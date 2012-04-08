@@ -1,0 +1,77 @@
+@font-face {
+	font-family: "Eutemia";
+	src: url(/static/fonts/ManyWeatz.ttf) format("truetype"); 
+}
+
+header {
+	min-height: 450px;
+}
+
+header * {
+	font-size: 70pt;
+	text-align: center;
+}
+
+
+#welcome {
+	font-family: "Eutemia";
+	font-size: 200pt;
+	line-height: 180pt;
+	color: rgb(128, 128, 128);
+	padding-right: 160pt;
+}
+
+#towrap {
+	
+	
+}
+
+.towidget {
+}
+#to {
+	
+	font-variant:small-caps;
+	width: 10%;
+	margin: 0 auto;
+	margin-top: -70pt;
+}
+
+#toleft{
+	background-image: url(/static/images/dashline.png);
+	background-repeat:repeat-x;
+	display: inline-block;
+	top: 62px;
+	height: 1px;
+	width: 44%;
+	max-width: 442px;
+	float: left;
+	position: relative;
+}
+
+#toright {
+	background-image: url(/static/images/dashline.png);
+	background-repeat:repeat-x;
+	display: inline-block;
+	top: -47px;
+	height: 1px;
+	width: 44%;
+	max-width: 442px;
+	float: right;
+	position: relative;
+}
+
+#login_form_hold {
+	width: 700px;
+	text-align: center;
+	margin: 0 auto;	
+}
+#login_form_hold input{
+	width: 85%;
+	font-size: 20pt;
+	padding: 5px;
+	margin-top: 15px;
+}
+#login_form_hold input[type=submit]{
+	width: 30%;
+}
+

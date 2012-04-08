@@ -1,0 +1,42 @@
+{% extends 'base_page.html' %}
+{%load staticfiles %}
+{% block stylin %}
+<link rel=stylesheet type="text/css" media="screen" href="{%static "styles/main_landing.css"%}"/>
+{% endblock %}
+
+{% block header %}
+<div id="welcome">Welcome</div>
+<div id="towrap">
+	<div class="towidget" id='toleft'> </div>
+	<div class="towidget" id="to">to</div>
+	<div class="towidget" id="toright"> </div>
+</div>
+
+{{block.super}}
+
+{% endblock %}
+
+{% block container%}
+
+<div id="login_form_hold">
+<form>
+<div><input type="text" placeholder="username"/></div>
+<div><input type="password" placeholder="password"/></div>
+<input type=submit id="signIn" class="button-submit" value="Get Started" />
+</form>
+</div>
+
+{% endblock%}
+
+
+{% block footer %}
+<div id="whycourses">
+	<section>
+			<h2>Why COURSES?</h2>
+	<p>We all hate Portal.</p>
+	<p>Portal sucks.</p>
+	</section>
+</div>
+
+{{block.super}}
+{% endblock%}
