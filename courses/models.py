@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models import signals
 from MultiDB import models as crossmodels
 
-import datetime
+import datetime, re
 # Create your models here.
 
 DAY_CHOICES = (
@@ -69,7 +69,6 @@ class Campus(models.Model):
                     ('CG', 'Claremont Graduate University'),
                     ('KG', 'Keck Graduate Institute'),
                     ('CU', 'Claremont Consortium'),
-                    ('JS', 'Joint Sciences')
                 )
     title = models.CharField(max_length=100)
     code = models.CharField(max_length=2, unique=True)
@@ -202,6 +201,22 @@ class Department(models.Model):
     class Meta:
         unique_together = (('code','campus'))
 
+    @classmethod
+    def flat_listing(cls, **kwargs):
+        """Returns a list of (code, code-title) tuples, where
+        every code appears only once in the list.""" 
+        codes = cls.objects.values_list('code',flat=True)
+        tuples = []
+        objs = cls.objects.values_list('code','name')
+        for code in codes:
+            obj = objs.filter(code=code)[0]
+            tuples += [(obj[0],"{} - {}".format(obj[0],obj[1]))]
+        
+        if kwargs.has_key('for_form') and kwargs['for_form']:
+            tuples = [('NONE',"(any)")]+tuples
+        
+        return tuples
+
     def __unicode__(self):
         return u"{} at {}".format(self.name, self.campus)
 
@@ -236,6 +251,8 @@ class MajorCourseRequirement(models.Model):
     course = models.ForeignKey('Course')
     times_to_take = models.IntegerField(default=1)
     alternates = models.ManyToManyField('Course', related_name='major_req_alts',null=True)
+    def __unicode__(self):
+        return "{}:{} x{}".format(self.major.title, self.course, self.times_to_take)
 
 class Course(models.Model):
     
@@ -243,12 +260,13 @@ class Course(models.Model):
     
     department = models.ForeignKey(Department)
     codeletters = models.CharField(max_length=50,blank=True)
+    number = models.IntegerField(default=0)
     codenumber = models.CharField(max_length=20)
     campus = models.ForeignKey(Campus)
     classtype = models.CharField(choices=(('L',"Lecture"),('S', "Seminar"),('B', 'Lab')), max_length=2, default='L')
     credit_hours = models.DecimalField(decimal_places=2, max_digits=3, default=3.00)
     campus_restricted = models.BooleanField(default=False)
-    
+    is_jointscience = models.BooleanField(default=False)
     prerequisites = models.ManyToManyField('self',blank=True, symmetrical=False)
     concurrent_with = models.ManyToManyField('self',blank=True)
     crosslisted_as = models.ManyToManyField('self',blank=True)
@@ -257,6 +275,18 @@ class Course(models.Model):
     description = models.TextField(blank=True, default="No description available.")
     
     students = models.ManyToManyField(Student, through="Enrollment")
+    
+    class Meta:
+        unique_together = (('department','codeletters','codenumber'),)
+    
+    def save(self, *args, **kwargs):
+        try:
+            # try to preserve numbering even if courses have letters
+            # in their codenumbers
+            self.number = int(re.match(r'^\d+',self.codenumber).group())
+        except:
+            pass
+        super(Course,self).save(*args,**kwargs)
     
     @property
     def enrolled_students(self):
@@ -276,6 +306,7 @@ class Course(models.Model):
     
 class Section(models.Model):
     course = models.ForeignKey(Course)
+    title = models.CharField(max_length=100,blank=True)
     number = models.IntegerField(default=1)
     teachers = models.ManyToManyField(Professor)
     
@@ -317,6 +348,10 @@ class Enrollment(models.Model):
     section = models.ForeignKey(Section)
     semester = models.ForeignKey(Semester)
 
+class Log(models.Model):
+    last_course_update = models.DateTimeField(default=datetime.datetime.now)
+    last_enrollment_update = models.DateTimeField(default=datetime.datetime.now)
+    
 #""" ############################## """
 #"""            SIGNALS             """
 #""" ############################## """

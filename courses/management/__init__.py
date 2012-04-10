@@ -55,6 +55,7 @@ def prepopulate_core(sender, **kwargs):
     if kwargs['verbosity'] > 0: print "Creating HMC Core requirements"
     core = []
     hmc, new = Campus.objects.get_or_create(code='HM') # should have been created already
+    
     if kwargs['verbosity'] > 1: print "\tCreating HM Engineering Dept."
     engr, new = Department.objects.get_or_create(
                      name="Engineering",
@@ -62,7 +63,7 @@ def prepopulate_core(sender, **kwargs):
                      campus=hmc
                      )
     if kwargs['verbosity'] > 2: print "\t\tCreating ENGR59"
-    engr59 = Course.objects.create(
+    engr59, new = Course.objects.get_or_create(
                     title="Introduction to Engineering Systems",
                     department=engr,
                     codenumber="59",
@@ -74,15 +75,15 @@ def prepopulate_core(sender, **kwargs):
                     Physics 51. 3 credit hours. (Fall and Spring.)"""
                     )
     core += [engr59]
-    if kwargs['verbosity'] > 1: print "\tCreating HM Chemistry Dept."
     
+    if kwargs['verbosity'] > 1: print "\tCreating HM Chemistry Dept."
     chem, new = Department.objects.get_or_create(
                      name="Chemistry",
                      code="CHEM",
                      campus=hmc
                      )
     if kwargs['verbosity'] > 2: print "\t\tCreating CHEM23D"
-    chem23d = Course.objects.create(
+    chem23d, new = Course.objects.get_or_create(
                     title="Dynamics",
                     department=chem,
                     codenumber="23D",
@@ -90,7 +91,7 @@ def prepopulate_core(sender, **kwargs):
                     credit_hours=1.5,
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating CHEM23E"
-    chem23e = Course.objects.create(
+    chem23e, new = Course.objects.get_or_create(
                     title="Energetics",
                     department=chem,
                     codenumber="23E",
@@ -98,7 +99,7 @@ def prepopulate_core(sender, **kwargs):
                     credit_hours=1.5,
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating CHEM23S"
-    chem23s = Course.objects.create(
+    chem23s, new = Course.objects.get_or_create(
                     title="Structure",
                     department=chem,
                     codenumber="23S",
@@ -106,7 +107,7 @@ def prepopulate_core(sender, **kwargs):
                     credit_hours=1.5,
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating CHEM24"
-    chem24 = Course.objects.create(
+    chem24, new = Course.objects.get_or_create(
                     title="Chemistry Laboratory",
                     department=chem,
                     codenumber="24",
@@ -115,6 +116,7 @@ def prepopulate_core(sender, **kwargs):
                     classtype='B'
                     )
     core += [chem23d,chem23e,chem23s,chem24]
+    
     if kwargs['verbosity'] > 1: print "\tCreating HM Physics Dept."
     phys, new = Department.objects.get_or_create(
                      name="Physics",
@@ -122,7 +124,7 @@ def prepopulate_core(sender, **kwargs):
                      campus=hmc
                      )
     if kwargs['verbosity'] > 2: print "\t\tCreating PHYS22"
-    phys22 = Course.objects.create(
+    phys22, new = Course.objects.get_or_create(
                     title="Physics Laboratory",
                     department=phys,
                     codenumber="22",
@@ -131,7 +133,7 @@ def prepopulate_core(sender, **kwargs):
                     classtype='B'
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating PHYS23"
-    phys23 = Course.objects.create(
+    phys23, new = Course.objects.get_or_create(
                     title="Special Relativity",
                     department=phys,
                     codenumber="23",
@@ -139,14 +141,14 @@ def prepopulate_core(sender, **kwargs):
                     credit_hours=1.5,
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating PHYS24"
-    phys24 = Course.objects.create(
+    phys24, new = Course.objects.get_or_create(
                     title="Mechanics & Wave Motion",
                     department=phys,
                     codenumber="24",
                     campus=hmc,
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating PHYS51"
-    phys51 = Course.objects.create(
+    phys51, new = Course.objects.get_or_create(
                     title="Electromagnetic Theory & Optics",
                     department=phys,
                     codenumber="51",
@@ -160,21 +162,55 @@ def prepopulate_core(sender, **kwargs):
                      code="CSCI",
                      campus=hmc
                      )
-    if kwargs['verbosity'] > 2: print "\t\tCreating CSCI5"
-    csci5 = Course.objects.create(
+    if kwargs['verbosity'] > 2: print "\t\tCreating CSCI5 gold"
+    csci5g, new = Course.objects.get_or_create(
                     title="Introduction to Computer Science",
                     department=csci,
-                    codenumber="5",
+                    codenumber="5G",
                     campus=hmc,
                     )
+    csci5b, new = Course.objects.get_or_create(
+                   title="Introduction to Computer Science",
+                   department=csci,
+                   codenumber="5G",
+                   campus=hmc,                            
+                   )
+    csci5l, new = Course.objects.get_or_create(
+                   title="Intro to Computer Science Lab",
+                   department=csci,
+                   codenumber="5L",
+                   campus=hmc,
+                   classtype='B',
+                   credit_hours=0.00,
+                   )
+    csci5b.concurrent_with.add(csci5l)
+    csci5g.concurrent_with.add(csci5l)
+    
+    csci5gr, new = Course.objects.get_or_create(
+                    title="Intro to Biology and Computer Science",
+                    department=csci,
+                    codenumber="5GR",
+                    campus=hmc                            
+                    )
+    csci5grl, new = Course.objects.get_or_create(
+                    title="Intro Biol and Computer Sci Lab",
+                    department=csci,
+                    codenumber="5GL",
+                    campus=hmc,
+                    classtype='B',
+                    credit_hours=0.00,
+                    )
+    csci5gr.concurrent_with.add(csci5grl)
+    
     if kwargs['verbosity'] > 2: print "\t\tCreating CSCI42"
-    csci42 = Course.objects.create(
+    csci42, new = Course.objects.get_or_create(
                     title="Principles & Practice: Comp Sci",
                     department=csci,
                     codenumber="42",
                     campus=hmc,
                     )
-    core += [(csci5,csci42)]
+    core += [(csci5g, csci5b, csci5gr, csci42)]
+    
     if kwargs['verbosity'] > 1: print "\tCreating HM Math Dept."
     math, new = Department.objects.get_or_create(
                      name="Mathematics",
@@ -182,7 +218,7 @@ def prepopulate_core(sender, **kwargs):
                      campus=hmc
                      )
     if kwargs['verbosity'] > 2: print "\t\tCreating MATH30B"
-    math30b = Course.objects.create(
+    math30b, new = Course.objects.get_or_create(
                     title="Calculus",
                     department=math,
                     codenumber="30B",
@@ -190,7 +226,7 @@ def prepopulate_core(sender, **kwargs):
                     credit_hours=1.5,
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating MATH30G"
-    math30g = Course.objects.create(
+    math30g, new = Course.objects.get_or_create(
                     title="Calculus",
                     department=math,
                     codenumber="30G",
@@ -198,7 +234,7 @@ def prepopulate_core(sender, **kwargs):
                     credit_hours=1.5,
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating MATH35"
-    math35 = Course.objects.create(
+    math35, new = Course.objects.get_or_create(
                     title="Probability and Statistics",
                     department=math,
                     codenumber="35",
@@ -206,7 +242,7 @@ def prepopulate_core(sender, **kwargs):
                     credit_hours=1.5,
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating MATH40"
-    math40 = Course.objects.create(
+    math40, new = Course.objects.get_or_create(
                     title="Intro to Linear Algebra",
                     department=math,
                     codenumber="40",
@@ -214,7 +250,7 @@ def prepopulate_core(sender, **kwargs):
                     credit_hours=1.5,
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating MATH45"
-    math45 = Course.objects.create(
+    math45, new = Course.objects.get_or_create(
                     title="Intro to Differential Equations",
                     department=math,
                     codenumber="45",
@@ -222,22 +258,23 @@ def prepopulate_core(sender, **kwargs):
                     credit_hours=1.5,
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating MATH60"
-    math60 = Course.objects.create(
+    math60, new = Course.objects.get_or_create(
                     title="Multivariable Calculus",
                     department=math,
-                    codenumber="45",
+                    codenumber="60",
                     campus=hmc,
                     credit_hours=1.5,
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating MATH65"
-    math65 = Course.objects.create(
+    math65, new = Course.objects.get_or_create(
                     title="Differential Eqns/Linear Alg II",
                     department=math,
-                    codenumber="45",
+                    codenumber="65",
                     campus=hmc,
                     credit_hours=1.5,
                     )
     core += [(math30b, math30g), math35, math40, math45,math60,math65]
+    
     if kwargs['verbosity'] > 1: print "\tCreating HM Biology Dept."
     biol, new = Department.objects.get_or_create(
                      name="Biology",
@@ -245,13 +282,30 @@ def prepopulate_core(sender, **kwargs):
                      campus=hmc
                      )
     if kwargs['verbosity'] > 2: print "\t\tCreating BIOL52"
-    biol52 = Course.objects.create(
+    biol52, new = Course.objects.get_or_create(
                     title="Introduction to Biology",
-                    department=math,
+                    department=biol,
                     codenumber="52",
                     campus=hmc,
                     )
-    core += [biol52]
+    core += [(biol52,csci5gr)]
+    
+    if kwargs['verbosity'] > 1: print "\tCreating Choice Lab department"
+    cl, new = Department.objects.get_or_create(
+                    name="Choice Lab",
+                    code="CL",
+                    campus=hmc
+                    )
+    if kwargs['verbosity'] > 2: print "\t\tCreating CL057"
+    cl57, new = Course.objects.get_or_create(
+                     title="Choice Lab",
+                     department=cl,
+                     codenumber="57",
+                     campus=hmc
+                     )
+    core += [cl57]
+    
+    
     if kwargs['verbosity'] > 1: print "\t\tCreating HMC Humanities Dept."
     coredept, new = Department.objects.get_or_create(
                      name="Humanities",
@@ -259,14 +313,14 @@ def prepopulate_core(sender, **kwargs):
                      campus=hmc
                      )
     if kwargs['verbosity'] > 0: print "\tCreating HMC Core major"
-    hmcore = Major.objects.create(title="HMC Core")
+    hmcore, new = Major.objects.get_or_create(title="HMC Core")
     hmcore.departments.add(coredept)
     if kwargs['verbosity'] > 1: print "\tAttaching courses to Core major"
     for course in core:
         if type(course) is tuple:
-            if kwargs['verbosity'] > 2: print "\t\tAssigning alternate course for{}: {}".format(course[0],course[1])
+            if kwargs['verbosity'] > 2: print "\t\tAssigning alternate course for {}: {}".format(course[0],course[1])
             # this is a set of exchangeable courses.
-            c = MajorCourseRequirement.objects.create(
+            c, new = MajorCourseRequirement.objects.get_or_create(
                          major=hmcore,
                          course=course[0],
                          )
@@ -275,7 +329,7 @@ def prepopulate_core(sender, **kwargs):
             c.save()
         else:
             if kwargs['verbosity'] > 2: print "\t\tAssigning {} to core".format(course)
-            c = MajorCourseRequirement.objects.create(
+            c, new = MajorCourseRequirement.objects.get_or_create(
                         major=hmcore,
                         course=course
                         )

@@ -1,0 +1,21 @@
+#calsearch {
+	max-width: 1500px;
+	overflow: hidden;
+	background-color: white;
+	padding: 15px;
+}
+
+section#search {
+	float: right;
+	width: 45%;
+}
+
+section#calendar{
+	float: left;
+	width: 45%;
+}
+
+#searchSubmit {
+	padding: 5px;
+	min-width: 50px;
+}

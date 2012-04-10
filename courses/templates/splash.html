@@ -1,6 +1,43 @@
 {%extends "base_page.html"%}
+{% load staticfiles %}
+{% block stylin %}
 
+<link rel="stylesheet" type="text/css" href="{% static "styles/fullcalendar.css" %}"/>
+<link rel="stylesheet" type="text/css" href="{% static "styles/coursesearch.css"%}"/>
+
+{% endblock %}
+
+{% block scriptin %}
+<script type="text/javascript" src="{%static "scripts/fullcalendar.js" %}"></script>
+<script>
+$(document).ready(function(){
+	$('#calendardiv').fullCalendar({
+		// Callbacks and shit
+		header: {left: '',center:'',right:''},
+		defaultView: 'agendaWeek',
+		weekends: false,
+		height: 700,
+		allDaySlot: false,
+		minTime:8,
+		maxTime:23,
+	});
+});
+</script>
+{% endblock %}
 
 {% block container %}
-Heyo.
+<section>
+<h1>Your majors</h1>
+</section>
+<section id="calsearch">
+		<section id="search">
+		<div id="searchwrap">
+			{%include "search_form.html"%}
+		</div>
+	</section>
+	<section id="calendar">
+		<div id='calendardiv'></div>
+	</section>
+
+</section>
 {% endblock %}

@@ -1,0 +1,49 @@
+#calsearch {
+	max-width: 1500px;
+	overflow: hidden;
+	background-color: white;
+	padding: 15px;
+}
+
+section#search {
+	float: right;
+	width: 45%;
+}
+
+section#calendar{
+	float: left;
+	width: 45%;
+}
+
+.horizontal ul {
+	list-style-type: none;
+	text-align: center;
+	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	overflow: auto;
+}
+
+.horizontal ul li {
+	display: inline;
+}
+
+.alternatives {
+	border: 1pt dashed rgb(128,128,128);
+	margin-bottom: 10px;
+	padding: 5px;
+}
+
+.alternatives > div:not(:last-child){
+	border-bottom: 1pt solid rgb(0,0,0);
+}
+
+.numericfield {
+	width: 50px;
+	text-align: center;
+}
+
+#searchSubmit {
+	padding: 5px;
+	min-width: 50px;
+}

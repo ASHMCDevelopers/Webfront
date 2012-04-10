@@ -16,27 +16,92 @@
 
 {% endblock %}
 
-{% block container%}
+{% block scriptin %}
+<script type="text/javascript">
 
+$(document).ready(function(){
+	$("#login_form_hold :input").tooltip({
+      // place tooltip on the right edge
+      position: "center right",
+ 
+      // a little tweaking of the position
+      offset: [-2, 10],
+ 
+      // use the built-in fadeIn/fadeOut effect
+      effect: "fade",
+ 
+      // custom opacity setting
+      opacity: 0.7
+ 
+      });
+      
+	$("#footerabout").click(function(){
+		$("#introfooter").slideToggle('slow');
+	});    
+});
+</script>
+{% endblock %}
+
+{% block container%}
+<div class="centerer w850">
+<div id="login_form_hold_left"></div>
+<div id="login_form_hold_right"></div>
 <div id="login_form_hold">
 <form>
-<div><input type="text" placeholder="username"/></div>
-<div><input type="password" placeholder="password"/></div>
+<div><input type="text" placeholder="username"/><div class='tooltip'>Your HMC email: first_last@hmc.edu</div></div>
+<div><input type="password" placeholder="password"/><div class='tooltip'>Don't know your password?<br/>Click <a href="#">here</a>.</div></div>
 <input type=submit id="signIn" class="button-submit" value="Get Started" />
 </form>
 </div>
 
+</div>
 {% endblock%}
 
 
 {% block footer %}
-<div id="whycourses">
+<div id="introfooter">
+	
+	<ul class="horstack">
+<li id="whycourses"><div>
 	<section>
 			<h2>Why COURSES?</h2>
-	<p>We all hate Portal.</p>
-	<p>Portal sucks.</p>
-	</section>
-</div>
+	<p>We all hate Portal; Portal sucks. Perversely, HMC's version of
+		Portal appears to suck the most, even though we are (by far)
+		the most technically-oriented of the 5C's.</p>
+	<p>COURSES is an attempt to show how much better Portal's course
+		listings could be,
+		if the <em>students</em> at HMC were allowed to design it.</p>
+	<p>I mean, just look up---that's already an improvement, amirite?</p>
+	</section></div>
+</li>
 
-{{block.super}}
+<li >
+	<div>
+	<img class="chart" src="{%static 'images/charts/COURSES_IS_BETTER_1.png'%}">
+	</div>
+</li>
+
+<li id="howwork"><div>
+	<a name="footer"></a>
+	<section>
+		<h2>How does it work?</h2>
+		<p>COURSES interacts with HMC's office of the registrar,
+			as well as the heads of HMC's major programs to provide
+			as up-to-date information about course offering and
+			requirements as possible.</p>
+		<p>It's important to realize that COURSES is not definitive;
+			it does its best, but it won't always be up to date.</p>
+		<p>Unfortunately, only Portal is guaranteed to be current.</p>
+	</section>
+	</div>
+</li>
+</ul>
+</div>
+	<div id="foot_links"><ul>
+		<a href="#" id="footertos"><li>TOS</li></a>
+		<a href="#" id="footerprivacy"><li>Privacy</li></a>
+		<a href="#" id="footercontact"><li>Contact</li></a>
+		<a href="#footer" id="footerabout"><li>About</li></a>
+		</ul></div>
+		</p>
 {% endblock%}

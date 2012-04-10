@@ -1,0 +1,31 @@
+{{form.non_field_errors}}
+
+
+<form action="#" method="GET">
+	<div id="preamble">I want a course...</div>
+	<div id="namelike">With a name like {{form.title}}</div>
+	<div id="oncampus">On 
+		<div class="horizontal">
+			{{form.campus}}
+		</div>
+	</div>
+	<div class="alternatives">
+		<div>
+			<div id="dept">In the {{form.department}} department</div>
+			<div id="numbered">With a number <em>n</em> s.t.: 
+				{{form.numberlow}}  &le; <em>n</em> &le; {{form.numberhigh}} </div>
+		</div>
+		<div>
+			<div id="coursecode">With a code like: {{form.code}}</div>
+		</div>
+	</div>
+	<div id="days" class='horizontal'>
+		Which meets {{form.day_limit}} on {{form.days}}
+	</div>
+	
+	<div id="taughtby">
+		Taught by {{form.professors}}
+	</div>
+	
+	<input  type='submit' id="searchSubmit" class="button-submit" value='Search!'/>
+</form>
