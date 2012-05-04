@@ -21,18 +21,25 @@ $(document).ready(function(){
 		minTime:8,
 		maxTime:23,
 	});
+	
+	$("#course_search_form").submit(function(){
+		alert("searching!");
+	});
 });
 </script>
 {% endblock %}
 
 {% block container %}
-<section>
-<h1>Your majors</h1>
-</section>
+
 <section id="calsearch">
-		<section id="search">
+	<section id="search">
 		<div id="searchwrap">
 			{%include "search_form.html"%}
+		</div>
+		<div id="results">
+			{% for course in courses %}
+				{% include "search_result.html" %}
+			{% endfor %}
 		</div>
 	</section>
 	<section id="calendar">
@@ -40,4 +47,6 @@ $(document).ready(function(){
 	</section>
 
 </section>
+
+
 {% endblock %}

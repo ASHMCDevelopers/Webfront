@@ -1,0 +1,54 @@
+{% load courses_extras %}
+<div class="course_result"><a name={{course.id}}></a>
+	<header>
+		<div class="seccount">{{course.get_active_sections.count}} section{{course.section_set.count|pluralize}}</div>
+		<h1>{{course}} &mdash; {{course.title|make_nbsp}}</h1>
+	</header>
+	{{course.description}}
+	{% if course.description %}<div class="more_link centered"><a href="#{{course.id}}">see more...</a></div>{%endif%}
+	<div class="more_info {%if course.description %}hidden{% endif %}"></div>
+	<div class="sections">
+		<ul>
+		{% for section in course.get_active_sections|clean_sections:sec_filt %}
+		<li>
+			{% if section.has_times %}<div class='addsection' id='{{section.id}}'><span>Add</span></div>
+			<div class='seats'>{{section.openseats}}/{{section.seats}} seat{{section.openseats|pluralize}} remaining</div>{% endif %}
+			<div class='secnum'><h3>Section&nbsp;{{section.number|stringformat:"02d"}}{% if section.title %}: {{section.title|make_nbsp}}{%endif%}</h3></div>
+			<div class="centerer"><div class='meta'>{{section.get_instructors|prettify:'instructors'}} &mdash; credit: {{section.mudd_creds|floatformat:"2"}} ({{section.credit_hours|floatformat:"2"}}) </div></div>
+			<div class='meetings'>
+				<ul>
+				{% for meeting in section.meeting_set.all%}
+					<li>
+						{% for time in meeting.get_timeslot_tuples %}
+							{% with meeting|get_room:time as ri %}
+							{% if not ri.is_arr and not ri.is_tbd %}
+								{{ri.room.building.campus|prettify}} &mdash; {{time.0}} &mdash; {{time.1|date:"P"}}&ndash;{{time.2|date:"P"}} &mdash; {{ri|prettify}}
+							{% elif ri.is_arr %}
+								ARR
+							{% elif ri.is_tbd %}
+								TBD
+							{% else %}
+								Whoopsie!
+							{% endif %}
+							{% endwith %}
+							{% empty %}
+								<span class="warning centerer">There's supposed to be another meeting, but it hasn't been set yet.</span>
+						{% endfor %}
+					</li>
+				{% empty %}
+					This is an error! Whoopsie...
+				{% endfor %}
+				</ul>
+			</div>
+		{% if not forloop.last %}
+			<hr/>
+		{% endif %}
+		</li>
+		
+		{% empty %}
+			This is an error! Whoopsie...
+		{% endfor %}
+		</ul>
+	</div>
+	
+</div> 

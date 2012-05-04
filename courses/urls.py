@@ -10,6 +10,6 @@ from django.contrib.auth.decorators import login_required
 from .views import *
 
 urlpatterns = patterns('courses.views',
-                       url('^$', SplashPage.as_view(), name='landing_page'),
-                       url('^/find', CourseSearcher.as_view(), name='search_courses'),
+                       url('^find', CourseSearcher.as_view(), name='search_courses'),
+                       url('^', SplashPage.as_view(), name='landing_page'),
                        ) 

@@ -1,12 +1,65 @@
-from courses.models import GradYear,Campus,Building,possible_grad_years,\
+from ..models import GradYear,Campus,Building,Utility,\
                            Major, Course, Department,\
-                           MajorCourseRequirement
-from courses import models as features
+                           MajorCourseRequirement, Prerequisite, Day, Semester
+from .. import models as features
 from django.db.models import signals
+
+import datetime
+
+def create_requirements(course_list, major,**kwargs):
+    for course in course_list:
+        if type(course) is tuple:
+            if kwargs['verbosity'] > 2: print "\t\tAssigning alternate course for {}: {}".format(course[0],course[1])
+            # this is a set of exchangeable courses.
+            c, new = MajorCourseRequirement.objects.get_or_create(
+                         major=major,
+                         course=course[0],
+                         )
+            for alt in course[1:]:
+                c.alternates.add(alt)
+            c.save()
+        else:
+            if kwargs['verbosity'] > 2: print "\t\tAssigning {} to core".format(course)
+            c, new = MajorCourseRequirement.objects.get_or_create(
+                        major=major,
+                        course=course
+                        )
 
 """ The following methods are attached to the post_syncdb signal
 and are used to ensure that certain objects never need to be created 
 on the fly."""
+def prepopulate_days(sender, **kwargs):
+    """Creates the seven day objects"""
+    if not kwargs.has_key('verbosity'):
+        kwargs['verbosity'] = 0
+    if kwargs['verbosity'] > 0: print "Creating days of the week"
+    for (code, name) in Day.DAY_CHOICES:
+        if code not in ['T', 'W','R']:
+            short = name[:3]
+        elif code in ['T', 'R']:
+            short = name[:-3]
+        elif code == 'W':
+            short = "Weds"
+        if kwargs['verbosity'] > 1: print "\tCreating {}".format(name)
+        Day.objects.get_or_create(name=name,
+                                  code=code,
+                                  short=short)
+signals.post_syncdb.connect(prepopulate_days, sender=features)
+
+def prepopulate_semesters(sender, **kwargs):
+    """Creates semesterly objects."""
+    if not kwargs.has_key('verbosity'):
+        kwargs['verbosity'] = 0
+    if kwargs['verbosity'] > 0: print "Creating semester objects"
+    for year in range(datetime.datetime.now().year-4, datetime.datetime.now().year+2):
+        fa, new = Semester.objects.get_or_create(year=year,
+                                                 half='FA')
+        sp, new = Semester.objects.get_or_create(year=year,
+                                                 half='SP')
+        sm, new = Semester.objects.get_or_create(year=year,
+                                                 half='SM')
+    
+signals.post_syncdb.connect(prepopulate_semesters, sender=features)
 
 def prepopulate_campuses(sender,**kwargs):
     """ Create objects for the campuses if they don't exist"""
@@ -42,7 +95,7 @@ def prepopulate_gradyears(sender, **kwargs):
     if not kwargs.has_key('verbosity'):
         kwargs['verbosity'] = 0
     if kwargs['verbosity'] > 0: print "Creating possible GradYears"
-    for year in possible_grad_years():
+    for year in Utility().possible_grad_years():
         if kwargs['verbosity'] > 1: print "\tCreating GradYear:{}".format(year)
         y, new = GradYear.objects.get_or_create(year=year)
 signals.post_syncdb.connect(prepopulate_gradyears, sender=features)
@@ -60,7 +113,7 @@ def prepopulate_core(sender, **kwargs):
     engr, new = Department.objects.get_or_create(
                      name="Engineering",
                      code="ENGR",
-                     campus=hmc
+                     campus=hmc,
                      )
     if kwargs['verbosity'] > 2: print "\t\tCreating ENGR59"
     engr59, new = Course.objects.get_or_create(
@@ -80,7 +133,8 @@ def prepopulate_core(sender, **kwargs):
     chem, new = Department.objects.get_or_create(
                      name="Chemistry",
                      code="CHEM",
-                     campus=hmc
+                     campus=hmc,
+                     
                      )
     if kwargs['verbosity'] > 2: print "\t\tCreating CHEM23D"
     chem23d, new = Course.objects.get_or_create(
@@ -121,7 +175,7 @@ def prepopulate_core(sender, **kwargs):
     phys, new = Department.objects.get_or_create(
                      name="Physics",
                      code="PHYS",
-                     campus=hmc
+                     campus=hmc,
                      )
     if kwargs['verbosity'] > 2: print "\t\tCreating PHYS22"
     phys22, new = Course.objects.get_or_create(
@@ -154,13 +208,15 @@ def prepopulate_core(sender, **kwargs):
                     codenumber="51",
                     campus=hmc,
                     )
+    req = Prerequisite.objects.get_or_create(course=phys51, requisite=phys23)
+    req = Prerequisite.objects.get_or_create(course=phys51, requisite=phys24)
     engr59.concurrent_with.add(phys51)
     core += [phys22,phys23,phys24,phys51]
     if kwargs['verbosity'] > 1: print "\tCreating HM CompSci Dept."
     csci, new = Department.objects.get_or_create(
                      name="Computer Science",
                      code="CSCI",
-                     campus=hmc
+                     campus=hmc,
                      )
     if kwargs['verbosity'] > 2: print "\t\tCreating CSCI5 gold"
     csci5g, new = Course.objects.get_or_create(
@@ -215,7 +271,7 @@ def prepopulate_core(sender, **kwargs):
     math, new = Department.objects.get_or_create(
                      name="Mathematics",
                      code="MATH",
-                     campus=hmc
+                     campus=hmc,
                      )
     if kwargs['verbosity'] > 2: print "\t\tCreating MATH30B"
     math30b, new = Course.objects.get_or_create(
@@ -264,7 +320,7 @@ def prepopulate_core(sender, **kwargs):
                     codenumber="60",
                     campus=hmc,
                     credit_hours=1.5,
-                    )
+                    )    
     if kwargs['verbosity'] > 2: print "\t\tCreating MATH65"
     math65, new = Course.objects.get_or_create(
                     title="Differential Eqns/Linear Alg II",
@@ -273,13 +329,15 @@ def prepopulate_core(sender, **kwargs):
                     campus=hmc,
                     credit_hours=1.5,
                     )
+    
+    phys51.concurrent_with.add(math60)
     core += [(math30b, math30g), math35, math40, math45,math60,math65]
     
     if kwargs['verbosity'] > 1: print "\tCreating HM Biology Dept."
     biol, new = Department.objects.get_or_create(
                      name="Biology",
                      code="BIOL",
-                     campus=hmc
+                     campus=hmc,
                      )
     if kwargs['verbosity'] > 2: print "\t\tCreating BIOL52"
     biol52, new = Course.objects.get_or_create(
@@ -294,7 +352,7 @@ def prepopulate_core(sender, **kwargs):
     cl, new = Department.objects.get_or_create(
                     name="Choice Lab",
                     code="CL",
-                    campus=hmc
+                    campus=hmc,
                     )
     if kwargs['verbosity'] > 2: print "\t\tCreating CL057"
     cl57, new = Course.objects.get_or_create(
@@ -312,27 +370,142 @@ def prepopulate_core(sender, **kwargs):
                      code="HUM",
                      campus=hmc
                      )
+    
+    if kwargs['verbosity'] > 1: print "\t\tCreating HMC Writing Dept."
+    hmcwrit, new = Department.objects.get_or_create(
+                    name="Writing",
+                    code="WRIT",
+                    campus=hmc
+                    )
+    
+    writ1 = Course.objects.get_or_create(
+                     title="Introduction to Academic Writing",
+                     department=hmcwrit,
+                     codenumber="1",
+                     campus=hmc
+                     )
     if kwargs['verbosity'] > 0: print "\tCreating HMC Core major"
     hmcore, new = Major.objects.get_or_create(title="HMC Core")
     hmcore.departments.add(coredept)
     if kwargs['verbosity'] > 1: print "\tAttaching courses to Core major"
-    for course in core:
-        if type(course) is tuple:
-            if kwargs['verbosity'] > 2: print "\t\tAssigning alternate course for {}: {}".format(course[0],course[1])
-            # this is a set of exchangeable courses.
-            c, new = MajorCourseRequirement.objects.get_or_create(
-                         major=hmcore,
-                         course=course[0],
-                         )
-            for alt in course[1:]:
-                c.alternates.add(alt)
-            c.save()
-        else:
-            if kwargs['verbosity'] > 2: print "\t\tAssigning {} to core".format(course)
-            c, new = MajorCourseRequirement.objects.get_or_create(
-                        major=hmcore,
-                        course=course
-                        )
-signals.post_syncdb.connect(prepopulate_core, sender=features)   
+    create_requirements(core, hmcore, **kwargs)
+#signals.post_syncdb.connect(prepopulate_core, sender=features)   
 
-
+def create_major_HM_CSCI(**kwargs):
+    hmc = Campus.objects.get(code="HM")
+    csci = Department.objects.get(code="CSCI", campus=hmc)
+    math = Department.objects.get(code="MATH", campus=hmc)
+    cs60, new = Course.objects.get_or_create(
+                 title="Principles of Computer Science",
+                 codenumber="60",
+                 department=csci,
+                 campus=hmc,
+                )
+    cs70, new = Course.objects.get_or_create(
+                 title="Data Structures and Program Development",
+                 codenumber="70",
+                 department=csci,
+                 campus=hmc,
+                )
+    cs81, new = Course.objects.get_or_create(
+                 title="Computability and Logic",
+                 codenumber="81",
+                 department=csci,
+                 campus=hmc,
+                )
+    cs105, new = Course.objects.get_or_create(
+                 title="Computer Systems",
+                 codenumber="105",
+                 department=csci,
+                 campus=hmc,
+                )
+    cs121, new = Course.objects.get_or_create(
+                 title="Software Development",
+                 codenumber="121",
+                 department=csci,
+                 campus=hmc,
+                )
+    cs131, new = Course.objects.get_or_create(
+                 title="Programming Languages",
+                 codenumber="131",
+                 department=csci,
+                 campus=hmc,
+                )
+    cs140, new = Course.objects.get_or_create(
+                 title="Algorithms",
+                 codenumber="140",
+                 department=csci,
+                 campus=hmc,
+                )
+    
+    math55, new = Course.objects.get_or_create(
+                 title="Discrete Mathematics",
+                 codenumber="55",
+                 department=math,
+                 campus=hmc,
+                )
+    cs42 = Course.objects.get(codenumber=42, department=csci)
+    cs5s = Course.objects.filter(number=5, department=csci, classtype__in=["L","S"])
+    
+    cp, new = Prerequisite.objects.get_or_create(
+               course=cs60,
+               requisite=cs5s[0],
+               )
+    cp.alternates = cs5s[1:]
+    cp, new = Prerequisite.objects.get_or_create(
+               course=cs70,
+               requisite=cs60,
+               )
+    cp.alternates = cs5s[1:]
+    cp, new = Prerequisite.objects.get_or_create(
+               course=cs81,
+               requisite=cs60,
+               )
+    cp.alternates = [cs42,]
+    Prerequisite.objects.get_or_create(
+               course=cs81,
+               requisite=math55,
+               )
+    Prerequisite.objects.get_or_create(
+               course=cs105,
+               requisite=cs70,
+               )
+    Prerequisite.objects.get_or_create(
+               course=cs121,
+               requisite=cs70,
+               )
+    Prerequisite.objects.get_or_create(
+               course=cs131,
+               requisite=cs70,
+               )
+    Prerequisite.objects.get_or_create(
+               course=cs131,
+               requisite=cs81,
+               )
+    Prerequisite.objects.get_or_create(
+               course=cs140,
+               requisite=cs70,
+               )
+    Prerequisite.objects.get_or_create(
+               course=cs140,
+               requisite=math55,
+               )
+    requirements = [(cs60,cs42),
+                    cs70,
+                    cs81,
+                    cs105,
+                    cs121,
+                    cs131,
+                    cs140,
+                    math55]
+    cs, new = Major.objects.get_or_create(title="Computer Science")
+    cs.departments.add(csci)
+    create_requirements(requirements, cs, **kwargs)
+    
+    
+    
+def create_majors(sender, **kwargs):
+    create_major_HM_CSCI(**kwargs)
+#signals.post_syncdb.connect(create_majors, features)
+    
+    

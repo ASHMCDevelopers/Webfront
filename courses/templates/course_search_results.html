@@ -1,0 +1,12 @@
+{{form.errors}}
+{{sec_filt}}
+{% for course in results %}
+{% if forloop.first %} Found {{total}} course{{total|pluralize}}.{%endif%}
+
+{% include "search_result.html"%}
+{% empty %}
+No courses found!
+{% endfor %}
+
+
+

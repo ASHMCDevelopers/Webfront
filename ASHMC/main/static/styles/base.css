@@ -18,7 +18,7 @@ p {
 body{
 	background-color: rgb(255, 248, 231);
 	min-width: 1200px;
-	
+	font-family: sans-serif;
 }
 
 a {
@@ -95,20 +95,20 @@ border-radius: 1px;
   box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
 }
 
-header {
+#container > header {
 	min-height: 151px;
 }
 
 #coursewrap {
 	cursor: default;
-	
+	font-family: serif;
 
 }
 
 #coursewrap ul {
     list-style-type: none;
     text-align: center; /* hacky hacky centering */
-    height: 20px;
+    height: 170px;
     margin-top: 5px;
     margin-bottom: 5px;
    
@@ -182,7 +182,8 @@ header {
 	padding-right: 70px!important; /* centers COURSES, since this
 									  S is so italicized. */
 }
-footer {
+
+#container > footer {
 	margin-top: 15px;
 	padding: 10px;
 	text-align: center;
@@ -216,6 +217,15 @@ footer hr{
 	width: 100%;
 	margin: 0 auto;
 }
+
+.hidden {
+	display: none;
+}
+
+.centered{
+	text-align: center;
+}
+
 .w850 {
 	max-width: 850px;
 }
@@ -241,4 +251,11 @@ footer hr{
 }
 #copyright {
 	text-align: left;
+}
+.whited {
+	color: white;
+}
+
+.bold {
+	font-weight: bold;
 }
