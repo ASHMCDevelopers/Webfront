@@ -1,5 +1,5 @@
 {% load courses_extras %}
-
+{% load url from future %}
 {{form.errors}}
 {% for course in results %}
 {% if forloop.first and results.start_index == 1%} <div id="totals" class="pagination">
