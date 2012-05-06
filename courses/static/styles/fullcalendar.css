@@ -262,7 +262,7 @@ html .fc,
 	border-style: solid;
 	border-width: 0;
 	font-size: .85em;
-	cursor: default;
+	cursor: pointer;
 	}
 	
 a.fc-event,
@@ -279,7 +279,7 @@ a.fc-event {
 	}
 	
 .fc-event-skin {
-	border-color: #36c;     /* default BORDER color */
+	border-color: transparent;     /* default BORDER color */
 	background-color: #36c; /* default BACKGROUND color */
 	color: #fff;            /* default TEXT color */
 	}
@@ -297,6 +297,10 @@ a.fc-event {
 .fc-event-title {
 	padding: 0 1px;
 	}
+
+.fc-event-title {
+	font-size: 9pt;
+}
 	
 .fc .ui-resizable-handle { /*** TODO: don't use ui-resizable anymore, change class ***/
 	display: block;
@@ -307,7 +311,11 @@ a.fc-event {
 	line-height: 50%; /* */
 	}
 	
+.fc-event.colored * {
+	border-color: inherit;
+	background-color: inherit;
 	
+}
 	
 /* Horizontal Events
 ------------------------------------------------------------------------*/

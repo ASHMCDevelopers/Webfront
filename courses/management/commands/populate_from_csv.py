@@ -34,10 +34,7 @@ class Command(BaseCommand):
         PREREQS = open(dir + 'courses 3.csv')
         
         # Gather campuses. We'll need them later.
-        CAMPUS_CODES = Campus.objects.all().values_list('code', flat=True)
-        self.stderr.write("{}".format(CAMPUS_CODES))
-        CAMPUS_LOOKUP = dict([ x for x in izip(CAMPUS_CODES,
-                                               Campus.objects.all())])
+        CAMPUS_LOOKUP = dict([ (x.code, x) for x in Campus.objects.all()])
         def find_campus(string, dictionary):
             try:
                 camp = CAMPUS_LOOKUP[string]
@@ -46,17 +43,15 @@ class Command(BaseCommand):
                 try:
                     camp = CAMPUS_LOOKUP[dictionary['campus']]
                 except KeyError, e:
-                    print "Falling back to NA"
-                    camp = CAMPUS_LOOKUP['NA']
+                    print "Falling back to UN"
+                    camp = CAMPUS_LOOKUP['UN']
             return camp
         
-        SEMESTER_LOOKUP = dict([ x for x in izip(Semester.objects.values_list('half','year'),
-                                                 Semester.objects.all())])
+        SEMESTER_LOOKUP = dict([ ((x.half, x.year), x) for x in Semester.objects.all()])
         
-        DAY_LOOKUP = dict([x for x in izip(Day.objects.values_list('code',flat=True),
-                                           Day.objects.all())])
+        DAY_LOOKUP = dict([(x.code, x) for x in Day.objects.all()])
         
-        self.stderr.write("{}\n{}\n{}".format(CAMPUS_LOOKUP, SEMESTER_LOOKUP, DAY_LOOKUP))
+        self.stderr.write("{}\n{}\n{}\n".format(CAMPUS_LOOKUP, SEMESTER_LOOKUP, DAY_LOOKUP))
         
         meetings_r = csv.DictReader(MEETINGS)
         sections_r = csv.DictReader(SECTIONS)
@@ -117,7 +112,8 @@ class Command(BaseCommand):
                     # Ex: MATH030G HM
                     # Ex: MUS 052HNPO
                     # Ex: CSCI005GLHM
-                    course['attention'] = True
+                    #course['attention'] = True
+                    pass
                 requisite = {'code':row['Requisite Course Number']}
                 if courses.has_key(requisite['code']):
                     requisite['req_attention'] = False
@@ -254,16 +250,18 @@ class Command(BaseCommand):
                                            
                                            campus=find_campus(course['code_campus'], course),
                                            
-                                           min_hours=course['minhours'],
-                                           max_hours=course['maxhours'],
                                            
                                            description=unicode(course['descr'],"UTF-8"),
-                                           needs_attention=course['attention']
+                                           
                                            )
             if not new: repeats += 1
             c.departments.add(dept)
             c.areas.add(ca)
             c.code = c.construct_code()
+            c.needs_attention=course['attention']
+            c.min_hours=course['minhours']
+            c.max_hours=course['maxhours']
+            if c.campus.code == "HM": c.credit_multiplier = 1.00
             c.save()
             #Now, we add sections.
             for section in course['sections'].keys():
@@ -272,21 +270,21 @@ class Command(BaseCommand):
                 try:
                     s, new = Section.objects.get_or_create(
                                                        course=c,
-                                                       title=sec['title'],
                                                        number=sec['number'],
-                                                       
-                                                       credit_hours=sec['cred_hours'],
-                                                       
-                                                       semester=SEMESTER_LOOKUP[(sec['semester'],sec['year'])],
-                                                       
-                                                       seats=sec['seats'],
-                                                       openseats=sec['seats'], # assume totally free classes!
-                                                       
-                                                       start_date=sec['starts'],
-                                                       end_date=sec['ends'],
-                                                       
-                                                       needs_attention=sec['attention'], 
                                                        )
+                    s.title=sec['title']
+                    s.credit_hours=sec['cred_hours']
+                                                       
+                    s.semester=SEMESTER_LOOKUP[(sec['semester'],sec['year'])]
+                    
+                    s.seats=sec['seats']
+                    s.openseats=sec['seats'] # assume totally free classes!
+                    
+                    s.start_date=sec['starts']
+                    s.end_date=sec['ends']
+                    
+                    s.needs_attention=sec['attention']
+                    s.save() 
                 except IntegrityError, e:
                     print e
                     print "Adding this course to the 'fucked' list"
@@ -365,5 +363,7 @@ class Command(BaseCommand):
                         ri, new = RoomInfo.objects.get_or_create(meeting=m, 
                                                 timeslot=t, 
                                                 room=room,
-                                                is_arr=is_arr,
-                                                is_tba=is_tba)
+                                                )
+                        ri.is_arr=is_arr,
+                        ri.is_tba=is_tba
+                        ri.save()

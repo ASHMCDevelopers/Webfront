@@ -8,6 +8,11 @@ from django.contrib import admin
 
 from .models import *
 
+class BuildingAdmin(admin.ModelAdmin):
+    list_display = ('code', '__unicode__', 'campus')
+    list_filter = ('campus',)
+admin.site.register(Building, BuildingAdmin)
+
 class PrereqAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'course', 'requisite')
 admin.site.register(Prerequisite, PrereqAdmin)
@@ -44,8 +49,8 @@ class MajorCourseRequirementInline(admin.TabularInline):
 class MajorAdmin(admin.ModelAdmin):
     def studentcount(self):
         return self.students.count()
-    list_display = ('title', studentcount)
-    list_filter = ('departments',)
+    list_display = ('title', studentcount, 'primary_campus')
+    list_filter = ('primary_campus', 'departments__campus', 'departments',)
     inlines = (MajorCourseRequirementInline,)
 admin.site.register(Major, MajorAdmin)
 
@@ -78,7 +83,8 @@ class RoomInfoAdmin(admin.ModelAdmin):
 admin.site.register(RoomInfo, RoomInfoAdmin)
 
 class RoomAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('__unicode__', 'building', )
+    list_filter = ('building__campus', 'building', )
 admin.site.register(Room, RoomAdmin)
 
 class MeetingAdmin(admin.ModelAdmin):
@@ -87,6 +93,9 @@ class MeetingAdmin(admin.ModelAdmin):
     inlines = (RoomInfoInline,)
 admin.site.register(Meeting, MeetingAdmin)
 
+class EnrollmentAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Enrollment,EnrollmentAdmin)
 
 class ProfessorAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name',)

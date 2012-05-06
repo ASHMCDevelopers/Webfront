@@ -8,8 +8,8 @@
 
 ol, ol li {
 	margin-left: 1em;
-	list-style:decimal!important; 
-	list-style-type:decimal!important;}
+	list-style:decimal; 
+	list-style-type:decimal;}
 
 p {
 	margin-bottom: .25em;
@@ -21,13 +21,15 @@ body{
 	font-family: sans-serif;
 }
 
-a {
+a, .linklike {
 	color:rgb(204, 85, 0);
 	text-decoration: none;
+	cursor: pointer;
 }
 
-a:hover {
+a:hover, .linklike {
 	text-decoration: underline;
+	cursor: pointer;
 }
 
 #container {

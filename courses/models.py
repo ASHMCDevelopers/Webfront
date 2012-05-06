@@ -45,7 +45,25 @@ class Utility(object):
             grad_range = range(today.year+1, today.year+5)
     
         return grad_range
-
+    
+    def create_grades(self):
+        letters = ['A','B','C','D','F','P','HP',
+                   'INC', # incomplete
+                   'N', # first half of a two-semester course
+                   'NC', # no credie
+                   'W', # late withdrawal
+                   'AP', # ap credit
+                   'EX', # exam credit
+                   'NR', # not reporting
+                   ]
+        final_letters = []
+        for letter in letters:
+            if letter in ['A','B','C','D']:
+                final_letters += ['{}+'.format(letter), 
+                                  letter, 
+                                  '{}-'.format(letter),]
+            else: final_letters += [letter]
+        return final_letters
 
 class SafeObjectManager(models.Manager):
     def get_query_set(self):
@@ -130,7 +148,8 @@ class Student(crossmodels.MultiDBProxyModel):
     studentid = models.IntegerField(unique=True)
     credit_requirement = models.IntegerField(default=128)
 
-  
+    class Meta:
+        unique_together = ('_linked_id',)
 
     def __unicode__(self):
         return u"{} {}".format(self.linked_model.first_name,
@@ -149,7 +168,9 @@ class Campus(models.Model):
                     ('KG', 'Keck Graduate Institute'), # Keck actually doesn't offer any classes. For real.
                     ('CU', 'Claremont Consortium'),
                     ('NA', 'No Specific Campus'),
+                    ('UN', 'Unknown Campus'),
                 )
+    ABSTRACTIONS = ['NA', 'UN']
     title = models.CharField(max_length=100)
     code = models.CharField(max_length=2, unique=True)
 
@@ -279,6 +300,12 @@ class Building(models.Model):
                         ("TBA","To Be Arranged"),
                         )
                     ),
+                    ('UN',(
+                        ('ARR', "To Be Arranged"),
+                        ('TBD', "To Be Determined"),
+                        ('TBA', "To Be Announced"),
+                        )
+                    ),
                 )
     
     campus = models.ForeignKey(Campus)
@@ -346,7 +373,7 @@ class Major(models.Model):
     # departments has to be a M2M because some majors are
     # jointly held by departments (Math/Bio, for example)
     departments = models.ManyToManyField(Department)
-    
+    primary_campus = models.ForeignKey(Campus)
     students = models.ManyToManyField(Student,
                                       related_name="majors", 
                                       null=True, 
@@ -364,7 +391,7 @@ class Major(models.Model):
     elective_credits = models.IntegerField(default=8)
     def __unicode__(self):
         return u"{} through {}".format(self.title,
-                                             self.departments.all())
+                                             self.primary_campus)
 
 class NonStandardElective(models.Model):
     """Models a non-standard but approved elective choice, 
@@ -409,6 +436,8 @@ class MajorCourseRequirement(models.Model):
 class Course(models.Model):
     """The abstract idea of a course, given Django form."""
     title = models.CharField(max_length=100)
+    
+    listable = models.BooleanField(default=True)
     
     departments = models.ManyToManyField(Department, null=True)
     
@@ -530,17 +559,18 @@ class Section(models.Model):
     title = models.CharField(max_length=100,blank=True, null=True)
     number = models.IntegerField(default=1)
 
-    credit_hours = models.DecimalField(max_digits=3,decimal_places=2)
+    credit_hours = models.DecimalField(max_digits=3,decimal_places=2, null=True)
+    credit_multiplier = models.DecimalField(max_digits=3,decimal_places=2, null=True)
     is_mudd_writingintense = models.BooleanField(default=False) # need this here instead of Course,
                                                                 # because writingintensity might expire
                                                                 # but shouldn't expire for all time, just
                                                                 # the future semeesters.
     
-    semester = models.ForeignKey('Semester')
+    semester = models.ForeignKey('Semester', null=True)
     
     campus_restricted = models.BooleanField(default=False)
-    seats = models.IntegerField()
-    openseats = models.IntegerField()
+    seats = models.IntegerField(null=True)
+    openseats = models.IntegerField(null=True)
     mudd_seats = models.IntegerField(null=True)
     mudd_seats_open = models.IntegerField(null=True)
     is_still_open = models.BooleanField(default=True)
@@ -548,8 +578,8 @@ class Section(models.Model):
     students = models.ManyToManyField(Student, through="Enrollment")
     
     
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
     
     
     needs_attention = models.BooleanField(default=False)
@@ -565,22 +595,25 @@ class Section(models.Model):
     @property
     def has_times(self):
         return self.meeting_set.count() > 0 and \
-            RoomInfo.objects.filter(models.Q(is_tba=True)|models.Q(is_arr=True),meeting__section=self).count() < 1\
-            and RoomInfo.objects.filter(meeting__section=self).count() > 0
+            RoomInfo.objects.filter(meeting__section=self).count() > 0
     
     @property
     def mudd_creds(self):
+        if self.credit_multiplier:
+            return self.credit_hours * self.credit_multiplier
+        
         return self.credit_hours * self.course.credit_multiplier
     
     class Meta:
-        unique_together = (('course','number',))
+        unique_together = (('course','number','semester'))
 
     def get_instructors(self):
         qs = self.meeting_set.all()
         return qs.values_list('teachers__last_name', 'teachers__first_name').distinct()
 
     def __unicode__(self):
-        return u"{} - {}".format(self.course, str(self.number).zfill(2))
+        return u"{} - {} ({})".format(self.course, str(self.number).zfill(2),
+                                      self.semester)
 
 class RoomInfo(models.Model):
     """
@@ -598,6 +631,18 @@ class RoomInfo(models.Model):
     room = models.ForeignKey(Room)
     is_tba = models.BooleanField(default=False, help_text="To-be-arranged room situation")
     is_arr = models.BooleanField(default=False, help_text="Arranged-per-student room situation")
+    
+    # Consider giving RoomInfo a foreignkey to Course, for easy filtering?
+    """
+    course = models.ForeignKey(Course)
+    
+    def save(self, *args, **kwargs):
+        if not self.course:
+            self.course = self.meeting.section.course
+        super(RoomInfo, self).save(*args, **kwargs)
+    """
+    
+    
     #class Meta:
         # Unfuckingbelievably, this no-nonsense constraint is also not true;
         # because of 'rooms' like ARR and TBA.
@@ -702,7 +747,7 @@ class Day(models.Model):
         )
     name = models.CharField(max_length=15, unique=True)
     code = models.CharField(max_length=1, unique=True)
-    short = models.CharField(max_length=4, unique=True)
+    short = models.CharField(max_length=15, unique=True)
 
     def __unicode__(self):
         return u"{}".format(self.code)
@@ -713,8 +758,18 @@ class Enrollment(models.Model):
     """
     Keeps track of which students are in which courses
     """
+    
+    
+    
+    
     student = models.ForeignKey(Student)
     section = models.ForeignKey(Section)
+    
+    
+    
+    grade = models.CharField(max_length=2,
+                             choices=([(x,x) for x in Utility().create_grades()]),
+                             default='NR')
     
     description = models.TextField(null=True, blank=True)
     
@@ -771,6 +826,39 @@ class HMCHumReq(models.Model):
         return u"({})".format(self.student)
 
 
+class ReviewModel(models.Model):
+    RATING_CHOICES = (
+                    (1,'1'),
+                    (2,'2'),
+                    (3,'3'),
+                    (4,'4'),
+                    (5,'5'),
+                    (6,'6'),
+                    (7,'7'),
+                    (8,'8'),
+                    (9,'9'),
+                    (10,'10'),
+                )
+    class Meta:
+        abstract = True
+
+"""class CourseReview(ReviewModel):
+    reviewer = models.ForeignKey(Student)
+    course = models.ForeignKey(Course)
+    date = models.DateTimeField(auto_now=True)
+    
+    toughness = models.PositiveIntegerField(choices=ReviewModel.RATING_CHOICES, help_text="1 being the easiest")
+    quality = models.PositiveIntegerField(choices=ReviewModel.RATING_CHOICES, help_text="1 being the worst")
+    
+    review = models.TextField()
+    review_html = models.TextField()
+    
+    class Meta:
+        unique_together = (('reviewer', 'course'),)
+
+    def __unicode__(self):
+        return "Review of {} by {}".format(self.course, self.reviewer)
+"""
 class Log(models.Model):
     last_course_update = models.DateTimeField(default=datetime.datetime.now)
     last_enrollment_update = models.DateTimeField(default=datetime.datetime.now)
@@ -786,14 +874,14 @@ def attach_core_to_mudders(sender, **kwargs):
     student = kwargs['instance']
     if student.at.code == 'HM': # only mudders experience core.
         try:
-            core = Major.objects.get(title='HMC Core',)
+            core = Major.objects.get(title='Core',primary_campus__code='HM')
             student.majors.add(core)
         except Exception,e:
             e.args = ("Couldn't find HMC Core",) + e.args
             raise e
         try:
             # Attach Hum requirements
-            h = HMCHumReq.objects.get_or_create(student=student)
+            h, new = HMCHumReq.objects.get_or_create(student=student)
         except Exception, e:
             e.args = ("Couldn't attach HMC hum reqs") + e.args
             raise e
