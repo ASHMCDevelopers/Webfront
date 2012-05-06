@@ -2,12 +2,12 @@ from django.views.generic import View
 from django.views.generic.base import TemplateView, TemplateResponseMixin
 from django import http
 from django.utils import simplejson as json
-from django.db.models import Count, Q
+from django.db.models import Q
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import CourseSearch
-from .models import Course, RoomInfo, Day, Section, Meeting, Utility,\
+from .models import Course, Day, Section,\
                     Enrollment
 
 import datetime
@@ -213,8 +213,8 @@ class JSONifySectionData(View):
 class CourseDetail(TemplateResponseMixin, View):
     template_name = "course_detail.html"
     
-    def get(self, request, id="Q"):
-        try: id = int(id)
+    def get(self, request, cid="Q"):
+        try: cid = int(id)
         except ValueError: raise http.Http404 
         
         

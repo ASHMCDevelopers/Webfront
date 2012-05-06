@@ -5,12 +5,10 @@ Created on May 2, 2012
 '''
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.utils import IntegrityError
 
 from ...models import Campus, Semester, Day, Course, Prerequisite
 
-from itertools import izip
-import csv, pprint, re, datetime
+import csv, re
 
 class Command(BaseCommand):
     args = '<directory_of_csv_files>'
@@ -19,25 +17,25 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if len(args) != 1:
             raise CommandError("Expects a single directory as an argument.")
-        dir = args[0]
-        if dir[-1] != '/':
+        dirs = args[0]
+        if dirs[-1] != '/':
             
-            dir += '/'
+            dirs += '/'
         
         # Gather up the relevant csv files.
         # ENSURE THESE ARE ENCODED AS UTF-8 BEFORE RUNNING THIS SCRIPT
-        PREREQS = open(dir + 'courses 3.csv')
+        PREREQS = open(dirs + 'courses 3.csv')
         
         # Gather campuses. We'll need them later.
         CAMPUS_LOOKUP = dict([ (x.code, x) for x in Campus.objects.all()])
         def find_campus(string, dictionary):
             try:
                 camp = CAMPUS_LOOKUP[string]
-            except KeyError, e:
+            except KeyError:
                 print "Invalid campus: {}".format(string)
                 try:
                     camp = CAMPUS_LOOKUP[dictionary['campus']]
-                except KeyError, e:
+                except KeyError:
                     print "Falling back to UN"
                     camp = CAMPUS_LOOKUP['UN']
             return camp
@@ -69,7 +67,7 @@ class Command(BaseCommand):
                 # get rid of '*' runs; they only happen at the end or at the
                 # beginning, as far as I can tell.
                 req_code = re.sub(r'\*+', '*', row['Requisite Course Number'])
-                filter = {
+                filters = {
                           'starts':"{}__istartswith",
                           'ends':"{}__iendswith",
                           'is':"{}",
@@ -79,7 +77,7 @@ class Command(BaseCommand):
                     # a non-wildcard requirement
                     try:
                         r = Course.objects.get(code=req_els[0])
-                    except ObjectDoesNotExist, e:
+                    except ObjectDoesNotExist:
                         print "\tNo such course: {}".format(req_els[0])
                         continue
                 
@@ -94,9 +92,9 @@ class Command(BaseCommand):
                                                         requisite=r)
                 elif len(req_els) == 2: # a single wildcard
                     if req_els[0] == '':
-                        r = Course.objects.filter(**{filter['ends'].format('code'):req_els[1]})
+                        r = Course.objects.filter(**{filters['ends'].format('code'):req_els[1]})
                     else:
-                        r = Course.objects.filter(**{filter['starts'].format('code'):req_els[0]})
+                        r = Course.objects.filter(**{filters['starts'].format('code'):req_els[0]})
                     
                     
                     if req_cat == 'N':

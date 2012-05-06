@@ -7,9 +7,8 @@ from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 from ...models import Campus, Course, Professor, Section, Meeting, Timeslot, Day, Semester,\
-                      CourseArea, Prerequisite, RoomInfo, Log, Department, Room, Building
+                      CourseArea, RoomInfo, Log, Department, Room, Building
 
-from itertools import izip
 import csv, pprint, re, datetime
 
             
@@ -20,29 +19,29 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if len(args) != 1:
             raise CommandError("Expects a single directory as an argument.")
-        dir = args[0]
-        if dir[-1] != '/':
+        dirs = args[0]
+        if dirs[-1] != '/':
             
-            dir += '/'
+            dirs += '/'
         
         # Gather up the relevant csv files.
         # ENSURE THESE ARE ENCODED AS UTF-8 BEFORE RUNNING THIS SCRIPT
-        MEETINGS = open(dir + 'meetings 1.csv')
-        SECTIONS = open(dir + 'sections 1.csv')
-        DESCRIPT = open(dir + 'courses 1.csv')
-        AREAS = open(dir + 'courses 2.csv')
-        PREREQS = open(dir + 'courses 3.csv')
+        MEETINGS = open(dirs + 'meetings 1.csv')
+        SECTIONS = open(dirs + 'sections 1.csv')
+        DESCRIPT = open(dirs + 'courses 1.csv')
+        AREAS = open(dirs + 'courses 2.csv')
+        PREREQS = open(dirs + 'courses 3.csv')
         
         # Gather campuses. We'll need them later.
         CAMPUS_LOOKUP = dict([ (x.code, x) for x in Campus.objects.all()])
         def find_campus(string, dictionary):
             try:
                 camp = CAMPUS_LOOKUP[string]
-            except KeyError, e:
+            except KeyError:
                 print "Invalid campus: {}".format(string)
                 try:
                     camp = CAMPUS_LOOKUP[dictionary['campus']]
-                except KeyError, e:
+                except KeyError:
                     print "Falling back to UN"
                     camp = CAMPUS_LOOKUP['UN']
             return camp
