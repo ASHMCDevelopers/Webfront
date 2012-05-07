@@ -17,12 +17,14 @@ class Command(BaseCommand):
                               'computer science':{
                                                   'depts':['HCSI',],
                                                   'kernel':[
-                                                            ('CSCI005  ', 'CSCI042  '),
-                                                            ('CSCI060  ', 'CSCI042  '),
+                                                            ('CSCI005  ', 
+                                                             'CSCI042  '),
+                                                            ('CSCI060  ', 
+                                                             'CSCI042  '),
                                                             'MATH055  ',
                                                             'CSCI070  ',
                                                             'CSCI081  ',
-                                                            ('CSCI105  ', 'CSCI105  '),
+                                                            'CSCI105  ',
                                                             'CSCI121  ',
                                                             'CSCI131  ',
                                                             'CSCI140  ',
@@ -54,6 +56,55 @@ class Command(BaseCommand):
                                                                'CSCI189  ',
                                                                ],
                                                   },
+                              'biology':{
+                                         'depts':['HBIO'],
+                                         'kernel':['BIOL054  ',
+                                                   'CHEM056  ',
+                                                   'CHEM058  ',
+                                                   'BIOL101  ',
+                                                   'CHEM105  HM',
+                                                   'BIOL108  ',
+                                                   'BIOL109  ',
+                                                   'BIOL113  ',
+                                                   'BIOL191  HM 2',
+                                                   'BIOL192  HM 2',
+                                                   ('BIOL193  HM', 
+                                                    'BIOL195  HM'),
+                                                   ('BIOL194  HM',
+                                                    'BIOL196  HM'),
+                                                   ],
+                                         'electives':[],
+                                         'elec_creds':13,
+                                         'elec_req':3
+                                         },
+                              'computer science and mathematics':{
+                                                                  'depts':['HCSI','HMTH'],
+                                                                  'kernel':['MATH055  ',
+                                                                            ('CSCI005',
+                                                                             'CSCI060  '),
+                                                                            'CSCI081  ',
+                                                                            'CSCI140  ',
+                                                                            'CSCI070  ',
+                                                                            'CSCI105  ',
+                                                                            'CSCI131  ',
+                                                                            'MATH131  ',
+                                                                            ('MATH164  ',
+                                                                             'MATH165'),
+                                                                            'MATH171  ',
+                                                                            ('CSCI183  HM',
+                                                                             'MATH193  HM',
+                                                                             'CSMT183  HM'),
+                                                                            ('CSCI184  HM',
+                                                                             'MATH193  HM',
+                                                                             'CSMT184  HM'),
+                                                                            'CSCI195  HM 2',
+                                                                            'MATH199  HM',
+                                                                            'MATH198  HM'
+                                                                            ],
+                                                                  'electives':[],
+                                                                  'elec_creds':8,
+                                                                  'elec_req':0
+                                                                  },
                               'core':{
                                       'elec_creds':0,
                                       'elec_req':0,
@@ -73,7 +124,7 @@ class Command(BaseCommand):
                                                 'PHYS023  HM',
                                                 'PHYS024  HM',
                                                 'PHYS051  HM',
-                                                ('CSCI005GRHM', 'CSCI005  HM', 'CSCI042  HM'),
+                                                ('CSCI005  HM', 'CSCI005GRHM', 'CSCI042  HM'),
                                                 ('MATH030B HM', 'MATH030G HM'),
                                                 'MATH040  HM',
                                                 'MATH045  HM',
@@ -127,7 +178,7 @@ class Command(BaseCommand):
            
             # attach departments to major 
             for dept in major['depts']:
-                d, new = Department.objects.get_or_create(code=dept)
+                d = Department.objects.get(code=dept)
                 print "adding dept", d
                 m.departments.add(d)
             
