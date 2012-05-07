@@ -114,8 +114,8 @@ def has_taken(value, course):
     instance of :model:`courses.Course`.
     """
     if not isinstance(value, Student):
-        value = value.student_profile
-        
+        try: value = value.student_profile
+        except AttributeError: return False # AnonymousUser
         
     return Enrollment.objects.filter(student=value)\
                             .filter(section__course=course) > 0
