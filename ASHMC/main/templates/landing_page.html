@@ -1,107 +1,94 @@
 {% extends 'base_page.html' %}
 {%load staticfiles %}
-{% block stylin %}
-<link rel=stylesheet type="text/css" media="screen" href="{%static "styles/main_landing.css"%}"/>
-{% endblock %}
+{% load main_extras %}
+{% load cache %}
 
+{% block content %}
+<div id="preheader">
+{% block pre_header %}
+    <div id="twitter_feed">
+    {% for tweet in latest_tweets  %}
+        <div class='tweet'>
+            <div class='spacer'>
+                <div class='time'>{{tweet.date|date:"m/d/y"}}</div>
+                <div class='author'>
+                    <a 
+                    style='color:#{{tweet.user.profile_link_color}};'
+                    href="http://twitter.com/#!/{{tweet.user.screen_name}}">@{{tweet.user.screen_name}}</a>
+                </div>
+            </div>
+            <div class='text'>{{tweet.text|urlize}}</div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock pre_header %}
+</div>
+
+<header>
 {% block header %}
-<div id="welcome">Welcome</div>
-<div id="towrap">
-	<div class="towidget" id='toleft'> </div>
-	<div class="towidget" id="to">to</div>
-	<div class="towidget" id="toright"> </div>
+<div id="logo">
+    <div id="ashmc">
+        <a href="{% url "main_landing_page" %}"><h1><span id="S">AS</span><span>HMC</span></h1></a>
+   </div>
+
+   {% if user.is_authenticated %}
+   <div id="salutation"> 
+        <h2>{% greeting %}{{user.first_name}}!</h2> 
+        <div class="righty"><a href="{% url 'logout' %}">logout</a></div>
+
+        <div id="ashmcroles">{{user.ashmcrole_set.all|join:", "}}</div>
+        <div id="dormroles">{{user.dormrole_set.all|join:", "}}</div>
+   </div>
+    <div id="head_links">
+        <ul>
+            <a href="www.hmc.edu"><li>HMC</li></a>
+            <a href="{% url "search_courses" %}"><li>Courses</li></a>
+            {% if perms.vote.can_vote %}
+                <a href=""><li>Vote</li></a>
+            {% endif %}
+        </ul>
+    </div>
+    {% else %}
+    <div id="login_form">
+        <div class="centerer centered">
+            <div id="login_form_hold_left"></div>
+            <div id="login_form_hold_right"></div>
+            <div id="login_form_hold">
+            <form action="{% url  "login" %}" method="POST">
+                {% csrf_token %}
+            <div>{{form.username}}<div class='tooltip'>Your HMC email: first_last@hmc.edu</div></div>
+            <div>{{form.password}}<div class='tooltip'>Don't know your password?<br/>Click <a href="#">here</a>.</div></div>
+            <input type=submit id="signIn" class="button-submit" value="Get Started" />
+            </form>
+        </div>
+    </div>
+    {% endif %}
 </div>
-
-{{block.super}}
-
 {% endblock %}
+</header>
 
-{% block scriptin %}
-<script type="text/javascript">
+<div id="postheader">
+{% block post_header %}
 
-$(document).ready(function(){
-	$("#login_form_hold :input").tooltip({
-      // place tooltip on the right edge
-      position: "center right",
- 
-      // a little tweaking of the position
-      offset: [-2, 10],
- 
-      // use the built-in fadeIn/fadeOut effect
-      effect: "fade",
- 
-      // custom opacity setting
-      opacity: 0.7
- 
-      });
-      
-	$("#footerabout").click(function(){
-		$("#introfooter").slideToggle('slow');
-	});    
-});
-</script>
-{% endblock %}
+<div id="rss_feed">
+    <h2>In the pipe @HMC</h2>
+{% cache 500 rss_display %}
+    {% get_rss "http://emsweb.claremont.edu/HarveyMC/RSSFeeds.aspx?data=j%2fxqvgLhwZs%2bG6vJ6fo56Qf9BN3JUl%2fAnKeSNhsCD7%2fPdUPWrw1HBw%3d%3d" as rss %}
+    <ul>
+    {% for entry in rss.entries %}
+    <li class='rss_entry'>
+        <div>{{entry.title}}</div>
+    </li>
+    {% endfor %}
+    </ul>
+{% endcache %}
 
-{% block container%}
-<div class="centerer w850">
-<div id="login_form_hold_left"></div>
-<div id="login_form_hold_right"></div>
-<div id="login_form_hold">
-<form>
-<div><input type="text" placeholder="username"/><div class='tooltip'>Your HMC email: first_last@hmc.edu</div></div>
-<div><input type="password" placeholder="password"/><div class='tooltip'>Don't know your password?<br/>Click <a href="#">here</a>.</div></div>
-<input type=submit id="signIn" class="button-submit" value="Get Started" />
-</form>
+<div id="blogger">
+    {% for post in posts %}
+        {% include "front_post.html" %}
+    {% endfor %}
 </div>
+{% endblock post_header %}
 
 </div>
-{% endblock%}
-
-
-{% block footer %}
-<div id="introfooter">
-	
-	<ul class="horstack">
-<li id="whycourses"><div>
-	<section>
-			<h2>Why COURSES?</h2>
-	<p>We all hate Portal; Portal sucks. Perversely, HMC's version of
-		Portal appears to suck the most, even though we are (by far)
-		the most technically-oriented of the 5C's.</p>
-	<p>COURSES is an attempt to show how much better Portal's course
-		listings could be,
-		if the <em>students</em> at HMC were allowed to design it.</p>
-	<p>I mean, just look up---that's already an improvement, amirite?</p>
-	</section></div>
-</li>
-
-<li >
-	<div>
-	<img class="chart" src="{%static 'images/charts/COURSES_IS_BETTER_1.png'%}">
-	</div>
-</li>
-
-<li id="howwork"><div>
-	<a name="footer"></a>
-	<section>
-		<h2>How does it work?</h2>
-		<p>COURSES interacts with HMC's office of the registrar,
-			as well as the heads of HMC's major programs to provide
-			as up-to-date information about course offering and
-			requirements as possible.</p>
-		<p>It's important to realize that COURSES is not definitive;
-			it does its best, but it won't always be up to date.</p>
-		<p>Unfortunately, only Portal is guaranteed to be current.</p>
-	</section>
-	</div>
-</li>
-</ul>
-</div>
-	<div id="foot_links"><ul>
-		<a href="#" id="footertos"><li>TOS</li></a>
-		<a href="#" id="footerprivacy"><li>Privacy</li></a>
-		<a href="#" id="footercontact"><li>Contact</li></a>
-		<a href="#footer" id="footerabout"><li>About</li></a>
-		</ul></div>
-		</p>
-{% endblock%}
+{% endblock content %}

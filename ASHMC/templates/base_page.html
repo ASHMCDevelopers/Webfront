@@ -1,5 +1,7 @@
 {% load staticfiles %}
 {% load url from future %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +10,7 @@
        Remove this if you use the .htaccess -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-  <title>{%block title%}COURSES{%endblock%}</title>
+  <title>{%block title%}ASHMC{%endblock%}</title>
   <meta name="description" content="" />
   <meta name="author" content="Haak Saxberg" />
 
@@ -23,44 +25,20 @@
 </head>
 
 <body>
-<div id="container">
-	<header>
-	{% block header %}
-	<div id="coursewrap">
-		<ul>
-	        <li id="c" title="PHYS">C</li>
-	        <li id="o" title="CSCI">O</li>
-	        <li id="u" title="BIOL">U</li>
-	        <li id="r" title="MATH">R</li>
-	        <li id="s1" title="CHEM">S</li>
-	        <li id="e" title="ENGR">&epsilon;</li>
-	        <li id="s2" title="HUM">S</li>
-	   </ul>
-	</div>
-	{% endblock %}
-	</header>
-	
-    {% block container %}
-    
-    
-    {% endblock %}
 
+<div id="container">
 	
+    {% block content %}
 	
+	{% endblock content %}
+
 </div>
 <footer>
-	<hr/><br/>
 	{% block footer %}
-	<div id="foot_links"><ul>
-		<a href="#" id="footertos"><li>TOS</li></a>
-		<a href="#" id="footerprivacy"><li>Privacy</li></a>
-		<a href="#" id="footercontact"><li>Contact</li></a>
-		<a href="courses" id="footerabout"><li>About</li></a>
-		</ul></div>
-		</p>
 	{% endblock %}
-	</footer>
-	<p id="copyright">&copy; Copyright  by <a href="http://cs.hmc.edu/~hsaxberg/curriculumvitae.html">Haak Saxberg</a></p>
+</footer>
+<p id="copyright">&copy; Copyright  by <a href="http://cs.hmc.edu/~hsaxberg/curriculumvitae.html">Haak Saxberg</a></p>
+
 {# scripts go at the end, when the page has mostly been loaded already. #}
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 

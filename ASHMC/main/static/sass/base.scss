@@ -1,0 +1,329 @@
+/* base.scss */
+
+$screen_max_width: 1000px;
+$screen_min_width: 1200px;
+
+@font-face {
+	font-family: "GungSeo";
+	src: url(/static/fonts/Gungseouche.ttf) format("truetype"); 
+}
+
+@font-face {
+	font-family: "LiSong Pro";
+	src: url(/static/fonts/LiSongPro.ttf) format("truetype"); 
+}
+
+
+* {
+	margin: 0;
+	padding: 0;
+	font: {
+		weight: normal;
+		style: normal;
+	}
+}
+
+h1,h2,h3 {
+    font: {
+        family: Helvetica, sans-serif;
+    }
+}
+
+a {
+    text: {
+        decoration: none;
+    }
+}
+
+@import "functions";
+
+@import "inputs";
+
+div#container {
+	min-width: $screen_min_width;
+}
+
+div#preheader {
+
+	max-width: $screen_max_width;
+	
+    margin: 0 auto;
+
+    div#twitter_feed {
+        position: relative;
+        left: 66%;
+
+        width: 35%;
+        max-height: 200px;
+        
+        padding: 5px;
+
+        overflow-y: auto;
+
+        @include cute-scrollbar($track-background: white);
+
+        div.spacer {
+            height: 10px;
+
+            padding: {
+                bottom: 3px;
+            }
+        }
+
+        a {
+            text: {
+                decoration: none;
+            }
+        }
+    }
+}
+
+div.tweet {
+    $tweet_color: rgb(154,228,232);
+
+    margin: {
+        bottom: 5px;
+    }
+
+    .text {
+
+        font: {
+            size: 10pt;
+            family: sans-serif;
+        }
+
+        margin: {
+            top: 5px;
+            bottom: 2px;
+        }
+
+        padding: 3px;
+
+        @include rounded_corner(bottom-left);
+
+        background: {
+           color: $tweet_color;
+        }
+    }
+
+    $sub_text_size: 10pt;
+
+    .time {
+        float: left;
+
+        font: {
+            size: $sub_text_size;
+        }
+    }
+
+    .author {
+        float: right;
+
+        padding: 2px;
+
+        @include rounded_corner(top-left);
+        @include rounded_corner(top-right);
+
+        background: {
+            color: $tweet_color;
+        }
+
+        font: {
+            size: $sub_text_size;
+        }
+    }
+}
+
+div#logo {
+	$border_width: 15px;
+	$logo_background: #cc9933;
+
+    height: 200px;
+
+    margin: {
+        top: 33px;
+    }
+
+	background-color: $logo_background;
+
+	border: {
+		style: solid;
+		left: None;
+		right: None;
+		width: $border_width;
+	}
+
+
+
+	#ashmc {
+		float: left;
+		height: 170px;
+		list-style: None;
+		list-style-type: None;
+
+		margin: {
+			top: 15px;
+			left: 5%;
+		}
+
+        a {
+            text: {
+                decoration: none;
+            }
+
+            color: rgb(85,26,139);
+
+            &:active {
+                color: rgb(200, 26, 70);
+            }
+        }
+
+		span {
+			margin: {
+				left: 0;
+				right: 0;
+			}
+		
+			display: inline block;
+			list-style: None;
+		
+			font:{
+				family: "GungSeo" serif;
+				size: 115pt;
+			}
+
+			&#A, &#S {
+				font:{
+					family: "LiSong Pro" serif;
+					size: 96pt;
+				}
+			}
+		}
+	}
+}
+
+#S::after {
+	content: "|";
+}
+
+div#head_links {
+	float: left;
+	margin: {
+		top: 1em;
+		left: 2em;
+	}
+
+	font: {
+		size: 20pt;
+	}
+}
+
+div#salutation {
+    float: right;
+
+    min-width: 300px;
+
+    margin: {
+        top: 1em;
+        right: 15%;
+    }
+}
+
+div#login_form {
+	float: right;
+
+	margin: {
+		right: 5%;
+		top: -32px; // This balances the braces vertically
+	}
+
+	div {
+		width: 500px;
+		margin: 0 auto;
+	}
+
+	$brace_width: 95px;
+	$brace_height: 265px;
+
+	#login_form_hold_left {
+		background: {
+			image: url(/static/images/header/leftbrace.png);
+			repeat:  no-repeat;
+			position: center left;
+		}
+		height: $brace_height;
+		width: $brace_width;
+		float: left;
+	}
+
+	#login_form_hold_right {
+		background: {
+			image: url(/static/images/header/rightbrace.png);
+			repeat:  no-repeat;
+			position: center right;
+		}
+		height: $brace_height;
+		width: $brace_width;
+		float: right;
+	}
+
+	#login_form_hold {
+		text-align: center;
+		margin: 0 auto;
+		padding: 35px 0px;
+		border-radius: 10px;
+	}
+    #login_form_hold input{
+        width: 55%;
+        padding: 5px;
+        margin: {
+            top: 20px;
+        }
+
+        font: {
+            size: 15pt;
+        }
+    }
+}
+
+#login_form_hold input[type=submit]{
+	width: 30%;
+}
+
+div#postheader {
+	max-width: $screen_max_width;
+	min-height: 500px;
+
+	margin: 0 auto;
+
+    div#rss_feed {
+        max-width: 25%;
+        padding: 5px;
+        margin: 5px;
+
+        font: {
+            size: 10pt;
+        }
+
+        h2 {
+            margin: {
+                left: -20px;
+            }
+        }
+    }
+}
+
+footer {
+	max-width: $screen_max_width;
+}
+
+@import "classes";
+
+
+#copyright {
+	margin: 10px;
+	font: {
+		size: 8pt;
+		style: italic;
+	}
+}
