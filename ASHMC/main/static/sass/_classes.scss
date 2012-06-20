@@ -9,6 +9,10 @@
     float: right;
 }
 
+.lefty {
+    float: left;
+}
+
 .hidden {
     display: none;
 }
@@ -30,6 +34,42 @@
     /* outline radius for mozilla/firefox only */
     -moz-box-shadow:0 0 10px #000;
     -webkit-box-shadow:0 0 10px #000;
+}
+
+a.social-media {
+
+    display: block;
+    width: 34px;
+    height: 34px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    text-indent: -8888px;
+    overflow: hidden;
+    float: left;
+
+    &.facebook {
+        background: {
+            image: url(/static/images/sm-facebook.png);
+        }
+    }
+
+    &.twitter {
+        background: {
+            image: url(/static/images/sm-twitter.png);
+        }
+    }
+
+    &.youtube {
+        background: {
+            image: url(/static/images/sm-youtube.png);
+        }
+    }
+
+    &.flickr {
+        background: {
+            image: url(/static/images/sm-flickr.png);
+        }
+    }
 }
 
 /* end _classes.scss */

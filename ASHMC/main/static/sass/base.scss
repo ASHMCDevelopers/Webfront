@@ -1,7 +1,9 @@
 /* base.scss */
 
-$screen_max_width: 1000px;
-$screen_min_width: 1200px;
+$screen_max_width: 1050px;
+$screen_min_width: 1050px;
+
+$mudd_gold: #cc9933;
 
 @font-face {
 	font-family: "GungSeo";
@@ -51,7 +53,7 @@ div#preheader {
 
     div#twitter_feed {
         position: relative;
-        left: 66%;
+        left: 65%;
 
         width: 35%;
         max-height: 200px;
@@ -135,8 +137,7 @@ div.tweet {
 }
 
 div#logo {
-	$border_width: 15px;
-	$logo_background: #cc9933;
+	$border_width: 10px;
 
     height: 200px;
 
@@ -144,7 +145,7 @@ div#logo {
         top: 33px;
     }
 
-	background-color: $logo_background;
+	background-color: $mudd_gold;
 
 	border: {
 		style: solid;
@@ -163,8 +164,10 @@ div#logo {
 
 		margin: {
 			top: 15px;
-			left: 5%;
+			left: 3%;
 		}
+
+        text-align: center;
 
         a {
             text: {
@@ -233,7 +236,7 @@ div#login_form {
 	float: right;
 
 	margin: {
-		right: 5%;
+		right: 2%;
 		top: -32px; // This balances the braces vertically
 	}
 
@@ -296,31 +299,72 @@ div#postheader {
 
 	margin: 0 auto;
 
-    div#rss_feed {
+    div#sidebar{
         max-width: 25%;
         padding: 5px;
         margin: 5px;
 
+        height: 100%;
+
+        float: left;
         font: {
             size: 10pt;
-        }
-
-        h2 {
-            margin: {
-                left: -20px;
-            }
         }
     }
 }
 
 footer {
 	max-width: $screen_max_width;
+
+    margin: 0 auto;
+
+    min-height: 50px;
+
+    padding: 10px;
+
+    border: 5px solid black {
+        left: none;
+        right: none;
+        bottom: none;
+    }
+
+    background: {
+        color: $mudd_gold;
+    }
+
+    font: {
+        size: 10pt;
+    }
+
+    a {
+        text: {
+            decoration: underline;
+        }
+    }
+
+    ul#social-media-links {
+
+        height: 34px;
+
+        list-style: none;
+        list-style-image: none;
+
+        li {
+            display: inline;
+        }
+    }
+
+    ul#footer-links {
+        text-align: right;
+        list-style: none;
+    }
 }
 
 @import "classes";
 
-
 #copyright {
+    display: block;
+
 	margin: 10px;
 	font: {
 		size: 8pt;

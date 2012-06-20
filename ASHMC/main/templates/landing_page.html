@@ -2,6 +2,8 @@
 {%load staticfiles %}
 {% load main_extras %}
 {% load cache %}
+{% load webdesign %}
+
 
 {% block content %}
 <div id="preheader">
@@ -29,6 +31,8 @@
 <div id="logo">
     <div id="ashmc">
         <a href="{% url "main_landing_page" %}"><h1><span id="S">AS</span><span>HMC</span></h1></a>
+
+        <h3>Associated Students of Harvey Mudd College</h3>
    </div>
 
    {% if user.is_authenticated %}
@@ -70,25 +74,49 @@
 <div id="postheader">
 {% block post_header %}
 
-<div id="rss_feed">
-    <h2>In the pipe @HMC</h2>
-{% cache 500 rss_display %}
-    {% get_rss "http://emsweb.claremont.edu/HarveyMC/RSSFeeds.aspx?data=j%2fxqvgLhwZs%2bG6vJ6fo56Qf9BN3JUl%2fAnKeSNhsCD7%2fPdUPWrw1HBw%3d%3d" as rss %}
-    <ul>
-    {% for entry in rss.entries %}
-    <li class='rss_entry'>
-        <div>{{entry.title}}</div>
-    </li>
-    {% endfor %}
-    </ul>
-{% endcache %}
+    <div id="sidebar">
+        <h2>In the pipe @HMC</h2>
+        {% cache 500 rss_display %}
+            {% get_rss "http://emsweb.claremont.edu/HarveyMC/RSSFeeds.aspx?data=j%2fxqvgLhwZs%2bG6vJ6fo56Qf9BN3JUl%2fAnKeSNhsCD7%2fPdUPWrw1HBw%3d%3d" as rss %}
+            <ul>
+            {% for entry in rss.entries %}
+            <li class='rss_entry'>
+                <div>{{entry.title}}</div>
+            </li>
+            {% endfor %}
+            </ul>
+        {% endcache %}
+    </div>
 
-<div id="blogger">
-    {% for post in posts %}
-        {% include "front_post.html" %}
-    {% endfor %}
-</div>
-{% endblock post_header %}
+
+    <div id="blogger">
+        {% for post in posts %}
+            {% include "front_post.html" %}
+        {% endfor %}
+        <h2>{% lorem 3 w %}</h2>
+        <author>{% lorem 2 w %}</author>
+        {% lorem 4 p %}
+    </div>
+    {% endblock post_header %}
 
 </div>
 {% endblock content %}
+
+{% block footer %}
+
+    <ul class="lefty" id="social-media-links">
+        <li><a href="" title="Like ASHMC on Facebook." class="social-media facebook">Like ASHMC on Facebook.</a></li>
+        <li><a href="http://www.flickr.com/photos/micamultimedia/" title="Take a look at ASHMC on Flickr." class="social-media flickr">Take a look at ASHMC on Flickr.</a></li>
+        <li><a href="" title="Follow ASHMC on Twitter (@ashmc.edu)." class="social-media twitter">Follow ASHMC on Twitter (@ashmc_updates).</a></li>
+        <li><a href="" class="social-media youtube">Watch our YouTube channel.</a></li>
+    </ul>
+
+    <ul id="footer-links">
+        <li><a href="">What is ASHMC?</a></li>
+        <li><a href="">Read the Constitution</a></li>
+        <li><a href="">Read the Bylaws</a></li>
+        <li><a href="">Get the Minutes</a></li>
+        <li><a href="">Find a form</a></li>
+    </ul>
+
+{% endblock footer %}

@@ -74,14 +74,14 @@ input[type=url]:hover {
 
 /* end _inputs.scss */
 div#container {
-  min-width: 1200px; }
+  min-width: 1050px; }
 
 div#preheader {
-  max-width: 1000px;
+  max-width: 1050px;
   margin: 0 auto; }
   div#preheader div#twitter_feed {
     position: relative;
-    left: 66%;
+    left: 65%;
     width: 35%;
     max-height: 200px;
     padding: 5px;
@@ -141,14 +141,15 @@ div#logo {
   border-style: solid;
   border-left: None;
   border-right: None;
-  border-width: 15px; }
+  border-width: 10px; }
   div#logo #ashmc {
     float: left;
     height: 170px;
     list-style: None;
     list-style-type: None;
     margin-top: 15px;
-    margin-left: 5%; }
+    margin-left: 3%;
+    text-align: center; }
     div#logo #ashmc a {
       text-decoration: none;
       color: #551a8b; }
@@ -182,7 +183,7 @@ div#salutation {
 
 div#login_form {
   float: right;
-  margin-right: 5%;
+  margin-right: 2%;
   margin-top: -32px; }
   div#login_form div {
     width: 500px;
@@ -216,19 +217,39 @@ div#login_form {
   width: 30%; }
 
 div#postheader {
-  max-width: 1000px;
+  max-width: 1050px;
   min-height: 500px;
   margin: 0 auto; }
-  div#postheader div#rss_feed {
+  div#postheader div#sidebar {
     max-width: 25%;
     padding: 5px;
     margin: 5px;
+    height: 100%;
+    float: left;
     font-size: 10pt; }
-    div#postheader div#rss_feed h2 {
-      margin-left: -20px; }
 
 footer {
-  max-width: 1000px; }
+  max-width: 1050px;
+  margin: 0 auto;
+  min-height: 50px;
+  padding: 10px;
+  border: 5px solid black;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  background-color: #cc9933;
+  font-size: 10pt; }
+  footer a {
+    text-decoration: underline; }
+  footer ul#social-media-links {
+    height: 34px;
+    list-style: none;
+    list-style-image: none; }
+    footer ul#social-media-links li {
+      display: inline; }
+  footer ul#footer-links {
+    text-align: right;
+    list-style: none; }
 
 /* _classes.scss */
 .centerer {
@@ -237,6 +258,9 @@ footer {
 
 .righty {
   float: right; }
+
+.lefty {
+  float: left; }
 
 .hidden {
   display: none; }
@@ -258,8 +282,27 @@ footer {
   -moz-box-shadow: 0 0 10px #000;
   -webkit-box-shadow: 0 0 10px #000; }
 
+a.social-media {
+  display: block;
+  width: 34px;
+  height: 34px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  text-indent: -8888px;
+  overflow: hidden;
+  float: left; }
+  a.social-media.facebook {
+    background-image: url(/static/images/sm-facebook.png); }
+  a.social-media.twitter {
+    background-image: url(/static/images/sm-twitter.png); }
+  a.social-media.youtube {
+    background-image: url(/static/images/sm-youtube.png); }
+  a.social-media.flickr {
+    background-image: url(/static/images/sm-flickr.png); }
+
 /* end _classes.scss */
 #copyright {
+  display: block;
   margin: 10px;
   font-size: 8pt;
   font-style: italic; }
