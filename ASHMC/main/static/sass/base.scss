@@ -27,15 +27,30 @@ body {
     font-family: "Proxima Nova Regular","Helvetica Neue",Arial,Helvetica,sans-serif;
 }
 
-em {
+em, figcaption {
     font-family: "Proxima Nova Italic","Helvetica Neue",Arial,Helvetica,sans-serif;
     font-weight: normal;
     font-style: italic;
 
-    br + & {
-        color: rgba(0, 0, 0, 0.4);
-        font-size: 0.875em;
+   
+}
+
+figure {
+    
+    &.centered {
+        margin: 0 auto;
+        width: 90%;
+        text-align: center;
+        img {
+            margin-bottom: 0.5em;
+        }
     }
+}
+
+figcaption {
+    text-align: left;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 0.875em;
 }
 
 h1{
@@ -563,7 +578,7 @@ div#login_form {
                 padding: 1em 2em;
                 border: 1px solid rgba(0, 0, 0, 0.1);
                 border-left: 8px solid #41B7DB;
-                background-color: #F7F7F7;
+                background: $body_background;// #F7F7F7;
                 font: italic 1.05em/1.55em "Skolar Italic", "Times New Roman", serif;
                 color: rgba(0, 0, 0, 0.75);
             }
@@ -582,7 +597,7 @@ div#login_form {
                 }
             }
             .metadata {
-                text-align: center;
+                text-align: right;
                 padding-bottom: 2em;
                 li {
                     color: rgba(0, 0, 0, 0.3);
@@ -601,6 +616,7 @@ div#login_form {
                         font-family: "Rockwell","Times New Roman",serif;
                         font-weight: normal;
                         font-style: normal;
+                        text-transform: capitalize;
                     }
                 }
 
