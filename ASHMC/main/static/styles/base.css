@@ -360,6 +360,12 @@ section#preheader {
 
 section#pipeline {
   padding: 5px; }
+  section#pipeline ul li {
+    margin-bottom: 1em; }
+    section#pipeline ul li p {
+      text-indent: -2em;
+      margin-left: 2em;
+      line_height: 0.5em; }
 
 section#twitter_feed {
   padding: 5px;
@@ -424,7 +430,9 @@ section#twitter_feed {
 div#logo {
   height: 150px;
   min-width: 1080px;
+  position: relative;
   margin-top: 15px;
+  z-index: 2;
   background-color: #1c1c1c;
   color: #cc9933;
   border-style: solid;
@@ -515,13 +523,13 @@ div#login_form {
   min-height: 500px;
   margin: 0 auto; }
   #postheader #sidebar {
-    z-index: -1;
+    z-index: 1;
     position: relative;
     background-color: #fff;
     max-width: 25%;
     padding: 1%;
       padding-top: 200px;
-    margin-top: -200px;
+    margin-top: -185px;
     height: 100%;
     float: left;
     font-size: 10pt; }

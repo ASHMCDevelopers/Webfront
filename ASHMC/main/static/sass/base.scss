@@ -191,6 +191,19 @@ section#preheader {
 
 section#pipeline {
     padding: 5px;
+
+    ul {
+        li {
+            margin-bottom: 1em;
+
+            p {
+                text-indent: -2em;
+                margin-left: 2em;
+                line_height: 0.5em;
+            }
+
+        }
+    }
 }
 
 section#twitter_feed {
@@ -295,10 +308,11 @@ div#logo {
 	$border_width: 10px;
     height: 150px;
     min-width: $logo_banner_min_width;
+    position: relative;
     margin: {
         top: 15px;
     }
-
+    z-index: 2;
 	background-color: #1c1c1c;
     
     color: $mudd_gold;
@@ -493,7 +507,7 @@ div#login_form {
 	margin: 0 auto;
     
     #sidebar{
-        z-index: -1;
+        z-index: 1;
         position: relative;
         background-color: #fff;
         max-width: 25%;
@@ -502,7 +516,7 @@ div#login_form {
         }
 
         margin: {
-            top: -200px;
+            top: -185px;
         }
         
         
