@@ -27,6 +27,19 @@ body {
     font-family: "Proxima Nova Regular","Helvetica Neue",Arial,Helvetica,sans-serif;
 }
 
+$link_hover_color: #e53b2c;
+$link_color: #41B7D8;
+a {
+    color: $link_color;
+    @include transition(color, .2s);
+    
+    &:hover {
+        color: $link_hover_color!important; // force all links to do this.
+
+        @include transition(color, .2s);
+    }
+}
+
 em, figcaption {
     font-family: "Proxima Nova Italic","Helvetica Neue",Arial,Helvetica,sans-serif;
     font-weight: normal;
@@ -186,8 +199,8 @@ section#preheader {
 
         li {
             text-indent: 2em;
-            padding-right: 7.2%;
-            margin-left: -2.2%;
+            padding-right: 8.5%;
+            margin-left: -3.5%;
             margin-bottom: 5px;
             font-family: Copse, "Rockwell", sans-serif;
             font-size: $font-size * 1.25;
@@ -370,7 +383,6 @@ div#logo {
         h1 {
             line-height: 4.5em;
             margin: 0;
-            //text-align:center;
 
     		span {
     			margin: {
@@ -546,7 +558,9 @@ div#login_form {
 
     #blogger {
         max-width: 70%;
-        padding: 1%;
+        padding: 1%{
+            bottom: 0%;
+        }
         margin: {
             left: 0.5%;
             top: $line_height*3;
@@ -565,6 +579,7 @@ div#login_form {
 
             padding: 15px{
                 left: 10%;
+                bottom: 3em;
             }
 
             margin-left: -3.5%;
@@ -584,7 +599,14 @@ div#login_form {
             }
             h2 {
                //margin-bottom: #{1.5*$line_height/($font-size*2)}em;
-               .catch_headline {
+                a {
+                    color: #333;
+
+                    &:hover {
+                        color: $link_hover_color;
+                    }
+                }
+                .catch_headline {
                     display: block;
                     color: rgba(0, 0, 0, 0.3);
                     font-size: 0.4em;
@@ -629,7 +651,23 @@ div#login_form {
                     margin: 0;
                 }
             }
-
+            p {
+                &.read_more {
+                    text-align: right;
+                    a {
+                        color: #fff;
+                        background-color: $link_color;
+                        padding: 8px 5px;
+                        @include rounded(5px);
+                        @include transition(background-color, .2s);
+                        &:hover {
+                            background-color: $link_hover_color;
+                            color: #fff!important;
+                            @include transition(background-color, .2s);
+                        }
+                    }
+                }
+            }
             .adieu {
                 &:first-child {
                     margin-top: #{2*$line_height/$font_size}em;
@@ -645,6 +683,7 @@ div#login_form {
                     font-family: "Adobe Caslon Pro";
                 }
             }
+
         }
     }
 }
@@ -676,6 +715,8 @@ footer {
         text: {
             decoration: underline;
         }
+
+        color: #333;
     }
 
     ul#social-media-links {

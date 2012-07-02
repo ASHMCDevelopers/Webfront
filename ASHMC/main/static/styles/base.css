@@ -253,6 +253,25 @@ body {
   font-size: 1em;
   font-family: "Proxima Nova Regular","Helvetica Neue",Arial,Helvetica,sans-serif; }
 
+a {
+  color: #41b7d8;
+  transition: color 0.2s;
+  -moz-transition: color 0.2s;
+  /* Firefox 4 */
+  -webkit-transition: color 0.2s;
+  /* Safari and Chrome */
+  -o-transition: color 0.2s;
+  /* Opera */ }
+  a:hover {
+    color: #e53b2c !important;
+    transition: color 0.2s;
+    -moz-transition: color 0.2s;
+    /* Firefox 4 */
+    -webkit-transition: color 0.2s;
+    /* Safari and Chrome */
+    -o-transition: color 0.2s;
+    /* Opera */ }
+
 em, figcaption {
   font-family: "Proxima Nova Italic","Helvetica Neue",Arial,Helvetica,sans-serif;
   font-weight: normal;
@@ -350,8 +369,8 @@ section#preheader {
     text-align: left; }
     #latest_news ul li {
       text-indent: 2em;
-      padding-right: 7.2%;
-      margin-left: -2.2%;
+      padding-right: 8.5%;
+      margin-left: -3.5%;
       margin-bottom: 5px;
       font-family: Copse, "Rockwell", sans-serif;
       font-size: 1.25em;
@@ -545,6 +564,7 @@ div#login_form {
   #postheader #blogger {
     max-width: 70%;
     padding: 1%;
+      padding-bottom: 0%;
     margin-left: 0.5%;
     margin-top: 5.25em;
     float: right; }
@@ -555,6 +575,7 @@ div#login_form {
       min-width: 591px;
       padding: 15px;
         padding-left: 10%;
+        padding-bottom: 3em;
       margin-left: -3.5%;
       background-color: #fff;
       color: #333; }
@@ -566,6 +587,10 @@ div#login_form {
         background: white url(../images/bg.jpg) repeat;
         font: italic 1.05em/1.55em "Skolar Italic", "Times New Roman", serif;
         color: rgba(0, 0, 0, 0.75); }
+      #postheader #blogger article h2 a {
+        color: #333; }
+        #postheader #blogger article h2 a:hover {
+          color: #e53b2c; }
       #postheader #blogger article h2 .catch_headline {
         display: block;
         color: rgba(0, 0, 0, 0.3);
@@ -604,6 +629,41 @@ div#login_form {
           font-size: 1.25em;
           line-height: 1.35em;
           margin: 0; }
+      #postheader #blogger article p.read_more {
+        text-align: right; }
+        #postheader #blogger article p.read_more a {
+          color: #fff;
+          background-color: #41b7d8;
+          padding: 8px 5px;
+          -webkit-border-top-right-radius: 5px;
+          border-top-right-radius: 5px;
+          -moz-border-radius-topright: 5px;
+          -webkit-border-top-left-radius: 5px;
+          border-top-left-radius: 5px;
+          -moz-border-radius-topleft: 5px;
+          -webkit-border-bottom-right-radius: 5px;
+          border-bottom-right-radius: 5px;
+          -moz-border-radius-bottomright: 5px;
+          -webkit-border-bottom-left-radius: 5px;
+          border-bottom-left-radius: 5px;
+          -moz-border-radius-bottomleft: 5px;
+          transition: background-color 0.2s;
+          -moz-transition: background-color 0.2s;
+          /* Firefox 4 */
+          -webkit-transition: background-color 0.2s;
+          /* Safari and Chrome */
+          -o-transition: background-color 0.2s;
+          /* Opera */ }
+          #postheader #blogger article p.read_more a:hover {
+            background-color: #e53b2c;
+            color: #fff!important;
+            transition: background-color 0.2s;
+            -moz-transition: background-color 0.2s;
+            /* Firefox 4 */
+            -webkit-transition: background-color 0.2s;
+            /* Safari and Chrome */
+            -o-transition: background-color 0.2s;
+            /* Opera */ }
       #postheader #blogger article .adieu {
         text-align: right; }
         #postheader #blogger article .adieu:first-child {
@@ -625,7 +685,8 @@ footer {
   background-color: #cc9933;
   font-size: 13px; }
   footer a {
-    text-decoration: underline; }
+    text-decoration: underline;
+    color: #333; }
   footer ul#social-media-links {
     height: 34px;
     list-style: none;
