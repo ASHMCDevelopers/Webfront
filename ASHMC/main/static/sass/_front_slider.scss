@@ -1,0 +1,20 @@
+$core_path: "/static/images/front_cycler";
+
+#slider1 {
+	background-image: url(#{$core_path}/mudd_olin.jpg);
+	background-repeat: no-repeat;
+	background-position: center
+}
+
+#slider2 {
+	background-image: url(#{$core_path}/olin.jpg);
+	background-repeat: no-repeat;
+	background-position: center
+}
+
+
+#slider3 {
+	background-image: url(#{$core_path}/tlc_plan.jpg);
+	background-repeat: no-repeat;
+	background-position: center
+}

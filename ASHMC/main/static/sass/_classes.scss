@@ -1,8 +1,28 @@
 /* _classes.scss */
 
+.AS {
+    font-family: "Walkway Bold", sans-serif;
+}
+
+.HMC {
+    font-family: "Adobe Caslon Pro", serif;
+}
+
 .centerer{
     width: 100%;
     margin: 0 auto;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.smallcaps {
+    font-variant: smallcaps;
+}
+
+.clearer {
+    clear: both;
 }
 
 .righty {
@@ -70,6 +90,26 @@ a.social-media {
             image: url(/static/images/sm-flickr.png);
         }
     }
+}
+
+.scrollable {
+  /* required settings */
+  position:relative;
+  overflow:hidden;
+  width: 600px;
+  height:250px;
+}
+
+.scrollable .items {
+  /* this cannot be too large */
+  width:20000em;
+  position:absolute;
+}
+
+.items div {
+  float:left;
+  height: 250px;
+  width: 600px;
 }
 
 /* end _classes.scss */

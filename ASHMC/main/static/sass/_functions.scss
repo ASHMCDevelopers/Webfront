@@ -44,3 +44,21 @@
     box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.4) 0 1px 1px 1px inset;
   }
 }
+
+@mixin transition($properties, $time) {
+  @each $property in $properties{
+    transition: $property $time;
+    -moz-transition: $property $time; /* Firefox 4 */
+    -webkit-transition: $property $time; /* Safari and Chrome */
+    -o-transition: $property $time; /* Opera */
+  }
+}
+
+@mixin gradient($color_from, $color_to) {
+  background-image: -webkit-gradient(linear,left top,left bottom,from($color_from),to($color_to));
+  background-image: -webkit-linear-gradient(top,$color_from,$color_to);
+  background-image: -moz-linear-gradient(top,$color_from,$color_to);
+  background-image: -ms-linear-gradient(top,$color_from,$color_to);
+  background-image: -o-linear-gradient(top,$color_from,$color_to);
+  background-image: linear-gradient(top,$color_from,$color_to);
+}
