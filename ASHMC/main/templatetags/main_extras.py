@@ -4,8 +4,20 @@ import feedparser
 
 import random
 import re
+import datetime
 
 register = template.Library()
+
+
+@register.filter
+def is_today(value):
+    assert isinstance(value, datetime.date)
+    now = datetime.datetime.now()
+    return (
+        value.day == now.day and
+        value.month == now.month and
+        value.year == now.year
+        )
 
 
 class RssParserNode(template.Node):

@@ -6,33 +6,51 @@
 
 
 {% block content %}
-<div id="preheader">
+<section id="preheader">
 {% block pre_header %}
-    <div id="twitter_feed">
-    {% for tweet in latest_tweets  %}
-        <div class='tweet'>
-            <div class='spacer'>
-                <div class='time'>{{tweet.date|date:"m/d/y"}}</div>
-                <div class='author'>
-                    <a 
-                    style='color:#{{tweet.user.profile_link_color}};'
-                    href="http://twitter.com/#!/{{tweet.user.screen_name}}">@{{tweet.user.screen_name}}</a>
+    <div class='scrollable_holder lefty'>
+        <div>
+            <section class='scrollable'>
+                <div class='items'>
+                    <div id="slider1">
+                       
+                    </div>
+                    <div id="slider2">
+                        
+                    </div>
+                    <div id="slider3">
+                        <div class="header">
+                            <h2>What is this place?</h2>
+                        </div>
+                        <div class="subheader">
+                            <h3>When will it be done?</h3>
+                        </div>
+                        <div class='blurb'>
+                            <p>{%lorem 33 w%}.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class='text'>{{tweet.text|urlize}}</div>
+            </section>
         </div>
-    {% endfor %}
     </div>
+    <section id="latest_news">
+        <ul>
+            <li class='current'>Mudd has its own name.</li>
+            <li>Mudd looks ok at night.</li>
+            <li>The TLC building isn't done yet.</li>
+        </ul>
+    </section>
+    <div class="clearer"> </div>
 {% endblock pre_header %}
-</div>
+</section>
 
 <header>
 {% block header %}
 <div id="logo">
     <div id="ashmc">
-        <a href="{% url "main_landing_page" %}"><h1><span id="S">AS</span><span>HMC</span></h1></a>
+        <a href="{% url "main_landing_page" %}"><h1><span class='AS'>AS</span><span class='HMC'>HMC</span></h1></a>
 
-        <h3>Associated Students of Harvey Mudd College</h3>
+        <h3><span class="AS">Associated Students of Harvey Mudd College</span></h3>
    </div>
 
    {% if user.is_authenticated %}
@@ -55,8 +73,7 @@
     {% else %}
     <div id="login_form">
         <div class="centerer centered">
-            <div id="login_form_hold_left"></div>
-            <div id="login_form_hold_right"></div>
+            
             <div id="login_form_hold">
             <form action="{% url  "login" %}" method="POST">
                 {% csrf_token %}
@@ -71,44 +88,133 @@
 {% endblock %}
 </header>
 
-<div id="postheader">
+<section id="postheader">
 {% block post_header %}
 
-    <div id="sidebar">
-        <h2>In the pipe @HMC</h2>
-        {% cache 500 rss_display %}
+    <aside id="sidebar">
+        <section id="pipeline">
+        <h2>In the pipe @<a href="http://www.hmc.edu">HMC</a></h2>
+        {# {% cache 500 rss_display %} #}
             {% get_rss "http://emsweb.claremont.edu/HarveyMC/RSSFeeds.aspx?data=j%2fxqvgLhwZs%2bG6vJ6fo56Qf9BN3JUl%2fAnKeSNhsCD7%2fPdUPWrw1HBw%3d%3d" as rss %}
             <ul>
             {% for entry in rss.entries %}
             <li class='rss_entry'>
-                <div>{{entry.title}}</div>
+                <p>{{entry.title}}</p>
             </li>
             {% endfor %}
             </ul>
-        {% endcache %}
-    </div>
+       {# {% endcache %} #}
+        </section>
+        
+        <section id="twitter_feed">
+            <div>
+            <h2>Twitter</h2>
+            {% for tweet in latest_tweets  %}
+                <div class='tweet'>
+                    <div class='spacer'>
+                        
+                        <div class='author'>
+                            <a 
+                            style='color:#{{tweet.user.profile_link_color}};'
+                            href="http://twitter.com/#!/{{tweet.user.screen_name}}">@{{tweet.user.screen_name}}</a>
+                        </div>
+                        <div class='time'>
+                        {% if tweet.date|is_today %}
+                            {{tweet.date|date:"j:M"}}
+                        {% else %}
+                            {{tweet.date|date:"m/d/y"}}
+                        {% endif %}
+                            
+
+                        </div>
+                    </div>
+                    <div class='text'>{{tweet.text|urlize}}</div>
+                </div>
+            {% endfor %}
+        </div>
+        </section>
+    </aside>
 
 
-    <div id="blogger">
+    <section id="blogger">
         {% for post in posts %}
             {% include "front_post.html" %}
         {% endfor %}
-        <h2>{% lorem 3 w %}</h2>
-        <author>{% lorem 2 w %}</author>
-        {% lorem 4 p %}
-    </div>
-    {% endblock post_header %}
+        <article class="post-124198 post type-post status-publish format-standard hentry category-fonts tag-typography post">
+    
+            <h2><a href=""><span class="catch_headline">{% lorem 5 w %}</span><span class="headline">{% lorem 7 w %}</span></a></h2>
+                
+        <ul class="metadata clearfix">
+            <li class="author"><a rel="author" href="" title="Posts by Josiah Gaskin">Josiah Gaskin</a> &mdash; ASHMC President</li>
+        
+                    
+            <li class="date">May 14th, 2012</li>
+            <li class="tags"><a href="">{% lorem 1 w %}</a></li>
+            <li class="comments"><a href="" title="Comment on this post">7 Comments</a></li>
+                    </ul>
+        
+                
+        {% lorem 1 p %}
+        <p class='read_more'><a href="">Read more...</a></p>
+        {% comment %}
+            
+        <figure class="centered"><img src="http://media.smashingmagazine.com/wp-content/uploads/2012/02/1_wyss.jpg" alt="Part of the sample of Wyss’ script offered by the ATF to back its claim that Koch Antiqua was not its designer’s intellectual property"><br>
+        <figcaption>{% lorem 20 w%}</figcaption></figure>
 
-</div>
+        {% lorem 1 p %}
+        <blockquote>
+        {% lorem 1 p %}
+        </blockquote>
+        {% lorem 2 p %}
+
+        <h4>{% lorem 3 w %}</h4>
+        <figure class="centered"><img src="http://media.smashingmagazine.com/wp-content/uploads/2012/02/7_banco-jacno.jpg" alt="The Typefaces Banco and Janco"><br>
+        <figcaption>{% lorem 25 w %}</figcaption></figure>
+        {% lorem 3 p %}
+
+        <h3>{% lorem 3 w %}</h3>
+        {% lorem 3 p %}
+
+        {% endcomment %}
+    </article>
+    <article class="post-124198 post type-post status-publish format-standard hentry category-fonts tag-typography post">
+    
+            <h2><a href=""><span class="catch_headline">{% lorem 3 w %}</span><span class="headline">{% lorem 4 w %}</span></a></h2>
+                
+        <ul class="metadata clearfix">
+            <li class="author"><a rel="author" href="" title="Posts by Josiah Gaskin">Haak Saxberg</a> &mdash; Atwood President #H</li>
+        
+                    
+            <li class="date">May 14th, 2012</li>
+            <li class="tags"><a href="">{% lorem 1 w %}</a></li>
+            <li class="comments"><a href="" title="Comment on this post">2 Comments</a></li>
+                    </ul>
+        
+                
+        <p>{% lorem 40 w %}.</p>
+
+        <p class='read_more'><a href="">Read more...</a></p>
+    </article>
+
+</section>
+    {% endblock post_header %}
+    <div class="clearer"> </div>
+</section>
 {% endblock content %}
 
 {% block footer %}
 
     <ul class="lefty" id="social-media-links">
+        {% comment %}
+            
         <li><a href="" title="Like ASHMC on Facebook." class="social-media facebook">Like ASHMC on Facebook.</a></li>
         <li><a href="http://www.flickr.com/photos/micamultimedia/" title="Take a look at ASHMC on Flickr." class="social-media flickr">Take a look at ASHMC on Flickr.</a></li>
         <li><a href="" title="Follow ASHMC on Twitter (@ashmc.edu)." class="social-media twitter">Follow ASHMC on Twitter (@ashmc_updates).</a></li>
         <li><a href="" class="social-media youtube">Watch our YouTube channel.</a></li>
+        {% endcomment %}
+        <li><a href=''><div class='facebook'>f</div></a></li>
+        <li><a href=''><div class='youtube'>You</div></a></li>
+        <li><a href=''><div class='twitter'>t</div></a></li>
     </ul>
 
     <ul id="footer-links">
@@ -120,3 +226,50 @@
     </ul>
 
 {% endblock footer %}
+
+
+{% block scriptin %}
+<script type="text/javascript">
+$(function() {
+  // initialize scrollable
+  $("#preheader .scrollable").scrollable({
+    circular: true,
+    keyboard: false,
+    onBeforeSeek: function(event, index){
+        var children = $('#preheader ul').children('li');
+        if (index != children.length){
+            var target = $(children[index]);
+            children.removeClass('current');
+            target.toggleClass('current');
+        }
+    },
+    }).autoscroll({
+        interval: 3500,
+    });
+
+  $("#latest_news ul").hover(function(){
+    var target = $('#preheader .scrollable').data('scrollable');
+    target.stop();
+  }, 
+  function(){
+    var target = $('#preheader .scrollable').data('scrollable');
+    target.play();
+  }
+  );
+
+  $("#latest_news ul li").each(function(i){
+    var target = $('#preheader .scrollable').data('scrollable');
+    $(this).click(function(){
+        target.seekTo(i);
+    });
+  });
+
+  //make tweet links prettier
+  $(".tweet").each(function(i){
+    var color = $($(this).children('.spacer').children('.author').children('a')[0]).css('color');
+    $(this).children('.text').children('a').css('color', color);
+  });
+
+});
+</script>
+{% endblock scriptin %}

@@ -6,7 +6,7 @@ from django.views.generic import View
 from django.views.generic.base import TemplateView  # , TemplateResponseMixin
 
 #if 'courses' in settings.INSTALLED_APPS:
-from courses.models import Course
+from ASHMC.courses.models import Course
 from .forms import LandingLoginForm
 
 import twitter
