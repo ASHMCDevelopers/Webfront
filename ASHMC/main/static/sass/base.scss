@@ -12,6 +12,14 @@ $font_size: 1em;
 $line_height: 1.75em;
 
 $mudd_gold: #cc9933;
+$dark_gold: #7E580D;
+
+$link_hover_color: #e53b2c;
+$link_color: #3079ed;
+$text_color: #333;
+
+$dark_background: #1c1c1c;
+$light_background: #fff;
 
 ::selection {
     background-color: $mudd_gold;
@@ -27,11 +35,10 @@ body {
     font-family: "Proxima Nova Regular","Helvetica Neue",Arial,Helvetica,sans-serif;
 }
 
-$link_hover_color: #e53b2c;
-$link_color: #41B7D8;
+
 a {
     color: $link_color;
-    @include transition(color, .2s);
+    @include transition(color, .2s, $delay:.1s);
     
     &:hover {
         color: $link_hover_color!important; // force all links to do this.
@@ -163,7 +170,7 @@ section#preheader {
     .scrollable_holder {
         //border: 1px solid $mudd_gold;
         width: $scrollable_width;
-        background-color: #fff;
+        background-color: $light_background;
         padding: 0.6% 1%;
 
         & > div {
@@ -174,8 +181,17 @@ section#preheader {
         .scrollable {
             width: 100%;
 
-            div {
+            & > div {
                 height: 250px;
+
+                & > div {
+                    width: 557px;
+
+                    div {
+                        width: auto;
+                        height: auto;
+                    }
+                }
             }
         }
     }
@@ -187,8 +203,7 @@ section#preheader {
     float: right;
     width: 44.1%;
     min-width: 300px;
-    background: #fff;
-    //border-left: 1px solid #fff;
+    background: $light_background;
     padding: {
         bottom: 20px;
         top: 20px;
@@ -341,7 +356,7 @@ div#logo {
         top: 15px;
     }
     z-index: 2;
-	background-color: #1c1c1c;
+	background: $dark_background;
     
     color: $mudd_gold;
 
@@ -350,7 +365,7 @@ div#logo {
 		left: None;
 		right: None;
 		width: $border_width;
-        color: #7E580D;
+        color: $dark_gold;
 	}
 
     z-index: 100;
@@ -536,7 +551,7 @@ div#login_form {
     #sidebar{
         z-index: 1;
         position: relative;
-        background-color: #fff;
+        background: $light_background;
         max-width: 25%;
         padding: 1% {
             top: 200px;
@@ -584,9 +599,9 @@ div#login_form {
 
             margin-left: -3.5%;
 
-            background-color: #fff;
+            background: $light_background;
 
-            color: #333;
+            color: $text_color;
 
             blockquote {
                 margin: 1em 0;
@@ -598,7 +613,7 @@ div#login_form {
                 color: rgba(0, 0, 0, 0.75);
             }
             h2 {
-               //margin-bottom: #{1.5*$line_height/($font-size*2)}em;
+               color: #000;
                 a {
                     color: #333;
 
@@ -608,7 +623,7 @@ div#login_form {
                 }
                 .catch_headline {
                     display: block;
-                    color: rgba(0, 0, 0, 0.3);
+                    color: scale-color($text_color, $alpha:-70%);
                     font-size: 0.4em;
                     line-height: 1.5em;
                     text-transform: uppercase;
@@ -622,13 +637,13 @@ div#login_form {
                 text-align: right;
                 padding-bottom: 2em;
                 li {
-                    color: rgba(0, 0, 0, 0.3);
+                    color: scale-color($text_color, $alpha:-60%);
                     display: inline-block;
                     list-style: none;
                     padding: 1em 2em 0 1.5em;
                     white-space: nowrap;
                     &.author {
-                        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                        border-bottom: 1px solid scale-color($text_color, $alpha:-65%);
                         display: block;
                         padding: 0.5em 0.5em 0.5em 0;
                         font-size: 1.25em;
@@ -649,6 +664,7 @@ div#login_form {
                     font-size: 1.25em;
                     line-height: 1.35em;
                     margin: 0;
+                    color: scale-color($text_color, $lightness:-30%);
                 }
             }
             p {
@@ -657,7 +673,7 @@ div#login_form {
                     a {
                         color: #fff;
                         background-color: $link_color;
-                        padding: 8px 5px;
+                        padding: 8px 8px;
                         @include rounded(5px);
                         @include transition(background-color, .2s);
                         &:hover {
@@ -697,15 +713,15 @@ footer {
 
     padding: 10px;
 
-    border: 5px solid black {
+    border: 5px solid $dark_gold {
         left: none;
         right: none;
         bottom: none;
     }
 
-    background: {
-        color: $mudd_gold;
-    }
+    background: $dark_background;
+
+    color: #fff;
 
     font: {
         size: 13px;
@@ -716,7 +732,7 @@ footer {
             decoration: underline;
         }
 
-        color: #333;
+        color: #ccc;
     }
 
     ul#social-media-links {
@@ -728,6 +744,48 @@ footer {
 
         li {
             display: inline;
+
+            div {
+                display: inline-block;
+                $diameter: 32px;
+                border: 2px solid white;
+                height: $diameter;
+                width: $diameter;
+                border-radius: $diameter/2 + 1px;
+                text-align: center;
+                vertical-align: middle;
+                @include transition(border-color, .2s, $delay:.1s);
+
+                &:hover {
+                    border-color: $link_hover_color;
+                    @include transition(border-color, .2s);
+                }
+ 
+                &.facebook {
+                    overflow: hidden;
+                    font-size: 36px;
+                    font-weight: bold;
+                    line-height: 30px;
+                    text-indent: 0.25em;
+                }
+
+                &.youtube {
+                    font-size: 25px;
+                    line-height: 32px;
+                    text-indent: 0;
+                    font-family: "Walkway UltraCondensed Bold";
+                }
+
+                &.twitter {
+                    font-size: 53px;
+                    line-height: 38px;
+                    overflow: hidden;
+                    font-family: Pico;
+                    text-indent:13px;
+                    border-radius: $diameter/4;
+
+                }
+            }
         }
     }
 

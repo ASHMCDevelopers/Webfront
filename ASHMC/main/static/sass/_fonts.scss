@@ -40,3 +40,8 @@
   font-weight: 400;
   src: local('Copse'), url(/static/fonts/Copse.woff) format('woff');
 }
+
+@font-face {
+	font-family: Pico;
+	src: url(/static/fonts/pico.ttf) format("truetype");
+}

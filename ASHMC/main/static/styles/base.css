@@ -38,6 +38,10 @@
   font-weight: 400;
   src: local("Copse"), url(/static/fonts/Copse.woff) format("woff"); }
 
+@font-face {
+  font-family: Pico;
+  src: url(/static/fonts/pico.ttf) format("truetype"); }
+
 * {
   margin: 0;
   padding: 0;
@@ -188,6 +192,8 @@ a.social-media {
   float: left;
   height: 250px;
   width: 600px; }
+  .items div div {
+    position: relative; }
 
 /* end _classes.scss */
 /* inputs.scss */
@@ -254,22 +260,22 @@ body {
   font-family: "Proxima Nova Regular","Helvetica Neue",Arial,Helvetica,sans-serif; }
 
 a {
-  color: #41b7d8;
-  transition: color 0.2s;
-  -moz-transition: color 0.2s;
+  color: #3079ed;
+  transition: color 0.2s linear 0.1s;
+  -moz-transition: color 0.2s linear 0.1s;
   /* Firefox 4 */
-  -webkit-transition: color 0.2s;
+  -webkit-transition: color 0.2s linear 0.1s;
   /* Safari and Chrome */
-  -o-transition: color 0.2s;
+  -o-transition: color 0.2s linear 0.1s;
   /* Opera */ }
   a:hover {
     color: #e53b2c !important;
-    transition: color 0.2s;
-    -moz-transition: color 0.2s;
+    transition: color 0.2s linear ;
+    -moz-transition: color 0.2s linear ;
     /* Firefox 4 */
-    -webkit-transition: color 0.2s;
+    -webkit-transition: color 0.2s linear ;
     /* Safari and Chrome */
-    -o-transition: color 0.2s;
+    -o-transition: color 0.2s linear ;
     /* Opera */ }
 
 em, figcaption {
@@ -347,22 +353,27 @@ section#preheader {
   margin: 15px auto; }
   section#preheader .scrollable_holder {
     width: 54%;
-    background-color: #fff;
+    background-color: white;
     padding: 0.6% 1%; }
     section#preheader .scrollable_holder > div {
       background: white url(../images/bg.jpg) repeat;
       padding: 1%; }
     section#preheader .scrollable_holder .scrollable {
       width: 100%; }
-      section#preheader .scrollable_holder .scrollable div {
+      section#preheader .scrollable_holder .scrollable > div {
         height: 250px; }
+        section#preheader .scrollable_holder .scrollable > div > div {
+          width: 557px; }
+          section#preheader .scrollable_holder .scrollable > div > div div {
+            width: auto;
+            height: auto; }
 
 #latest_news {
   display: inline;
   float: right;
   width: 44.1%;
   min-width: 300px;
-  background: #fff;
+  background: white;
   padding-bottom: 20px;
   padding-top: 20px; }
   #latest_news ul {
@@ -375,12 +386,12 @@ section#preheader {
       font-family: Copse, "Rockwell", sans-serif;
       font-size: 1.25em;
       cursor: pointer;
-      transition: background-color 1s;
-      -moz-transition: background-color 1s;
+      transition: background-color 1s linear ;
+      -moz-transition: background-color 1s linear ;
       /* Firefox 4 */
-      -webkit-transition: background-color 1s;
+      -webkit-transition: background-color 1s linear ;
       /* Safari and Chrome */
-      -o-transition: background-color 1s;
+      -o-transition: background-color 1s linear ;
       /* Opera */ }
       #latest_news ul li.current {
         background-color: #cc9933;
@@ -461,13 +472,13 @@ div#logo {
   position: relative;
   margin-top: 15px;
   z-index: 2;
-  background-color: #1c1c1c;
+  background: #1c1c1c;
   color: #cc9933;
   border-style: solid;
   border-left: None;
   border-right: None;
   border-width: 10px;
-  border-color: #7E580D;
+  border-color: #7e580d;
   z-index: 100; }
   div#logo #ashmc {
     float: left;
@@ -553,7 +564,7 @@ div#login_form {
   #postheader #sidebar {
     z-index: 1;
     position: relative;
-    background-color: #fff;
+    background: white;
     max-width: 25%;
     padding: 1%;
       padding-top: 200px;
@@ -577,8 +588,8 @@ div#login_form {
         padding-left: 10%;
         padding-bottom: 3em;
       margin-left: -3.5%;
-      background-color: #fff;
-      color: #333; }
+      background: white;
+      color: #333333; }
       #postheader #blogger article blockquote {
         margin: 1em 0;
         padding: 1em 2em;
@@ -587,31 +598,33 @@ div#login_form {
         background: white url(../images/bg.jpg) repeat;
         font: italic 1.05em/1.55em "Skolar Italic", "Times New Roman", serif;
         color: rgba(0, 0, 0, 0.75); }
-      #postheader #blogger article h2 a {
-        color: #333; }
-        #postheader #blogger article h2 a:hover {
-          color: #e53b2c; }
-      #postheader #blogger article h2 .catch_headline {
-        display: block;
-        color: rgba(0, 0, 0, 0.3);
-        font-size: 0.4em;
-        line-height: 1.5em;
-        text-transform: uppercase;
-        font-family: "Proxima Nova";
-        font-weight: bold;
-        letter-spacing: 1px;
-        padding-bottom: 0.5em; }
+      #postheader #blogger article h2 {
+        color: #000; }
+        #postheader #blogger article h2 a {
+          color: #333; }
+          #postheader #blogger article h2 a:hover {
+            color: #e53b2c; }
+        #postheader #blogger article h2 .catch_headline {
+          display: block;
+          color: rgba(51, 51, 51, 0.3);
+          font-size: 0.4em;
+          line-height: 1.5em;
+          text-transform: uppercase;
+          font-family: "Proxima Nova";
+          font-weight: bold;
+          letter-spacing: 1px;
+          padding-bottom: 0.5em; }
       #postheader #blogger article .metadata {
         text-align: right;
         padding-bottom: 2em; }
         #postheader #blogger article .metadata li {
-          color: rgba(0, 0, 0, 0.3);
+          color: rgba(51, 51, 51, 0.4);
           display: inline-block;
           list-style: none;
           padding: 1em 2em 0 1.5em;
           white-space: nowrap; }
           #postheader #blogger article .metadata li.author {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(51, 51, 51, 0.35);
             display: block;
             padding: 0.5em 0.5em 0.5em 0;
             font-size: 1.25em;
@@ -628,13 +641,14 @@ div#login_form {
           font-style: normal;
           font-size: 1.25em;
           line-height: 1.35em;
-          margin: 0; }
+          margin: 0;
+          color: #242424; }
       #postheader #blogger article p.read_more {
         text-align: right; }
         #postheader #blogger article p.read_more a {
           color: #fff;
-          background-color: #41b7d8;
-          padding: 8px 5px;
+          background-color: #3079ed;
+          padding: 8px 8px;
           -webkit-border-top-right-radius: 5px;
           border-top-right-radius: 5px;
           -moz-border-radius-topright: 5px;
@@ -647,22 +661,22 @@ div#login_form {
           -webkit-border-bottom-left-radius: 5px;
           border-bottom-left-radius: 5px;
           -moz-border-radius-bottomleft: 5px;
-          transition: background-color 0.2s;
-          -moz-transition: background-color 0.2s;
+          transition: background-color 0.2s linear ;
+          -moz-transition: background-color 0.2s linear ;
           /* Firefox 4 */
-          -webkit-transition: background-color 0.2s;
+          -webkit-transition: background-color 0.2s linear ;
           /* Safari and Chrome */
-          -o-transition: background-color 0.2s;
+          -o-transition: background-color 0.2s linear ;
           /* Opera */ }
           #postheader #blogger article p.read_more a:hover {
             background-color: #e53b2c;
             color: #fff!important;
-            transition: background-color 0.2s;
-            -moz-transition: background-color 0.2s;
+            transition: background-color 0.2s linear ;
+            -moz-transition: background-color 0.2s linear ;
             /* Firefox 4 */
-            -webkit-transition: background-color 0.2s;
+            -webkit-transition: background-color 0.2s linear ;
             /* Safari and Chrome */
-            -o-transition: background-color 0.2s;
+            -o-transition: background-color 0.2s linear ;
             /* Opera */ }
       #postheader #blogger article .adieu {
         text-align: right; }
@@ -678,21 +692,64 @@ footer {
   margin: 0 auto;
   min-height: 50px;
   padding: 10px;
-  border: 5px solid black;
+  border: 5px solid #7e580d;
     border-left: none;
     border-right: none;
     border-bottom: none;
-  background-color: #cc9933;
+  background: #1c1c1c;
+  color: #fff;
   font-size: 13px; }
   footer a {
     text-decoration: underline;
-    color: #333; }
+    color: #ccc; }
   footer ul#social-media-links {
     height: 34px;
     list-style: none;
     list-style-image: none; }
     footer ul#social-media-links li {
       display: inline; }
+      footer ul#social-media-links li div {
+        display: inline-block;
+        border: 2px solid white;
+        height: 32px;
+        width: 32px;
+        border-radius: 17px;
+        text-align: center;
+        vertical-align: middle;
+        transition: border-color 0.2s linear 0.1s;
+        -moz-transition: border-color 0.2s linear 0.1s;
+        /* Firefox 4 */
+        -webkit-transition: border-color 0.2s linear 0.1s;
+        /* Safari and Chrome */
+        -o-transition: border-color 0.2s linear 0.1s;
+        /* Opera */ }
+        footer ul#social-media-links li div:hover {
+          border-color: #e53b2c;
+          transition: border-color 0.2s linear ;
+          -moz-transition: border-color 0.2s linear ;
+          /* Firefox 4 */
+          -webkit-transition: border-color 0.2s linear ;
+          /* Safari and Chrome */
+          -o-transition: border-color 0.2s linear ;
+          /* Opera */ }
+        footer ul#social-media-links li div.facebook {
+          overflow: hidden;
+          font-size: 36px;
+          font-weight: bold;
+          line-height: 30px;
+          text-indent: 0.25em; }
+        footer ul#social-media-links li div.youtube {
+          font-size: 25px;
+          line-height: 32px;
+          text-indent: 0;
+          font-family: "Walkway UltraCondensed Bold"; }
+        footer ul#social-media-links li div.twitter {
+          font-size: 53px;
+          line-height: 38px;
+          overflow: hidden;
+          font-family: Pico;
+          text-indent: 13px;
+          border-radius: 8px; }
   footer ul#footer-links {
     text-align: right;
     list-style: none; }
@@ -719,3 +776,14 @@ footer {
   background-image: url(/static/images/front_cycler/tlc_plan.jpg);
   background-repeat: no-repeat;
   background-position: center; }
+  #slider3 .header {
+    padding: 5px;
+    float: right; }
+  #slider3 .subheader {
+    padding: 5px; }
+  #slider3 .blurb {
+    background: rgba(255, 255, 255, 0.6);
+    bottom: 0;
+    padding: 5px;
+    color: #333;
+    text-align: justify; }

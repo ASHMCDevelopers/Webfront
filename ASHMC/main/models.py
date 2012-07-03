@@ -113,3 +113,13 @@ class TransientSuite(models.Model):
 
     def __unicode__(self):
         return u"{}".format(self.name)
+
+class TopNews(models.Model):
+
+    slug = models.CharField(max_length=80)
+    panel_html = models.TextField()
+    panel_css = models.TextField()
+
+    author = models.ForeignKey(User)
+    date_published = models.DateTimeField()
+    date_expired = models.DateTimeField()

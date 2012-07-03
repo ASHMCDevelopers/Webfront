@@ -16,5 +16,23 @@ $core_path: "/static/images/front_cycler";
 #slider3 {
 	background-image: url(#{$core_path}/tlc_plan.jpg);
 	background-repeat: no-repeat;
-	background-position: center
+	background-position: center;
+
+	.header {
+		padding: 5px;
+		float: right;
+
+	}
+
+	.subheader {
+		padding: 5px;
+	}
+
+	.blurb {
+		background: change-color($light_background, $alpha:0.6);
+		bottom: 0;
+		padding: 5px;
+		color: #333;
+		text-align: justify;
+	}
 }

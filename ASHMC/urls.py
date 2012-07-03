@@ -13,8 +13,8 @@ urlpatterns = patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    
-    
-    url(r'^courses/', include('courses.urls')),
+
+
+    url(r'^courses/', include('ASHMC.courses.urls')),
     url(r'^', include('ASHMC.main.urls')),
 )

@@ -110,6 +110,10 @@ a.social-media {
   float:left;
   height: 250px;
   width: 600px;
+
+  div {
+    position: relative;
+  }
 }
 
 /* end _classes.scss */

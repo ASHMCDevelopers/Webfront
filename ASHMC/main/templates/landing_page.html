@@ -19,7 +19,15 @@
                         
                     </div>
                     <div id="slider3">
-                        
+                        <div class="header">
+                            <h2>What is this place?</h2>
+                        </div>
+                        <div class="subheader">
+                            <h3>When will it be done?</h3>
+                        </div>
+                        <div class='blurb'>
+                            <p>{%lorem 33 w%}.</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -85,7 +93,7 @@
 
     <aside id="sidebar">
         <section id="pipeline">
-        <h2>In the pipe @<a href="http://www.hmc.edu">HMC</h2>
+        <h2>In the pipe @<a href="http://www.hmc.edu">HMC</a></h2>
         {# {% cache 500 rss_display %} #}
             {% get_rss "http://emsweb.claremont.edu/HarveyMC/RSSFeeds.aspx?data=j%2fxqvgLhwZs%2bG6vJ6fo56Qf9BN3JUl%2fAnKeSNhsCD7%2fPdUPWrw1HBw%3d%3d" as rss %}
             <ul>
@@ -174,7 +182,7 @@
             <h2><a href=""><span class="catch_headline">{% lorem 3 w %}</span><span class="headline">{% lorem 4 w %}</span></a></h2>
                 
         <ul class="metadata clearfix">
-            <li class="author"><a rel="author" href="" title="Posts by Josiah Gaskin">Haak Saxberg</a> &mdash; Atwood President</li>
+            <li class="author"><a rel="author" href="" title="Posts by Josiah Gaskin">Haak Saxberg</a> &mdash; Atwood President #H</li>
         
                     
             <li class="date">May 14th, 2012</li>
@@ -197,10 +205,16 @@
 {% block footer %}
 
     <ul class="lefty" id="social-media-links">
+        {% comment %}
+            
         <li><a href="" title="Like ASHMC on Facebook." class="social-media facebook">Like ASHMC on Facebook.</a></li>
         <li><a href="http://www.flickr.com/photos/micamultimedia/" title="Take a look at ASHMC on Flickr." class="social-media flickr">Take a look at ASHMC on Flickr.</a></li>
         <li><a href="" title="Follow ASHMC on Twitter (@ashmc.edu)." class="social-media twitter">Follow ASHMC on Twitter (@ashmc_updates).</a></li>
         <li><a href="" class="social-media youtube">Watch our YouTube channel.</a></li>
+        {% endcomment %}
+        <li><a href=''><div class='facebook'>f</div></a></li>
+        <li><a href=''><div class='youtube'>You</div></a></li>
+        <li><a href=''><div class='twitter'>t</div></a></li>
     </ul>
 
     <ul id="footer-links">

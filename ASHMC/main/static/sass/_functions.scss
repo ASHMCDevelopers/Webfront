@@ -45,12 +45,12 @@
   }
 }
 
-@mixin transition($properties, $time) {
+@mixin transition($properties, $time, $function:linear, $delay:"") {
   @each $property in $properties{
-    transition: $property $time;
-    -moz-transition: $property $time; /* Firefox 4 */
-    -webkit-transition: $property $time; /* Safari and Chrome */
-    -o-transition: $property $time; /* Opera */
+    transition: $property $time #{$function} #{$delay};
+    -moz-transition: $property $time #{$function} #{$delay}; /* Firefox 4 */
+    -webkit-transition: $property $time #{$function} #{$delay}; /* Safari and Chrome */
+    -o-transition: $property $time #{$function} #{$delay}; /* Opera */
   }
 }
 
