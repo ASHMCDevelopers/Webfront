@@ -14,7 +14,10 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
-
     url(r'^courses/', include('ASHMC.courses.urls')),
+
+    url(r'^weblog/', include('zinnia.urls')),
+    url(r'^comments/', include('django.contrib.comments.urls')),
+
     url(r'^', include('ASHMC.main.urls')),
 )
