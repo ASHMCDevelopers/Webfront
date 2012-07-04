@@ -16,8 +16,7 @@ urlpatterns = patterns('',
 
     url(r'^courses/', include('ASHMC.courses.urls')),
 
-    url(r'^weblog/', include('zinnia.urls')),
-    url(r'^comments/', include('django.contrib.comments.urls')),
+    url(r'^blog/', include('blogger.urls')),
 
     url(r'^', include('ASHMC.main.urls')),
 )

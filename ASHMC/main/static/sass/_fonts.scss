@@ -3,7 +3,8 @@
 	src: url("/static/fonts/Adobe Caslon Pro.ttf") format("truetype"); 
 }
 @font-face {
-	font-family: "Adobe Caslon Pro Semibold";
+	font-family: "Adobe Caslon Pro";
+	font-weight: 600;
 	src: url("/static/fonts/Adobe Caslon Pro Semibold.ttf") format("truetype"); 
 }
 @font-face {
@@ -11,7 +12,8 @@
 	src: url("/static/fonts/Walkway Expand.ttf") format("truetype"); 
 }
 @font-face {
-	font-family: "Walkway Expand Bold";
+	font-family: "Walkway Expand";
+	font-weight: 700;
 	src: url("/static/fonts/Walkway Expand Bold.ttf") format("truetype"); 
 }
 @font-face {
@@ -30,16 +32,23 @@
 }
 
 @font-face {
-	font-family: Rockwell;
-	src: url(/static/fonts/Rockwell.ttf) format("truetype");
+	font-family: "Museo Slab";
+	font-weight: 500;
+	src: url("/static/fonts/exljbris - MuseoSlab-500.otf") format("opentype");
+}
+@font-face {
+	font-family: "Museo Slab";
+	font-weight: 500;
+	font-style: italic;
+	src: url("/static/fonts/exljbris - MuseoSlab-500Italic.otf") format("opentype");
 }
 
-@font-face {
-  font-family: 'Copse';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Copse'), url(/static/fonts/Copse.woff) format('woff');
-}
+//@font-face {
+//  font-family: 'Copse';
+//  font-style: normal;
+//  font-weight: 400;
+//  src: local('Copse'), url(/static/fonts/Copse.woff) format('woff');
+//}
 
 @font-face {
 	font-family: Pico;

@@ -75,7 +75,8 @@ figcaption {
 
 h1{
     font: {
-         family: "Copse", "Rockwell", "Helvetica Neue", sans-serif;
+         family: "Museo Slab", "Museo", "Arial", serif;
+         weight: 500;
     }
 }
 
@@ -98,8 +99,8 @@ h1 {
 h2,h3 {
    
     font: {
-        family: "Rockwell","Times New Roman",serif;
-        weight: bold;
+        family: "Museo Slab","Museo", serif;
+        weight: 500;
         style: normal;
         height: 1.1em;
         size: 2em;
@@ -217,7 +218,8 @@ section#preheader {
             padding-right: 8.5%;
             margin-left: -3.5%;
             margin-bottom: 5px;
-            font-family: Copse, "Rockwell", sans-serif;
+            font-family: Copse, "Museo Slab", sans-serif;
+            font-weight: 500;
             font-size: $font-size * 1.25;
 
             cursor: pointer;
@@ -650,18 +652,18 @@ div#login_form {
                         line-height: 1.35em;
                         margin: 0;
                         text-align: left;
-                        font-family: "Rockwell","Times New Roman",serif;
-                        font-weight: normal;
+                        font-family: "Museo Slab","Times New Roman",serif;
+                        font-weight: 500;
                         font-style: normal;
                         text-transform: capitalize;
                     }
                 }
 
                 & + p {
-                    font-family: "Rockwell","Times New Roman",serif;
-                    font-weight: normal;
+                    font-family: "Museo Slab","Times New Roman",serif;
+                    font-weight: 500;
                     font-style: normal;
-                    font-size: 1.25em;
+                    font-size: 1.125em;
                     line-height: 1.35em;
                     margin: 0;
                     color: scale-color($text_color, $lightness:-30%);

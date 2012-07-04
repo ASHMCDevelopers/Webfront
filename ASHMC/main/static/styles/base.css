@@ -5,7 +5,8 @@
   src: url("/static/fonts/Adobe Caslon Pro.ttf") format("truetype"); }
 
 @font-face {
-  font-family: "Adobe Caslon Pro Semibold";
+  font-family: "Adobe Caslon Pro";
+  font-weight: 600;
   src: url("/static/fonts/Adobe Caslon Pro Semibold.ttf") format("truetype"); }
 
 @font-face {
@@ -13,7 +14,8 @@
   src: url("/static/fonts/Walkway Expand.ttf") format("truetype"); }
 
 @font-face {
-  font-family: "Walkway Expand Bold";
+  font-family: "Walkway Expand";
+  font-weight: 700;
   src: url("/static/fonts/Walkway Expand Bold.ttf") format("truetype"); }
 
 @font-face {
@@ -29,14 +31,15 @@
   src: url("/static/fonts/advent-Lt3.otf") format("opentype"); }
 
 @font-face {
-  font-family: Rockwell;
-  src: url(/static/fonts/Rockwell.ttf) format("truetype"); }
+  font-family: "Museo Slab";
+  font-weight: 500;
+  src: url("/static/fonts/exljbris - MuseoSlab-500.otf") format("opentype"); }
 
 @font-face {
-  font-family: 'Copse';
-  font-style: normal;
-  font-weight: 400;
-  src: local("Copse"), url(/static/fonts/Copse.woff) format("woff"); }
+  font-family: "Museo Slab";
+  font-weight: 500;
+  font-style: italic;
+  src: url("/static/fonts/exljbris - MuseoSlab-500Italic.otf") format("opentype"); }
 
 @font-face {
   font-family: Pico;
@@ -296,7 +299,8 @@ figcaption {
   font-size: 0.875em; }
 
 h1 {
-  font-family: "Copse", "Rockwell", "Helvetica Neue", sans-serif; }
+  font-family: "Museo Slab", "Museo", "Arial", serif;
+  font-weight: 500; }
 
 h1 {
   font-size: 1.75em;
@@ -307,8 +311,8 @@ h1 {
     margin-top: 1em; }
 
 h2, h3 {
-  font-family: "Rockwell","Times New Roman",serif;
-  font-weight: bold;
+  font-family: "Museo Slab","Museo", serif;
+  font-weight: 500;
   font-style: normal;
   font-height: 1.1em;
   font-size: 2em; }
@@ -383,7 +387,8 @@ section#preheader {
       padding-right: 8.5%;
       margin-left: -3.5%;
       margin-bottom: 5px;
-      font-family: Copse, "Rockwell", sans-serif;
+      font-family: Copse, "Museo Slab", sans-serif;
+      font-weight: 500;
       font-size: 1.25em;
       cursor: pointer;
       transition: background-color 1s linear ;
@@ -631,15 +636,15 @@ div#login_form {
             line-height: 1.35em;
             margin: 0;
             text-align: left;
-            font-family: "Rockwell","Times New Roman",serif;
-            font-weight: normal;
+            font-family: "Museo Slab","Times New Roman",serif;
+            font-weight: 500;
             font-style: normal;
             text-transform: capitalize; }
         #postheader #blogger article .metadata + p {
-          font-family: "Rockwell","Times New Roman",serif;
-          font-weight: normal;
+          font-family: "Museo Slab","Times New Roman",serif;
+          font-weight: 500;
           font-style: normal;
-          font-size: 1.25em;
+          font-size: 1.125em;
           line-height: 1.35em;
           margin: 0;
           color: #242424; }

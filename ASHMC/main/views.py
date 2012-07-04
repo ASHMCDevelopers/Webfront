@@ -9,6 +9,8 @@ from django.views.generic.base import TemplateView  # , TemplateResponseMixin
 from ASHMC.courses.models import Course
 from .forms import LandingLoginForm
 
+from blogger.models import Entry
+
 import twitter
 import datetime
 # Create your views here.
@@ -37,6 +39,8 @@ class LandingPage(TemplateView):
 
             context['latest_tweets'] = tweets
 
+        latest_entries = Entry.published.all()[:3]
+        context['latest_entries'] = latest_entries
         return context
 
 
