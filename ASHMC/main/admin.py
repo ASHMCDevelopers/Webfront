@@ -21,3 +21,8 @@ admin.site.register(Dorm, DormAdmin)
 class DormRoleAdmin(admin.ModelAdmin):
     pass
 admin.site.register(DormRole, DormRoleAdmin)
+
+
+class TopNewsAdmin(admin.ModelAdmin):
+	pass
+admin.site.register(TopNews, TopNewsAdmin)

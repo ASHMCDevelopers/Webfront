@@ -6,6 +6,12 @@
 
 {% block stylin %}
     <link rel="stylesheet" href="{%static "styles/landing_page.css"%}">
+
+    <style>
+        {% for item in top_stories %}
+            {{item.render_css}}
+        {% endfor %}
+    </style>
 {% endblock stylin %}
 
 {% block pre_header %}
@@ -13,32 +19,20 @@
         <div>
             <section class='scrollable'>
                 <div class='items'>
-                    <div id="slider1">
-                       
-                    </div>
-                    <div id="slider2">
-                        
-                    </div>
-                    <div id="slider3">
-                        <div class="header">
-                            <h2>What is this place?</h2>
+                    {% for item in top_stories %}
+                        <div id="slider{{item.id}}">
+                            {{item.panel_html|safe}}
                         </div>
-                        <div class="subheader">
-                            <h3>When will it be done?</h3>
-                        </div>
-                        <div class='blurb'>
-                            <p>{%lorem 33 w%}.</p>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </section>
         </div>
     </div>
     <section id="latest_news">
         <ul>
-            <li class='current'>Mudd has its own name.</li>
-            <li>Mudd looks ok at night.</li>
-            <li>The TLC building isn't done yet.</li>
+            {% for item in top_stories %}
+                <li>{{item.slug}}</li>
+            {% endfor %}
         </ul>
     </section>
     <div class="clearer"> </div>

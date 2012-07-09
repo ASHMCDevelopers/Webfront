@@ -117,7 +117,26 @@ class TopNews(models.Model):
     slug = models.CharField(max_length=80)
     panel_html = models.TextField()
     panel_css = models.TextField()
+    render_css = models.TextField(null=True, blank=True)
 
     author = models.ForeignKey(User)
     date_published = models.DateTimeField()
     date_expired = models.DateTimeField()
+
+    class Meta:
+        verbose_name = u'Top News Item'
+        verbose_name_plural = u'Top News Items'
+
+    def save(self, *args, **kwargs):
+        if self.id is None:
+            super(TopNews, self).save(*args, **kwargs)
+            self.save(*args, **kwargs)
+
+        css = self.panel_css
+        lines = []
+        for line in css.split('\n'):
+            lines += ["#slider{} {}".format(self.id, line)]
+
+        self.render_css = '\n'.join(lines)
+
+        super(TopNews, self).save(*args, **kwargs)

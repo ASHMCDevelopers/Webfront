@@ -772,29 +772,3 @@ footer {
   #blogger article {
     margin-left: -3.5%;
     padding-left: 10%; }
-
-#slider1 {
-  background-image: url(/static/images/front_cycler/mudd_olin.jpg);
-  background-repeat: no-repeat;
-  background-position: center; }
-
-#slider2 {
-  background-image: url(/static/images/front_cycler/olin.jpg);
-  background-repeat: no-repeat;
-  background-position: center; }
-
-#slider3 {
-  background-image: url(/static/images/front_cycler/tlc_plan.jpg);
-  background-repeat: no-repeat;
-  background-position: center; }
-  #slider3 .header {
-    padding: 5px;
-    float: right; }
-  #slider3 .subheader {
-    padding: 5px; }
-  #slider3 .blurb {
-    background: rgba(255, 255, 255, 0.6);
-    bottom: 0;
-    padding: 5px;
-    color: #333;
-    text-align: justify; }
