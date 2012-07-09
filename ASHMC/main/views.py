@@ -8,7 +8,7 @@ from django.views.generic.base import TemplateView  # , TemplateResponseMixin
 #if 'courses' in settings.INSTALLED_APPS:
 from ASHMC.courses.models import Course
 from .forms import LandingLoginForm
-from .models import TopNews
+from .models import TopNewsItem
 
 from blogger.models import Entry
 
@@ -43,7 +43,7 @@ class LandingPage(TemplateView):
         latest_entries = Entry.published.all()[:3]
         context['latest_entries'] = latest_entries
 
-        context['top_stories'] = TopNews.objects.filter(
+        context['top_stories'] = TopNewsItem.objects.filter(
             date_expired__gt=datetime.datetime.now(),
             date_published__lte=datetime.datetime.now(),
         )

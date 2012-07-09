@@ -113,7 +113,7 @@ class DormRole(Role):
         return u"{} {}".format(self.dorm, self.title)
 
 
-class TopNews(models.Model):
+class TopNewsItem(models.Model):
 
     slug = models.CharField(max_length=80)
     panel_html = models.TextField()
@@ -124,15 +124,15 @@ class TopNews(models.Model):
     date_published = models.DateTimeField()
     date_expired = models.DateTimeField()
 
-    class Meta:
-        verbose_name = u'Top News Item'
-        verbose_name_plural = u'Top News Items'
+    def __unicode__(self):
+        return u"{}".format(self.slug)
 
     def save(self, *args, **kwargs):
         if self.id is None:
-            super(TopNews, self).save(*args, **kwargs)
+            super(TopNewsItem, self).save(*args, **kwargs)
             self.save(*args, **kwargs)
 
+        # TODO: Make this less janky
         css = self.panel_css
         lines = []
         for line in css.split('\n'):
@@ -140,4 +140,4 @@ class TopNews(models.Model):
 
         self.render_css = '\n'.join(lines)
 
-        super(TopNews, self).save(*args, **kwargs)
+        super(TopNewsItem, self).save(*args, **kwargs)
