@@ -66,6 +66,7 @@
 			{% for hf in cf.hidden_fields %}
 				{{hf}}
 			{% endfor %}
+			<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{{ cf.target_object.get_absolute_url }}{% endif %}" />
 		<div class='comment_comment'>{{cf.comment}}</div>
 		<div class='comment_submit'><input type="submit" class='button-submit' value="note it!"/></div>
 		</form>
@@ -90,7 +91,7 @@
 		</ul>
 
 		<div class='comment_body'>
-			{{comment.comment|markdown:"safe"}}
+			{{comment.comment|markdown|safe}}
 		</div>
 		<div class='flag_this'><a href="">Flag this comment</a></div>
  	</article>
