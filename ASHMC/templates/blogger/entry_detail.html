@@ -93,7 +93,12 @@
 		<div class='comment_body'>
 			{{comment.comment|markdown|safe}}
 		</div>
-		<div class='flag_this'><a href="">Flag this comment</a></div>
+		<div class='flag_this'>{% if comment.flags.count == 0 %}<form action="/comments/flag/{{comment.id}}/" method="POST">
+			<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{{ cf.target_object.get_absolute_url }}{% endif %}" />
+			{%csrf_token%}<a class="" href="#">Flag this comment</a></form>
+		{% else %}
+		This comment has been flagged for moderation.
+		{% endif %}</div>
  	</article>
  {% empty %}
  	<article clas='comment'>
@@ -103,3 +108,13 @@
 </section>
 {% endif %}
 {% endblock post_header %}
+
+{% block scriptin %}
+<script>
+$(function(){
+	$('.flag_this form a').click(function(){
+		$(this).parent().submit();
+	})
+});
+</script>
+{% endblock scriptin %}

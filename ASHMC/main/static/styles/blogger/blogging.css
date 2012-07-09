@@ -656,6 +656,8 @@ footer {
       text-align: right; }
     #comments form input[type='submit'] {
       padding: 5px 8px; }
+  #comments .flag_this form {
+    background: none; }
   #comments .comment_comment textarea {
     height: 4em;
     width: 32em;

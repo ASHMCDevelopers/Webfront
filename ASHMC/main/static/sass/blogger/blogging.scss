@@ -53,7 +53,9 @@ $screen_min_width: 1115px;
 			padding: 5px 8px;
 		}
 	}
-
+	.flag_this form {
+		background: none;
+	}
 	.comment_comment {
 		textarea {
 			height: 4em;
