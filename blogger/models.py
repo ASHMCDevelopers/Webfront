@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from django.contrib.comments.models import Comment
+from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
@@ -194,8 +196,14 @@ class Entry(models.Model):
     @property
     def comments_are_open(self):
         """Check if comments are open"""
-        return (self.comment_enabled and 
-            timezone.localtime(datetime.datetime.now(pytz.utc)) < self.comments_closed_as_of)
+        return (self.comment_enabled and (self.comments_closed_as_of is None or
+            timezone.localtime(datetime.datetime.now(pytz.utc)) < self.comments_closed_as_of))
+
+    @property
+    def comments_were_open(self):
+        """Checks if comments were ever open."""
+        return (self.comments.count() > 0 or
+            self.comments_are_open)
 
     '''
     @property

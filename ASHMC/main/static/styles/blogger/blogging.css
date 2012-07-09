@@ -260,7 +260,7 @@ body {
   -webkit-print-color-adjust: exact;
   background: white url(/static/images/bg.jpg) repeat;
   font-size: 1em;
-  font-family: "Proxima Nova Regular","Helvetica Neue",Arial,Helvetica,sans-serif; }
+  font-family: "Proxima Nova Regular","Helvetica Neue",Helvetica,Arial,sans-serif; }
 
 a {
   color: #3079ed;
@@ -599,21 +599,27 @@ footer {
         font-family: "Adobe Caslon Pro"; }
 
 #comments {
+  width: 422px;
   float: left;
   padding: 10px;
-  margin-top: 5.5em;
-  margin-left: 1.5em;
+  margin-top: 6em;
+  margin-left: 1em;
+  margin-bottom: 1em;
   background: white url(/static/images/bg.jpg) repeat;
-  outline: 1em solid white;
+  outline: 0.5em solid white;
   z-index: 90; }
   #comments .comment {
     font-size: 0.75em;
     background: white;
     padding: 4px 8px; }
+    #comments .comment:nth-child(even) {
+      background: #e6e6e6; }
     #comments .comment.ashmc {
       background: #c9b147; }
       #comments .comment.ashmc a {
         color: white; }
+      #comments .comment.ashmc:nth-child(odd) {
+        background: #bda538; }
     #comments .comment.author {
       padding-right: 2em;
       margin-right: -1em;
@@ -623,6 +629,9 @@ footer {
       list-style: none; }
       #comments .comment .metadata li.author {
         display: block; }
+        #comments .comment .metadata li.author h3 {
+          padding-top: 0px;
+          font-size: 1em; }
       #comments .comment .metadata li.date {
         float: right; }
     #comments .comment.author .author {
@@ -634,11 +643,14 @@ footer {
     #comments .comment .flag_this {
       margin-top: 0.5em;
       text-align: right; }
+  #comments .intro {
+    background: white;
+    padding: 15px; }
   #comments form {
-    padding: 15px;
     background: white;
     margin-bottom: 1em; }
-    #comments form h3 {
+    #comments form h2 {
+      font-size: 1.25em;
       padding-top: 0.5em; }
     #comments form .comment_submit {
       text-align: right; }
@@ -646,7 +658,11 @@ footer {
       padding: 5px 8px; }
   #comments .comment_comment textarea {
     height: 4em;
-    width: 30em;
-    max-width: 30em;
+    width: 32em;
+    max-width: 32em;
     font-size: 0.75em;
     padding: 0.25em; }
+
+footer {
+  max-width: 85%;
+  min-width: 1135px; }

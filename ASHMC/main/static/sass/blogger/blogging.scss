@@ -19,22 +19,29 @@ $screen_min_width: 1115px;
 }
 
 #comments {
+	width: 422px;
 	float: left;
 	padding: 10px;
-	margin-top: 5.5em;
-	margin-left: 1.5em;
+	margin-top: 6em;
+	margin-left: 1em;
+	margin-bottom: 1em;
 	background: $body_background;
-	outline: 1em solid $light_background;
+	outline: 0.5em solid $light_background;
 	z-index: 90;
 	@import "comments";
 
-	form {
+	.intro {
+		background: $light_background;
 		padding: 15px;
+	}
+
+	form {
 		background: $light_background;
 
 		margin-bottom: 1em;
 
-		h3 {
+		h2 {
+			font-size: $font_size * 1.25;
 			padding-top: 0.5em;
 		}
 
@@ -50,11 +57,16 @@ $screen_min_width: 1115px;
 	.comment_comment {
 		textarea {
 			height: 4em;
-			width: 30em;
-			max-width: 30em;
+			width: 32em;
+			max-width: 32em;
 
 			font-size: $font_size * 0.75;
 			padding: 0.25em;
 		}
 	}
+}
+
+footer {
+	max-width: 85%;
+	min-width: $screen_min_width + 20px;
 }

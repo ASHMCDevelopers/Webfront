@@ -4,17 +4,28 @@
 
 	padding: 4px 8px;
 
+	&:nth-child(even){
+		// Preven comments from blending together:
+		background: scale_color($light_background, $lightness:-10%);
+	}
 
 	&.ashmc {
 		background: $light_gold;
 
 		a {color: white;}
+
+		&:nth-child(odd) {
+			// Prevent comments from blending together:
+			background: scale_color($light_gold, $lightness:-10%);
+		}
 	}
 
 	&.author {
 		padding-right: 2em;
 		margin-right: -1em;
 		z-index: 100;
+
+
 	}
 
 	.metadata {
@@ -25,6 +36,10 @@
 
 			&.author {
 				display: block;
+				h3 {
+					padding-top: 0px;
+					font-size: $font_size;
+				}
 			}
 
 			&.date {

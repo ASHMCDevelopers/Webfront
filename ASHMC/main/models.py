@@ -35,7 +35,7 @@ class ASHMCRole(Role):
     """Describes a role in ASHMC, i.e. President"""
     COUNCIL_ROLES = (
         'President',
-        'Vice-president',
+        'Vice-President',
         'Dorm President',
         'Treasurer',
         'Webmaster',

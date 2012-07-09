@@ -1,4 +1,7 @@
+from django import forms
 from django.contrib import admin
+from django.contrib.sites.models import Site
+from django.db.models import ManyToManyRel
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
@@ -10,7 +13,7 @@ from .models import Entry
 
 class EntryAdmin(admin.ModelAdmin):
     """Admin for Entry model"""
-    # form = EntryAdminForm
+    #form = EntryAdminForm
     date_hierarchy = 'creation_date'
     fieldsets = ((_('Content'), {'fields': ('title', 'catch_title', 'content',
                                             #'image',
@@ -21,7 +24,8 @@ class EntryAdmin(admin.ModelAdmin):
                                             'creation_date',
                                             'start_publication',
                                             'end_publication',
-                                            'dorms_hidden_from',),
+                                            'dorms_hidden_from',
+                                            ),
                                  'classes': ('collapse', 'collapse-closed')}),
                  (_('Privacy'), {'fields': ('password', 'login_required',),
                                  'classes': ('collapse', 'collapse-closed')}),
@@ -47,6 +51,10 @@ class EntryAdmin(admin.ModelAdmin):
                'ping_directories', 'make_tweet', 'put_on_top']
     actions_on_top = True
     actions_on_bottom = True
+
+    def __init__(self, model, admin_site):
+        self.form.admin_site = admin_site
+        super(EntryAdmin, self).__init__(model, admin_site)
 
     def get_title(self, entry):
         """Return the title with word count and number of comments"""

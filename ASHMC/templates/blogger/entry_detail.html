@@ -1,5 +1,6 @@
 {% extends "blogger/blogger_base_page.html" %}
 {% load comments %}
+{% load main_extras %}
 {% load blogger_filters %}
 {% load markup %}
 
@@ -24,7 +25,7 @@
             	<a rel="author" href="" title="">{{entry.primary_author.get_full_name}}</a>
             	{% if entry.primary_author.ashmcrole_set.count != 0 %}
             	 &mdash; 
-            	 {% with entry.primary_author.ashmcrole_set.all|first as role %}
+            	 {% with entry.primary_author.highest_ashmc_role as role %}
             	 {{role.cast}}
             	 {%endwith%}
             	 {% endif %}
@@ -53,23 +54,39 @@
         {{entry.html_content|safe}}
 </article>
 </section>
-
+{% if entry.comments_were_open %}
 <section id="comments">
+	<div class="intro">
 	{# TODO: Make this an actual permission #}
 	{% if entry.comment_enabled and user.is_authenticated %}
 		{% get_comment_form for entry as cf%}
-		<form>
-			<h3>Leave a note:</h3>
+		<form action="{% comment_form_target %}" method="POST">
+			{% csrf_token %}
+			<h2>Leave a note:</h2>
+			{% for hf in cf.hidden_fields %}
+				{{hf}}
+			{% endfor %}
 		<div class='comment_comment'>{{cf.comment}}</div>
 		<div class='comment_submit'><input type="submit" class='button-submit' value="note it!"/></div>
 		</form>
-	{% endif %}
+
+	{% else %}
+		<h2>Notes</h2>
+	{% endif %}</div>
  {% get_comment_list for entry as comment_list %}
  {% for comment in comment_list %}
  	<article class='comment{% if comment.user.ashmcrole_set.count != 0 %} ashmc{%endif%}{% if comment.user == entry.primary_author%} author{% endif %}'>
  		<ul class="metadata clearfix">
  			<li class='date'>{{comment.submit_date|date:"F jS, Y g:i a"}}</li>
- 			<li class='author'>{{comment.user.get_full_name}}</li>
+ 			<li class='author'><h3>{{comment.user.get_full_name}}
+			{% if comment.user.ashmcrole_set.count != 0 %}
+	        	 &mdash; 
+	        	 {% with comment.user.highest_ashmc_role as role %}
+	        	 	{{role.cast|shorten_role}}
+	        	 {%endwith%}
+        	 {% endif %}
+			</h3>
+ 			</li>
 		</ul>
 
 		<div class='comment_body'>
@@ -77,7 +94,11 @@
 		</div>
 		<div class='flag_this'><a href="">Flag this comment</a></div>
  	</article>
+ {% empty %}
+ 	<article clas='comment'>
+ 		<h3>Nobody's left any notes.</h3>
+ 	</article>
  {% endfor %}
 </section>
-
+{% endif %}
 {% endblock post_header %}

@@ -260,7 +260,7 @@ body {
   -webkit-print-color-adjust: exact;
   background: white url(/static/images/bg.jpg) repeat;
   font-size: 1em;
-  font-family: "Proxima Nova Regular","Helvetica Neue",Arial,Helvetica,sans-serif; }
+  font-family: "Proxima Nova Regular","Helvetica Neue",Helvetica,Arial,sans-serif; }
 
 a {
   color: #3079ed;

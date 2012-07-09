@@ -19,6 +19,10 @@ def is_today(value):
         value.year == now.year
         )
 
+@register.filter
+def shorten_role(role):
+    return role
+
 
 class RssParserNode(template.Node):
     def __init__(self, var_name, url=None, url_var_name=None):
