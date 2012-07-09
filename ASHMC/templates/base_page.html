@@ -17,10 +17,10 @@
   <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
   <link rel="shortcut icon" href="{% static "images/favicon.png" %}" />
   <link rel="apple-touch-icon" href="{% static "images/apple-touch-icon.png"%}" />
-  
-  <link rel="stylesheet" type="text/css" href="{%static "styles/base.css"%}" />
   {% block stylin %}
-  
+    {# multiple http queries are slower than one big css file. #}
+    {# you should use sass to include this in subsequent stylesheets. #}
+    <link rel="stylesheet" type="text/css" href="{%static "styles/base.css"%}" />
   {% endblock %}
 </head>
 
@@ -28,7 +28,7 @@
 
 <div id="container">
 	
-    {% block content %}
+  {% block content %}
 	
 	{% endblock content %}
 

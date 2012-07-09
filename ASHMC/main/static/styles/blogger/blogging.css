@@ -428,3 +428,225 @@ footer {
   footer ul#footer-links {
     text-align: right;
     list-style: none; }
+
+#logo {
+  height: 150px;
+  min-width: 1080px;
+  position: relative;
+  margin-top: 15px;
+  z-index: 2;
+  background: #1c1c1c;
+  color: #cc9933;
+  border-style: solid;
+  border-left: None;
+  border-right: None;
+  border-width: 10px;
+  border-color: #7e580d;
+  z-index: 100; }
+
+#ashmc {
+  float: left;
+  height: 150px;
+  list-style: None;
+  list-style-type: None;
+  margin-top: 0px;
+  margin-left: 3%;
+  color: black;
+  text-align: center; }
+  #ashmc a {
+    text-decoration: none; }
+    #ashmc a:active {
+      color: #c81a46; }
+  #ashmc h1 {
+    line-height: 4.5em;
+    margin: 0; }
+    #ashmc h1 span {
+      margin-left: 0;
+      margin-right: 0;
+      display: inline block;
+      list-style: None;
+      color: #cc9933; }
+      #ashmc h1 span.HMC {
+        font-size: 125px; }
+      #ashmc h1 span.AS {
+        font-size: 130px;
+        color: #fff; }
+        #ashmc h1 span.AS::after {
+          content: "|";
+          color: #C9B147; }
+  #ashmc h3 {
+    position: relative;
+    top: -4em;
+    font-family: Helvetica sans-serif;
+    color: white;
+    font-size: 1em; }
+    #ashmc h3 .AS {
+      font-family: "Walkway Expand Bold", sans-serif; }
+
+#postheader {
+  max-width: 1150px;
+  min-width: 1115px;
+  min-height: 500px;
+  margin: 0 auto; }
+
+#entry {
+  max-width: 650px;
+  float: left; }
+  #entry p {
+    padding: 0.5em 0; }
+  #entry article {
+    line_height: 1.4em;
+    min-width: 591px;
+    padding: 35px;
+      padding-bottom: 3em;
+    background: white;
+    color: #333333; }
+    #entry article blockquote {
+      margin: 1em 0;
+      padding: 1em 2em;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-left: 8px solid #41B7DB;
+      background: white url(/static/images/bg.jpg) repeat;
+      font: italic 1.05em/1.55em "Skolar Italic", "Times New Roman", serif;
+      color: rgba(0, 0, 0, 0.75); }
+    #entry article h2 {
+      color: #000; }
+      #entry article h2 a {
+        color: #333; }
+        #entry article h2 a:hover {
+          color: #e53b2c; }
+      #entry article h2 .catch_headline {
+        display: block;
+        color: rgba(51, 51, 51, 0.3);
+        font-size: 0.4em;
+        line-height: 1.5em;
+        text-transform: uppercase;
+        font-family: "Proxima Nova";
+        font-weight: bold;
+        letter-spacing: 1px;
+        padding-bottom: 0.5em; }
+    #entry article .metadata {
+      text-align: right;
+      padding-bottom: 2em; }
+      #entry article .metadata li {
+        color: rgba(51, 51, 51, 0.4);
+        display: inline-block;
+        list-style: none;
+        padding: 1em 2em 0 1.5em;
+        white-space: nowrap; }
+        #entry article .metadata li.author {
+          border-bottom: 1px solid rgba(51, 51, 51, 0.35);
+          display: block;
+          padding: 0.5em 0.5em 0.5em 0;
+          font-size: 1.25em;
+          line-height: 1.35em;
+          margin: 0;
+          text-align: left;
+          font-family: "Museo Slab","Times New Roman",serif;
+          font-weight: 500;
+          font-style: normal;
+          text-transform: capitalize; }
+      #entry article .metadata + p {
+        font-family: "Museo Slab","Times New Roman",serif;
+        font-weight: 500;
+        font-style: normal;
+        font-size: 1.125em;
+        line-height: 1.35em;
+        margin: 0;
+        color: #242424; }
+    #entry article p.read_more {
+      text-align: right; }
+      #entry article p.read_more a {
+        color: #fff;
+        background-color: #3079ed;
+        padding: 8px 8px;
+        -webkit-border-top-right-radius: 5px;
+        border-top-right-radius: 5px;
+        -moz-border-radius-topright: 5px;
+        -webkit-border-top-left-radius: 5px;
+        border-top-left-radius: 5px;
+        -moz-border-radius-topleft: 5px;
+        -webkit-border-bottom-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        -moz-border-radius-bottomright: 5px;
+        -webkit-border-bottom-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        -moz-border-radius-bottomleft: 5px;
+        transition: background-color 0.2s linear ;
+        -moz-transition: background-color 0.2s linear ;
+        /* Firefox 4 */
+        -webkit-transition: background-color 0.2s linear ;
+        /* Safari and Chrome */
+        -o-transition: background-color 0.2s linear ;
+        /* Opera */ }
+        #entry article p.read_more a:hover {
+          background-color: #e53b2c;
+          color: #fff!important;
+          transition: background-color 0.2s linear ;
+          -moz-transition: background-color 0.2s linear ;
+          /* Firefox 4 */
+          -webkit-transition: background-color 0.2s linear ;
+          /* Safari and Chrome */
+          -o-transition: background-color 0.2s linear ;
+          /* Opera */ }
+    #entry article .adieu {
+      text-align: right; }
+      #entry article .adieu:first-child {
+        margin-top: 3.5em; }
+      #entry article .adieu.signature {
+        font-size: 1.75em; }
+      #entry article .adieu.role {
+        font-family: "Adobe Caslon Pro"; }
+
+#comments {
+  float: left;
+  padding: 10px;
+  margin-top: 5.5em;
+  margin-left: 1.5em;
+  background: white url(/static/images/bg.jpg) repeat;
+  outline: 1em solid white;
+  z-index: 90; }
+  #comments .comment {
+    font-size: 0.75em;
+    background: white;
+    padding: 4px 8px; }
+    #comments .comment.ashmc {
+      background: #c9b147; }
+      #comments .comment.ashmc a {
+        color: white; }
+    #comments .comment.author {
+      padding-right: 2em;
+      margin-right: -1em;
+      z-index: 100; }
+    #comments .comment .metadata li {
+      display: inline-block;
+      list-style: none; }
+      #comments .comment .metadata li.author {
+        display: block; }
+      #comments .comment .metadata li.date {
+        float: right; }
+    #comments .comment.author .author {
+      color: #7e580d; }
+    #comments .comment .comment_body {
+      min-width: 400px; }
+      #comments .comment .comment_body p:first-child {
+        margin-top: 0px; }
+    #comments .comment .flag_this {
+      margin-top: 0.5em;
+      text-align: right; }
+  #comments form {
+    padding: 15px;
+    background: white;
+    margin-bottom: 1em; }
+    #comments form h3 {
+      padding-top: 0.5em; }
+    #comments form .comment_submit {
+      text-align: right; }
+    #comments form input[type='submit'] {
+      padding: 5px 8px; }
+  #comments .comment_comment textarea {
+    height: 4em;
+    width: 30em;
+    max-width: 30em;
+    font-size: 0.75em;
+    padding: 0.25em; }

@@ -1,0 +1,92 @@
+{% extends "base_page.html" %}
+{% load main_extras %}
+{% load cache %}
+{% load webdesign %}
+
+{% block content %}
+<section id="preheader">
+	{% block pre_header %}
+		Login Stuff
+	{% endblock pre_header %}
+	</section>
+
+<header>
+{% block header %}
+<div id="logo">
+	{% block left_header %}
+	    <div id="ashmc">
+	        <a href="{% url "main_landing_page" %}"><h1><span class='AS'>AS</span><span class='HMC'>HMC</span></h1></a>
+
+	        <h3><span class="AS">Associated Students of Harvey Mudd College</span></h3>
+	   </div>
+   {% endblock %}
+
+   {% block right_header %}
+	   {% if user.is_authenticated %}
+	   <div id="salutation"> 
+	        <h2>{% greeting %}{{user.first_name}}!</h2> 
+	        <div class="righty"><a href="{% url 'logout' %}">logout</a></div>
+
+	        <div id="ashmcroles">{{user.ashmcrole_set.all|join:", "}}</div>
+	   </div>
+	    <div id="head_links">
+	        <ul>
+	            <a href="www.hmc.edu"><li>HMC</li></a>
+	            <a href="{% url "search_courses" %}"><li>Courses</li></a>
+	            {% if perms.vote.can_vote %}
+	                <a href=""><li>Vote</li></a>
+	            {% endif %}
+	        </ul>
+	    </div>
+	    {% else %}
+		    <div id="login_form">
+		        <div class="centerer centered">
+		            
+		            <div id="login_form_hold">
+			            <form action="{% url  "login" %}" method="POST">
+			                {% csrf_token %}
+			            <div>{{form.username}}<div class='tooltip'>Your HMC email: first_last@hmc.edu</div></div>
+			            <div>{{form.password}}<div class='tooltip'>Don't know your password?<br/>Click <a href="#">here</a>.</div></div>
+			            <input type=submit id="signIn" class="button-submit" value="Get Started" />
+			            </form>
+		        	</div>
+		    	</div>
+			</div>
+	    {% endif %}
+    {% endblock %}
+</div>
+{% endblock header %}
+</header>
+
+<section id="postheader">
+{% block post_header %}
+	
+{% endblock post_header %}
+    <div class="clearer"> </div>
+</section>
+{% endblock content %}
+
+{% block footer %}
+
+    <ul class="lefty" id="social-media-links">
+        {% comment %}
+            
+        <li><a href="" title="Like ASHMC on Facebook." class="social-media facebook">Like ASHMC on Facebook.</a></li>
+        <li><a href="http://www.flickr.com/photos/micamultimedia/" title="Take a look at ASHMC on Flickr." class="social-media flickr">Take a look at ASHMC on Flickr.</a></li>
+        <li><a href="" title="Follow ASHMC on Twitter (@ashmc.edu)." class="social-media twitter">Follow ASHMC on Twitter (@ashmc_updates).</a></li>
+        <li><a href="" class="social-media youtube">Watch our YouTube channel.</a></li>
+        {% endcomment %}
+        <li><a href=''><div class='facebook'>F<span class="hidden">acebook</span></div></a></li>
+        <li><a href=''><div class='youtube'>You<span class='hidden'>Tube</span></div></a></li>
+        <li><a href=''><div class='twitter'>T<span class="hidden">witter</span></div></a></li>
+    </ul>
+
+    <ul id="footer-links">
+        <li><a href="">What is ASHMC?</a></li>
+        <li><a href="">Read the Constitution</a></li>
+        <li><a href="">Read the Bylaws</a></li>
+        <li><a href="">Get the Minutes</a></li>
+        <li><a href="">Find a form</a></li>
+    </ul>
+
+{% endblock footer %}

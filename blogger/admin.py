@@ -26,7 +26,7 @@ class EntryAdmin(admin.ModelAdmin):
                  (_('Privacy'), {'fields': ('password', 'login_required',),
                                  'classes': ('collapse', 'collapse-closed')}),
                  (_('Discussion'), {'fields': ('comment_enabled',
-                                               )}),
+                                               'comments_closed_as_of')}),
                  (_('Publication'), {'fields': ('categories', 'tags',
                                                 'slug')}))
     list_filter = ('categories', 'authors', 'status', 'featured',

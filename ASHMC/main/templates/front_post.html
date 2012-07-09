@@ -1,6 +1,16 @@
+{% load blogger_filters %}
 <article class="">
     
-            <h2><a href=""><span class="catch_headline">{{post.catch_title}}</span><span class="headline">{{post.title}}</span></a></h2>
+            <h2><a href="{{post.get_absolute_url}}"><span class="catch_headline">{{post.catch_title}}
+            	{% with post|has_been_updated as u %}
+            	{% if u == 1 %}
+            		(updated {{post.last_update|date:"F jS, Y"}})
+            	{% elif u == 2 %}
+            		(updated {{post.last_update|date:"g:i a"}})
+            	{% endif %}    
+            	{% endwith %}
+            	
+            </span><span class="headline">{{post.title}}</span></a></h2>
                 
         <ul class="metadata clearfix">
             <li class="author">
@@ -20,7 +30,9 @@
             </li>
         
                     
-            <li class="date">{{post.start_publication|date:"F jS, Y"}}</li>
+            <li class="date">
+            	{{post.start_publication|date:"F jS, Y"}}
+            </li>
             {% if post.tags %}
             	<li class="tags">
             	{% for tag in post.tags.all|slice:":3" %}
@@ -28,10 +40,15 @@
             	{% endfor %}
             	</li>
     		{% endif %}
-            <li class="comments"><a href="" title="Comment on this post">{{post.comments.count|default:"0"}} Comments</a></li>
+            <li class="comments">
+            	{% if post.comments_enabled and not post.comments_closed_as_of %}
+            	<a href="" title="Comment on this post">{{post.comments.count|default:"0"}} Comment{{post.comments.count|pluralize}}</a></li>
+            	{% elif post.comments.count != 0 %}
+            		{{post.comments.count}} Comment{{post.comments.count|pluralize}}
+            	{% endif %}
         </ul>
-        {{post.html_content|safe}}
+        {{post|naive_excerpt|safe}}
                 
         
-<p class='read_more'><a href="">Read more...</a></p>
+<p class='read_more'><a href="{{post.get_absolute_url}}">Read more...</a></p>
 </article>

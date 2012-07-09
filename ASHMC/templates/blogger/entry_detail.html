@@ -1,0 +1,83 @@
+{% extends "blogger/blogger_base_page.html" %}
+{% load comments %}
+{% load blogger_filters %}
+{% load markup %}
+
+{% block post_header %}
+<section id="entry">
+<article class="entry">
+    
+            <h2><a href="{{entry.get_absolute_url}}"><span class="catch_headline">{{entry.catch_title}}
+            	{% with entry|has_been_updated as u %}
+            	{% if u == 1 %}
+            		(updated {{entry.last_update|date:"F jS, Y"}})
+            	{% elif u == 2 %}
+            		(updated {{entry.last_update|date:"g:i a"}})
+            	{% endif %}    
+            	{% endwith %}
+            	
+            </span><span class="headline">{{entry.title}}</span></a></h2>
+                
+        <ul class="metadata clearfix">
+            <li class="author">
+            	{% if entry.primary_author.get_full_name %}
+            	<a rel="author" href="" title="">{{entry.primary_author.get_full_name}}</a>
+            	{% if entry.primary_author.ashmcrole_set.count != 0 %}
+            	 &mdash; 
+            	 {% with entry.primary_author.ashmcrole_set.all|first as role %}
+            	 {{role.cast}}
+            	 {%endwith%}
+            	 {% endif %}
+            	{% else %}
+            		SYSTEM 
+            	{% endif %}
+            </li>
+        
+                    
+            <li class="date">
+            	{{entry.start_publication|date:"F jS, Y"}}
+            </li>
+            {% if entry.tags %}
+            	<li class="tags">
+            	{% for tag in entry.tags.all|slice:":3" %}
+            		<a href="">{{tag}}</a>{% if not forloop.last %},{%endif%} 
+            	{% endfor %}
+            	</li>
+    		{% endif %}
+    	{% if entry.comment_enabled %}
+            <li class="comments">
+            		{{entry.comments.count}} Comment{{entry.comments.count|pluralize}}
+        	</li>
+    	{% endif %}
+        </ul>
+        {{entry.html_content|safe}}
+</article>
+</section>
+
+<section id="comments">
+	{# TODO: Make this an actual permission #}
+	{% if entry.comment_enabled and user.is_authenticated %}
+		{% get_comment_form for entry as cf%}
+		<form>
+			<h3>Leave a note:</h3>
+		<div class='comment_comment'>{{cf.comment}}</div>
+		<div class='comment_submit'><input type="submit" class='button-submit' value="note it!"/></div>
+		</form>
+	{% endif %}
+ {% get_comment_list for entry as comment_list %}
+ {% for comment in comment_list %}
+ 	<article class='comment{% if comment.user.ashmcrole_set.count != 0 %} ashmc{%endif%}{% if comment.user == entry.primary_author%} author{% endif %}'>
+ 		<ul class="metadata clearfix">
+ 			<li class='date'>{{comment.submit_date|date:"F jS, Y g:i a"}}</li>
+ 			<li class='author'>{{comment.user.get_full_name}}</li>
+		</ul>
+
+		<div class='comment_body'>
+			{{comment.comment|markdown:"safe"}}
+		</div>
+		<div class='flag_this'><a href="">Flag this comment</a></div>
+ 	</article>
+ {% endfor %}
+</section>
+
+{% endblock post_header %}

@@ -71,7 +71,10 @@ class DormPresident(ASHMCRole):
     dorm = models.ForeignKey('Dorm')
 
     def __unicode__(self):
-        return u"{} {}".format(self.dorm, self.title)
+        if self.title == " ":
+            return u"{} President".format(self.dorm)
+        else:
+            return u"{} President {}".format(self.dorm, self.title)
 
 
 class Dorm(models.Model):

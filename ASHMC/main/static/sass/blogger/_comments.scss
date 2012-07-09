@@ -1,0 +1,51 @@
+.comment {
+	font-size: $font-size * 0.75;
+	background: $light_background;
+
+	padding: 4px 8px;
+
+
+	&.ashmc {
+		background: $light_gold;
+
+		a {color: white;}
+	}
+
+	&.author {
+		padding-right: 2em;
+		margin-right: -1em;
+		z-index: 100;
+	}
+
+	.metadata {
+
+		li {
+			display: inline-block;
+			list-style: none;
+
+			&.author {
+				display: block;
+			}
+
+			&.date {
+				float: right;
+			}
+		}
+	}
+
+	&.author .author {
+		color: $dark_gold;
+	}
+
+	.comment_body {
+		min-width: 400px;
+		p:first-child {
+			margin-top: 0px;
+		}
+	}
+
+	.flag_this {
+		margin-top: 0.5em;
+		text-align: right;
+	}
+}

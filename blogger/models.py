@@ -17,6 +17,9 @@ from taggit.managers import TaggableManager
 from .util import entries_published, DRAFT, HIDDEN, PUBLISHED, UPLOAD_TO, EntryPublishedManager
 from ASHMC.main.models import Dorm
 
+
+import datetime
+import pytz
 # Create your models here.
 
 
@@ -97,7 +100,7 @@ class Entry(models.Model):
     featured = models.BooleanField(_('featured'), default=False)
 
     comment_enabled = models.BooleanField(_('comment enabled'), default=True)
-    comments_closed_as_of = models.DateTimeField(null=True)
+    comments_closed_as_of = models.DateTimeField(null=True, blank=True)
 
     dorms_hidden_from = models.ManyToManyField(Dorm, blank=True, null=True)  # None means not hidden
 
@@ -191,7 +194,9 @@ class Entry(models.Model):
     @property
     def comments_are_open(self):
         """Check if comments are open"""
-        return self.comment_enabled
+        return (self.comment_enabled and 
+            timezone.localtime(datetime.datetime.now(pytz.utc)) < self.comments_closed_as_of)
+
     '''
     @property
     def short_url(self):
