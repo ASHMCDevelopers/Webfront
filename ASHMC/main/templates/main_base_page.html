@@ -25,19 +25,10 @@
 	   {% if user.is_authenticated %}
 	   <div id="salutation"> 
 	        <h2>{% greeting %}{{user.first_name}}!</h2> 
-	        <div class="righty"><a href="{% url 'logout' %}">logout</a></div>
+	        <div class="lefty" id="logout"><a href="{% url 'logout' %}">logout</a></div>
 
 	        <div id="ashmcroles">{{user.ashmcrole_set.all|join:", "}}</div>
 	   </div>
-	    <div id="head_links">
-	        <ul>
-	            <a href="www.hmc.edu"><li>HMC</li></a>
-	            <a href="{% url "search_courses" %}"><li>Courses</li></a>
-	            {% if perms.vote.can_vote %}
-	                <a href=""><li>Vote</li></a>
-	            {% endif %}
-	        </ul>
-	    </div>
 	    {% else %}
 		    <div id="login_form">
 		        <div class="centerer centered">

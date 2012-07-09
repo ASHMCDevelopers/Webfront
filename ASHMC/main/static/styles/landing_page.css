@@ -613,6 +613,9 @@ footer {
   min-width: 300px;
   margin-top: 1em;
   margin-right: 15%; }
+  #salutation h2 {
+    float: left;
+    margin-right: 1em; }
 
 #login_form {
   float: right;

@@ -76,7 +76,7 @@
 	{% endif %}</div>
  {% get_comment_list for entry as comment_list %}
  {% for comment in comment_list %}
- 	<article class='comment{% if comment.user.ashmcrole_set.count != 0 %} ashmc{%endif%}{% if comment.user == entry.primary_author%} author{% endif %}'>
+ 	<article class="comment{% if comment.user.ashmcrole_set.count != 0 and comment.user.highest_ashmc_role.title != 'Student'%} ashmc{%endif%}{% if comment.user == entry.primary_author%} author{% endif %}">
  		<ul class="metadata clearfix">
  			<li class='date'>{{comment.submit_date|date:"F jS, Y g:i a"}}</li>
  			<li class='author'><h3>{{comment.user.get_full_name}}
