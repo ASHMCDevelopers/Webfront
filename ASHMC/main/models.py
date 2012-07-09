@@ -121,8 +121,10 @@ class TopNewsItem(models.Model):
     render_css = models.TextField(null=True, blank=True)
 
     author = models.ForeignKey(User)
+
     date_published = models.DateTimeField()
     date_expired = models.DateTimeField()
+    should_display = models.BooleanField(default=True)
 
     def __unicode__(self):
         return u"{}".format(self.slug)

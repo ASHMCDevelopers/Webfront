@@ -46,7 +46,8 @@ class LandingPage(TemplateView):
         context['top_stories'] = TopNewsItem.objects.filter(
             date_expired__gt=datetime.datetime.now(),
             date_published__lte=datetime.datetime.now(),
-        )
+            should_display=True
+        ).order_by('-date_published')[:7]
         return context
 
 
