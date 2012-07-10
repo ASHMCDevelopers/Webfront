@@ -509,6 +509,9 @@ footer {
       background: white url(/static/images/bg.jpg) repeat;
       font: italic 1.05em/1.55em "Skolar Italic", "Times New Roman", serif;
       color: rgba(0, 0, 0, 0.75); }
+    #entry article ol {
+      list-style-type: decimal;
+      margin-left: 1em; }
     #entry article h2 {
       color: #000; }
       #entry article h2 a {

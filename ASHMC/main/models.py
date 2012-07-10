@@ -8,10 +8,9 @@ from django.utils.translation import ugettext as _
 
 class Role(models.Model):
 
-    year = models.IntegerField()
     title = models.CharField(max_length=50)
 
-    student = models.ForeignKey(User)
+    description = models.TextField(blank=True, null=True)
 
     # This FK is what makes the polymorphic magic work (esp. for printing)
     real_type = models.ForeignKey(ContentType, editable=False, null=True)
@@ -31,6 +30,14 @@ class Role(models.Model):
         abstract = True
 
 
+class ASHMCAppointment(models.Model):
+    year = models.IntegerField()
+    student = models.ForeignKey(User)
+    role = models.ForeignKey("ASHMCRole")
+
+    bio = models.TextField(null=True, blank=True)
+
+
 class ASHMCRole(Role):
     """Describes a role in ASHMC, i.e. President"""
     COUNCIL_ROLES = (
@@ -40,6 +47,8 @@ class ASHMCRole(Role):
         'Treasurer',
         'Webmaster',
     )
+
+    appointee = models.ManyToManyField(User, through="ASHMCAppointment")
 
     def __lt__(self, other):
         assert isinstance(other, ASHMCRole)

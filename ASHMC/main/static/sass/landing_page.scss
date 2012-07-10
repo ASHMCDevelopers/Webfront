@@ -63,10 +63,17 @@
 
             cursor: pointer;
 
+            &:hover {
+                background-color: scale_color($light_background, $lightness:-10%);
+                @include transition(background-color, 0.1s);
+            }
+
             &.current {
                 background-color: $mudd_gold;
                 color: white;
             }
+
+
 
             @include transition(background-color, 1s);
         }

@@ -26,6 +26,12 @@ article {
         font: italic 1.05em/1.55em "Skolar Italic", "Times New Roman", serif;
         color: rgba(0, 0, 0, 0.75);
     }
+
+    ol {
+        list-style-type: decimal;
+        margin-left: 1em;
+    }
+
     h2 {
        color: #000;
         a {

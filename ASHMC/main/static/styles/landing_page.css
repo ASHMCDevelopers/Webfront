@@ -529,6 +529,15 @@ footer {
       /* Safari and Chrome */
       -o-transition: background-color 1s linear ;
       /* Opera */ }
+      #latest_news ul li:hover {
+        background-color: #e6e6e6;
+        transition: background-color 0.1s linear ;
+        -moz-transition: background-color 0.1s linear ;
+        /* Firefox 4 */
+        -webkit-transition: background-color 0.1s linear ;
+        /* Safari and Chrome */
+        -o-transition: background-color 0.1s linear ;
+        /* Opera */ }
       #latest_news ul li.current {
         background-color: #cc9933;
         color: white; }
@@ -684,6 +693,9 @@ footer {
       background: white url(/static/images/bg.jpg) repeat;
       font: italic 1.05em/1.55em "Skolar Italic", "Times New Roman", serif;
       color: rgba(0, 0, 0, 0.75); }
+    #blogger article ol {
+      list-style-type: decimal;
+      margin-left: 1em; }
     #blogger article h2 {
       color: #000; }
       #blogger article h2 a {

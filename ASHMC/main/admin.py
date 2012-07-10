@@ -10,6 +10,11 @@ class ASHMCRoleAdmin(admin.ModelAdmin):
 admin.site.register(ASHMCRole, ASHMCRoleAdmin)
 
 
+class ASHMCAppointmentAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ASHMCAppointment, ASHMCAppointmentAdmin)
+
+
 class DormPrezAdmin(admin.ModelAdmin):
     pass
 admin.site.register(DormPresident, DormPrezAdmin)

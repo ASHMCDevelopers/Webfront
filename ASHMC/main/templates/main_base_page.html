@@ -25,9 +25,16 @@
 	   {% if user.is_authenticated %}
 	   <div id="salutation"> 
 	        <h2>{% greeting %}{{user.first_name}}!</h2> 
-	        <div class="lefty" id="logout"><a href="{% url 'logout' %}">logout</a></div>
+	        
 
-	        <div id="ashmcroles">{{user.ashmcrole_set.all|join:", "}}</div>
+	        <div id="ashmcroles">
+	        	<ul>
+	        {% for role in user.ashmcrole_set.all %}
+	        	<li>{{role.cast}}</li>
+	        {% endfor %}
+	        	</ul>
+	        </div>
+	        <div class="righty" id="logout"><a href="{% url 'logout' %}">logout</a></div>
 	   </div>
 	    {% else %}
 		    <div id="login_form">
