@@ -505,7 +505,7 @@ footer {
 
 #latest_news {
   display: inline;
-  float: right;
+  float: left;
   width: 44.1%;
   min-width: 300px;
   background: white;

@@ -6,7 +6,7 @@
 
 {% block stylin %}
     <link rel="stylesheet" href="{%static "styles/landing_page.css"%}">
-
+    {# This is fucking gross. TODO: Find a better way to do this. #}
     <style>
         {% for item in top_stories %}
             {{item.render_css}}
@@ -15,6 +15,7 @@
 {% endblock stylin %}
 
 {% block pre_header %}
+{% if top_stories.count != 0 %}
     <div class='scrollable_holder lefty'>
         <div>
             <section class='scrollable'>
@@ -36,6 +37,7 @@
         </ul>
     </section>
     <div class="clearer"> </div>
+{% endif %}
 {% endblock pre_header %}
 
 
@@ -67,7 +69,7 @@
                         <div class='author'>
                             <a 
                             style='color:#{{tweet.user.profile_link_color}};'
-                            href="http://twitter.com/#!/{{tweet.user.screen_name}}">@{{tweet.user.screen_name}}</a>
+                            href="http://twitter.com/{{tweet.user.screen_name}}">@{{tweet.user.screen_name}}</a>
                         </div>
                         <div class='time'>
                         {% if tweet.date|is_today %}

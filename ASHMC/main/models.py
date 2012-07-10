@@ -39,7 +39,6 @@ class ASHMCRole(Role):
         'Dorm President',
         'Treasurer',
         'Webmaster',
-        'Student',
     )
 
     def __lt__(self, other):
