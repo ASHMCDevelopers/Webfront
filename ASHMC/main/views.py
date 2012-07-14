@@ -12,7 +12,7 @@ from .models import TopNewsItem
 
 from blogger.models import Entry
 
-import twitter
+from django.conf import settings
 import datetime
 # Create your views here.
 
@@ -32,11 +32,11 @@ class LandingPage(TemplateView):
             context['latest_tweets'] = tweets
 
         else:
-            tweets = twitter.Api().GetUserTimeline(settings.TWITTER_USER)[:5]
+            tweets = settings.TWITTER_AGENT.statuses.user_timeline()[:6]
             for tweet in tweets:
-                tweet.date = datetime.datetime.strptime(tweet.created_at, "%a %b %d %H:%M:%S +0000 %Y")
+                tweet['date'] = datetime.datetime.strptime(tweet['created_at'], "%a %b %d %H:%M:%S +0000 %Y")
 
-            cache.set('latest_tweets', tweets, settings.TWITTER_TIMEOUT)
+            cache.set('latest_tweets', tweets, settings.TWITTER_CACHE_TIMEOUT)
 
             context['latest_tweets'] = tweets
 

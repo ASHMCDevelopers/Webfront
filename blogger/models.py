@@ -3,6 +3,7 @@ from django.contrib.comments.models import Comment
 from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models import Q
+from django.dispatch import Signal
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext as _
@@ -234,3 +235,7 @@ class Entry(models.Model):
         permissions = (('can_view_all', 'Can view all entries'),
                        ('can_change_status', 'Can change status'),
                        ('can_change_author', 'Can change author(s)'), )
+
+#### SIGNALS ###
+new_entry = Signal(providing_args=['entry_id','author_id'])
+entry_updated = Signal(providing_args=['entry_id', 'author_id'])
