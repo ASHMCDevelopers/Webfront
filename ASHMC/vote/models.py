@@ -3,17 +3,25 @@ from django.db import models
 from django.utils.translation import ugettext as _
 # Create your models here.
 
-from main.models import Dorm
+from ASHMC.main.models import Dorm
 
 import datetime
 
 
 class Ballot(models.Model):
+    """For example, a ballot for ASHMC President would have
+        candidates (actually PersonCandidates).
+
+        Multiple ballots can appear in a measure; that is,
+        you can have a ballot for ASHMC President election and
+        one for VP election in the same measure.
+    """
+
     TYPES = (
         ("PL", "Popularity"),
     )
 
-    election = models.ForeignKey('Election', null=True)
+    measure = models.ForeignKey('Measure', null=True)
 
     display_position = models.IntegerField(default=1)
 
@@ -26,6 +34,9 @@ class Ballot(models.Model):
     def __unicode__(self):
         return u"Ballot #{}".format(self.id)
 
+    class Meta:
+        unique_together = (('measure', 'display_position'),)
+
 
 class DormBallot(Ballot):
     dorm = models.ForeignKey(Dorm)
@@ -35,12 +46,12 @@ class DormBallot(Ballot):
         unique_together = ('dorm', 'number',)
 
 
-class Mesure(models.Model):
+class Measure(models.Model):
     """A collection of ballots. This is probably where you'd want
     to calculate things like quorum."""
 
     name = models.CharField(max_length=50)
-    summary = models.TextField(blank=True)
+    summary = models.TextField(blank=True, null=True)
 
     vote_start = models.DateTimeField(default=datetime.datetime.now)
     vote_end = models.DateTimeField()
@@ -58,7 +69,7 @@ class Mesure(models.Model):
 class Vote(models.Model):
 
     account = models.ForeignKey(User, null=True)
-    election = models.ForeignKey(Mesure)
+    measure = models.ForeignKey(Measure)
 
     class Meta:
         verbose_name = _('Vote')
@@ -93,4 +104,4 @@ class Candidate(models.Model):
 
 class PersonCandidate(Candidate):
     user = models.ForeignKey(User, null=True)
-    write_in_value = models.CharField(max_length=50, blank=True)
+    write_in_value = models.CharField(max_length=50, blank=True, null=True)

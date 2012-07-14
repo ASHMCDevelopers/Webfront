@@ -10,6 +10,10 @@
   src: url("/static/fonts/Adobe Caslon Pro Semibold.ttf") format("truetype"); }
 
 @font-face {
+  font-family: "Walkway Bold";
+  src: url("/static/fonts/Walkway Bold.ttf") format("truetype"); }
+
+@font-face {
   font-family: "Walkway Expand";
   src: url("/static/fonts/Walkway Expand.ttf") format("truetype"); }
 
@@ -21,6 +25,10 @@
 @font-face {
   font-family: "Walkway Expand Black";
   src: url("/static/fonts/Walkway Expand Black.ttf") format("truetype"); }
+
+@font-face {
+  font-family: "Walkway UltraCondensed Bold";
+  src: url("/static/fonts/Walkway UltraCondensed Bold.ttf") format("truetype"); }
 
 @font-face {
   font-family: "Baskerville";

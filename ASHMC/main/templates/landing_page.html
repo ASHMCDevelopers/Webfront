@@ -58,16 +58,16 @@
             </ul>
        {# {% endcache %} #}
         </section>
-        
+
         <section id="twitter_feed">
             <div>
             <h2>Twitter</h2>
             {% for tweet in latest_tweets  %}
                 <div class='tweet'>
                     <div class='spacer'>
-                        
+
                         <div class='author'>
-                            <a 
+                            <a
                             style='color:#{{tweet.user.profile_link_color}};'
                             href="http://twitter.com/{{tweet.user.screen_name}}">@{{tweet.user.screen_name}}</a>
                         </div>
@@ -77,7 +77,7 @@
                         {% else %}
                             {{tweet.date|date:"m/d/y"}}
                         {% endif %}
-                            
+
 
                         </div>
                     </div>
@@ -93,11 +93,10 @@
         {% for post in latest_entries %}
             {% include "front_post.html" %}
         {% endfor %}
-        
+
 
 </section>
-    {% endblock post_header %}
-
+{% endblock post_header %}
 
 {% block scriptin %}
 <script type="text/javascript">
@@ -121,7 +120,7 @@ $(function() {
   $("#latest_news ul").hover(function(){
     var target = $('#preheader .scrollable').data('scrollable');
     target.stop();
-  }, 
+  },
   function(){
     var target = $('#preheader .scrollable').data('scrollable');
     target.play();
