@@ -1,0 +1,15 @@
+{% extends "legal/legal_base.html" %}
+{% load mptt_tags %}
+
+
+{% block post_header %}
+<ul class='root'>
+    {% recursetree object.children %}
+        <li> {{node.title}}
+                <ul class='children'>
+                    {{children}}
+                </ul>
+        </li>
+    {% endrecursetree %}
+</ul>
+{% endblock post_header %}
