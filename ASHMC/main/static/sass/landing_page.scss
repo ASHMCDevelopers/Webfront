@@ -312,6 +312,7 @@
 
     margin: {
         top: -185px;
+        left: 1.6%;
     }
 
 
@@ -321,6 +322,20 @@
 
     font: {
         size: 10pt;
+    }
+}
+
+#navlinks {
+    background: $body_background;
+    padding: 5px;
+    margin-bottom: 15px;
+    div {
+        background: $light_background;
+        padding: 5px;
+
+        h3 {
+            padding: 0.5em;
+        }
     }
 }
 

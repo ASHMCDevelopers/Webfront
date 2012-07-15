@@ -53,6 +53,10 @@
   font-family: Pico;
   src: url(/static/fonts/pico.ttf) format("truetype"); }
 
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("/static/fonts/ProximaNova-Regular.otf") format("opentype"); }
+
 * {
   margin: 0;
   padding: 0;
@@ -675,9 +679,20 @@ footer {
   padding: 1%;
     padding-top: 200px;
   margin-top: -185px;
+  margin-left: 1.6%;
   height: 100%;
   float: left;
   font-size: 10pt; }
+
+#navlinks {
+  background: white url(/static/images/bg.jpg) repeat;
+  padding: 5px;
+  margin-bottom: 15px; }
+  #navlinks div {
+    background: white;
+    padding: 5px; }
+    #navlinks div h3 {
+      padding: 0.5em; }
 
 #blogger {
   max-width: 75%;

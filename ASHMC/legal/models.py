@@ -5,6 +5,7 @@ from django.utils.translation import ugettext as _
 from mptt.models import MPTTModel, TreeForeignKey
 
 import datetime
+import pytz
 # Create your models here.
 
 
@@ -74,7 +75,7 @@ class Article(MPTTModel):
             return u"{}".format(self.title)
 
     def save(self, *args, **kwargs):
-        self.time_modified = datetime.datetime.now()
+        self.time_modified = pytz.utc.localize(datetime.datetime.now())
         if not self.slug:
             self.slug = self.title.replace(' ', '-').lower()
         super(Article, self).save(*args, **kwargs)

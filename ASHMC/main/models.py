@@ -40,12 +40,28 @@ class ASHMCAppointment(models.Model):
 
 class ASHMCRole(Role):
     """Describes a role in ASHMC, i.e. President"""
+    # This defines the hierarchy of roles.
+    # Naturally, the president is at the top.
     COUNCIL_ROLES = (
         'President',
         'Vice-President',
         'Dorm President',
         'Treasurer',
+        'Social Chair',
+        'Committee for Activities Planning Chair',
         'Webmaster',
+        'Athletics Director',
+        'Dormitory Affaris Committee Chair',
+        'Senior Class President',
+        'Junior Class President',
+        'Sophomore Class President',
+        'Freshman Class President',
+        'Judiciary Board Chair',
+        'Disciplinary Board Chair',
+        'Appeals Board Chair',
+        'Appeals Board Rep',
+        'Food Committee Chair',
+        'Honor Board Rep',
     )
 
     appointee = models.ManyToManyField(User, through="ASHMCAppointment")
