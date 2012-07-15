@@ -7,10 +7,18 @@
 h2, h3, h4, h5 {
     text-align: left;
 }
+#container {
+    min-width: 1100px;
+}
+
+.to_top {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+}
+
 #postheader {
     $heading_offset: -4em;
-
-    min-width: 1100px;
 
     margin-left: -$heading_offset;
 
@@ -27,6 +35,11 @@ h2, h3, h4, h5 {
             background: $light_background;
             li {
                 padding: 1em 0.5em;
+
+                &:hover {
+                    background: $mudd_gold;
+                    color: #fff;
+                }
             }
         }
     }
@@ -77,5 +90,9 @@ ol {
 
     &.four {
         list-style-type: decimal;
+    }
+
+    &.five {
+        list-style-type: lower-roman;
     }
 }

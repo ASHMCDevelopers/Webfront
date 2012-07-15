@@ -7,8 +7,6 @@ from mptt.models import MPTTModel, TreeForeignKey
 import datetime
 # Create your models here.
 
-CONSTITUTION_TITLE = "ASHMC Constitution"
-
 
 class DocumentManager(models.Manager):
     def get_query_set(self):
@@ -49,6 +47,7 @@ class Article(MPTTModel):
         default="",
         blank=True,
     )
+    slug = models.SlugField(null=True, blank=True)
     body = models.TextField(
         default="",
         blank=True,
@@ -76,6 +75,8 @@ class Article(MPTTModel):
 
     def save(self, *args, **kwargs):
         self.time_modified = datetime.datetime.now()
+        if not self.slug:
+            self.slug = self.title.replace(' ', '-').lower()
         super(Article, self).save(*args, **kwargs)
 
     def get_time_last_updated(self):
@@ -92,5 +93,5 @@ class Article(MPTTModel):
     def get_absolute_url(self):
 
         return ('legal_document_detail', {
-                'pk': self.pk,
+                'slug': self.slug,
             })

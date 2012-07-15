@@ -23,9 +23,9 @@
 
    {% block right_header %}
 	   {% if user.is_authenticated %}
-	   <div id="salutation"> 
-	        <h2>{% greeting %}{{user.first_name}}!</h2> 
-	        
+	   <div id="salutation">
+	        <h2>{% greeting %}{{user.first_name}}!</h2>
+
 
 	        <div id="ashmcroles">
 	        	<ul>
@@ -39,7 +39,7 @@
 	    {% else %}
 		    <div id="login_form">
 		        <div class="centerer centered">
-		            
+
 		            <div id="login_form_hold">
 			            <form action="{% url  "login" %}" method="POST">
 			                {% csrf_token %}
@@ -58,7 +58,7 @@
 
 <section id="postheader">
 {% block post_header %}
-	
+
 {% endblock post_header %}
     <div class="clearer"> </div>
 </section>
@@ -68,7 +68,7 @@
 
     <ul class="lefty" id="social-media-links">
         {% comment %}
-            
+
         <li><a href="" title="Like ASHMC on Facebook." class="social-media facebook">Like ASHMC on Facebook.</a></li>
         <li><a href="http://www.flickr.com/photos/micamultimedia/" title="Take a look at ASHMC on Flickr." class="social-media flickr">Take a look at ASHMC on Flickr.</a></li>
         <li><a href="" title="Follow ASHMC on Twitter (@ashmc.edu)." class="social-media twitter">Follow ASHMC on Twitter (@ashmc_updates).</a></li>
@@ -81,8 +81,8 @@
 
     <ul id="footer-links">
         <li><a href="">What is ASHMC?</a></li>
-        <li><a href="">Read the Constitution</a></li>
-        <li><a href="">Read the Bylaws</a></li>
+        <li><a href="{% url "legal_document_detail" 'ashmc-constitution' %}">Read the Constitution</a></li>
+        <li><a href="{% url "legal_document_detail" 'ashmc-bylaws' %}">Read the Bylaws</a></li>
         <li><a href="">Get the Minutes</a></li>
         <li><a href="">Find a form</a></li>
     </ul>

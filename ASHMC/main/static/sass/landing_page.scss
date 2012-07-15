@@ -294,7 +294,7 @@
 
 #postheader {
 	max-width: $screen_max_width;
-    min-width: 965px;
+    min-width: 1085px;
 	min-height: 500px;
 
 	margin: 0 auto;
@@ -330,14 +330,14 @@
         bottom: 0%;
     }
     margin: {
-        left: 0.5%;
+        left: -1.5%;
         top: $line_height*3;
     }
-    float: right;
+    float: left;
 
     @import "blogger/entry";
     article {
-        margin-left: -12%;
+        width: 100%;
         padding-left: 10%;
     }
 

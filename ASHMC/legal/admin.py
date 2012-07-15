@@ -6,6 +6,7 @@ from .models import *
 
 
 class ArticleAdmin(MPTTModelAdmin):
+    prepopulated_fields = {'slug': ('title',)}
     def save_model(self, request, article, form, change):
         """Keep track of who modified this object."""
         article.save()
