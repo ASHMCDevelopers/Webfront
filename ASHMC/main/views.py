@@ -14,6 +14,7 @@ from blogger.models import Entry
 
 from django.conf import settings
 import datetime
+import pytz
 # Create your views here.
 
 
@@ -34,7 +35,7 @@ class LandingPage(TemplateView):
         else:
             tweets = settings.TWITTER_AGENT.statuses.user_timeline()[:6]
             for tweet in tweets:
-                tweet['date'] = datetime.datetime.strptime(tweet['created_at'], "%a %b %d %H:%M:%S +0000 %Y")
+                tweet['date'] = pytz.utc.localize(datetime.datetime.strptime(tweet['created_at'], "%a %b %d %H:%M:%S +0000 %Y"))
 
             cache.set('latest_tweets', tweets, settings.TWITTER_CACHE_TIMEOUT)
 
