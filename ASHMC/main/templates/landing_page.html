@@ -73,7 +73,7 @@
                         </div>
                         <div class='time'>
                         {% if tweet.date|is_today %}
-                            {{tweet.date|date:"j:M"}}
+                            {{tweet.date|date:"g:i a"}}
                         {% else %}
                             {{tweet.date|date:"m/d/y"}}
                         {% endif %}
