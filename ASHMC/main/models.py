@@ -151,3 +151,6 @@ class TopNewsItem(models.Model):
         self.render_css = '\n'.join(lines)
 
         super(TopNewsItem, self).save(*args, **kwargs)
+
+    ### SIGNALS ###
+
