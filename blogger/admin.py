@@ -1,14 +1,12 @@
-from django import forms
 from django.contrib import admin
-from django.contrib.sites.models import Site
-from django.db.models import ManyToManyRel
 from django.utils import timezone
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
 from django.utils.translation import ugettext as _
 
 from .util import PUBLISHED, HIDDEN
-from .models import Entry, new_entry, entry_updated
+from .models import Entry
+
 
 class EntryAdmin(admin.ModelAdmin):
     """Admin for Entry model"""
@@ -140,10 +138,7 @@ class EntryAdmin(admin.ModelAdmin):
     def save_model(self, request, entry, form, change):
         """Save the authors, update time, make an excerpt"""
         if entry.status == PUBLISHED and not entry.pk:
-            signal = new_entry
             entry.start_publication = timezone.now()
-        else:
-            signal = entry_updated
 
         if not form.cleaned_data.get('excerpt') and entry.status == PUBLISHED:
             entry.excerpt = Truncator('...').words(
@@ -157,7 +152,6 @@ class EntryAdmin(admin.ModelAdmin):
 
         entry.last_update = timezone.now()
         entry.save()
-        signal.send(sender=self, entry_id=entry.pk, author_id=request.user.id)
 
     def queryset(self, request):
         """Make special filtering by user permissions"""
