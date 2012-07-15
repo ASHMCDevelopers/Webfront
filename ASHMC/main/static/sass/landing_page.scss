@@ -4,7 +4,7 @@
 #preheader {
 
 	max-width: $screen_max_width;
-	
+
     margin: 15px auto;
     $scrollable_width: 54%;
     .scrollable_holder {
@@ -35,7 +35,7 @@
             }
         }
     }
-    
+
 }
 
 #latest_news {
@@ -99,21 +99,21 @@
 
 #twitter_feed {
     $font_size: $font_size * 0.9;
-    h2 { 
+    h2 {
         word-spacing: -0.125em;
         margin-top: -0.5em;
         margin-bottom: 0.25em;
     }
     //width: 20%;
     //max-height: 200px;
-    
+
     padding: 5px;
 
     overflow-y: auto;
 
     @include cute-scrollbar($track-background: white);
     background: $body_background;
-    
+
 
     & > div {
         background: rgba(151, 223, 252, .3);
@@ -294,16 +294,18 @@
 
 #postheader {
 	max-width: $screen_max_width;
+    min-width: 1085px;
 	min-height: 500px;
 
 	margin: 0 auto;
-    
+
 }
 #sidebar{
     z-index: 1;
     position: relative;
     background: $light_background;
     max-width: 25%;
+    min-width: 250px;
     padding: 1% {
         top: 200px;
     }
@@ -311,31 +313,31 @@
     margin: {
         top: -185px;
     }
-    
-    
+
+
     height: 100%;
 
     float: left;
-    
+
     font: {
         size: 10pt;
     }
 }
 
 #blogger {
-    max-width: 70%;
-    padding: 1%{
+    max-width: 75%;
+    padding: 0%{
         bottom: 0%;
     }
     margin: {
-        left: 0.5%;
+        left: -0.5%;
         top: $line_height*3;
     }
-    float: right;
+    float: left;
 
     @import "blogger/entry";
     article {
-        margin-left: -3.5%;
+        width: 100%;
         padding-left: 10%;
     }
 

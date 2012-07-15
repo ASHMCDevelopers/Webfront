@@ -2,7 +2,7 @@
 
 @mixin rounded_corner($corner, $radius: 5px) {
     -webkit-border-#{$corner}-radius: $radius;
-    
+
     border-#{$corner}-radius: $radius;
     @if $corner == top-left {
         -moz-border-radius-topleft: $radius;
@@ -19,7 +19,7 @@
   @include rounded_corner(top-right, $radius);
   @include rounded_corner(top-left, $radius);
   @include rounded_corner(bottom-right, $radius);
-  @include rounded_corner(bottom-left, $radius); 
+  @include rounded_corner(bottom-left, $radius);
 }
 
 @mixin cute-scrollbar($size: 8px, $track-background: grey, $thumb-color: grey, $inactive-thumb-color: grey){

@@ -491,309 +491,66 @@ footer {
     #ashmc h3 .AS {
       font-family: "Walkway Expand Bold", sans-serif; }
 
-#preheader {
-  max-width: 1050px;
-  margin: 15px auto; }
-  #preheader .scrollable_holder {
-    width: 54%;
-    background-color: white;
-    padding: 0.6% 1%; }
-    #preheader .scrollable_holder > div {
-      background: white url(/static/images/bg.jpg) repeat;
-      padding: 1%; }
-    #preheader .scrollable_holder .scrollable {
-      width: 100%; }
-      #preheader .scrollable_holder .scrollable > div {
-        height: 250px; }
-        #preheader .scrollable_holder .scrollable > div > div {
-          width: 557px; }
-          #preheader .scrollable_holder .scrollable > div > div div {
-            width: auto;
-            height: auto; }
+#logo {
+  min-width: 0px; }
 
-#latest_news {
-  display: inline;
-  float: left;
-  width: 44.1%;
-  min-width: 300px;
-  background: white;
-  padding-bottom: 20px;
-  padding-top: 20px; }
-  #latest_news ul {
-    text-align: left; }
-    #latest_news ul li {
-      text-indent: 2em;
-      padding-right: 8.5%;
-      margin-left: -3.5%;
-      margin-bottom: 5px;
-      font-family: Copse, "Museo Slab", sans-serif;
-      font-weight: 500;
-      font-size: 1.25em;
-      cursor: pointer;
-      transition: background-color 1s linear ;
-      -moz-transition: background-color 1s linear ;
-      /* Firefox 4 */
-      -webkit-transition: background-color 1s linear ;
-      /* Safari and Chrome */
-      -o-transition: background-color 1s linear ;
-      /* Opera */ }
-      #latest_news ul li:hover {
-        background-color: #e6e6e6;
-        transition: background-color 0.1s linear ;
-        -moz-transition: background-color 0.1s linear ;
-        /* Firefox 4 */
-        -webkit-transition: background-color 0.1s linear ;
-        /* Safari and Chrome */
-        -o-transition: background-color 0.1s linear ;
-        /* Opera */ }
-      #latest_news ul li.current {
-        background-color: #cc9933;
-        color: white; }
+h2, h3, h4, h5 {
+  text-align: left; }
 
-#pipeline {
-  padding: 5px; }
-  #pipeline ul li {
-    margin-bottom: 1em; }
-    #pipeline ul li p {
-      text-indent: -2em;
-      margin-left: 2em;
-      line_height: 0.5em; }
+#container {
+  min-width: 1100px; }
 
-#twitter_feed {
-  padding: 5px;
-  overflow-y: auto;
-  background: white url(/static/images/bg.jpg) repeat; }
-  #twitter_feed h2 {
-    word-spacing: -0.125em;
-    margin-top: -0.5em;
-    margin-bottom: 0.25em; }
-  #twitter_feed::-webkit-scrollbar {
-    width: 8px;
-    height: 8px; }
-  #twitter_feed::-webkit-scrollbar-track {
-    border-radius: 4px;
-    background: white;
-    box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.2) 0 1px 1px 1px inset; }
-  #twitter_feed::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background: grey;
-    box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.7) 0 1px 7px 0px inset; }
-  #twitter_feed::-webkit-scrollbar-thumb:window-inactive {
-    border-radius: 4px;
-    background: grey;
-    box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.4) 0 1px 1px 1px inset; }
-  #twitter_feed > div {
-    background: rgba(151, 223, 252, 0.3);
-    padding: 15px 15px 10px 10px;
-    border: solid 1px #CACFC3;
-    border-bottom-color: #B5BAAE; }
-  #twitter_feed div.spacer {
-    height: 10px;
-    padding-bottom: 3px; }
-  #twitter_feed a {
-    text-decoration: none; }
-  #twitter_feed div.tweet {
-    margin-bottom: 15px;
-    border: solid 1px #CACFC3;
-    padding: 5px; }
-    #twitter_feed div.tweet .text {
-      font-size: 0.9em;
-      font-family: sans-serif;
-      margin-top: 4px;
-      margin-bottom: 2px;
-      padding: 4px;
-      -webkit-border-bottom-left-radius: 5px;
-      border-bottom-left-radius: 5px;
-      -moz-border-radius-bottomleft: 5px; }
-    #twitter_feed div.tweet .time {
-      float: left;
-      margin-left: 5px;
-      font-size: 13px; }
-    #twitter_feed div.tweet .author {
-      float: right;
-      -webkit-border-top-left-radius: 5px;
-      border-top-left-radius: 5px;
-      -moz-border-radius-topleft: 5px;
-      -webkit-border-top-right-radius: 5px;
-      border-top-right-radius: 5px;
-      -moz-border-radius-topright: 5px;
-      font-size: 13px; }
-
-#head_links {
-  float: left;
-  margin-top: 1em;
-  margin-left: 2em;
-  font-size: 20pt; }
-
-#salutation {
-  float: right;
-  min-width: 300px;
-  margin-top: 1em;
-  margin-right: 15%; }
-  #salutation h2 {
-    float: left;
-    margin-right: 1em; }
-
-#login_form {
-  float: right;
-  height: inherit;
-  margin-right: 2%;
-  margin-top: 0px; }
-  #login_form div {
-    width: 413px; }
-  #login_form::before {
-    content: "}";
-    font-size: 235px;
-    font-family: "Baskerville";
-    float: right;
-    margin-top: -68px; }
-  #login_form::after {
-    content: "{";
-    font-size: 235px;
-    font-family: "Baskerville";
-    float: left;
-    margin-top: -202px;
-    margin-left: -113px; }
-  #login_form form input {
-    width: 300px;
-    padding: 5px;
-    margin-top: 10px;
-    font-size: 20px; }
+.to_top {
+  position: fixed;
+  bottom: 15px;
+  right: 15px; }
 
 #postheader {
-  max-width: 1050px;
-  min-width: 1085px;
-  min-height: 500px;
-  margin: 0 auto; }
-
-#sidebar {
-  z-index: 1;
-  position: relative;
-  background: white;
-  max-width: 25%;
-  min-width: 250px;
-  padding: 1%;
-    padding-top: 200px;
-  margin-top: -185px;
-  height: 100%;
-  float: left;
-  font-size: 10pt; }
-
-#blogger {
-  max-width: 75%;
-  padding: 0%;
-    padding-bottom: 0%;
-  margin-left: -0.5%;
-  margin-top: 5.25em;
-  float: left; }
-  #blogger p {
-    padding: 0.5em 0; }
-  #blogger article {
-    line_height: 1.4em;
-    min-width: 591px;
-    padding: 35px;
-      padding-bottom: 3em;
+  margin-left: 4em;
+  text-align: justify; }
+  #postheader .sidebar {
+    outline: 10px solid white;
+    margin-top: 10em;
+    max-width: 450px;
+    float: left; }
+    #postheader .sidebar ol {
+      margin: 5px;
+      background: white; }
+      #postheader .sidebar ol li {
+        padding: 1em 0.5em; }
+        #postheader .sidebar ol li:hover {
+          background: #cc9933;
+          color: #fff; }
+  #postheader .wrapper {
+    float: left;
     background: white;
-    color: #333333; }
-    #blogger article blockquote {
-      margin: 1em 0;
-      padding: 1em 2em;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      border-left: 8px solid #41B7DB;
-      background: white url(/static/images/bg.jpg) repeat;
-      font: italic 1.05em/1.55em "Skolar Italic", "Times New Roman", serif;
-      color: rgba(0, 0, 0, 0.75); }
-    #blogger article ol {
-      list-style-type: decimal;
-      margin-left: 1em; }
-    #blogger article h2 {
-      color: #000; }
-      #blogger article h2 a {
-        color: #333; }
-        #blogger article h2 a:hover {
-          color: #e53b2c; }
-      #blogger article h2 .catch_headline {
-        display: block;
-        color: rgba(51, 51, 51, 0.3);
-        font-size: 0.4em;
-        line-height: 1.5em;
-        text-transform: uppercase;
-        font-family: "Proxima Nova";
-        font-weight: bold;
-        letter-spacing: 1px;
-        padding-bottom: 0.5em; }
-    #blogger article .metadata {
-      text-align: right;
-      padding-bottom: 2em; }
-      #blogger article .metadata li {
-        color: rgba(51, 51, 51, 0.4);
-        display: inline-block;
-        list-style: none;
-        padding: 1em 2em 0 1.5em;
-        white-space: nowrap; }
-        #blogger article .metadata li.author {
-          border-bottom: 1px solid rgba(51, 51, 51, 0.35);
-          display: block;
-          padding: 0.5em 0.5em 0.5em 0;
-          font-size: 1.25em;
-          line-height: 1.35em;
-          margin: 0;
-          text-align: left;
-          font-family: "Museo Slab","Times New Roman",serif;
-          font-weight: 500;
-          font-style: normal;
-          text-transform: capitalize; }
-      #blogger article .metadata + p {
-        font-family: "Museo Slab","Times New Roman",serif;
-        font-weight: 500;
-        font-style: normal;
-        font-size: 1.125em;
-        line-height: 1.35em;
-        margin: 0;
-        color: #242424; }
-    #blogger article p.read_more {
-      text-align: right; }
-      #blogger article p.read_more a {
-        color: #fff;
-        background-color: #3079ed;
-        padding: 8px 8px;
-        -webkit-border-top-right-radius: 5px;
-        border-top-right-radius: 5px;
-        -moz-border-radius-topright: 5px;
-        -webkit-border-top-left-radius: 5px;
-        border-top-left-radius: 5px;
-        -moz-border-radius-topleft: 5px;
-        -webkit-border-bottom-right-radius: 5px;
-        border-bottom-right-radius: 5px;
-        -moz-border-radius-bottomright: 5px;
-        -webkit-border-bottom-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-        -moz-border-radius-bottomleft: 5px;
-        transition: background-color 0.2s linear ;
-        -moz-transition: background-color 0.2s linear ;
-        /* Firefox 4 */
-        -webkit-transition: background-color 0.2s linear ;
-        /* Safari and Chrome */
-        -o-transition: background-color 0.2s linear ;
-        /* Opera */ }
-        #blogger article p.read_more a:hover {
-          background-color: #e53b2c;
-          color: #fff!important;
-          transition: background-color 0.2s linear ;
-          -moz-transition: background-color 0.2s linear ;
-          /* Firefox 4 */
-          -webkit-transition: background-color 0.2s linear ;
-          /* Safari and Chrome */
-          -o-transition: background-color 0.2s linear ;
-          /* Opera */ }
-    #blogger article .adieu {
-      text-align: right; }
-      #blogger article .adieu:first-child {
-        margin-top: 3.889em; }
-      #blogger article .adieu.signature {
-        font-size: 1.575em; }
-      #blogger article .adieu.role {
-        font-family: "Adobe Caslon Pro"; }
-  #blogger article {
-    width: 100%;
-    padding-left: 10%; }
+    max-width: 650px;
+    margin-left: 4em; }
+    #postheader .wrapper section > ol {
+      max-width: 650px;
+      margin-left: -1.5em;
+      padding-bottom: 2em;
+      padding-right: 1.5em; }
+  #postheader h2 {
+    padding: 1em;
+    background: white;
+    margin-left: -4em; }
+  #postheader h3 {
+    padding: 1em;
+      padding-left: 1.5em;
+    margin-left: -1.5em;
+    background: white; }
+
+.intro p {
+  padding: 0 1.5em; }
+
+ol {
+  margin-left: 2em; }
+  ol.three {
+    list-style-type: upper-alpha; }
+    ol.three li:first-child {
+      margin-top: 1.75em; }
+  ol.four {
+    list-style-type: decimal; }
+  ol.five {
+    list-style-type: lower-roman; }

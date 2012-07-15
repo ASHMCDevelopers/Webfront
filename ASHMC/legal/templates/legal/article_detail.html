@@ -1,0 +1,34 @@
+{% extends "legal/legal_base.html" %}
+{% load mptt_tags %}
+{% load legal_extras %}
+{% load markup %}
+
+{% block post_header %}
+
+    <div id="top" class='wrapper'>
+        <section>
+        <h2>{{object.title}}</h2>
+        {% if object.body %}
+        <div class='intro'>
+            {{object.body|markdown|safe}}
+        </div>
+        {% endif %}
+        <ol>
+            {% for el in object.children.all %}
+                {% include "legal/recursive_article.html" %}
+            {% endfor %}
+        </ol>
+        </section>
+    </div>
+    <div class="sidebar">
+        <ol>
+        {% for el in object.children.all %}
+            <a href="#{{el.id}}"><li>Article {{el.number|roman_number}}: {{el.title}}</li></a>
+        {% endfor %}
+        </ol>
+    </div>
+
+    <div class='to_top'>
+        <a href="#top">Back to top</a>
+    </div>
+{% endblock post_header %}
