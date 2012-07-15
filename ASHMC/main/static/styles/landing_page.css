@@ -662,6 +662,7 @@ footer {
 
 #postheader {
   max-width: 1050px;
+  min-width: 965px;
   min-height: 500px;
   margin: 0 auto; }
 
@@ -670,6 +671,7 @@ footer {
   position: relative;
   background: white;
   max-width: 25%;
+  min-width: 250px;
   padding: 1%;
     padding-top: 200px;
   margin-top: -185px;
@@ -793,5 +795,5 @@ footer {
       #blogger article .adieu.role {
         font-family: "Adobe Caslon Pro"; }
   #blogger article {
-    margin-left: -3.5%;
+    margin-left: -12%;
     padding-left: 10%; }

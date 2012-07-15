@@ -1,0 +1,23 @@
+ {% load humanize %}
+ <li>
+    <article id="{{el.id}}">
+        {% if el.level < 3 or el.title %}
+        <h{{el.level|add:"2"}}>
+            {% if el.level == 1 %} Article {{el.number}}:
+            {% elif el.level == 2 %} Section {{el.number}}:
+            {%endif%} {{el.title}}
+        </h{{el.level|add:"2"}}>
+        {% endif %}
+        {% if el.body %}<p>{{el.body}}</p>{% endif %}
+        {% if el.children.count > 0 %}
+        <ol class='{{el.level|add:"1"|apnumber}}'>
+            {% for el in el.children.all %}
+                {% with "legal/recursive_article.html" as includer %}
+                    {% include includer %}
+                {% endwith %}
+            {% endfor %}
+
+        </ol>
+        {% endif %}
+    </article>
+</li>

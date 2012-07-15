@@ -490,3 +490,55 @@ footer {
     font-size: 1em; }
     #ashmc h3 .AS {
       font-family: "Walkway Expand Bold", sans-serif; }
+
+#logo {
+  min-width: 0px; }
+
+h2, h3, h4, h5 {
+  text-align: left; }
+
+#postheader {
+  min-width: 1100px;
+  margin-left: 4em;
+  text-align: justify; }
+  #postheader .sidebar {
+    outline: 10px solid white;
+    margin-top: 10em;
+    max-width: 450px;
+    float: left; }
+    #postheader .sidebar ol {
+      margin: 5px;
+      background: white; }
+      #postheader .sidebar ol li {
+        padding: 1em 0.5em; }
+  #postheader .wrapper {
+    float: left;
+    background: white;
+    max-width: 650px;
+    margin-left: 4em; }
+    #postheader .wrapper section > ol {
+      max-width: 650px;
+      margin-left: -1.5em;
+      padding-bottom: 2em;
+      padding-right: 1.5em; }
+  #postheader h2 {
+    padding: 1em;
+    background: white;
+    margin-left: -4em; }
+  #postheader h3 {
+    padding: 1em;
+      padding-left: 1.5em;
+    margin-left: -1.5em;
+    background: white; }
+
+.intro p {
+  padding: 0 1.5em; }
+
+ol {
+  margin-left: 2em; }
+  ol.three {
+    list-style-type: upper-alpha; }
+    ol.three li:first-child {
+      margin-top: 1.75em; }
+  ol.four {
+    list-style-type: decimal; }

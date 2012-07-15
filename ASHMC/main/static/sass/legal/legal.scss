@@ -1,2 +1,81 @@
 @import "base";
 @import "logo_style";
+
+#logo {
+    min-width: 0px;
+}
+h2, h3, h4, h5 {
+    text-align: left;
+}
+#postheader {
+    $heading_offset: -4em;
+
+    min-width: 1100px;
+
+    margin-left: -$heading_offset;
+
+    text-align: justify;
+
+    .sidebar {
+        outline: 10px solid $light_background;
+        margin-top: 10em;
+        max-width: 450px;
+        float: left;
+
+        ol {
+            margin: 5px;
+            background: $light_background;
+            li {
+                padding: 1em 0.5em;
+            }
+        }
+    }
+
+    .wrapper {
+        float: left;
+        background: $light_background;
+        max-width: $text_max_width;
+        margin-left: -$heading_offset;
+
+        section > ol {
+            max-width: $text_max_width;
+            margin-left: -1.5em;
+            padding-bottom: 2em;
+            padding-right: 1.5em;
+        }
+    }
+
+    h2 {
+        padding: 1em;
+        background: $light_background;
+        margin-left: $heading_offset;
+    }
+
+    h3 {
+        padding: 1em {
+            left: 1.5em;
+        }
+
+        margin-left: -1.5em;
+        background: $light_background;
+    }
+}
+
+.intro p {
+    padding: 0 1.5em;
+}
+
+ol {
+    margin-left: 2em;
+
+    &.three {
+        list-style-type: upper-alpha;
+        li:first-child {
+            margin-top: 1.75em;
+        }
+    }
+
+    &.four {
+        list-style-type: decimal;
+    }
+}

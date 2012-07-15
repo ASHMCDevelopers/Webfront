@@ -3,13 +3,27 @@
 
 
 {% block post_header %}
-<ul class='root'>
-    {% recursetree object.children %}
-        <li> {{node.title}}
-                <ul class='children'>
-                    {{children}}
-                </ul>
-        </li>
-    {% endrecursetree %}
-</ul>
+
+    <div class='wrapper'>
+        <section>
+        <h2>{{object.title}}</h2>
+        <div class='intro'>
+            <p>The ASHMC Constitution is organized hierarchically into articles, sections, sub-sections, paragraphs and sub-paragraphs.</p>
+            <p>You can download the constitution (PDF).</p>
+            <p>The bylaws to the constitution can be found here.</p>
+        </div>
+        <ol>
+            {% for el in object.children.all %}
+                {% include "legal/recursive_article.html" %}
+            {% endfor %}
+        </ol>
+        </section>
+    </div>
+    <div class="sidebar">
+        <ol>
+        {% for el in object.children.all %}
+            <a href="#{{el.id}}"><li>Article {{el.number}}: {{el.title}}</li></a>
+        {% endfor %}
+        </ol>
+    </div>
 {% endblock post_header %}
