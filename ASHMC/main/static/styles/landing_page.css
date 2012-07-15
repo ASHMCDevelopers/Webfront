@@ -680,10 +680,10 @@ footer {
   font-size: 10pt; }
 
 #blogger {
-  max-width: 70%;
-  padding: 1%;
+  max-width: 75%;
+  padding: 0%;
     padding-bottom: 0%;
-  margin-left: -1.5%;
+  margin-left: -0.5%;
   margin-top: 5.25em;
   float: left; }
   #blogger p {

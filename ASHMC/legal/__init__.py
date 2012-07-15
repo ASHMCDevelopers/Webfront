@@ -8,7 +8,13 @@ def create_constitution(sender, **kwargs):
         return
 
     root = Article.objects.create(
-        title="ASHMC Constitution"
+        title="ASHMC Constitution",
+        body="""The ASHMC Constitution is organized hierarchically into articles (denoted by upper-case roman numerals I, II, III...), sections (denoted by arabic numerals 1, 2, 3...), sub-sections (denoted by upper-case letters A, B, C...), paragraphs (denoted by arabic numerals) and sub-paragraphs (denoted by lower-case roman numerals i, ii, iii, iv...).
+
+You can read the bylaws [here](/legal/ashmc-bylaws).
+
+You can download the constitution [here](/legal/pdf/). (PDF)
+        """
     )
 
     article = Article.objects.create(
@@ -979,6 +985,7 @@ def create_bylaws(sender, **kwargs):
         return
     root = Article.objects.create(
         title="ASHMC Bylaws",
+        body="""You can read the constitution [here](/legal/ashmc-constitution)."""
     )
 
     article = Article.objects.create(
