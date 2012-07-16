@@ -66,3 +66,8 @@
     font-family: "Proxima Nova";
     src: url("/static/fonts/ProximaNova-Regular.otf") format("opentype");
 }
+@font-face {
+    font-family: "Proxima Nova";
+    font-style: italic;
+    src: url("/static/fonts/ProximaNova-RegItalic.otf") format("opentype");
+}
