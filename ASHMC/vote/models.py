@@ -63,7 +63,7 @@ class Measure(models.Model):
         verbose_name_plural = _('Mesures')
 
     def __unicode__(self):
-        return "u Ballots {}".format(self.ballot_set.all())
+        return u"{}: Ballots {}".format(self.name, self.ballot_set.all())
 
 
 class Vote(models.Model):
