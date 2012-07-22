@@ -1,0 +1,11 @@
+{% extends "vote/vote_base.html" %}
+
+{% block postheader %}
+
+    <ul>
+    {% for measure in object_list  %}
+      <li> {{measure.title}} </li>
+    {% endfor %}
+    </ul>
+
+{% endblock postheader %}
