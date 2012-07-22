@@ -2,8 +2,8 @@ from django.views.generic import ListView
 
 from utility.models import LoginRequiredMixin as LRM
 
-from .models import Ballot
+from .models import Measure
 
 
-class BallotListing(ListView, LRM):
-    model = Ballot
+class MeasureListing(ListView, LRM):
+    model = Measure
