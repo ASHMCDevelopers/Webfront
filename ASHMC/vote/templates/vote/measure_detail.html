@@ -2,8 +2,14 @@
 {% load markup %}
 
 {% block post_header %}
+<div class="measure_wrap_wrap">
+<div class="surrounder light">
+<div class="measure_wrap">
+    <a href="{% url 'measure_list' %}"><div class='number'><h2># {{object.id}}</h2></div></a>
     <h2>{{object.name}}</h2>
-
+    <div class='measure_description'>
+        {{object.summary|markdown:"safe"}}
+    </div>
     <form>
     <ol>
     {% for ballot in object.ballot_set.all %}
@@ -16,7 +22,12 @@
         <ul>
             {% for candidate in ballot.candidate_set.all %}
             <li>
+                {{candidate.get_type}}
+                {% if candidate.get_type == 'PersonCandidate' %}
+
+                {% else %}
                <input type="radio" value="{{ballot.id}}_{{candidate.id}}" id="{{ballot.id}}_{{candidate.id}}" name="{{ballot.id}}"/> <label for="{{ballot.id}}_{{candidate.id}}">{{candidate.description}}</label>
+               {% endif %}
             </li>
             {% endfor %}
             {% if ballot.can_write_in %}
@@ -30,6 +41,11 @@
 
     {% endfor %}
     </ol>
-    <input class='button-submit' type=submit value="Record my vote!"/>
+    <div class='centered'>
+        <input class='button-submit' type=submit value="Record my vote!"/>
+    </div>
     </form>
+</div>
+</div>
+</div>
 {% endblock post_header %}

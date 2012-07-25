@@ -572,6 +572,22 @@ a:hover .number {
   -o-transition: color 0.2s linear 0.1s;
   /* Opera */ }
 
+.measure_wrap_wrap {
+  margin: 0 auto;
+  width: 700px; }
+
+.measure_wrap {
+  padding: 15px;
+  background: white; }
+  .measure_wrap h2 {
+    text-align: center; }
+  .measure_wrap .number {
+    float: left;
+    margin-left: -7.5em;
+    width: 6em; }
+    .measure_wrap .number h2 {
+      text-align: right; }
+
 .ballot_blurb {
   margin-bottom: 1em; }
   .ballot_blurb p:first-child {

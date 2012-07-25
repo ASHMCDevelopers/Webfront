@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext as _
 # Create your models here.
@@ -50,12 +51,25 @@ class Measure(models.Model):
 
     is_open = models.BooleanField(default=True)
 
+    real_type = models.ForeignKey(ContentType, editable=False, null=True)
+
+    def _get_real_type(self):
+        return ContentType.objects.get_for_model(type(self))
+
+    def cast(self):
+        return self.real_type.get_object_for_this_type(pk=self.pk)
+
     class Meta:
         verbose_name = _('Mesure')
         verbose_name_plural = _('Mesures')
 
     def __unicode__(self):
         return u"{}: Ballots {}".format(self.name, self.ballot_set.all())
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.real_type = self._get_real_type()
+        super(Measure, self).save(*args, **kwargs)
 
 
 class DormMeasure(Measure):
@@ -85,6 +99,7 @@ class PopularityVote(models.Model):
 
     vote = models.ForeignKey(Vote)
     candidate = models.ForeignKey("Candidate")
+    write_in_value = models.CharField(max_length=50)
 
     class Meta:
         verbose_name = _('PopularityVote')
@@ -101,7 +116,20 @@ class Candidate(models.Model):
 
     description = models.TextField()
 
+ # This FK is what makes the polymorphic magic work (esp. for printing)
+    real_type = models.ForeignKey(ContentType, editable=False, null=True)
+
+    def _get_real_type(self):
+        return ContentType.objects.get_for_model(type(self))
+
+    def cast(self):
+        return self.real_type.get_object_for_this_type(pk=self.pk)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.real_type = self._get_real_type()
+        super(Candidate, self).save(*args, **kwargs)
+
 
 class PersonCandidate(Candidate):
     user = models.ForeignKey(User, null=True)
-    write_in_value = models.CharField(max_length=50, blank=True, null=True)

@@ -3,13 +3,19 @@ from django.contrib import admin
 from .models import *
 
 
-class BallotAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(Ballot, BallotAdmin)
-
-
 class BallotInline(admin.TabularInline):
     model = Ballot
+
+
+class CandidateInline(admin.TabularInline):
+    model = Candidate
+
+
+class BallotAdmin(admin.ModelAdmin):
+    inlines = [
+        CandidateInline,
+    ]
+admin.site.register(Ballot, BallotAdmin)
 
 
 class MeasureAdmin(admin.ModelAdmin):

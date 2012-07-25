@@ -69,6 +69,29 @@ a {
     }
 }
 
+.measure_wrap_wrap {
+    margin: 0 auto;
+    width: 700px;
+}
+
+.measure_wrap {
+    padding: 15px;
+    background: $light_background;
+    h2 {
+        text-align: center;
+    }
+
+    .number {
+        float: left;
+        margin-left: -7.5em;
+        width: 6em;
+
+        h2 {
+            text-align: right;
+        }
+    }
+}
+
 .ballot_blurb {
     margin-bottom: 1em;
     p:first-child {
