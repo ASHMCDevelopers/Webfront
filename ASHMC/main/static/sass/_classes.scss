@@ -116,4 +116,15 @@ a.social-media {
   }
 }
 
+.surrounder {
+    padding: 5px;
+    &.light {
+        background: $body_background;
+    }
+
+    &.dark {
+        background: $dark_background;
+    }
+}
+
 /* end _classes.scss */

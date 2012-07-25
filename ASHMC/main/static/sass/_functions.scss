@@ -62,3 +62,11 @@
   background-image: -o-linear-gradient(top,$color_from,$color_to);
   background-image: linear-gradient(top,$color_from,$color_to);
 }
+
+@mixin linear_gradient($direction, $color_from, $color_to) {
+    background: linear-gradient($direction, $color_from, $color_to);
+    background: -webkit-linear-gradient($direction, $color_from, $color_to);
+    background: -moz-linear-gradient($direction, $color_from, $color_to);
+    background: -o-linear-gradient($direction, $color_from, $color_to);
+    background: -ms-linear-gradient($direction, $color_from, $color_to);
+}

@@ -1,9 +1,11 @@
 from django.conf.urls import patterns, url
+from django.contrib.auth.decorators import login_required
 
-from .views import MeasureListing
 
+from .views import MeasureListing, MeasureDetail
 
 urlpatterns = patterns('vote.views',
-       url('^$', MeasureListing.as_view(), name='main_landing_page'),
-       url('^measures$', MeasureListing.as_view(), name='writeup'),
+       url('^$', login_required(MeasureListing.as_view()), name='vote_main'),
+       url('^measures$', login_required(MeasureListing.as_view()), name='measure_list'),
+       url('^measure/(?P<pk>\d+)/$', login_required(MeasureDetail.as_view()), name='measure_detail'),
 )

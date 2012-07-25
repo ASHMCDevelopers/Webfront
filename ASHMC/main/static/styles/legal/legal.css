@@ -215,8 +215,18 @@ a.social-media {
   .items div div {
     position: relative; }
 
+.surrounder {
+  padding: 5px; }
+  .surrounder.light {
+    background: white url(/static/images/bg.jpg) repeat; }
+  .surrounder.dark {
+    background: #1c1c1c; }
+
 /* end _classes.scss */
 /* inputs.scss */
+input[type="radio"] {
+  margin: 5px; }
+
 input[type="email"], input[type="number"], input[type="password"], input[type="tel"], input[type="text"], input[type="url"] {
   display: inline-block;
   margin: 0;
@@ -227,12 +237,12 @@ input[type="email"], input[type="number"], input[type="password"], input[type="t
   box-sizing: border-box;
   border-radius: 1px; }
 
-input[type=email]:hover,
-input[type=number]:hover,
-input[type=password]:hover,
-input[type=tel]:hover,
-input[type=text]:hover,
-input[type=url]:hover {
+input[type="email"]:hover,
+input[type="number"]:hover,
+input[type="password"]:hover,
+input[type="tel"]:hover,
+input[type="text"]:hover,
+input[type="url"]:hover {
   border: 1px solid #b9b9b9;
   border-top: 1px solid #a0a0a0;
   -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -240,6 +250,7 @@ input[type=url]:hover {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); }
 
 .button-submit {
+  padding: 5px 10px;
   border: 1px solid #3079ed;
   color: #fff;
   text-shadow: 0 1px rgba(0, 0, 0, 0.1);

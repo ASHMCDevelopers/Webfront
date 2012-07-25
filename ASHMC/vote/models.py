@@ -38,14 +38,6 @@ class Ballot(models.Model):
         unique_together = (('measure', 'display_position'),)
 
 
-class DormBallot(Ballot):
-    dorm = models.ForeignKey(Dorm)
-    number = models.IntegerField()
-
-    class Meta:
-        unique_together = ('dorm', 'number',)
-
-
 class Measure(models.Model):
     """A collection of ballots. This is probably where you'd want
     to calculate things like quorum."""
@@ -64,6 +56,14 @@ class Measure(models.Model):
 
     def __unicode__(self):
         return u"{}: Ballots {}".format(self.name, self.ballot_set.all())
+
+
+class DormMeasure(Measure):
+    dorm = models.ForeignKey(Dorm)
+    number = models.IntegerField()
+
+    class Meta:
+        unique_together = ('dorm', 'number',)
 
 
 class Vote(models.Model):

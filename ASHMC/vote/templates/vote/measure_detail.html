@@ -1,0 +1,35 @@
+{% extends "vote/vote_base.html" %}
+{% load markup %}
+
+{% block post_header %}
+    <h2>{{object.name}}</h2>
+
+    <form>
+    <ol>
+    {% for ballot in object.ballot_set.all %}
+
+    <li class='ballot'>
+        <h3>{{ballot.title}}</h3>
+        <div class='ballot_blurb'>
+            {{ballot.blurb|markdown:"safe"}}
+        </div>
+        <ul>
+            {% for candidate in ballot.candidate_set.all %}
+            <li>
+               <input type="radio" value="{{ballot.id}}_{{candidate.id}}" id="{{ballot.id}}_{{candidate.id}}" name="{{ballot.id}}"/> <label for="{{ballot.id}}_{{candidate.id}}">{{candidate.description}}</label>
+            </li>
+            {% endfor %}
+            {% if ballot.can_write_in %}
+                <li>
+                    <input type='radio' value="{{ballot.id}}_0" id="{{ballot.id}}_writein" name="{{ballot.id}}"/><label for="{{ballot.id}}_writein"><input name='writein_{{ballot.id}}' type='text' /></label>
+                </li>
+            {% endif %}
+        </ul>
+
+    </li>
+
+    {% endfor %}
+    </ol>
+    <input class='button-submit' type=submit value="Record my vote!"/>
+    </form>
+{% endblock post_header %}

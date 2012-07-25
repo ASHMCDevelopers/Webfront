@@ -4,7 +4,7 @@ from django.conf import settings
 
 from blogger.models import Entry
 
-from .models import TopNewsItem
+from .models import TopNewsItem, User
 
 
 def send_tweet_after_new_entry(sender, **kwargs):
@@ -44,3 +44,22 @@ def send_tweet_after_top_story(sender, **kwargs):
     settings.TWITTER_AGENT.statuses.update(status=tweet_body)
 
 post_save.connect(send_tweet_after_top_story, sender=TopNewsItem)
+
+
+def create_welcoming_blog_post(sender, **kwargs):
+    if Entry.objects.count() > 0:
+        return
+
+    Entry.objects.create(
+        tags="welcome",
+        title="Welcome to ASHMC",
+        slug="welcome-to-ashmc",
+        comment_enabled=False,
+        primary_author=User.objects.all()[0],
+        content="""
+Welcome to the new and improved ASHMC presence.
+
+Here, you'll find lots of useful tools for interacting with the student body;
+these range from easy-to-setup
+        """,
+    )
