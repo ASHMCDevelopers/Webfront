@@ -92,7 +92,24 @@ a {
     }
 }
 
+ol {
+    margin-top: 2em;
+    & > div {
+        margin-bottom: 15px;
+    }
+}
+
+.ballot {
+    background: $light_background;
+    padding: 10px;
+
+    h3 {
+        padding: 5px;
+    }
+}
+
 .ballot_blurb {
+    text-align: justify;
     margin-bottom: 1em;
     p:first-child {
         margin-top: 0.5em;

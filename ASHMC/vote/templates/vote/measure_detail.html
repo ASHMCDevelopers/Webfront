@@ -14,6 +14,7 @@
     <ol>
     {% for ballot in object.ballot_set.all %}
 
+    <div class='surrounder light'>
     <li class='ballot'>
         <h3>{{ballot.title}}</h3>
         <div class='ballot_blurb'>
@@ -21,14 +22,11 @@
         </div>
         <ul>
             {% for candidate in ballot.candidate_set.all %}
+            {% with candidate.cast as candidate %}
             <li>
-                {{candidate.get_type}}
-                {% if candidate.get_type == 'PersonCandidate' %}
-
-                {% else %}
-               <input type="radio" value="{{ballot.id}}_{{candidate.id}}" id="{{ballot.id}}_{{candidate.id}}" name="{{ballot.id}}"/> <label for="{{ballot.id}}_{{candidate.id}}">{{candidate.description}}</label>
-               {% endif %}
+                <input type='radio' value="{{ballot.id}}_{{candidate.id}}" id="{{ballot.id}}_{{candidate.id}}" name="{{ballot.id}}"/><label for="{{ballot.id}}_{{candidate.id}}">{{candidate}}</label>
             </li>
+            {% endwith %}
             {% endfor %}
             {% if ballot.can_write_in %}
                 <li>
@@ -36,8 +34,8 @@
                 </li>
             {% endif %}
         </ul>
-
     </li>
+    </div>
 
     {% endfor %}
     </ol>

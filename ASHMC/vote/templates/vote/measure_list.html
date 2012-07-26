@@ -16,13 +16,28 @@
         </div>
         </a>
         <div class='measure_description'>
-            {{measure.summary|markdown:"safe"}}
+            {{measure.summary|markdown:"safe"|truncatewords_html:25}}
         </div>
         <div class='clearer'></div>
     </div>
       </li>
     {% endfor %}
     </ul>
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{% url 'measure_list' %}?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                {% if page_obj.has_next %}
+                    <a href="{% url 'measure_list' %}?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+
+
     </div>
 
 {% endblock post_header %}

@@ -588,7 +588,19 @@ a:hover .number {
     .measure_wrap .number h2 {
       text-align: right; }
 
+ol {
+  margin-top: 2em; }
+  ol > div {
+    margin-bottom: 15px; }
+
+.ballot {
+  background: white;
+  padding: 10px; }
+  .ballot h3 {
+    padding: 5px; }
+
 .ballot_blurb {
+  text-align: justify;
   margin-bottom: 1em; }
   .ballot_blurb p:first-child {
     margin-top: 0.5em; }

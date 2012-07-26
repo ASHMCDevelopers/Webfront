@@ -33,10 +33,10 @@ class Ballot(models.Model):
     is_secret = models.BooleanField(default=True)
 
     def __unicode__(self):
-        return u"Ballot #{}".format(self.id)
+        return u"Ballot #{}: {}".format(self.id, self.title)
 
     class Meta:
-        unique_together = (('measure', 'display_position'),)
+        unique_together = (('measure', 'display_position'),('measure','title'))
 
 
 class Measure(models.Model):
@@ -114,10 +114,14 @@ class Candidate(models.Model):
 
     ballot = models.ForeignKey(Ballot)
 
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
+    title = models.CharField(max_length=200, blank=True, null=True)
 
  # This FK is what makes the polymorphic magic work (esp. for printing)
     real_type = models.ForeignKey(ContentType, editable=False, null=True)
+
+    class Meta:
+        unique_together = (('ballot', 'title'),)
 
     def _get_real_type(self):
         return ContentType.objects.get_for_model(type(self))
@@ -130,6 +134,14 @@ class Candidate(models.Model):
             self.real_type = self._get_real_type()
         super(Candidate, self).save(*args, **kwargs)
 
+    def __unicode__(self):
+        return u"{}".format(self.title)
+
 
 class PersonCandidate(Candidate):
     user = models.ForeignKey(User, null=True)
+
+    def save(self, *args, **kwargs):
+        self.title = self.user.get_full_name()
+        super(PersonCandidate, self).save(*args, **kwargs)
+
