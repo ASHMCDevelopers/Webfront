@@ -371,6 +371,11 @@ h3 {
   padding: 1.5em 0 0.5em 0;
   line-height: 1.3em; }
 
+h5 {
+  font-size: 1em;
+  padding: 1em 0 0.25em 0;
+  line-height: 1.25em; }
+
 abbr {
   letter-spacing: .1em; }
 
@@ -613,4 +618,5 @@ ol {
     margin-top: 0.5em; }
 
 input[type=text] {
-  padding: 5px 10px; }
+  padding: 5px 10px;
+  margin-left: 25px; }

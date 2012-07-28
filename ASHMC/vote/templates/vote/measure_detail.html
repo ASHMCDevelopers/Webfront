@@ -28,7 +28,7 @@
                 {% for candidate in form.ballot.candidate_set.all %}
                 {% if candidate.description %}
                 <li class='surrounder light'>
-                    <h4>{{candidate.title}}</h4>
+                    <h5>{{candidate.title}}</h5>
                     {{candidate.description|markdown:"safe"}}
                 </li>
                 {% endif %}
