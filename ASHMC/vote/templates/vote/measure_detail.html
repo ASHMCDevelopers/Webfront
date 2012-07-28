@@ -1,4 +1,5 @@
 {% extends "vote/vote_base.html" %}
+{% load vote_extras %}
 {% load markup %}
 
 {% block post_header %}
@@ -10,27 +11,42 @@
     <div class='measure_description'>
         {{object.summary|markdown:"safe"}}
     </div>
-    <form>
+    <form action="{% url 'process_vote' object.id %}" method="POST">
+        {% csrf_token %}
     <ol>
-    {% for ballot in object.ballot_set.all %}
+    {% for form in forms %}
 
     <div class='surrounder light'>
     <li class='ballot'>
-        <h3>{{ballot.title}}</h3>
+        <h3>{{form.ballot.title}}</h3>
         <div class='ballot_blurb'>
-            {{ballot.blurb|markdown:"safe"}}
+            {{form.ballot.blurb|markdown:"safe"}}
+        </div>
+        <div class='surrounder body'>
+        <div class='candidate_blurbs'>
+            <ul>
+                {% for candidate in form.ballot.candidate_set.all %}
+                {% if candidate.description %}
+                <li class='surrounder light'>
+                    <h4>{{candidate.title}}</h4>
+                    {{candidate.description|markdown:"safe"}}
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
         </div>
         <ul>
-            {% for candidate in ballot.candidate_set.all %}
-            {% with candidate.cast as candidate %}
-            <li>
-                <input type='radio' value="{{ballot.id}}_{{candidate.id}}" id="{{ballot.id}}_{{candidate.id}}" name="{{ballot.id}}"/><label for="{{ballot.id}}_{{candidate.id}}">{{candidate}}</label>
+            <div class='empty spacer'></div>
+            <h4>Choose an option</h4>
+            {% for candidate in form.choice %}
+            <li class='candidate'>
+                {{candidate}}
             </li>
-            {% endwith %}
             {% endfor %}
-            {% if ballot.can_write_in %}
+            {% if form.ballot.can_write_in %}
                 <li>
-                    <input type='radio' value="{{ballot.id}}_0" id="{{ballot.id}}_writein" name="{{ballot.id}}"/><label for="{{ballot.id}}_writein"><input name='writein_{{ballot.id}}' type='text' /></label>
+                    {{form.write_in_value}}
                 </li>
             {% endif %}
         </ul>

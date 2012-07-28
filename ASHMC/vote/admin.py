@@ -30,6 +30,11 @@ class VoteAdmin(admin.ModelAdmin):
 admin.site.register(Vote, VoteAdmin)
 
 
+class PopularityVoteAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(PopularityVote, PopularityVoteAdmin)
+
+
 class CandidateAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Candidate, CandidateAdmin)

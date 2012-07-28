@@ -36,7 +36,7 @@ class Ballot(models.Model):
         return u"Ballot #{}: {}".format(self.id, self.title)
 
     class Meta:
-        unique_together = (('measure', 'display_position'),('measure','title'))
+        unique_together = (('measure', 'display_position'), ('measure', 'title'))
 
 
 class Measure(models.Model):
@@ -88,9 +88,11 @@ class Vote(models.Model):
     class Meta:
         verbose_name = _('Vote')
         verbose_name_plural = _('Votes')
+        # Never vote twice.
+        unique_together = (('account', 'measure'),)
 
     def __unicode__(self):
-        return u"{} - {}".format(self.account, self.election)
+        return u"{} in #{}-{}".format(self.account, self.measure.id, self.measure.name)
 
 
 class PopularityVote(models.Model):
@@ -98,15 +100,21 @@ class PopularityVote(models.Model):
     gets a single vote."""
 
     vote = models.ForeignKey(Vote)
-    candidate = models.ForeignKey("Candidate")
-    write_in_value = models.CharField(max_length=50)
+    ballot = models.ForeignKey(Ballot)
+    candidate = models.ForeignKey("Candidate", null=True, blank=True)
+    write_in_value = models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:
         verbose_name = _('PopularityVote')
         verbose_name_plural = _('PopularityVotes')
 
     def __unicode__(self):
-        return "{} vote for {}".format(self.vote, self.candidate)
+        if self.candidate is not None:
+            votee = self.candidate
+        else:
+            votee = self.write_in_value
+
+        return "{} ({}) for {}".format(self.vote, self.ballot, votee)
 
 
 class Candidate(models.Model):

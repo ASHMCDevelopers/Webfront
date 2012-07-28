@@ -95,6 +95,7 @@ h1 {
         size: $h1_size;
     }
     line-height: #{$line_height/$h1_size}em;
+
     margin: {
         bottom: #{$line_height/$h1_size}em;
         top: #{$line_height/$h1_size}em;
@@ -122,7 +123,9 @@ h4,h5,h6 {
     font-weight: bold;
     font-style: normal;
     letter-spacing: 0.125em;
-    padding: 1.5em 0 0.5em 0;
+    &:not(:first-child){
+        padding: 1.5em 0 0.5em 0;
+    }
     text-transform: uppercase;
 }
 

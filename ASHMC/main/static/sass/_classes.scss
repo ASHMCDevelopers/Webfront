@@ -118,8 +118,12 @@ a.social-media {
 
 .surrounder {
     padding: 5px;
-    &.light {
+    &.body, &.light {
         background: $body_background;
+    }
+
+    &.bright {
+        background: $light_background;
     }
 
     &.dark {
