@@ -538,6 +538,9 @@ footer {
   margin: 0 auto;
   width: 1000px; }
 
+p {
+  text-align: justify; }
+
 .measure_list li:not(:first-child) {
   margin-top: 1.5em; }
 .measure_list li .measure_head {

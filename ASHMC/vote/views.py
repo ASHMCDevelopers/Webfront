@@ -83,11 +83,13 @@ class ProcessVote(View):
                 # Valid form with None choice means write in
                 # TODO: Document this assumption
                 pv = PopularityVote.objects.create(
+                    ballot=form.ballot,
                     vote=vote,
                     write_in_value=form.cleaned_data['write_in_value'],
                 )
             else:
                 pv = PopularityVote.objects.create(
+                    ballot=form.ballot,
                     vote=vote,
                     candidate=form.cleaned_data['choice'],
                 )

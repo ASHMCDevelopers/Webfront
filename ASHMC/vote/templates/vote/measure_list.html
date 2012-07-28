@@ -5,22 +5,28 @@
     <div class='list_wrap'>
     <ul class="measure_list">
     {% for measure in object_list  %}
-      <li>
-        <div class="surrounder light">
-        <a href="{% url 'measure_detail' measure.id%}">
-        <div class='measure_head'>
-            <div class='expiry_date'><h3>Voting Ends {{measure.vote_end|date:"n/j/y"}}</h3></div>
-            <div class='number'><h2># {{measure.id}}</h2></div>
-            <div class="measure_name"><h2>{{measure.name}}</h2></div>
-            <div class='clearer'></div>
-        </div>
-        </a>
-        <div class='measure_description'>
-            {{measure.summary|markdown:"safe"|truncatewords_html:25}}
-        </div>
-        <div class='clearer'></div>
-    </div>
-      </li>
+        <li>
+            <div class="surrounder light">
+                <a href="{% url 'measure_detail' measure.id%}">
+                <div class='measure_head'>
+                    <div class='expiry_date'><h3>Voting Ends {{measure.vote_end|date:"n/j/y"}}</h3></div>
+                    <div class='number'><h2># {{measure.id}}</h2></div>
+                    <div class="measure_name"><h2>{{measure.name}}</h2></div>
+                    <div class='clearer'></div>
+                </div>
+                </a>
+                <div class='measure_description'>
+                    {{measure.summary|markdown:"safe"|truncatewords_html:25}}
+                </div>
+                <div class='clearer'></div>
+            </div>
+        </li>
+      {% empty %}
+        <li>
+            <div class='surrounder bright'>
+                <h1 class="centered">Looks like there's nothing to vote on!</h1>
+            </div>
+        </li>
     {% endfor %}
     </ul>
     {% if is_paginated %}
