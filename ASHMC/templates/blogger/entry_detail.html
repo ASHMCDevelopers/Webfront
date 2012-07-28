@@ -7,41 +7,41 @@
 {% block post_header %}
 <section id="entry">
 <article class="entry">
-    
+
             <h2><a href="{{entry.get_absolute_url}}"><span class="catch_headline">{{entry.catch_title}}
             	{% with entry|has_been_updated as u %}
             	{% if u == 1 %}
             		(updated {{entry.last_update|date:"F jS, Y"}})
             	{% elif u == 2 %}
             		(updated {{entry.last_update|date:"g:i a"}})
-            	{% endif %}    
+            	{% endif %}
             	{% endwith %}
-            	
+
             </span><span class="headline">{{entry.title}}</span></a></h2>
-                
+
         <ul class="metadata clearfix">
             <li class="author">
             	{% if entry.primary_author.get_full_name %}
             	<a rel="author" href="" title="">{{entry.primary_author.get_full_name}}</a>
             	{% if entry.primary_author.ashmcrole_set.count != 0 %}
-            	 &mdash; 
+            	 &mdash;
             	 {% with entry.primary_author.highest_ashmc_role as role %}
             	 {{role.cast}}
             	 {%endwith%}
             	 {% endif %}
             	{% else %}
-            		SYSTEM 
+            		SYSTEM
             	{% endif %}
             </li>
-        
-                    
+
+
             <li class="date">
             	{{entry.start_publication|date:"F jS, Y"}}
             </li>
             {% if entry.tags %}
             	<li class="tags">
             	{% for tag in entry.tags.all|slice:":3" %}
-            		<a href="">{{tag}}</a>{% if not forloop.last %},{%endif%} 
+            		<a href="">{{tag}}</a>{% if not forloop.last %},{%endif%}
             	{% endfor %}
             	</li>
     		{% endif %}
@@ -81,7 +81,7 @@
  			<li class='date'>{{comment.submit_date|date:"F jS, Y g:i a"}}</li>
  			<li class='author'><h3>{{comment.user.get_full_name}}
 			{% if comment.user.ashmcrole_set.count != 0 %}
-	        	 &mdash; 
+	        	 &mdash;
 	        	 {% with comment.user.highest_ashmc_role as role %}
 	        	 	{{role.cast|shorten_role}}
 	        	 {%endwith%}
@@ -102,7 +102,7 @@
  	</article>
  {% empty %}
  	<article clas='comment'>
- 		<h3>Nobody's left any notes.</h3>
+ 		<h3 class='centered'>Nobody's left any notes.</h3>
  	</article>
  {% endfor %}
 </section>

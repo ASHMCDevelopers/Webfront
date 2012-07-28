@@ -18,7 +18,7 @@ def send_tweet_after_new_entry(sender, **kwargs):
     instance = kwargs['instance']
 
     tweet_body = """New story from {}: {} http://{}{}""".format(
-        instance.author.first_name,
+        instance.primary_author.first_name,
         instance.title,
         Site.objects.get_current().domain,
         instance.get_absolute_url(),

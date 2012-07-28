@@ -25,7 +25,7 @@ class BallotForm(forms.Form):
             self.fields['write_in_value'] = forms.CharField(
                 max_length=50,
                 required=False,
-                widget=forms.TextInput(attrs={'placeholder':"or, write in here."})
+                widget=forms.TextInput(attrs={'placeholder': "or, write in here."})
             )
 
     def clean(self):

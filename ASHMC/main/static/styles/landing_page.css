@@ -724,10 +724,9 @@ footer {
       padding: 0.5em; }
 
 #blogger {
-  max-width: 75%;
+  max-width: 65%;
   padding: 0%;
     padding-bottom: 0%;
-  margin-left: -0.5%;
   margin-top: 5.25em;
   float: left; }
   #blogger p {
@@ -838,6 +837,3 @@ footer {
         font-size: 1.575em; }
       #blogger article .adieu.role {
         font-family: "Adobe Caslon Pro"; }
-  #blogger article {
-    width: 100%;
-    padding-left: 10%; }

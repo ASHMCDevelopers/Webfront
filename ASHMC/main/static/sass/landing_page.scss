@@ -340,21 +340,16 @@
 }
 
 #blogger {
-    max-width: 75%;
+    max-width: 65%;
     padding: 0%{
         bottom: 0%;
     }
     margin: {
-        left: -0.5%;
         top: $line_height*3;
     }
     float: left;
 
     @import "blogger/entry";
-    article {
-        width: 100%;
-        padding-left: 10%;
-    }
 
 }
 @import "front_slider";

@@ -30,8 +30,14 @@ class VoteAdmin(admin.ModelAdmin):
 admin.site.register(Vote, VoteAdmin)
 
 
+def get_measure(obj):
+    return obj.ballot.measure
+
+
 class PopularityVoteAdmin(admin.ModelAdmin):
-    pass
+
+    list_display = ('__unicode__', get_measure, 'ballot')
+
 admin.site.register(PopularityVote, PopularityVoteAdmin)
 
 
