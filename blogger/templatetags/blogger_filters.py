@@ -3,6 +3,7 @@ from django.template import Library
 from ..models import Entry
 
 from BeautifulSoup import BeautifulSoup
+import datetime
 
 register = Library()
 
@@ -45,3 +46,10 @@ def naive_excerpt(post):
     soup = BeautifulSoup(post.html_content)
 
     return soup.find('p')
+
+@register.filter
+def before_today(date):
+    try:
+        return datetime.date.today() > date
+    except:
+        return False
