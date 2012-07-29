@@ -2,6 +2,7 @@
 {% load mptt_tags %}
 {% load legal_extras %}
 {% load markup %}
+{% load cache %}
 
 {% block post_header %}
 
@@ -13,11 +14,13 @@
             {{object.body|markdown|safe}}
         </div>
         {% endif %}
+        {% cache 500 object.id %}
         <ol>
             {% for el in object.children.all %}
                 {% include "legal/recursive_article.html" %}
             {% endfor %}
         </ol>
+        {% endcache %}
         </section>
     </div>
     <div class="sidebar">

@@ -53,6 +53,8 @@ class Measure(models.Model):
 
     real_type = models.ForeignKey(ContentType, editable=False, null=True)
 
+    banned_accounts = models.ManyToManyField(User, null=True, blank=True)
+
     def _get_real_type(self):
         return ContentType.objects.get_for_model(type(self))
 
@@ -143,7 +145,7 @@ class Candidate(models.Model):
         super(Candidate, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u"{}".format(self.title)
+        return u"{}: {}".format(self.ballot, self.title)
 
 
 class PersonCandidate(Candidate):

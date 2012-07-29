@@ -57,7 +57,7 @@
         </section>
         <section id="pipeline">
         <h2>In the pipe @<a href="http://www.hmc.edu">HMC</a></h2>
-        {# {% cache 500 rss_display %} #}
+        {% cache 500 rss_display %}
             {% get_rss "http://emsweb.claremont.edu/HarveyMC/RSSFeeds.aspx?data=j%2fxqvgLhwZs%2bG6vJ6fo56Qf9BN3JUl%2fAnKeSNhsCD7%2fPdUPWrw1HBw%3d%3d" as rss %}
             <ul>
             {% for entry in rss.entries %}
@@ -66,7 +66,7 @@
             </li>
             {% endfor %}
             </ul>
-       {# {% endcache %} #}
+       {% endcache %}
         </section>
 
         <section id="twitter_feed">

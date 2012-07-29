@@ -350,6 +350,9 @@
     float: left;
 
     @import "blogger/entry";
+    article {
+        margin-bottom: 0.1em;
+    }
 
 }
 @import "front_slider";

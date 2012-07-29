@@ -402,7 +402,6 @@ li {
     margin: 0; }
 
 footer {
-  max-width: 1050px;
   margin: 0 auto;
   min-height: 50px;
   padding: 10px;
@@ -837,3 +836,5 @@ footer {
         font-size: 1.575em; }
       #blogger article .adieu.role {
         font-family: "Adobe Caslon Pro"; }
+  #blogger article {
+    margin-bottom: 0.1em; }
