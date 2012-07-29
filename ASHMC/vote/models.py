@@ -145,7 +145,7 @@ class Candidate(models.Model):
         super(Candidate, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return u"{}: {}".format(self.ballot, self.title)
+        return u"{}".format(self.title)
 
 
 class PersonCandidate(Candidate):

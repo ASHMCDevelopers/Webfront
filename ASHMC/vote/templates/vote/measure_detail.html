@@ -26,12 +26,14 @@
         <div class='candidate_blurbs'>
             <ul>
                 {% for candidate in form.ballot.candidate_set.all %}
-                {% if candidate.description %}
                 <li class='surrounder light'>
                     <h5>{{candidate.title}}</h5>
+                    {% if candidate.description %}
                     {{candidate.description|markdown:"safe"}}
+                    {% else %}
+                    <p>No information provided.</p>
+                    {% endif %}
                 </li>
-                {% endif %}
                 {% endfor %}
             </ul>
         </div>
