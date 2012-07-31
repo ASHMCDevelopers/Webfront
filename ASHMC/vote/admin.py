@@ -12,6 +12,11 @@ class CandidateInline(admin.TabularInline):
 
 
 class BallotAdmin(admin.ModelAdmin):
+
+    list_filter = ('measure',)
+
+    list_display = ('__unicode__', 'measure')
+
     inlines = [
         CandidateInline,
     ]
@@ -19,6 +24,11 @@ admin.site.register(Ballot, BallotAdmin)
 
 
 class MeasureAdmin(admin.ModelAdmin):
+
+    list_display = ('id', '__unicode__', 'actual_quorum', 'quorum')
+    list_editable = ('quorum', )
+    list_display_links = ('id', '__unicode__')
+
     inlines = [
         BallotInline,
     ]

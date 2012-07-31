@@ -42,13 +42,8 @@ class Ballot(models.Model):
     blurb = models.TextField()
 
     can_write_in = models.BooleanField(default=False)
-    is_secret = models.BooleanField(default=True)
-
-    quorum = IntegerRangeField(default=50,
-        help_text="Integer value between 0 and 100; what percentage of student response is quorum for this ballot?",
-        max_value=100,
-        min_value=0,
-    )
+    can_abstain = models.BooleanField(default=True)
+    is_secret = models.BooleanField(default=False)
 
     def __unicode__(self):
         return u"Ballot #{}: {}".format(self.id, self.title)
@@ -72,6 +67,20 @@ class Measure(models.Model):
     real_type = models.ForeignKey(ContentType, editable=False, null=True)
 
     banned_accounts = models.ManyToManyField(User, null=True, blank=True)
+
+    quorum = IntegerRangeField(default=50,
+        help_text="Integer value between 0 and 100; what percentage of student response is quorum for this ballot?",
+        max_value=100,
+        min_value=0,
+    )
+
+    @property
+    def actual_quorum(self):
+        return (float(Vote.objects.filter(measure=self).count()) / self.eligible_voters.count()) * 100
+
+    @property
+    def has_reached_quorum(self):
+        return self.quorum <= self.actual_quorum
 
     def _get_real_type(self):
         return ContentType.objects.get_for_model(type(self))
@@ -117,7 +126,7 @@ class DormMeasure(Measure):
 
 class Vote(models.Model):
 
-    account = models.ForeignKey(User, null=True)
+    account = models.ForeignKey(User)
     measure = models.ForeignKey(Measure)
 
     class Meta:
