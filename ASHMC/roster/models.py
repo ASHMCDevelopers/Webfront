@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
-from ASHM.main.models import Dorm
+
+from ASHMC.main.models import Dorm, Semester
 
 
 class DormRoom(models.Model):
@@ -10,10 +11,10 @@ class DormRoom(models.Model):
     dorm = models.ForeignKey(Dorm)
     number = models.CharField(max_length=30)
 
-    students = models.ManyToManyField(User, through="StudentRoom")
+    students = models.ManyToManyField(User, through="UserRoom")
 
-    suite = models.ForeignKey('Suite', null=True)
-    tran_suite = models.ForeignKey('TransientSuite', null=True)
+    suite = models.ForeignKey('Suite', null=True, blank=True)
+    tran_suite = models.ForeignKey('TransientSuite', null=True, blank=True)
 
     class Meta:
         verbose_name = _('Dorm room')
@@ -26,15 +27,17 @@ class DormRoom(models.Model):
 class UserRoom(models.Model):
     """Links a User to a DormRoom"""
 
-    student = models.ForeignKey(User)
+    user = models.ForeignKey(User)
     room = models.ForeignKey(DormRoom)
 
+    semester = models.ForeignKey(Semester)
+
     class Meta:
-        verbose_name = _('StudentRoom')
-        verbose_name_plural = _('StudentRooms')
+        verbose_name = _('User Room')
+        verbose_name_plural = _('User Rooms')
 
     def __unicode__(self):
-        return u"{} -> {}".format(self.student, self.room)
+        return u"{} -> {}".format(self.user, self.room)
 
 
 class Suite(models.Model):
@@ -55,8 +58,8 @@ class TransientSuite(models.Model):
     year = models.IntegerField()
 
     class Meta:
-        verbose_name = _('TransientSuite')
-        verbose_name_plural = _('TransientSuites')
+        verbose_name = _('Transient Suite')
+        verbose_name_plural = _('Transient Suites')
 
     def __unicode__(self):
         return u"{}".format(self.name)

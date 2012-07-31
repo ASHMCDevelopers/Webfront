@@ -25,6 +25,11 @@ class MeasureAdmin(admin.ModelAdmin):
 admin.site.register(Measure, MeasureAdmin)
 
 
+class DormMeasureAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(DormMeasure, DormMeasureAdmin)
+
+
 class VoteAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Vote, VoteAdmin)

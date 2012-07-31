@@ -5,8 +5,20 @@ from django.utils.translation import ugettext as _
 # Create your models here.
 
 from ASHMC.main.models import Dorm
+from ASHMC.roster.models import DormRoom, UserRoom
 
 import datetime
+
+
+class IntegerRangeField(models.IntegerField):
+    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
+        self.min_value, self.max_value = min_value, max_value
+        models.IntegerField.__init__(self, verbose_name, name, **kwargs)
+
+    def formfield(self, **kwargs):
+        defaults = {'min_value': self.min_value, 'max_value': self.max_value}
+        defaults.update(kwargs)
+        return super(IntegerRangeField, self).formfield(**defaults)
 
 
 class Ballot(models.Model):
@@ -31,6 +43,12 @@ class Ballot(models.Model):
 
     can_write_in = models.BooleanField(default=False)
     is_secret = models.BooleanField(default=True)
+
+    quorum = IntegerRangeField(default=50,
+        help_text="Integer value between 0 and 100; what percentage of student response is quorum for this ballot?",
+        max_value=100,
+        min_value=0,
+    )
 
     def __unicode__(self):
         return u"Ballot #{}: {}".format(self.id, self.title)
@@ -61,6 +79,15 @@ class Measure(models.Model):
     def cast(self):
         return self.real_type.get_object_for_this_type(pk=self.pk)
 
+    @property
+    def eligible_voters(self):
+        return User.objects.all().exclude(
+            id__in=(self.banned_accounts.values_list(
+                'id',
+                flat=True,
+            )),
+        )
+
     class Meta:
         verbose_name = _('Mesure')
         verbose_name_plural = _('Mesures')
@@ -77,6 +104,12 @@ class Measure(models.Model):
 class DormMeasure(Measure):
     dorm = models.ForeignKey(Dorm)
     number = models.IntegerField()
+
+    @property
+    def eligible_voters(self):
+        super_eligible = super(DormMeasure, self).eligible_voters
+        user_ids = DormRoom.objects.filter(dorm=self.dorm).values_list('students__id', flat=True)
+        return super_eligible.filter(id__in=user_ids)
 
     class Meta:
         unique_together = ('dorm', 'number',)
@@ -149,9 +182,4 @@ class Candidate(models.Model):
 
 
 class PersonCandidate(Candidate):
-    user = models.ForeignKey(User, null=True)
-
-    def save(self, *args, **kwargs):
-        self.title = self.user.get_full_name()
-        super(PersonCandidate, self).save(*args, **kwargs)
-
+    users = models.ManyToManyField(User, null=True, blank=True)
