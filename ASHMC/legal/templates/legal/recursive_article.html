@@ -1,5 +1,6 @@
  {% load humanize %}
  {% load legal_extras %}
+ {% load main_extras %}
  <li>
     <article id="{{el.id}}">
         {% if el.level < 3 or el.title %}
@@ -12,7 +13,7 @@
         {% if el.body %}<p>{{el.body}}</p>{% endif %}
         {% if el.children.count > 0 %}
         <ol class='{{el.level|add:"1"|apnumber}}'>
-            {% for el in el.children.all %}
+            {% for el in el.children.all|order_by:"number" %}
                 {% with "legal/recursive_article.html" as includer %}
                     {% include includer %}
                 {% endwith %}

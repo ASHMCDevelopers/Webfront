@@ -19,9 +19,15 @@ def is_today(value):
         value.year == now.year
         )
 
+
 @register.filter
 def shorten_role(role):
     return role
+
+
+@register.filter
+def order_by(qset, ordering):
+    return qset.order_by(ordering)
 
 
 class RssParserNode(template.Node):
