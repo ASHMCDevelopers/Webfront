@@ -422,6 +422,7 @@ footer {
     footer ul#social-media-links li {
       display: inline; }
       footer ul#social-media-links li div {
+        padding: 0;
         display: inline-block;
         border: 2px solid white;
         height: 32px;
@@ -465,6 +466,12 @@ footer {
           text-indent: 13px;
           border-radius: 8px;
           text-transform: lowercase; }
-  footer ul#footer-links {
-    text-align: right;
+  footer div {
+    padding: 0 1.2em; }
+  footer h5 {
+    padding-top: 0;
+    text-align: left; }
+  footer ul.footer-links {
+    text-align: left;
+    margin-left: 0.5em;
     list-style: none; }

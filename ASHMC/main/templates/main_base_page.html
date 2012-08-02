@@ -79,12 +79,27 @@
         <li><a href='http://www.twitter.com/ashmc_council'><div class='twitter'>T<span class="hidden">witter</span></div></a></li>
     </ul>
 
-    <ul id="footer-links">
-        <li><a href="">What is ASHMC?</a></li>
-        <li><a href="{% url "legal_document_detail" 'ashmc-constitution' %}">Read the Constitution</a></li>
-        <li><a href="{% url "legal_document_detail" 'ashmc-bylaws' %}">Read the Bylaws</a></li>
-        <li><a href="">Get the Minutes</a></li>
-        <li><a href="">Find a form</a></li>
-    </ul>
 
+    <div class='righty'>
+        <h5>About ASHMC</h5>
+        <ul class="footer-links">
+            <li><a href="">What is ASHMC?</a></li>
+            <li><a href="{% url "legal_document_detail" 'ashmc-constitution' %}">Read the Constitution</a></li>
+            <li><a href="{% url "legal_document_detail" 'ashmc-bylaws' %}">Read the Bylaws</a></li>
+            <li><a href="">Get the Minutes</a></li>
+            <li><a href="">Find a form</a></li>
+        </ul>
+    </div>
+    <div class='righty'>
+        <h5>The 5C's</h5>
+        <ul class="footer-links">
+            <li><a href="http://www.hmc.edu">HMC</a></li>
+            <li><a href="http://www.scrippscollege.edu">Scripps</a></li>
+            <li><a href="http://www.cmc.edu">CMC</a></li>
+            <li><a href="http://www.pitzer.edu">Pitzer</a></li>
+            <li><a href="http://www.pomona.edu">Pomona</a></li>
+        </ul>
+    </div>
+
+    <div class="clearer"></div>
 {% endblock footer %}

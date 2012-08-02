@@ -232,6 +232,7 @@ footer {
             display: inline;
 
             div {
+                padding: 0;
                 display: inline-block;
                 $diameter: 32px;
                 border: 2px solid white;
@@ -276,9 +277,16 @@ footer {
             }
         }
     }
-
-    ul#footer-links {
-        text-align: right;
+    div {
+        padding: 0 1.2em;
+    }
+    h5 {
+        padding-top: 0;
+        text-align: left;
+    }
+    ul.footer-links {
+        text-align: left;
+        margin-left: 0.5em;
         list-style: none;
     }
 }
