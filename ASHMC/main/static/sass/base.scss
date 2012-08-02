@@ -1,9 +1,5 @@
 /* base.scss */
-@import "functions";
-@import "fonts";
-@import "reset";
-@import "classes";
-@import "inputs";
+
 
 $screen_max_width: 1050px;
 $logo_banner_min_width: 1080px;
@@ -23,13 +19,18 @@ $dark_background: #1c1c1c;
 $light_background: #fff;
 
 $text_max_width: 650px;
+$body_background:  white url(/static/images/bg.jpg) repeat;
 
+@import "functions";
+@import "fonts";
+@import "reset";
+@import "classes";
+@import "inputs";
 ::selection {
     background-color: $mudd_gold;
     color: white;
 }
 
-$body_background:  white url(/static/images/bg.jpg) repeat;
 
 body {
     -webkit-print-color-adjust: exact;
@@ -94,6 +95,7 @@ h1 {
         size: $h1_size;
     }
     line-height: #{$line_height/$h1_size}em;
+
     margin: {
         bottom: #{$line_height/$h1_size}em;
         top: #{$line_height/$h1_size}em;
@@ -121,7 +123,9 @@ h4,h5,h6 {
     font-weight: bold;
     font-style: normal;
     letter-spacing: 0.125em;
-    padding: 1.5em 0 0.5em 0;
+    &:not(:first-child){
+        padding: 1.5em 0 0.5em 0;
+    }
     text-transform: uppercase;
 }
 
@@ -140,6 +144,12 @@ h3 {
     font-size: 1.5em;
     padding: 1.5em 0 0.5em 0;
     line-height: 1.3em;
+}
+
+h5 {
+    font-size: $font_size;
+    padding: 1em 0 0.25em 0;
+    line-height: 1.25em;
 }
 
 abbr {
@@ -182,7 +192,6 @@ li {
     }
 }
 footer {
-    max-width: $screen_max_width;
 
     margin: 0 auto;
 

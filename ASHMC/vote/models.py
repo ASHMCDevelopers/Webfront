@@ -1,11 +1,25 @@
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models.signals import post_save
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 # Create your models here.
 
-from ASHMC.main.models import Dorm
-
+from ASHMC.main.models import GradYear
+from ASHMC.roster.models import Dorm, DormRoom, UserRoom
 import datetime
+
+
+class IntegerRangeField(models.IntegerField):
+    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
+        self.min_value, self.max_value = min_value, max_value
+        models.IntegerField.__init__(self, verbose_name, name, **kwargs)
+
+    def formfield(self, **kwargs):
+        defaults = {'min_value': self.min_value, 'max_value': self.max_value}
+        defaults.update(kwargs)
+        return super(IntegerRangeField, self).formfield(**defaults)
 
 
 class Ballot(models.Model):
@@ -29,21 +43,14 @@ class Ballot(models.Model):
     blurb = models.TextField()
 
     can_write_in = models.BooleanField(default=False)
-    is_secret = models.BooleanField(default=True)
+    can_abstain = models.BooleanField(default=True)
+    is_secret = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return u"Ballot #{}".format(self.id)
+        return u"Ballot #{}: {}".format(self.id, self.title)
 
     class Meta:
-        unique_together = (('measure', 'display_position'),)
-
-
-class DormBallot(Ballot):
-    dorm = models.ForeignKey(Dorm)
-    number = models.IntegerField()
-
-    class Meta:
-        unique_together = ('dorm', 'number',)
+        unique_together = (('measure', 'display_position'), ('measure', 'title'))
 
 
 class Measure(models.Model):
@@ -51,32 +58,92 @@ class Measure(models.Model):
     to calculate things like quorum."""
 
     name = models.CharField(max_length=50)
-    summary = models.TextField(blank=True, null=True)
+    summary = models.TextField(blank=True, null=True,
+        default="""There is no summary for this measure."""
+    )
 
     vote_start = models.DateTimeField(default=datetime.datetime.now)
-    vote_end = models.DateTimeField()
+    vote_end = models.DateTimeField(null=True, blank=True,
+        help_text="""If you don't specify an end time, the measure will automatically
+        close the midnight after quorum is reached.""",
+    )
 
     is_open = models.BooleanField(default=True)
+
+    real_type = models.ForeignKey(ContentType, editable=False, null=True)
+
+    banned_accounts = models.ManyToManyField(User, null=True, blank=True)
+
+    restricted_to = models.OneToOneField("Restrictions")
+
+    quorum = IntegerRangeField(default=50,
+        help_text="Integer value between 0 and 100; what percentage of student response is quorum for this ballot?",
+        max_value=100,
+        min_value=0,
+    )
+
+    @property
+    def actual_quorum(self):
+        return (float(Vote.objects.filter(measure=self).count()) / self.eligible_voters.count()) * 100
+
+    @property
+    def has_reached_quorum(self):
+        return self.quorum <= self.actual_quorum
+
+    def _get_real_type(self):
+        return ContentType.objects.get_for_model(type(self))
+
+    def cast(self):
+        return self.real_type.get_object_for_this_type(pk=self.pk)
+
+    @property
+    def eligible_voters(self):
+        return self.restricted_to.get_grad_year_users() & self.restricted_to.get_dorm_users()
 
     class Meta:
         verbose_name = _('Mesure')
         verbose_name_plural = _('Mesures')
 
     def __unicode__(self):
-        return "u Ballots {}".format(self.ballot_set.all())
+        return u"{}: Ballots {}".format(self.name, self.ballot_set.all())
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.real_type = self._get_real_type()
+
+        super(Measure, self).save(*args, **kwargs)
+
+
+class Restrictions(models.Model):
+    gradyear = models.ForeignKey(GradYear, null=True, blank=True)
+    dorm = models.ForeignKey(Dorm, null=True, blank=True)
+
+    def get_grad_year_users(self):
+        if self.gradyear is None:
+            return User.objects.empty()
+        return self.gradyear.student_set.all()
+
+    def get_dorm_users(self):
+        if self.dorm is None:
+            return User.objects.empty()
+        dormrooms = DormRoom.objects.filter(dorm=self.dorm)
+        user_ids = UserRoom.objects.filter(room__in=dormrooms).values_list('user__id', flat=True)
+        return User.objects.filter(id__in=user_ids)
 
 
 class Vote(models.Model):
 
-    account = models.ForeignKey(User, null=True)
+    account = models.ForeignKey(User)
     measure = models.ForeignKey(Measure)
 
     class Meta:
         verbose_name = _('Vote')
         verbose_name_plural = _('Votes')
+        # Never vote twice.
+        unique_together = (('account', 'measure'),)
 
     def __unicode__(self):
-        return u"{} - {}".format(self.account, self.election)
+        return u"{} in #{}-{}".format(self.account, self.measure.id, self.measure.name)
 
 
 class PopularityVote(models.Model):
@@ -84,14 +151,21 @@ class PopularityVote(models.Model):
     gets a single vote."""
 
     vote = models.ForeignKey(Vote)
-    candidate = models.ForeignKey("Candidate")
+    ballot = models.ForeignKey(Ballot)
+    candidate = models.ForeignKey("Candidate", null=True, blank=True)
+    write_in_value = models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:
         verbose_name = _('PopularityVote')
         verbose_name_plural = _('PopularityVotes')
 
     def __unicode__(self):
-        return "{} vote for {}".format(self.vote, self.candidate)
+        if self.candidate is not None:
+            votee = self.candidate
+        else:
+            votee = self.write_in_value
+
+        return "{} ({}) for {}".format(self.vote, self.ballot, votee)
 
 
 class Candidate(models.Model):
@@ -99,9 +173,50 @@ class Candidate(models.Model):
 
     ballot = models.ForeignKey(Ballot)
 
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
+    title = models.CharField(max_length=200, blank=True, null=True)
+
+ # This FK is what makes the polymorphic magic work (esp. for printing)
+    real_type = models.ForeignKey(ContentType, editable=False, null=True)
+
+    class Meta:
+        unique_together = (('ballot', 'title'),)
+
+    def _get_real_type(self):
+        return ContentType.objects.get_for_model(type(self))
+
+    def cast(self):
+        return self.real_type.get_object_for_this_type(pk=self.pk)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.real_type = self._get_real_type()
+        super(Candidate, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return u"{}".format(self.title)
 
 
 class PersonCandidate(Candidate):
-    user = models.ForeignKey(User, null=True)
-    write_in_value = models.CharField(max_length=50, blank=True, null=True)
+    users = models.ManyToManyField(User, null=True, blank=True)
+
+
+def set_end_on_quorum_reached(sender, **kwargs):
+    """As per Article 4, section 3, paragraph C of the Bylaws, measures end
+    automatically on the midnight following quorum attainment."""
+    if not 'instance' in kwargs:
+        return
+
+    obj = kwargs['instance']
+    measure = obj.measure
+
+    # Unless otherwise specified, of course.
+    if measure.vote_end is not None:
+        return
+
+    if measure.actual_quorum >= measure.quorum:
+        midnight = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        measure.vote_end = midnight
+
+        measure.save()
+post_save.connect(set_end_on_quorum_reached, sender=Vote)

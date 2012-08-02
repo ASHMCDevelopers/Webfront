@@ -19,5 +19,6 @@ urlpatterns = patterns('',
     url(r'^blog/', include('blogger.urls')),
     url(r'^comments/', include('django.contrib.comments.urls')),
     url(r'^legal/', include('ASHMC.legal.urls')),
+    url(r'^vote/', include('ASHMC.vote.urls')),
     url(r'^', include('ASHMC.main.urls')),
 )

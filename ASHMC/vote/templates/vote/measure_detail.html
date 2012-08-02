@@ -1,0 +1,67 @@
+{% extends "vote/vote_base.html" %}
+{% load vote_extras %}
+{% load markup %}
+
+{% block post_header %}
+<div class="measure_wrap_wrap">
+<div class="surrounder light">
+<div class="measure_wrap">
+    <a href="{% url 'measure_list' %}"><div class='number'><h2># {{object.id}}</h2></div></a>
+    <h2>{{object.name}}</h2>
+    <div class='measure_description'>
+        {{object.summary|markdown:"safe"}}
+    </div>
+    <form action="{% url 'process_vote' object.id %}" method="POST">
+        {% csrf_token %}
+    <ol>
+    {% for form in forms %}
+
+    <div class='surrounder light'>
+    <li class='ballot'>
+        <h3>{{form.ballot.title}}</h3>
+        <div class='ballot_blurb'>
+            {{form.ballot.blurb|markdown:"safe"}}
+        </div>
+        <div class='surrounder body'>
+        <div class='candidate_blurbs'>
+            <ul>
+                {% for candidate in form.ballot.candidate_set.all %}
+                <li class='surrounder light'>
+                    <h5>{{candidate.title}}</h5>
+                    {% if candidate.description %}
+                    {{candidate.description|markdown:"safe"}}
+                    {% else %}
+                    <p>No information provided.</p>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        </div>
+        <ul>
+            <div class='empty spacer'></div>
+            <h4>Choose an option</h4>
+            {% for candidate in form.choice %}
+            <li class='candidate'>
+                {{candidate}}
+            </li>
+            {% endfor %}
+            {% if form.ballot.can_write_in %}
+                <li>
+                    {{form.write_in_value}}
+                </li>
+            {% endif %}
+        </ul>
+    </li>
+    </div>
+
+    {% endfor %}
+    </ol>
+    <div class='centered'>
+        <input class='button-submit' type=submit value="Record my vote!"/>
+    </div>
+    </form>
+</div>
+</div>
+</div>
+{% endblock post_header %}

@@ -524,190 +524,102 @@ footer {
       font-family: "Walkway Expand Bold", sans-serif; }
 
 #postheader {
-  max-width: 1150px;
-  min-width: 1115px;
-  min-height: 500px;
-  margin: 0 auto; }
+  max-width: 1050px;
+  margin: 0 auto;
+  background: linear-gradient(left, transparent 70%, #1c1c1c 70%);
+  background: -webkit-linear-gradient(left, transparent 70%, #1c1c1c 70%);
+  background: -moz-linear-gradient(left, transparent 70%, #1c1c1c 70%);
+  background: -o-linear-gradient(left, transparent 70%, #1c1c1c 70%);
+  background: -ms-linear-gradient(left, transparent 70%, #1c1c1c 70%);
+  padding: 15px 0; }
 
-#entry {
-  max-width: 650px;
-  float: left; }
-  #entry p {
-    padding: 0.5em 0; }
-  #entry article {
-    line_height: 1.4em;
-    min-width: 591px;
-    padding: 35px;
-      padding-bottom: 3em;
-    background: white;
-    color: #333333; }
-    #entry article blockquote {
-      margin: 1em 0;
-      padding: 1em 2em;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      border-left: 8px solid #41B7DB;
-      background: white url(/static/images/bg.jpg) repeat;
-      font: italic 1.05em/1.55em "Skolar Italic", "Times New Roman", serif;
-      color: rgba(0, 0, 0, 0.75); }
-    #entry article ol {
-      list-style-type: decimal;
-      margin-left: 1em; }
-    #entry article h2 {
-      color: #000; }
-      #entry article h2 a {
-        color: #333; }
-        #entry article h2 a:hover {
-          color: #e53b2c; }
-      #entry article h2 .catch_headline {
-        display: block;
-        color: rgba(51, 51, 51, 0.3);
-        font-size: 0.4em;
-        line-height: 1.5em;
-        text-transform: uppercase;
-        font-family: "Proxima Nova";
-        font-weight: bold;
-        letter-spacing: 1px;
-        padding-bottom: 0.5em; }
-    #entry article .metadata {
-      text-align: right;
-      padding-bottom: 2em; }
-      #entry article .metadata li {
-        color: rgba(51, 51, 51, 0.4);
-        display: inline-block;
-        list-style: none;
-        padding: 1em 2em 0 1.5em;
-        white-space: nowrap; }
-        #entry article .metadata li.author {
-          border-bottom: 1px solid rgba(51, 51, 51, 0.35);
-          display: block;
-          padding: 0.5em 0.5em 0.5em 0;
-          font-size: 1.25em;
-          line-height: 1.35em;
-          margin: 0;
-          text-align: left;
-          font-family: "Museo Slab","Times New Roman",serif;
-          font-weight: 500;
-          font-style: normal;
-          text-transform: capitalize; }
-      #entry article .metadata + p {
-        font-family: "Museo Slab","Times New Roman",serif;
-        font-weight: 500;
-        font-style: normal;
-        font-size: 1.125em;
-        line-height: 1.35em;
-        margin: 0;
-        color: #242424; }
-    #entry article p.read_more {
-      text-align: right; }
-      #entry article p.read_more a {
-        color: #fff;
-        background-color: #3079ed;
-        padding: 8px 8px;
-        -webkit-border-top-right-radius: 5px;
-        border-top-right-radius: 5px;
-        -moz-border-radius-topright: 5px;
-        -webkit-border-top-left-radius: 5px;
-        border-top-left-radius: 5px;
-        -moz-border-radius-topleft: 5px;
-        -webkit-border-bottom-right-radius: 5px;
-        border-bottom-right-radius: 5px;
-        -moz-border-radius-bottomright: 5px;
-        -webkit-border-bottom-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-        -moz-border-radius-bottomleft: 5px;
-        transition: background-color 0.2s linear ;
-        -moz-transition: background-color 0.2s linear ;
-        /* Firefox 4 */
-        -webkit-transition: background-color 0.2s linear ;
-        /* Safari and Chrome */
-        -o-transition: background-color 0.2s linear ;
-        /* Opera */ }
-        #entry article p.read_more a:hover {
-          background-color: #e53b2c;
-          color: #fff!important;
-          transition: background-color 0.2s linear ;
-          -moz-transition: background-color 0.2s linear ;
-          /* Firefox 4 */
-          -webkit-transition: background-color 0.2s linear ;
-          /* Safari and Chrome */
-          -o-transition: background-color 0.2s linear ;
-          /* Opera */ }
-    #entry article .adieu {
-      text-align: right; }
-      #entry article .adieu:first-child {
-        margin-top: 3.5em; }
-      #entry article .adieu.signature {
-        font-size: 1.75em; }
-      #entry article .adieu.role {
-        font-family: "Adobe Caslon Pro"; }
+.list_wrap {
+  margin: 0 auto;
+  width: 1000px; }
 
-#comments {
-  width: 422px;
-  float: left;
-  padding: 5px;
-  margin-top: 6em;
-  margin-left: 1em;
-  margin-bottom: 1em;
-  background: white url(/static/images/bg.jpg) repeat;
-  outline: 0.5em solid white;
-  z-index: 90; }
-  #comments .comment {
-    font-size: 0.75em;
-    background: white;
-    padding: 4px 8px; }
-    #comments .comment:nth-child(even) {
-      background: #e6e6e6; }
-    #comments .comment.ashmc {
-      background: #c9b147; }
-      #comments .comment.ashmc a {
-        color: white; }
-      #comments .comment.ashmc:nth-child(odd) {
-        background: #bda538; }
-    #comments .comment.author {
-      padding-right: 2em;
-      margin-right: -1em;
-      z-index: 100; }
-    #comments .comment .metadata li {
-      display: inline-block;
-      list-style: none; }
-      #comments .comment .metadata li.author {
-        display: block; }
-        #comments .comment .metadata li.author h3 {
-          padding-top: 0px;
-          font-size: 1em; }
-      #comments .comment .metadata li.date {
-        float: right; }
-    #comments .comment.author .author {
-      color: #7e580d; }
-    #comments .comment .comment_body {
-      min-width: 400px; }
-      #comments .comment .comment_body p:first-child {
-        margin-top: 0px; }
-    #comments .comment .flag_this {
-      margin-top: 0.5em;
-      text-align: right; }
-  #comments .intro {
-    background: white;
-    padding: 15px; }
-  #comments form {
-    background: white;
-    margin-bottom: 1em; }
-    #comments form h2 {
-      font-size: 1.25em;
-      padding-top: 0.5em; }
-    #comments form .comment_submit {
-      text-align: right; }
-    #comments form input[type='submit'] {
-      padding: 5px 8px; }
-  #comments .flag_this form {
-    background: none; }
-  #comments .comment_comment textarea {
-    height: 4em;
-    width: 32em;
-    max-width: 32em;
-    font-size: 0.75em;
-    padding: 0.25em; }
+p {
+  text-align: justify; }
 
-footer {
-  max-width: 85%;
-  min-width: 1135px; }
+.measure_list li:not(:first-child) {
+  margin-top: 1.5em; }
+.measure_list li .measure_head {
+  background: white; }
+.measure_list li h2 {
+  padding: 0.5em;
+  margin: 0; }
+.measure_list li .number {
+  display: inline-block;
+  background: white url(/static/images/bg.jpg) repeat; }
+.measure_list li .expiry_date {
+  float: right;
+  padding: 0.5em; }
+  .measure_list li .expiry_date h3 {
+    padding: 0; }
+.measure_list li .measure_name {
+  display: inline-block; }
+.measure_list li .measure_description {
+  float: right;
+  background: white;
+  padding: 0.5em;
+  max-width: 450px; }
+
+a .number {
+  color: #333333;
+  transition: color 0.2s linear 0.1s;
+  -moz-transition: color 0.2s linear 0.1s;
+  /* Firefox 4 */
+  -webkit-transition: color 0.2s linear 0.1s;
+  /* Safari and Chrome */
+  -o-transition: color 0.2s linear 0.1s;
+  /* Opera */ }
+a:hover .number {
+  color: #e53b2c;
+  transition: color 0.2s linear 0.1s;
+  -moz-transition: color 0.2s linear 0.1s;
+  /* Firefox 4 */
+  -webkit-transition: color 0.2s linear 0.1s;
+  /* Safari and Chrome */
+  -o-transition: color 0.2s linear 0.1s;
+  /* Opera */ }
+
+.measure_wrap_wrap {
+  margin: 0 auto;
+  width: 700px; }
+
+.measure_wrap {
+  padding: 15px;
+  background: white; }
+  .measure_wrap h2 {
+    text-align: center; }
+  .measure_wrap .number {
+    float: left;
+    margin-left: -7.5em;
+    width: 6em; }
+    .measure_wrap .number h2 {
+      text-align: right; }
+
+ol {
+  margin-top: 2em; }
+  ol > div {
+    margin-bottom: 15px; }
+
+.ballot {
+  background: white;
+  padding: 10px; }
+  .ballot h3 {
+    padding: 5px; }
+
+.candidate_blurbs li:not(:last-child) {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.75em;
+  margin-bottom: 0.75em; }
+
+.ballot_blurb {
+  text-align: justify;
+  margin-bottom: 1em; }
+  .ballot_blurb p:first-child {
+    margin-top: 0.5em; }
+
+input[type=text] {
+  padding: 5px 10px;
+  margin-left: 25px; }

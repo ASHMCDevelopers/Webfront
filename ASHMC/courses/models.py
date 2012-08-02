@@ -1,74 +1,17 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.db.models import signals
 from django.core.exceptions import ValidationError
 
-from MultiDB import models as crossmodels
+# TODO: Make these imports not all necessary.
+from ASHMC.main.models import Semester, Day
+from ASHMC.main.models import Campus, Room
+from ASHMC.main.models import Student
+from ASHMC.main.models import Utility
+
 
 import datetime
 import re
 # Create your models here.
-
-
-class Utility(object):
-    """
-    Collects useful functions, allows them to share attributes if desired.
-
-    If not, it's not too much overhead.
-    """
-    def disjunct(self, lister, funct=lambda x: x):
-        for x in lister:
-            if funct(x):
-                return True
-        return False
-
-    def conjunct(self, lister, funct=lambda x: x):
-        for x in lister:
-            if not funct(x):
-                return False
-        return True
-
-    def current_semester(self):
-        """Determines whether today is in the spring, fall, or summer semesters"""
-        today = datetime.datetime.now()
-
-        if today.month < 5:
-            return "SP"
-        elif today.month < 8:
-            return "SM"
-        else:
-            return "FA"
-
-    def possible_grad_years(self):
-        """Returns a range of current students' possible graduation dates"""
-        today = datetime.datetime.now()
-
-        if self.current_semester() == 'SP':  # second semester
-            grad_range = range(today.year, today.year + 4)
-        else:  # first semester
-            grad_range = range(today.year + 1, today.year + 5)
-
-        return grad_range
-
-    def create_grades(self):
-        letters = ['A', 'B', 'C', 'D', 'F', 'P', 'HP',
-                   'INC',  # incomplete
-                   'N',  # first half of a two-semester course
-                   'NC',  # no credie
-                   'W',  # late withdrawal
-                   'AP',  # ap credit
-                   'EX',  # exam credit
-                   'NR',  # not reporting
-                   ]
-        final_letters = []
-        for letter in letters:
-            if letter in ['A', 'B', 'C', 'D']:
-                final_letters += ['{}+'.format(letter),
-                                  letter,
-                                  '{}-'.format(letter), ]
-            else:
-                final_letters += [letter]
-        return final_letters
 
 
 class SafeObjectManager(models.Manager):
@@ -83,268 +26,6 @@ class ActiveCourseManager(SafeObjectManager):
             .filter(num_sections__gte=1)\
             .annotate(num_meetings=models.Count('section__meeting'))\
             .filter(num_meetings__gte=1)
-
-
-class Semester(models.Model):
-    """Model representing Spring/Fall/Summer sessions"""
-    year = models.IntegerField()
-    half = models.CharField(max_length=2,
-                            choices=(('FA', "Fall"),
-                                     ('SP', "Spring"),
-                                     ('SM', "Summer"))
-                            )
-
-    @classmethod
-    def get_this_semester(cls):
-        half = Utility().current_semester()
-        year = datetime.datetime.now().year
-        return cls.objects.get(half=half,
-                               year=year)
-
-    def next_with_summer(self):
-        if self.half == 'FA':
-            half = "SP"
-            year = self.year + 1
-        elif self.half == "SP":
-            half = "SM"
-            year = self.year
-        elif self.half == "SM":
-            half = "FA"
-            year = self.year
-
-        return Semester.objects.get(half=half,
-                                    year=year)
-
-    def next(self):
-        if self.half == 'FA':
-            half = "SP"
-            year = self.year + 1
-        elif self.half == "SP":
-            half = "FA"
-            year = self.year
-        else:
-            half = "FA"
-            year = self.year
-
-        return Semester.objects.get(half=half,
-                                    year=year)
-
-    class Meta:
-        unique_together = (('year', 'half'),)
-
-    def __unicode__(self):
-        return u"{}{}".format(self.half, self.year)
-
-
-class GradYear(models.Model):
-    year = models.IntegerField()
-
-    def __unicode__(self):
-        return u"{}".format(self.year)
-
-
-class Student(crossmodels.MultiDBProxyModel):
-    """
-    Student is a sorta-proxy for User, since they're (probably)
-    stored on different databases.
-
-    This means that direct FK and M2M relations aren't supported by Django, so we have
-    to 'coerce' them.
-    """
-    _linked_model = User
-
-    class_of = models.ForeignKey(GradYear)
-    at = models.ForeignKey('Campus')  # This will default to HMC
-    studentid = models.IntegerField(unique=True)
-    credit_requirement = models.IntegerField(default=128)
-
-    class Meta:
-        unique_together = ('_linked_id',)
-
-    def __unicode__(self):
-        return u"{} {}".format(self.linked_model.first_name,
-                               self.linked_model.last_name)
-# Attach a property to simulate reverse relationship
-Student._linked_model.student_profile = property(lambda u: Student.objects.get(_linked_id=u.id))
-
-
-class Campus(models.Model):
-    CAMPUSES = (
-                    ('SC', 'Scripps'),
-                    ('PZ', 'Pitzer'),
-                    ('PO', 'Pomona'),
-                    ('CM', 'Claremont-Mckenna'),
-                    ('HM', 'Harvey Mudd'),
-                    ('CG', 'Claremont Graduate University'),
-                    ('KG', 'Keck Graduate Institute'),  # Keck actually doesn't offer any classes. For real.
-                    ('CU', 'Claremont Consortium'),
-                    ('NA', 'No Specific Campus'),
-                    ('UN', 'Unknown Campus'),
-                )
-    ABSTRACTIONS = ['NA', 'UN']
-    title = models.CharField(max_length=100)
-    code = models.CharField(max_length=2, unique=True)
-
-    class Meta:
-        verbose_name_plural = "campuses"
-
-    def __unicode__(self):
-        return u"{}".format(self.title)
-
-
-class Building(models.Model):
-    BUILDINGS = (
-                    ('HM', (
-                        ('BK', "Beckman"),
-                        ("GA", "Galileo"),
-                        ("HOSH", "Hoch"),
-                        ('JA', "Jacobs"),
-                        ("KE", "Keck"),
-                        ("LAC", "LAC"),
-                        ("MD", "Modular"),
-                        ("ON", "Olin"),
-                        ("PA", "Parsons"),
-                        ("PL", "Platt"),
-                        ("SP", "Sprague"),
-                        ("TG", "TG"),
-                        ("ARR", "Arranged"),
-                        ("TBA", "To Be Arranged"),
-                        )
-                    ),
-                    ('PZ', (
-                            ('ATN', "Atherton Hall"),
-                            ('AV', "Avery Hall"),
-                            ("BD", "E&E Broad Center"),
-                            ("BE", "Bernard Hall"),
-                            ("BH", "Broad Hall"),
-                            ("FL", "Fletcher Hall"),
-                            ("GC", "Gold Student Center"),
-                            ("GR", "Grove House"),
-                            ("HO", "Holden Hall"),
-                            ("MC", "McConnell Center"),
-                            ("MH", "Mead Hall"),
-                            ("OT", "Pitzer in Ontario"),
-                            ("SB", "Sanborn Hall"),
-                            ("SC", "Scott Hall"),
-                            ("WST", "WST (??)"),
-                            ("ARR", "Arranged"),
-                            ("TBA", "To Be Arranged"),
-                            )
-                    ),
-                    ('PO', (
-                            ('AN', 'Andrew Science Bldg'),
-                            ('BRDG', "Bridges Auditorium"),
-                            ('BT', "Brackett Observatory"),
-                            ('CA', "Carnegie Building"),
-                            ("CR", "Crookshank Hall"),
-                            ("EDMS", "Edmunds Building"),
-                            ("GIBS", "Gibson Hall"),
-                            ("HN", "Social Science Bldg"),
-                            ("ITB", "Information Tech Bldg"),
-                            ("LB", "Bridges Hall"),
-                            ("LE", "Le Bus Court"),
-                            ("LINC", "Lincoln Building"),
-                            ("MA", "Mason Hall"),
-                            ("ML", "Millikan Lab"),
-                            ("OLDB", "Oldenbourg Center"),
-                            ("PD", "Pendleton Dance Center"),
-                            ("PENP", "Pool (??)"),
-                            ("POM", "Pomona (??)"),
-                            ("PR", "Pearsons Hall"),
-                            ("RA", "Rains Center"),
-                            ("REM", "Rembrandt Hall"),
-                            ("SA", "Seaver Computing Ctr"),
-                            ("SCC", "Smith Campus Center"),
-                            ("SCOM", "Seaver Commons"),
-                            ("SE", "Seaver South Lab"),
-                            ("SL", "Seeley Science Library"),
-                            ("SN", "Seaver North Lab"),
-                            ("SVBI", "Seaver Bio Bldg"),
-                            ("TE", "Seaver Theatre"),
-                            ("THAT", "Thatcher Music Bldg"),
-                            ("TR", "Biology Trailers"),
-                            ("ARR", "Arranged"),
-                            ("TBA", "To Be Arranged"),
-                            )
-                    ),
-                    ('SC', (
-                            ('AT', "Athletic Facility"),
-                            ("BL", "Balch Hall"),
-                            ("BX", "BX (??)"),
-                            ("DN", "Richardson Studio"),
-                            ("FRA", "Frankel Hall"),
-                            ('HM', 'Edwards Humanities'),
-                            ("LA", "Lang Art Studios"),
-                            ("LCAB", "Arty something?"),
-                            ("MT", "Malott Commons"),
-                            ("PAC", "Performing Arts Center"),
-                            ("ST", "Steele Hall"),
-                            ("TIER", "Tiernant Field House"),
-                            ("VN", "Vita Nova Hall"),
-                            ("ARR", "Arranged"),
-                            ("TBA", "To Be Arranged"),
-                            )
-                    ),
-                    ('CM', (
-                            ('AD', 'Adams Hall'),
-                            ('BC', "Bauer South"),
-                            ('BZ', 'Biszantz Tennis Center'),
-                            ("DU", "Ducey Gym"),
-                            ('KRV', "Kravitz Center"),
-                            ('RN', "Roberts North"),
-                            ('RS', "Roberts South"),
-                            ("SM", "Seaman Hall"),
-                            ("ARR", "Arranged"),
-                            ("TBA", "To Be Arranged"),
-                            )
-                    ),
-                    ('CG', (
-                            ('BU', 'Burkle Building'),
-                            ("ARR", "Arranged"),
-                            ("TBA", "To Be Arranged"),
-                            )
-                    ),
-                    ('CU', (
-                        ('HD', "Honnold/Mudd Library"),
-                        ("KS", "Keck Science Center"),
-                        ("SSC", "Student Services Center"),
-                        ("ARR", "Arranged"),
-                        ("TBA", "To Be Arranged"),
-                        )
-                    ),
-                    ('UN', (
-                        ('ARR', "To Be Arranged"),
-                        ('TBD', "To Be Determined"),
-                        ('TBA', "To Be Announced"),
-                        )
-                    ),
-                )
-
-    campus = models.ForeignKey(Campus)
-    name = models.CharField(max_length=50)
-    code = models.CharField(max_length=10)
-
-    class Meta:
-        unique_together = (('campus', 'code'),)
-
-    def __unicode__(self):
-        return u"{} {}".format(self.campus.code, self.name)
-
-    def __repr__(self):
-        return u"<Building: {}:{}>".format(self.campus.code, self.code)
-
-
-class Room(models.Model):
-    building = models.ForeignKey(Building)
-    title = models.CharField(max_length=50)
-
-    class Meta:
-        unique_together = (('building', 'title'),)
-
-    def __unicode__(self):
-        return u"{} {} {}".format(self.building.campus.code,
-                                  self.building.code,
-                                  self.title)
 
 
 class Department(models.Model):
@@ -593,7 +274,7 @@ class Section(models.Model):
                                                                  # but shouldn't expire for all time, just
                                                                  # the future semeesters.
 
-    semester = models.ForeignKey('Semester', null=True)
+    semester = models.ForeignKey(Semester, null=True)
 
     campus_restricted = models.BooleanField(default=False)
     seats = models.IntegerField(null=True)
@@ -704,7 +385,7 @@ class Meeting(models.Model):
 
     @property
     def is_not_set(self):
-        return Utility().conjunct(self.timeslots.all())
+        return Utility.conjunct(self.timeslots.all())
 
     class Meta:
         unique_together = ('section', 'meeting_code')
@@ -742,7 +423,7 @@ class Meeting(models.Model):
 class Timeslot(models.Model):
     starts = models.TimeField(null=True)
     ends = models.TimeField(null=True)
-    day = models.ForeignKey('Day')
+    day = models.ForeignKey(Day)
 
     class Meta:
         unique_together = (('starts', 'ends', 'day'),)
@@ -759,29 +440,6 @@ class Timeslot(models.Model):
         return u"{}: {}-{}".format(self.day.code, self.starts, self.ends)
 
 
-class Day(models.Model):
-    """
-    A day of the week.
-
-    Keeps track of code and name, as well as providing a shorthand name."""
-
-    DAY_CHOICES = (
-            ("M", "Monday"),
-            ("T", "Tuesday"),
-            ("W", "Wednesday"),
-            ("R", "Thursday"),
-            ("F", "Friday"),
-            ("S", "Saturday"),
-            ("U", "Sunday")
-        )
-    name = models.CharField(max_length=15, unique=True)
-    code = models.CharField(max_length=1, unique=True)
-    short = models.CharField(max_length=15, unique=True)
-
-    def __unicode__(self):
-        return u"{}".format(self.code)
-
-
 class Enrollment(models.Model):
     """
     Keeps track of which students are in which courses
@@ -791,7 +449,7 @@ class Enrollment(models.Model):
     section = models.ForeignKey(Section)
 
     grade = models.CharField(max_length=2,
-                             choices=([(x, x) for x in Utility().create_grades()]),
+                             choices=([(x, x) for x in Utility.create_grades()]),
                              default='NR')
 
     description = models.TextField(null=True, blank=True)

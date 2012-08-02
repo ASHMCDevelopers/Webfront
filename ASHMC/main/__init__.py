@@ -1,6 +1,7 @@
-from django.db.models.signals import post_save, post_syncdb
+from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.conf import settings
+from django.db.models.signals import post_save
 
 from blogger.models import Entry
 
@@ -18,7 +19,7 @@ def send_tweet_after_new_entry(sender, **kwargs):
     instance = kwargs['instance']
 
     tweet_body = """New story from {}: {} http://{}{}""".format(
-        instance.author.first_name,
+        instance.primary_author.first_name,
         instance.title,
         Site.objects.get_current().domain,
         instance.get_absolute_url(),
@@ -44,3 +45,22 @@ def send_tweet_after_top_story(sender, **kwargs):
     settings.TWITTER_AGENT.statuses.update(status=tweet_body)
 
 post_save.connect(send_tweet_after_top_story, sender=TopNewsItem)
+
+
+def create_welcoming_blog_post(sender, **kwargs):
+    if Entry.objects.count() > 0:
+        return
+
+    Entry.objects.create(
+        tags="welcome",
+        title="Welcome to ASHMC",
+        slug="welcome-to-ashmc",
+        comment_enabled=False,
+        primary_author=User.objects.all()[0],
+        content="""
+Welcome to the new and improved ASHMC presence.
+
+Here, you'll find lots of useful tools for interacting with the student body;
+these range from easy-to-setup
+        """,
+    )

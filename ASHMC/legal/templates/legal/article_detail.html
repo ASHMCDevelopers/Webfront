@@ -1,7 +1,9 @@
 {% extends "legal/legal_base.html" %}
 {% load mptt_tags %}
+{% load main_extras %}
 {% load legal_extras %}
 {% load markup %}
+{% load cache %}
 
 {% block post_header %}
 
@@ -14,7 +16,7 @@
         </div>
         {% endif %}
         <ol>
-            {% for el in object.children.all %}
+            {% for el in object.children.all|order_by:"number" %}
                 {% include "legal/recursive_article.html" %}
             {% endfor %}
         </ol>
@@ -22,7 +24,7 @@
     </div>
     <div class="sidebar">
         <ol>
-        {% for el in object.children.all %}
+        {% for el in object.children.all|order_by:"number" %}
             <a href="#{{el.id}}"><li>Article {{el.number|roman_number}}: {{el.title}}</li></a>
         {% endfor %}
         </ol>
