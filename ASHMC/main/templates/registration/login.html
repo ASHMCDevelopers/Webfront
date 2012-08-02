@@ -23,6 +23,7 @@
         <div id="login_form_hold">
             <form action="{% url  "login" %}" method="POST">
                 {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}" />
                 <div>{{form.username}}<div class='tooltip'>Your HMC email: first_last@hmc.edu</div></div>
                 <div>{{form.password}}<div class='tooltip'>Don't know your password?<br/>Click <a href="#">here</a>.</div></div>
                 <input type=submit id="signIn" class="button-submit" value="Get Started" />
