@@ -33,7 +33,7 @@ class MeasureDetail(DetailView):
         object = super(MeasureDetail, self).get_object()
 
         # make sure it's a vote-able object.
-        if not object.is_open or object.vote_end < datetime.datetime.now(pytz.utc):
+        if not object.is_open or (object.vote_end is not None and object.vote_end < datetime.datetime.now(pytz.utc)):
             raise Http404
 
         if Vote.objects.filter(account=self.request.user, measure=object).count() != 0:

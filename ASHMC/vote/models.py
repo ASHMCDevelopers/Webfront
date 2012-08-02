@@ -59,7 +59,9 @@ class Measure(models.Model):
     to calculate things like quorum."""
 
     name = models.CharField(max_length=50)
-    summary = models.TextField(blank=True, null=True)
+    summary = models.TextField(blank=True, null=True,
+        default="""There is no summary for this measure."""
+    )
 
     vote_start = models.DateTimeField(default=datetime.datetime.now)
     vote_end = models.DateTimeField(null=True, blank=True,
@@ -215,7 +217,7 @@ def set_end_on_quorum_reached(sender, **kwargs):
 
     if measure.actual_quorum >= measure.quorum:
         midnight = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
-        obj.vote_end = midnight
+        measure.vote_end = midnight
 
-        obj.save()
+        measure.save()
 post_save.connect(set_end_on_quorum_reached, sender=Vote)
