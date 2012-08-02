@@ -1,11 +1,13 @@
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models.signals import post_save
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 # Create your models here.
 
 from ASHMC.main.models import Dorm
-from ASHMC.roster.models import DormRoom, UserRoom
+from ASHMC.roster.models import DormRoom
 
 import datetime
 
@@ -60,7 +62,10 @@ class Measure(models.Model):
     summary = models.TextField(blank=True, null=True)
 
     vote_start = models.DateTimeField(default=datetime.datetime.now)
-    vote_end = models.DateTimeField()
+    vote_end = models.DateTimeField(null=True, blank=True,
+        help_text="""If you don't specify an end time, the measure will automatically
+        close the midnight after quorum is reached.""",
+    )
 
     is_open = models.BooleanField(default=True)
 
@@ -107,6 +112,7 @@ class Measure(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             self.real_type = self._get_real_type()
+
         super(Measure, self).save(*args, **kwargs)
 
 
@@ -192,3 +198,24 @@ class Candidate(models.Model):
 
 class PersonCandidate(Candidate):
     users = models.ManyToManyField(User, null=True, blank=True)
+
+
+def set_end_on_quorum_reached(sender, **kwargs):
+    """As per Article 4, section 3, paragraph C of the Bylaws, measures end
+    automatically on the midnight following quorum attainment."""
+    if not 'instance' in kwargs:
+        return
+
+    obj = kwargs['instance']
+    measure = obj.measure
+
+    # Unless otherwise specified, of course.
+    if measure.vote_end is not None:
+        return
+
+    if measure.actual_quorum >= measure.quorum:
+        midnight = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        obj.vote_end = midnight
+
+        obj.save()
+post_save.connect(set_end_on_quorum_reached, sender=Vote)

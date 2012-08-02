@@ -15,13 +15,11 @@
             {{object.body|markdown|safe}}
         </div>
         {% endif %}
-        {% cache 500 object.id %}
         <ol>
             {% for el in object.children.all|order_by:"number" %}
                 {% include "legal/recursive_article.html" %}
             {% endfor %}
         </ol>
-        {% endcache %}
         </section>
     </div>
     <div class="sidebar">
