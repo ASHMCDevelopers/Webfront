@@ -20,5 +20,7 @@ urlpatterns = patterns('',
     url(r'^comments/', include('django.contrib.comments.urls')),
     url(r'^legal/', include('ASHMC.legal.urls')),
     url(r'^vote/', include('ASHMC.vote.urls')),
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', name="login"),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
     url(r'^', include('ASHMC.main.urls')),
 )

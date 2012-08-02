@@ -1,0 +1,66 @@
+#login_form {
+    float: right;
+    height: inherit;
+    margin: {
+        right: 2%;
+        top: 0px;
+    }
+
+    div {
+        width: 413px;
+        //margin: 0 auto;
+    }
+
+    $brace_width: 45px;
+    $brace_height: 235px;
+    $brace_font: "Baskerville";
+    &::before {
+        //background: {
+        //  image: url(/static/images/header/leftbrace.png);
+        //  repeat:  no-repeat;
+        //  position: center left;
+        //}
+        content: "}";
+        //height: $brace_height;
+        //width: $brace_width;
+        //float: left;
+        font-size: $brace_height;
+        font-family: $brace_font;
+        float: right;
+        margin-top: -68px;
+
+    }
+
+
+
+    &::after {
+        //background: {
+        //  image: url(/static/images/header/rightbrace.png);
+        //  repeat:  no-repeat;
+        //  position: center right;
+        //}
+        content: "{";
+        //height: $brace_height;
+        //width: $brace_width;
+        //float: right;
+        font-size: $brace_height;
+        font-family: $brace_font;
+        float: left;
+        margin: {
+            top: -202px;
+            left: -113px;
+        }
+    }
+
+    form input{
+        width: 300px;
+        padding: 5px;
+        margin: {
+            top: 10px;
+        }
+
+        font: {
+            size: 20px;
+        }
+    }
+}
