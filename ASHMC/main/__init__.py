@@ -1,10 +1,11 @@
-from django.db.models.signals import post_save, post_syncdb
+from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.conf import settings
+from django.db.models.signals import post_save
 
 from blogger.models import Entry
 
-from .models import TopNewsItem, User
+from .models import TopNewsItem
 
 
 def send_tweet_after_new_entry(sender, **kwargs):

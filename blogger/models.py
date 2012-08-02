@@ -13,7 +13,7 @@ from mptt.models import TreeForeignKey
 from taggit.managers import TaggableManager
 
 from .util import entries_published, DRAFT, HIDDEN, PUBLISHED, UPLOAD_TO, EntryPublishedManager
-from ASHMC.main.models import Dorm
+from ASHMC.roster.models import Dorm
 
 import datetime
 import pytz

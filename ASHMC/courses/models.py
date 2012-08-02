@@ -1,10 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.db.models import signals
 from django.core.exceptions import ValidationError
 
 # TODO: Make these imports not all necessary.
-from ASHMC.main.models import Semester, Utility, Campus, Building, Room, Student, GradYear
+from ASHMC.main.models import Semester, Day
+from ASHMC.main.models import Campus, Room
+from ASHMC.main.models import Student
+from ASHMC.main.models import Utility
 
 
 import datetime
@@ -383,7 +385,7 @@ class Meeting(models.Model):
 
     @property
     def is_not_set(self):
-        return Utility().conjunct(self.timeslots.all())
+        return Utility.conjunct(self.timeslots.all())
 
     class Meta:
         unique_together = ('section', 'meeting_code')
@@ -421,7 +423,7 @@ class Meeting(models.Model):
 class Timeslot(models.Model):
     starts = models.TimeField(null=True)
     ends = models.TimeField(null=True)
-    day = models.ForeignKey('Day')
+    day = models.ForeignKey(Day)
 
     class Meta:
         unique_together = (('starts', 'ends', 'day'),)
@@ -438,29 +440,6 @@ class Timeslot(models.Model):
         return u"{}: {}-{}".format(self.day.code, self.starts, self.ends)
 
 
-class Day(models.Model):
-    """
-    A day of the week.
-
-    Keeps track of code and name, as well as providing a shorthand name."""
-
-    DAY_CHOICES = (
-            ("M", "Monday"),
-            ("T", "Tuesday"),
-            ("W", "Wednesday"),
-            ("R", "Thursday"),
-            ("F", "Friday"),
-            ("S", "Saturday"),
-            ("U", "Sunday")
-        )
-    name = models.CharField(max_length=15, unique=True)
-    code = models.CharField(max_length=1, unique=True)
-    short = models.CharField(max_length=15, unique=True)
-
-    def __unicode__(self):
-        return u"{}".format(self.code)
-
-
 class Enrollment(models.Model):
     """
     Keeps track of which students are in which courses
@@ -470,7 +449,7 @@ class Enrollment(models.Model):
     section = models.ForeignKey(Section)
 
     grade = models.CharField(max_length=2,
-                             choices=([(x, x) for x in Utility().create_grades()]),
+                             choices=([(x, x) for x in Utility.create_grades()]),
                              default='NR')
 
     description = models.TextField(null=True, blank=True)

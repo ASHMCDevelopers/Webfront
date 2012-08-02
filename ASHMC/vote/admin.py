@@ -39,16 +39,6 @@ class MeasureAdmin(admin.ModelAdmin):
 admin.site.register(Measure, MeasureAdmin)
 
 
-class DormMeasureAdmin(admin.ModelAdmin):
-    list_display = (
-        '__unicode__', 'dorm', 'vote_start',
-    )
-    list_filter = (
-        'dorm', 'vote_start',
-    )
-admin.site.register(DormMeasure, DormMeasureAdmin)
-
-
 class VoteAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Vote, VoteAdmin)

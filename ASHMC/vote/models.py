@@ -6,9 +6,8 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 # Create your models here.
 
-from ASHMC.main.models import Dorm
-from ASHMC.roster.models import DormRoom
-
+from ASHMC.main.models import GradYear
+from ASHMC.roster.models import Dorm, DormRoom, UserRoom
 import datetime
 
 
@@ -75,6 +74,8 @@ class Measure(models.Model):
 
     banned_accounts = models.ManyToManyField(User, null=True, blank=True)
 
+    restricted_to = models.OneToOneField("Restrictions")
+
     quorum = IntegerRangeField(default=50,
         help_text="Integer value between 0 and 100; what percentage of student response is quorum for this ballot?",
         max_value=100,
@@ -97,12 +98,7 @@ class Measure(models.Model):
 
     @property
     def eligible_voters(self):
-        return User.objects.all().exclude(
-            id__in=(self.banned_accounts.values_list(
-                'id',
-                flat=True,
-            )),
-        )
+        return self.restricted_to.get_grad_year_users() & self.restricted_to.get_dorm_users()
 
     class Meta:
         verbose_name = _('Mesure')
@@ -118,18 +114,21 @@ class Measure(models.Model):
         super(Measure, self).save(*args, **kwargs)
 
 
-class DormMeasure(Measure):
-    dorm = models.ForeignKey(Dorm)
-    number = models.IntegerField()
+class Restrictions(models.Model):
+    gradyear = models.ForeignKey(GradYear, null=True, blank=True)
+    dorm = models.ForeignKey(Dorm, null=True, blank=True)
 
-    @property
-    def eligible_voters(self):
-        super_eligible = super(DormMeasure, self).eligible_voters
-        user_ids = DormRoom.objects.filter(dorm=self.dorm).values_list('students__id', flat=True)
-        return super_eligible.filter(id__in=user_ids)
+    def get_grad_year_users(self):
+        if self.gradyear is None:
+            return User.objects.empty()
+        return self.gradyear.student_set.all()
 
-    class Meta:
-        unique_together = ('dorm', 'number',)
+    def get_dorm_users(self):
+        if self.dorm is None:
+            return User.objects.empty()
+        dormrooms = DormRoom.objects.filter(dorm=self.dorm)
+        user_ids = UserRoom.objects.filter(room__in=dormrooms).values_list('user__id', flat=True)
+        return User.objects.filter(id__in=user_ids)
 
 
 class Vote(models.Model):

@@ -10,7 +10,7 @@ import datetime
 # Create your models here.
 
 
-class Utility(object):
+class _Utility(object):
     """
     Collects useful functions, allows them to share attributes if desired.
 
@@ -69,6 +69,7 @@ class Utility(object):
             else:
                 final_letters += [letter]
         return final_letters
+Utility = _Utility()
 
 
 class Role(models.Model):
@@ -158,7 +159,7 @@ class DormPresident(ASHMCRole):
     """Subclass of ASHMCRole specifically for Dorm Presidents, since they have to be associated
     with a dorm."""
 
-    dorm = models.ForeignKey('Dorm')
+    dorm = models.ForeignKey('roster.Dorm')
 
     def __unicode__(self):
         if self.title == " ":
@@ -167,32 +168,9 @@ class DormPresident(ASHMCRole):
             return u"{} President {}".format(self.dorm, self.title)
 
 
-class Dorm(models.Model):
-    DORMS = (
-        ('Atwood', 'AT'),
-        ('Case', 'CA'),
-        ('West', 'WE'),
-        ('Sontag', "SU"),
-        ("South", 'SO'),
-        ('EAST', 'EA'),
-        ('Linde', 'LI'),
-        ('North', 'NO'),
-        ('Brighton Park', 'BPA'),
-    )
-    name = models.CharField(max_length=50)
-    code = models.CharField(max_length=3)
-
-    class Meta:
-        verbose_name = _('Dorm')
-        verbose_name_plural = _('Dorms')
-
-    def __unicode__(self):
-        return u"{}".format(self.name)
-
-
 class DormRole(Role):
 
-    dorm = models.ForeignKey(Dorm)
+    dorm = models.ForeignKey('roster.Dorm')
 
     class Meta:
         verbose_name = _('DormRole')
@@ -245,7 +223,7 @@ class Semester(models.Model):
 
     @classmethod
     def get_this_semester(cls):
-        half = Utility().current_semester()
+        half = Utility.current_semester()
         year = datetime.datetime.now().year
         return cls.objects.get(half=half,
                                year=year)
@@ -495,6 +473,28 @@ class Room(models.Model):
                                   self.building.code,
                                   self.title)
 
+
+class Day(models.Model):
+    """
+    A day of the week.
+
+    Keeps track of code and name, as well as providing a shorthand name."""
+
+    DAY_CHOICES = (
+            ("M", "Monday"),
+            ("T", "Tuesday"),
+            ("W", "Wednesday"),
+            ("R", "Thursday"),
+            ("F", "Friday"),
+            ("S", "Saturday"),
+            ("U", "Sunday")
+        )
+    name = models.CharField(max_length=15, unique=True)
+    code = models.CharField(max_length=1, unique=True)
+    short = models.CharField(max_length=15, unique=True)
+
+    def __unicode__(self):
+        return u"{}".format(self.code)
 
     ### SIGNALS ###
 

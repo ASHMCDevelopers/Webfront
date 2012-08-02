@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, View
 
 from .forms import BallotForm
-from .models import Measure, DormMeasure, Vote, PopularityVote
+from .models import Measure, Vote, PopularityVote
 
 import datetime
 import pytz
@@ -17,10 +17,13 @@ class MeasureListing(ListView):
 
     def get_queryset(self):
         # Put the next-to-expire measures up front.
+
         return Measure.objects.filter(
             ~Q(id__in=Vote.objects.filter(account=self.request.user).values_list('measure__id', flat=True)),
             is_open=True,
             vote_start__lte=datetime.datetime.now(pytz.utc),
+            #restricted_to__dorm=dorm,
+            #restricted_to__gradyear=gradyear,
         ).exclude(
             banned_accounts__id__exact=self.request.user.id,
         ).order_by('vote_end')
@@ -31,6 +34,8 @@ class MeasureDetail(DetailView):
 
     def get_object(self):
         object = super(MeasureDetail, self).get_object()
+        if self.request.user in object.banned_accounts:
+            raise PermissionDenied()
 
         # make sure it's a vote-able object.
         if not object.is_open or (object.vote_end is not None and object.vote_end < datetime.datetime.now(pytz.utc)):
@@ -49,20 +54,12 @@ class MeasureDetail(DetailView):
         return context
 
 
-class DormMeasureList(ListView):
-    model = DormMeasure
-
-    def get_queryset(self):
-        user = self.request.user
-        dorm = user.get_current_dorm  # TODO: make this a real function.
-
-        return DormMeasure.open_objects.filter(dorm=dorm)
-
-
 class ProcessVote(View):
 
     def post(self, request, measure_id, *args, **kwargs):
         measure = get_object_or_404(Measure, pk=measure_id)
+        if self.request.user in measure.banned_accounts:
+            raise PermissionDenied()
 
         forms = []
         for ballot in measure.ballot_set.all():

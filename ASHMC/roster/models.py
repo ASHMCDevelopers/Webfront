@@ -2,7 +2,28 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
-from ASHMC.main.models import Dorm, Semester
+
+class Dorm(models.Model):
+    DORMS = (
+        ('Atwood', 'AT'),
+        ('Case', 'CA'),
+        ('West', 'WE'),
+        ('Sontag', "SU"),
+        ("South", 'SO'),
+        ('East', 'EA'),
+        ('Linde', 'LI'),
+        ('North', 'NO'),
+        ('Brighton Park', 'BPA'),
+    )
+    name = models.CharField(max_length=50)
+    code = models.CharField(max_length=3)
+
+    class Meta:
+        verbose_name = _('Dorm')
+        verbose_name_plural = _('Dorms')
+
+    def __unicode__(self):
+        return u"{}".format(self.name)
 
 
 class DormRoom(models.Model):
@@ -14,7 +35,6 @@ class DormRoom(models.Model):
     students = models.ManyToManyField(User, through="UserRoom")
 
     suite = models.ForeignKey('Suite', null=True, blank=True)
-    tran_suite = models.ForeignKey('TransientSuite', null=True, blank=True)
 
     class Meta:
         verbose_name = _('Dorm room')
@@ -30,7 +50,7 @@ class UserRoom(models.Model):
     user = models.ForeignKey(User)
     room = models.ForeignKey(DormRoom)
 
-    semester = models.ForeignKey(Semester)
+    semester = models.ForeignKey('main.Semester')
 
     class Meta:
         verbose_name = _('User Room')
@@ -56,6 +76,8 @@ class TransientSuite(models.Model):
 
     name = models.CharField(max_length=100)
     year = models.IntegerField()
+
+    users = models.ManyToManyField(User)
 
     class Meta:
         verbose_name = _('Transient Suite')
