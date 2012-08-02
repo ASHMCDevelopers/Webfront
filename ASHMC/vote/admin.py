@@ -25,9 +25,13 @@ admin.site.register(Ballot, BallotAdmin)
 
 class MeasureAdmin(admin.ModelAdmin):
 
-    list_display = ('id', '__unicode__', 'actual_quorum', 'quorum')
-    list_editable = ('quorum', )
+    list_display = (
+        'id', '__unicode__', 'actual_quorum',
+        'quorum', 'is_open', 'vote_start'
+    )
     list_display_links = ('id', '__unicode__')
+    list_editable = ('quorum', )
+    list_filter = ('is_open', 'vote_start', 'vote_end',)
 
     inlines = [
         BallotInline,
@@ -36,7 +40,12 @@ admin.site.register(Measure, MeasureAdmin)
 
 
 class DormMeasureAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        '__unicode__', 'dorm', 'vote_start',
+    )
+    list_filter = (
+        'dorm', 'vote_start',
+    )
 admin.site.register(DormMeasure, DormMeasureAdmin)
 
 
