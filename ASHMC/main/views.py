@@ -1,8 +1,5 @@
-from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from django.core.cache import cache
-from django.shortcuts import redirect
-from django.views.generic import View
 from django.views.generic.base import TemplateView  # , TemplateResponseMixin
 
 #if 'courses' in settings.INSTALLED_APPS:
@@ -12,7 +9,6 @@ from .models import TopNewsItem
 
 from blogger.models import Entry
 
-from django.conf import settings
 import datetime
 import pytz
 # Create your views here.
@@ -50,29 +46,6 @@ class LandingPage(TemplateView):
             should_display=True
         ).order_by('-date_published')[:7]
         return context
-
-
-class Login(View):
-
-    def post(self, request):
-        login_form = LandingLoginForm(request.POST)
-        if login_form.is_valid():
-            user = authenticate(
-                    username=login_form.cleaned_data['username'],
-                    password=login_form.cleaned_data['password'],
-                )
-            if user is not None:
-                if user.is_active:
-                    login(request, user)
-                    return redirect('main_home')
-            else:
-                return redirect('main_landing_page')
-
-        return redirect('main_landing_page')
-
-    def get(self, request):
-        logout(request)
-        return redirect('main_landing_page')
 
 
 class HomePage(TemplateView):
