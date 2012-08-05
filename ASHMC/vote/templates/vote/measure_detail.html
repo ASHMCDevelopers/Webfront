@@ -11,7 +11,7 @@
     <div class='measure_description'>
         {{object.summary|markdown:"safe"}}
     </div>
-    <form action="{% url 'process_vote' object.id %}" method="POST">
+    <form action="{% url 'measure_detail' object.id %}" method="POST">
         {% csrf_token %}
     <ol>
     {% for form in forms %}
@@ -22,10 +22,12 @@
         <div class='ballot_blurb'>
             {{form.ballot.blurb|markdown:"safe"}}
         </div>
+        {% for candidate in form.ballot.candidate_set.all %}
+        {% if forloop.first %}
         <div class='surrounder body'>
         <div class='candidate_blurbs'>
             <ul>
-                {% for candidate in form.ballot.candidate_set.all %}
+        {% endif %}
                 <li class='surrounder light'>
                     <h5>{{candidate.title}}</h5>
                     {% if candidate.description %}
@@ -34,18 +36,28 @@
                     <p>No information provided.</p>
                     {% endif %}
                 </li>
-                {% endfor %}
+        {% if forloop.last %}
             </ul>
         </div>
         </div>
-        <ul>
+        {% endif %}
+        {% endfor %}
             <div class='empty spacer'></div>
             <h4>Choose an option</h4>
+            {%with form.ballot.id as bid %}
+            {{form_errors|prettify_error_listings:bid}}
+            {% endwith %}
+        <ul>
             {% for candidate in form.choice %}
             <li class='candidate'>
                 {{candidate}}
             </li>
             {% endfor %}
+            {% if form.ballot.can_abstain %}
+                <li>
+                    {{form.abstains}}
+                </li>
+            {% endif %}
             {% if form.ballot.can_write_in %}
                 <li>
                     {{form.write_in_value}}
@@ -65,3 +77,16 @@
 </div>
 </div>
 {% endblock post_header %}
+
+
+{% block scriptin %}
+<script type="text/javascript">
+$(function(){
+    $('.write_in').click(function(){
+        var ballot_num = $(this).prop('id').split('-')[0].split('_')[1];
+        var name = '' + ballot_num + '-choice';
+        $('input[name='+name+']').prop('checked', false);
+    });
+});
+</script>
+{% endblock scriptin %}

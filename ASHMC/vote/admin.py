@@ -3,12 +3,16 @@ from django.contrib import admin
 from .models import *
 
 
+class CandidateInline(admin.TabularInline):
+    model = Candidate
+
+
 class BallotInline(admin.TabularInline):
     model = Ballot
 
 
-class CandidateInline(admin.TabularInline):
-    model = Candidate
+class RestrictionsInline(admin.StackedInline):
+    model = Restrictions
 
 
 class BallotAdmin(admin.ModelAdmin):
@@ -34,9 +38,15 @@ class MeasureAdmin(admin.ModelAdmin):
     list_filter = ('is_open', 'vote_start', 'vote_end',)
 
     inlines = [
+        RestrictionsInline,
         BallotInline,
     ]
 admin.site.register(Measure, MeasureAdmin)
+
+
+class RestrictionsAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Restrictions, RestrictionsAdmin)
 
 
 class VoteAdmin(admin.ModelAdmin):

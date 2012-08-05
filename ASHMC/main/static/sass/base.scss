@@ -17,6 +17,7 @@ $text_color: #333;
 
 $dark_background: #1c1c1c;
 $light_background: #fff;
+$error_background: #FF6A6A;
 
 $text_max_width: 650px;
 $body_background:  white url(/static/images/bg.jpg) repeat;
@@ -171,6 +172,11 @@ p { // proper typographic styling
 p + p { // proper typogrpahic styling
     text-indent: $line_height;
     margin-top: 0;
+}
+
+.errors {
+    background: $error_background;
+    color: #fff;
 }
 
 li {

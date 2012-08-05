@@ -74,8 +74,6 @@ class Measure(models.Model):
 
     banned_accounts = models.ManyToManyField(User, null=True, blank=True)
 
-    restricted_to = models.OneToOneField("Restrictions")
-
     quorum = IntegerRangeField(default=50,
         help_text="Integer value between 0 and 100; what percentage of student response is quorum for this ballot?",
         max_value=100,
@@ -98,7 +96,7 @@ class Measure(models.Model):
 
     @property
     def eligible_voters(self):
-        return self.restricted_to.get_grad_year_users() & self.restricted_to.get_dorm_users()
+        return self.restrictions.get_grad_year_users() & self.restrictions.get_dorm_users()
 
     class Meta:
         verbose_name = _('Mesure')
@@ -115,18 +113,28 @@ class Measure(models.Model):
 
 
 class Restrictions(models.Model):
-    gradyear = models.ForeignKey(GradYear, null=True, blank=True)
-    dorm = models.ForeignKey(Dorm, null=True, blank=True)
+    gradyears = models.ManyToManyField(GradYear, null=True, blank=True,
+        help_text="Only these gradyears will be able to see this measure. If none are selected, visible to all gradyears."
+    )
+    dorms = models.ManyToManyField(Dorm, null=True, blank=True,
+        help_text="Only residents of these dorms will be able to see this measure. If none are selected, visible to all dorms."
+    )
+
+    restricted_to = models.OneToOneField(Measure)
+
+    class Meta:
+        verbose_name_plural = _('Restrictions')
 
     def get_grad_year_users(self):
-        if self.gradyear is None:
-            return User.objects.empty()
-        return self.gradyear.student_set.all()
+        if self.gradyears.all().count() == 0:
+            return User.objects.all()
+        user_ids = self.gradyears.all().values_list('student__user__id', flat=True)
+        return User.objects.filter(id__in=[x for x in user_ids if x is not None])
 
     def get_dorm_users(self):
-        if self.dorm is None:
-            return User.objects.empty()
-        dormrooms = DormRoom.objects.filter(dorm=self.dorm)
+        if self.dorms.count() == 0:
+            return User.objects.all()
+        dormrooms = DormRoom.objects.filter(dorm__in=self.dorms.all())
         user_ids = UserRoom.objects.filter(room__in=dormrooms).values_list('user__id', flat=True)
         return User.objects.filter(id__in=user_ids)
 

@@ -16,7 +16,7 @@ class BallotForm(forms.Form):
 
         self.fields['choice'] = CandidateChoiceField(
             widget=forms.RadioSelect,
-            empty_label=None,
+            empty_label=None if not ballot.can_abstain else "I'm abstaining",
             queryset=choices,
             required=(not ballot.can_write_in),
         )
@@ -25,7 +25,11 @@ class BallotForm(forms.Form):
             self.fields['write_in_value'] = forms.CharField(
                 max_length=50,
                 required=False,
-                widget=forms.TextInput(attrs={'placeholder': "or, write in here."})
+                widget=forms.TextInput(
+                    attrs={
+                        'placeholder': "or, write in here.",
+                        'class': 'write_in',
+                    })
             )
 
     def clean(self):
@@ -37,9 +41,10 @@ class BallotForm(forms.Form):
         # A none choice would have been caught unless there's a write-in field
 
         if choice is None and not write_in:
-            raise forms.ValidationError(
-                "Must either select a candidate or write one in."
-            )
+            if not self.ballot.can_abstain:
+                raise forms.ValidationError(
+                    "Must either select a candidate or write one in."
+                )
 
         if choice is not None and write_in:
             raise forms.ValidationError(

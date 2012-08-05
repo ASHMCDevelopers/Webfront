@@ -1,9 +1,13 @@
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, View
+from django.shortcuts import redirect
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import FormMixin
 
+
+from ASHMC.main.models import Semester
+from ASHMC.roster.models import UserRoom
 from .forms import BallotForm
 from .models import Measure, Vote, PopularityVote
 
@@ -18,23 +22,32 @@ class MeasureListing(ListView):
     def get_queryset(self):
         # Put the next-to-expire measures up front.
 
+        this_sem = Semester.get_this_semester()
+
+        room = UserRoom.objects.filter(
+            user=self.request.user,
+            semester__id=this_sem.id,
+        )[0].room
+
         return Measure.objects.filter(
+            # Hide measures that the user has already voted in.
             ~Q(id__in=Vote.objects.filter(account=self.request.user).values_list('measure__id', flat=True)),
+            Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
+            Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None),
             is_open=True,
+            # Only show measures which have already opened for voting
             vote_start__lte=datetime.datetime.now(pytz.utc),
-            #restricted_to__dorm=dorm,
-            #restricted_to__gradyear=gradyear,
         ).exclude(
             banned_accounts__id__exact=self.request.user.id,
         ).order_by('vote_end')
 
 
-class MeasureDetail(DetailView):
+class MeasureDetail(DetailView, FormMixin):
     model = Measure
 
     def get_object(self):
         object = super(MeasureDetail, self).get_object()
-        if self.request.user in object.banned_accounts:
+        if self.request.user in object.banned_accounts.all():
             raise PermissionDenied()
 
         # make sure it's a vote-able object.
@@ -49,27 +62,33 @@ class MeasureDetail(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super(MeasureDetail, self).get_context_data(*args, **kwargs)
 
+        if not hasattr(self, 'bad_forms'):
+            self.bad_forms = {}
+        context['form_errors'] = self.bad_forms
+
         context['forms'] = [BallotForm(b, data=self.request.POST) for b in self.get_object().ballot_set.all()]
 
         return context
 
-
-class ProcessVote(View):
-
-    def post(self, request, measure_id, *args, **kwargs):
-        measure = get_object_or_404(Measure, pk=measure_id)
-        if self.request.user in measure.banned_accounts:
-            raise PermissionDenied()
+    def post(self, *args, **kwargs):
+        measure = self.get_object()
 
         forms = []
         for ballot in measure.ballot_set.all():
-            forms.append(BallotForm(ballot, data=request.POST, prefix="{}".format(ballot.id)))
+            forms.append(BallotForm(ballot, data=self.request.POST, prefix="{}".format(ballot.id)))
 
         # Make them vote again if they fucked up
         # TODO: actually display error messages. Probably bring this
         # into one view class.
-        if not all(f.is_valid() for f in forms):
-            return redirect('measure_detail', pk=measure.id)
+        self.bad_forms = {}
+        for f in forms:
+            if not f.is_valid():
+                print dir(f)
+                self.bad_forms[f.ballot.id] = f.errors
+                print self.bad_forms
+
+        if self.bad_forms:
+            return self.get(*args, **kwargs)
 
         # all forms valid - safe to create the vote.
         vote = Vote.objects.create(
@@ -94,6 +113,3 @@ class ProcessVote(View):
                 )
 
         return redirect('measure_list')
-
-    def get(self, request, *args, **kwargs):
-        raise PermissionDenied()

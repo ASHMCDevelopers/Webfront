@@ -390,6 +390,10 @@ p + p {
   text-indent: 1.75em;
   margin-top: 0; }
 
+.errors {
+  background: #ff6a6a;
+  color: #fff; }
+
 li {
   padding: .2em; }
 
