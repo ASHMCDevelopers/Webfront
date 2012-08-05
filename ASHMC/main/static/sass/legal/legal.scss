@@ -56,6 +56,10 @@ h2, h3, h4, h5 {
             padding-bottom: 2em;
             padding-right: 1.5em;
         }
+
+        & > p {
+            padding: 0 1.5em;
+        }
     }
 
     h2 {

@@ -651,6 +651,11 @@ footer {
         font-size: 1.75em; }
       #entry article .adieu.role {
         font-family: "Adobe Caslon Pro"; }
+  #entry ul {
+    margin-left: 1em;
+    list-style: disc; }
+  #entry ol {
+    list-style: decimal; }
 
 #comments {
   width: 422px;

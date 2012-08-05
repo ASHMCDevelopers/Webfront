@@ -1,5 +1,7 @@
 from django.template import Library, TemplateSyntaxError
 
+from ..models import OfficialForm
+
 register = Library()
 
 
@@ -64,3 +66,7 @@ def roman_number(value):
     return value
 
 register.filter('roman_number', roman_number)
+
+@register.simple_tag
+def get_file_form_url(file_form_name):
+    return OfficialForm.objects.get(name=file_form_name).file_actual.url

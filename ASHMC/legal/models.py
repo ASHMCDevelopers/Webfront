@@ -96,3 +96,17 @@ class Article(MPTTModel):
         return ('legal_document_detail', {
                 'slug': self.slug,
             })
+
+
+class OfficialForm(models.Model):
+    last_updated = models.DateField(default=datetime.datetime.now)
+    name = models.CharField(max_length=120)
+    description = models.TextField(blank=True, null=True)
+
+    file_actual = models.FileField(upload_to="legal/forms/%Y/%m/%d")
+
+    class Meta:
+        unique_together = ('name', 'last_updated')
+
+    def __unicode__(self):
+        return u"{}".format(self.name)

@@ -16,6 +16,15 @@ $screen_min_width: 1115px;
 	max-width: $text_max_width;
 	float: left;
 	@import "entry";
+
+    ul {
+        margin-left: 1em;
+        list-style: disc;
+    }
+
+    ol {
+        list-style: decimal;
+    }
 }
 
 #comments {

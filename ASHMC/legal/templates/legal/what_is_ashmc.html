@@ -1,0 +1,30 @@
+{% extends "legal/legal_base.html" %}
+{% load legal_extras %}
+
+{% block post_header %}
+<section class='wrapper'>
+   <h2>What is ASHMC?</h2>
+
+   <p>Students participate in the governing of student life through the Associated
+    Students of Harvey Mudd College (ASHMC). Student body and class and dorm
+    officers manage committees that plan and coordinate many extracurricular and
+    social activities. Day-to-day government is put in the hands of the
+    <a href="{% url 'council_list' %}">ASHMC Council</a>, composed of eighteen voting members, as well as some non-voting
+    members.</p>
+
+    <p>ASHMC members—every HMC student is a member—are invited to attend meetings
+    of the ASHMC Council, which meets every Sunday at 4 p.m. in the Riggs Room
+    upstairs in the Linde Activities Center. Meetings typically run about an
+    hour.</p>
+
+   <p>ASHMC is an organization made up of student volunteers who ran for office.
+    If you are considering running, you can come to an ASHMC Meeting (Sundays at
+    4 p.m., Riggs Room) to see how it all works. Feel free to contact current or
+    previous ASHMC members with questions. Each position has different responsibilities,
+    and the time commitment varies.</p>
+
+    <p>To run for a position on ASHMC (including DB and JB Chairs and Food Chair)
+    you must get the <a href="{% get_file_form_url 'Election Petition' %}">Election Petition</a> signed by at least 10% of your constituency.
+    Remember that each person may only sign one petition for each position.</p>
+</section>
+{% endblock post_header %}

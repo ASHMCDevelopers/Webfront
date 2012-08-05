@@ -1,0 +1,15 @@
+{% extends "legal/legal_base.html" %}
+{% load legal_extras %}
+{% load markup %}
+{% block post_header %}
+
+<section class='wrapper'>
+    {% for form in object_list %}
+        <h2><a href="{% get_file_form_url form.name %}">{{form.name}}</a></h2>
+        <p>Last updated {{form.last_updated|date:"d/m/Y"}}.</p>
+
+        {{form.description|markdown:"safe"}}
+    {% endfor %}
+</section>
+
+{% endblock post_header %}

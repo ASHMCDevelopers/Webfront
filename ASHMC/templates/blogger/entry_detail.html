@@ -8,10 +8,9 @@
 <section id="entry">
 <article class="entry">
 
-        {% include "blogger_entry_header.html" %}
+    {% include "blogger_entry_header.html" %}
 
-
-        {{entry.html_content|safe}}
+    {{entry.html_content|safe}}
 </article>
 </section>
 {% if entry.comments_were_open %}

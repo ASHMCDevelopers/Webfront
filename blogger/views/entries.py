@@ -21,4 +21,5 @@ class AuthorEntryList(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Entry.objects.filter(authors__id__in=[self.kwargs['author_id']])
+        return Entry.objects.filter(authors__id__in=[self.kwargs['author_id']]) \
+            | Entry.objects.filter(primary_author__id__in=[self.kwargs['author_id']])
