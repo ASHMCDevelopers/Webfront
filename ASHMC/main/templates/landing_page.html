@@ -2,7 +2,6 @@
 {%load staticfiles %}
 {% load main_extras %}
 {% load cache %}
-{% load webdesign %}
 
 {% block stylin %}
     <link rel="stylesheet" href="{%static "styles/landing_page.css"%}">
@@ -49,15 +48,14 @@
             <div>
                 <h2>What should I do?</h2>
                 <ul>
-                    <li><a href=""><h3>Meet the Council</h3></a></li>
+                    <li><a href="{% url 'council_list' %}"><h3>Meet the Council</h3></a></li>
                     <li><a href="{% url "vote_main" %}"><h3>Vote</h3></a></li>
-                    <li><a href=""><h3>Take a poll</h3></a></li>
                 </ul>
             </div>
         </section>
         <section id="pipeline">
         <h2>In the pipe @<a href="http://www.hmc.edu">HMC</a></h2>
-        {% cache 500 rss_display %}
+        {% cache 1500 rss_display %}
             {% get_rss "http://emsweb.claremont.edu/HarveyMC/RSSFeeds.aspx?data=j%2fxqvgLhwZs%2bG6vJ6fo56Qf9BN3JUl%2fAnKeSNhsCD7%2fPdUPWrw1HBw%3d%3d" as rss %}
             <ul>
             {% for entry in rss.entries %}
@@ -94,18 +92,15 @@
                     <div class='text'>{{tweet.text|urlize}}</div>
                 </div>
             {% endfor %}
-        </div>
+            </div>
         </section>
     </aside>
-
 
     <section id="blogger">
         {% for post in latest_entries %}
             {% include "front_post.html" %}
         {% endfor %}
-
-
-</section>
+    </section>
 {% endblock post_header %}
 
 {% block scriptin %}

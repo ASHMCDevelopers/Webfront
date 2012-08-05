@@ -1,11 +1,14 @@
 from django.conf import settings
 from django.core.cache import cache
-from django.views.generic.base import TemplateView  # , TemplateResponseMixin
+from django.views.generic import ListView
+from django.views.generic.base import TemplateView
 
 #if 'courses' in settings.INSTALLED_APPS:
 from ASHMC.courses.models import Course
+from ASHMC.roster.models import Dorm
+
 from .forms import LandingLoginForm
-from .models import TopNewsItem
+from .models import TopNewsItem, ASHMCRole, ASHMCAppointment, DormAppointment, Semester
 
 from blogger.models import Entry
 
@@ -51,8 +54,43 @@ class LandingPage(TemplateView):
 class HomePage(TemplateView):
     template_name = "home.html"
 
+
+class ASHMCList(ListView):
+    model = ASHMCAppointment
+
+    def get_queryset(self):
+        this_sem = Semester.get_this_semester()
+        return self.model.objects.filter(semesters__id=this_sem.id)
+
     def get_context_data(self, **kwargs):
-        context = super(HomePage, self).get_context_data(**kwargs)
+        context = super(ASHMCList, self).get_context_data(**kwargs)
+
+        this_sem = Semester.get_this_semester()
+
+        context['form'] = LandingLoginForm()
+
+        this_sem_appointment = ASHMCAppointment.objects.filter(semesters__id=this_sem.id)
+
+        context['council_main'] = {}
+        context['council_additional'] = {}
+        context['council_appointed'] = {}
+        for title in ASHMCRole.COUNCIL_MAIN:
+            key = title.lower().replace('-', '_').replace(' ', '_')
+            context[key] = this_sem_appointment.filter(role__title=title)
+            context['council_main'][title] = context[key]
+
+        for title in ASHMCRole.COUNCIL_ADDITIONAL:
+            key = title.lower().replace('-', '_').replace(' ', '_')
+            context[key] = this_sem_appointment.filter(role__title=title)
+            context['council_additional'][title] = context[key]
+
+        for title in ASHMCRole.COUNCIL_APPOINTED:
+            key = title.lower().replace('-', '_').replace(' ', '_')
+            context[key] = this_sem_appointment.filter(role__title=title)
+            if context[key]:
+                context['council_appointed'][title] = context[key]
+
+        context['dorms'] = Dorm.objects.all().order_by('name')
 
         return context
 
@@ -62,11 +100,8 @@ class Writeup(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(Writeup, self).get_context_data(**kwargs)
-        #if 'courses' in settings.INSTALLED_APPS:
         qcourses = Course.objects.count()\
                     - Course.active_objects.count()
-    #    else:
-    #        qcourses = 0
 
         context['qcourses'] = qcourses
         context['courses'] = Course.objects.count()

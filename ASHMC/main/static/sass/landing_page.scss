@@ -208,25 +208,7 @@
 	}
 }
 
-#salutation {
-    float: right;
-
-    min-width: 300px;
-
-    margin: {
-        top: 1em;
-        right: 15%;
-    }
-
-    h2 {
-        float: left;
-        margin-right: 1em;
-    }
-}
-
-
 @import "login_form";
-
 
 #postheader {
 	max-width: $screen_max_width;

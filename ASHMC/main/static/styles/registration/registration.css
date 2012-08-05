@@ -556,6 +556,15 @@ footer {
     margin-top: 10px;
     font-size: 20px; }
 
+#salutation {
+  float: right;
+  min-width: 300px;
+  margin-top: 1em;
+  margin-right: 15%; }
+  #salutation h2 {
+    float: left;
+    margin-right: 1em; }
+
 #container {
   min-width: 573px; }
 
