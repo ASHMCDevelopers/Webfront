@@ -11,8 +11,13 @@ admin.site.register(ASHMCRole, ASHMCRoleAdmin)
 
 
 class ASHMCAppointmentAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ('semesters',)
 admin.site.register(ASHMCAppointment, ASHMCAppointmentAdmin)
+
+
+class DormAppointmentAdmin(admin.ModelAdmin):
+    list_filter = ('dorm_role__dorm',)
+admin.site.register(DormAppointment, DormAppointmentAdmin)
 
 
 class DormPrezAdmin(admin.ModelAdmin):
@@ -21,7 +26,8 @@ admin.site.register(DormPresident, DormPrezAdmin)
 
 
 class DormRoleAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('__unicode__', 'dorm')
+    list_filter = ('dorm', 'title',)
 admin.site.register(DormRole, DormRoleAdmin)
 
 
@@ -54,13 +60,13 @@ admin.site.register(TopNewsItem, TopNewsItemAdmin)
 class StudentAdmin(admin.ModelAdmin):
 
     def first_name(self):
-        return self.linked_model.first_name
+        return self.user.first_name
 
     def last_name(self):
-        return self.linked_model.last_name
+        return self.user.last_name
 
     def email(self):
-        return self.linked_model.email
+        return self.user.email
 
     list_display = ('studentid', first_name, last_name, 'at', 'class_of', email)
     list_filter = ('at', 'class_of')

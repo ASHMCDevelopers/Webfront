@@ -1,4 +1,7 @@
-from ..models import Utility, Day, Semester, Building, GradYear, Campus
+from django.db.models.signals import post_save
+
+from ASHMC.roster.models import Dorm
+from ..models import Utility, Day, Semester, Building, GradYear, Campus, DormRole
 from .. import models as features
 from django.db.models import signals
 
@@ -93,3 +96,14 @@ def prepopulate_gradyears(sender, **kwargs):
         if kwargs['verbosity'] > 1:
             print "done."
 signals.post_syncdb.connect(prepopulate_gradyears, sender=features)
+
+
+def create_official_dorm_roles(sender, **kwargs):
+    dorm = kwargs['instance']
+    for title in DormRole.OFFICIAL_TITLES:
+        print "\t {} - {}".format(dorm, title)
+        dr, _ = DormRole.objects.get_or_create(
+            dorm=dorm,
+            title=title,
+        )
+post_save.connect(create_official_dorm_roles, sender=Dorm)

@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext as _
 
-from MultiDB import models as crossmodels
-
 import datetime
 # Create your models here.
 
@@ -97,15 +95,55 @@ class Role(models.Model):
 
 
 class ASHMCAppointment(models.Model):
-    year = models.IntegerField()
-    student = models.ForeignKey(User)
+    semesters = models.ManyToManyField("Semester")
+    user = models.ForeignKey(User)
     role = models.ForeignKey("ASHMCRole")
 
     bio = models.TextField(null=True, blank=True)
 
+    def __unicode__(self):
+        return u"{} - {} ({})".format(self.user, self.role.cast(), self.semesters.all())
+
 
 class ASHMCRole(Role):
     """Describes a role in ASHMC, i.e. President"""
+
+    COUNCIL_MAIN = (
+        'President',
+        'Vice-President',
+        'Treasurer',
+        'Social Chair',
+        'Committee for Activities Planning Chair',
+        'Athletics Director',
+        'Dormitory Affairs Committee Chair',
+        'Senior Class President',
+        'Junior Class President',
+        'Sophomore Class President',
+        'Freshman Class President',
+    )
+
+    COUNCIL_ADDITIONAL = (
+        'Judiciary Board Chair',
+        'Disciplinary Board Chair',
+        'Appeals Board Chair',
+        'Appeals Board Representative',
+        'Food Committee Chair',
+        'Honor Board Representative',
+    )
+
+    COUNCIL_APPOINTED = (
+        'Language Tables Director',
+        'Representative to the HMC Computer Committee',
+        'Student Security Director',
+        'Students-l Moderator',
+        'Representative to the Educational Planning Committee',
+        'Representative to the Student Affairs Committee',
+        'Representative to the Campus Planning and Physical Plant Committee',
+        'ASHMC Executive Assistant',
+        'ASHMC Publicity Director',
+        'ASHMC Web Editor',
+    )
+
     # This defines the hierarchy of roles.
     # Naturally, the president is at the top.
     COUNCIL_ROLES = (
@@ -117,7 +155,7 @@ class ASHMCRole(Role):
         'Committee for Activities Planning Chair',
         'Webmaster',
         'Athletics Director',
-        'Dormitory Affaris Committee Chair',
+        'Dormitory Affairs Committee Chair',
         'Senior Class President',
         'Junior Class President',
         'Sophomore Class President',
@@ -125,11 +163,10 @@ class ASHMCRole(Role):
         'Judiciary Board Chair',
         'Disciplinary Board Chair',
         'Appeals Board Chair',
-        'Appeals Board Rep',
+        'Appeals Board Representative',
         'Food Committee Chair',
-        'Honor Board Rep',
+        'Honor Board Representative',
     )
-
     appointee = models.ManyToManyField(User, through="ASHMCAppointment")
 
     def __lt__(self, other):
@@ -156,21 +193,41 @@ setattr(User, "highest_ashmc_role", property(lambda x: max(x.ashmcrole_set.all()
 
 
 class DormPresident(ASHMCRole):
-    """Subclass of ASHMCRole specifically for Dorm Presidents, since they have to be associated
-    with a dorm."""
+    """Subclass of ASHMCRole specifically for Dorm Presidents,
+    since they have to be associated with a dorm."""
 
     dorm = models.ForeignKey('roster.Dorm')
 
     def __unicode__(self):
-        if self.title == " ":
-            return u"{} President".format(self.dorm)
-        else:
-            return u"{} President {}".format(self.dorm, self.title)
+        return u"{} President".format(self.dorm)
+
+    def save(self, *args, **kwargs):
+        if not self.title:
+            self.title = " "
+        super(DormPresident, self).save(*args, **kwargs)
+
+
+class DormAppointment(models.Model):
+    user = models.ForeignKey(User)
+    dorm_role = models.ForeignKey("DormRole")
+    semesters = models.ManyToManyField("Semester")
+
+    @property
+    def dorm(self):
+        return self.dorm_role.dorm
 
 
 class DormRole(Role):
 
+    OFFICIAL_TITLES = (
+        'Treasurer',
+        'Social Representative',
+        'Jock',
+    )
+
     dorm = models.ForeignKey('roster.Dorm')
+    is_unofficial = models.BooleanField(default=False)
+    appointees = models.ManyToManyField(User, through=DormAppointment)
 
     class Meta:
         verbose_name = _('DormRole')
@@ -266,11 +323,19 @@ class Semester(models.Model):
 class GradYear(models.Model):
     year = models.IntegerField()
 
+    @property
+    def senior_class(self):
+        sem = Semester.get_this_semester()
+        if sem.half in ['SP', 'SM']:
+            return GradYear.objects.get(year=sem.year)
+        else:
+            return GradYear.objects.get(year=sem.year + 1)
+
     def __unicode__(self):
         return u"{}".format(self.year)
 
 
-class Student(crossmodels.MultiDBProxyModel):
+class Student(models.Model):
     """
     Student is a sorta-proxy for User, since they're (probably)
     stored on different databases.
@@ -278,21 +343,16 @@ class Student(crossmodels.MultiDBProxyModel):
     This means that direct FK and M2M relations aren't supported by Django, so we have
     to 'coerce' them.
     """
-    _linked_model = User
+    user = models.OneToOneField(User)
 
     class_of = models.ForeignKey(GradYear)
     at = models.ForeignKey('Campus')  # This will default to HMC
     studentid = models.IntegerField(unique=True)
     credit_requirement = models.IntegerField(default=128)
 
-    class Meta:
-        unique_together = ('_linked_id',)
-
     def __unicode__(self):
-        return u"{} {}".format(self.linked_model.first_name,
-                               self.linked_model.last_name)
-# Attach a property to simulate reverse relationship
-Student._linked_model.student_profile = property(lambda u: Student.objects.get(_linked_id=u.id))
+        return u"{}".format(self.user.get_full_name)
+User.profile = property(lambda u: Student.objects.get_or_create(user=u)[0])
 
 
 class Campus(models.Model):
@@ -309,8 +369,8 @@ class Campus(models.Model):
                     ('UN', 'Unknown Campus'),
                 )
     ABSTRACTIONS = ['NA', 'UN']
-    title = models.CharField(max_length=100)
-    code = models.CharField(max_length=2, unique=True)
+    title = models.CharField(max_length=100, choices=((x[1],x[1]) for x in CAMPUSES))
+    code = models.CharField(max_length=2, unique=True, choices=CAMPUSES)
 
     class Meta:
         verbose_name_plural = "campuses"
@@ -489,12 +549,13 @@ class Day(models.Model):
             ("S", "Saturday"),
             ("U", "Sunday")
         )
-    name = models.CharField(max_length=15, unique=True)
-    code = models.CharField(max_length=1, unique=True)
+    name = models.CharField(max_length=15, unique=True, choices=((x[1], x[1]) for x in DAY_CHOICES))
+    code = models.CharField(max_length=1, unique=True, choices=DAY_CHOICES)
     short = models.CharField(max_length=15, unique=True)
 
     def __unicode__(self):
         return u"{}".format(self.code)
 
-    ### SIGNALS ###
+### SIGNALS ###
+
 

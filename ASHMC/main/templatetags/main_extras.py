@@ -6,6 +6,8 @@ import random
 import re
 import datetime
 
+from ..models import ASHMCRole, DormPresident, DormRole, DormAppointment, ASHMCAppointment, Semester
+
 register = template.Library()
 
 
@@ -28,6 +30,43 @@ def shorten_role(role):
 @register.filter
 def order_by(qset, ordering):
     return qset.order_by(ordering)
+
+
+@register.filter
+def council_ordered(dictionary):
+    try:
+        return sorted(dictionary.iteritems(), key=lambda (x, y): ASHMCRole.COUNCIL_MAIN.index(x))
+    except ValueError:
+        try:
+            return sorted(dictionary.iteritems(), key=lambda (x, y): ASHMCRole.COUNCIL_ADDITIONAL.index(x))
+        except ValueError:
+            try:
+                return sorted(dictionary.iteritems(), key=lambda (x, y): ASHMCRole.COUNCIL_APPOINTED.index(x))
+            except ValueError:
+                return dictionary
+
+
+@register.filter
+def current_presidents(dorm):
+    president_roles = DormPresident.objects.filter(dorm=dorm)
+    this_sem = Semester.get_this_semester()
+    current_appointments = ASHMCAppointment.objects.filter(
+        role__in=president_roles,
+        semesters__id=this_sem.id,
+    )
+
+    return current_appointments
+
+
+@register.filter
+def current_appointments(role):
+    this_sem = Semester.get_this_semester()
+    if isinstance(role, ASHMCRole):
+        return ASHMCAppointment.objects.filter(role=role, semesters__id=this_sem.id)
+    elif isinstance(role, DormRole):
+        return DormAppointment.objects.filter(dorm_role=role, semesters__id=this_sem.id)
+    else:
+        return []
 
 
 class RssParserNode(template.Node):

@@ -1,0 +1,26 @@
+@import "base";
+@import "logo_style";
+@import "login_form";
+
+#postheader {
+    width: $screen_max_width;
+
+    margin: 0 auto;
+
+    background: $light_background;
+    padding: 2em;
+}
+
+ul {
+    padding-left: 1em;
+    margin-bottom: 1.5em;
+}
+
+h2:not(:first-child) {
+    margin-top: 0.875em;
+    margin-bottom: 0;
+}
+
+h4 {
+    padding-top: 0.75em;
+}
