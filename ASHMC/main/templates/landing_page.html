@@ -31,7 +31,7 @@
     <section id="latest_news">
         <ul>
             {% for item in top_stories %}
-                <li>{{item.slug}}</li>
+                <li {% if forloop.first %}class='current'{%endif%}>{{item.slug}}</li>
             {% endfor %}
         </ul>
     </section>

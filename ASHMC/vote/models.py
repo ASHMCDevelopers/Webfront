@@ -100,12 +100,6 @@ class Measure(models.Model):
     def has_reached_quorum(self):
         return self.quorum <= self.actual_quorum
 
-    def _get_real_type(self):
-        return ContentType.objects.get_for_model(type(self))
-
-    def cast(self):
-        return self.real_type.get_object_for_this_type(pk=self.pk)
-
     @property
     def eligible_voters(self):
         return self.restrictions.get_grad_year_users() & self.restrictions.get_dorm_users()
@@ -122,6 +116,17 @@ class Measure(models.Model):
             self.real_type = self._get_real_type()
 
         super(Measure, self).save(*args, **kwargs)
+
+    def destroy_user_associations(self):
+        """This method *should* destroy the links between users
+        and their votes."""
+        for ballot in self.ballot_set.filter(is_secret=True):
+            for vote in ballot.popularityvote_set.all():
+                vote.vote = None
+                vote.save()
+            for vote in ballot.preferentialvote_set.all():
+                vote.vote = None
+                vote.save()
 
 
 class Restrictions(models.Model):

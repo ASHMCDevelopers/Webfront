@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
+from django.shortcuts import redirect
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -23,6 +24,8 @@ urlpatterns = patterns('',
     url(r'^vote/', include('ASHMC.vote.urls')),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name="login"),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
+    # DON'T user the soft_link if you can avoid it.
+    url(r'^soft_link/(?P<url_name>.*)/', lambda x, url_name: redirect(url_name)),
     url(r'^', include('ASHMC.main.urls')),
 )
 
