@@ -8,49 +8,9 @@
 <section id="entry">
 <article class="entry">
 
-            <h2><a href="{{entry.get_absolute_url}}"><span class="catch_headline">{{entry.catch_title}}
-            	{% with entry|has_been_updated as u %}
-            	{% if u == 1 %}
-            		(updated {{entry.last_update|date:"F jS, Y"}})
-            	{% elif u == 2 %}
-            		(updated {{entry.last_update|date:"g:i a"}})
-            	{% endif %}
-            	{% endwith %}
-
-            </span><span class="headline">{{entry.title}}</span></a></h2>
-
-        <ul class="metadata clearfix">
-            <li class="author">
-            	{% if entry.primary_author.get_full_name %}
-            	<a rel="author" href="" title="">{{entry.primary_author.get_full_name}}</a>
-            	{% if entry.primary_author.ashmcrole_set.count != 0 %}
-            	 &mdash;
-            	 {% with entry.primary_author.highest_ashmc_role as role %}
-            	 {{role.cast}}
-            	 {%endwith%}
-            	 {% endif %}
-            	{% else %}
-            		SYSTEM
-            	{% endif %}
-            </li>
+        {% include "blogger_entry_header.html" %}
 
 
-            <li class="date">
-            	{{entry.start_publication|date:"F jS, Y"}}
-            </li>
-            {% if entry.tags %}
-            	<li class="tags">
-            	{% for tag in entry.tags.all|slice:":3" %}
-            		<a href="">{{tag}}</a>{% if not forloop.last %},{%endif%}
-            	{% endfor %}
-            	</li>
-    		{% endif %}
-    	{% if entry.comment_enabled %}
-            <li class="comments">
-            		{{entry.comments.count}} Comment{{entry.comments.count|pluralize}}
-        	</li>
-    	{% endif %}
-        </ul>
         {{entry.html_content|safe}}
 </article>
 </section>

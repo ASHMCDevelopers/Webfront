@@ -1,0 +1,9 @@
+{% extends "blogger/blogger_base_page.html" %}
+
+{% block post_header %}
+   {% for post in object_list %}
+    {% include "front_post.html" %}
+   {% empty %}
+    <h2> No entries found! </h2>
+   {% endfor %}
+{% endblock post_header %}

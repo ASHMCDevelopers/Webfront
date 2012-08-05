@@ -76,7 +76,7 @@ class Entry(models.Model):
     excerpt = models.TextField(_('excerpt'), blank=True,
                                 help_text=_('optional element'))
 
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
     categories = models.ManyToManyField(Category, verbose_name=_('categories'),
                                         related_name='entries',
                                         blank=True, null=True)
