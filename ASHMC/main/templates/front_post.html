@@ -23,12 +23,9 @@
             	 {%endwith%}
             	 {% endif %}
             	{% else %}
-
             		SYSTEM
-
             	{% endif %}
             </li>
-
 
             <li class="date">
             	{{post.start_publication|date:"F jS, Y"}}
@@ -43,7 +40,7 @@
             {% if post.comment_enabled or post.comments.count != 0 %}
             <li class="comments">
             	{% if post.comment_enabled and not post.comments_closed_as_of|before_today %}
-            	<a href="" title="Comment on this post">{{post.comments.count|default:"0"}} Comment{{post.comments.count|pluralize}}</a>
+            	<a href="{{post.get_absolute_url}}" title="Comment on this post">{{post.comments.count|default:"0"}} Comment{{post.comments.count|pluralize}}</a>
             	{% elif post.comments.count != 0 %}
             		{{post.comments.count}} Comment{{post.comments.count|pluralize}}
             	{% endif %}
@@ -51,7 +48,6 @@
             {% endif %}
         </ul>
         {{post|naive_excerpt|safe}}
-
 
 <p class='read_more'><a href="{{post.get_absolute_url}}">Read more...</a></p>
 </article>
