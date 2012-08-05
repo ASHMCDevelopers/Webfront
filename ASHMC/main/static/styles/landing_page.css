@@ -551,8 +551,8 @@ footer {
         #preheader .scrollable_holder .scrollable > div > div {
           width: 557px; }
           #preheader .scrollable_holder .scrollable > div > div div {
-            width: auto;
-            height: auto; }
+            width: 557px;
+            height: 250px; }
 
 #latest_news {
   display: inline;
