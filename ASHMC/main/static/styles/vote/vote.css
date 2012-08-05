@@ -226,7 +226,7 @@ a.social-media {
 
 /* end _classes.scss */
 /* inputs.scss */
-input[type="radio"] {
+input[type="radio"], input[type="checkbox"] {
   margin: 5px; }
 
 input[type="email"], input[type="number"], input[type="password"], input[type="tel"], input[type="text"], input[type="url"] {
@@ -608,6 +608,10 @@ a:hover .number {
     width: 6em; }
     .measure_wrap .number h2 {
       text-align: right; }
+  .measure_wrap ul {
+    margin-left: 1em; }
+    .measure_wrap ul.errors {
+      margin-left: 0; }
 
 ol {
   margin-top: 2em; }
@@ -634,3 +638,6 @@ ol {
 input[type=text] {
   padding: 5px 10px;
   margin-left: 25px; }
+  input[type=text].preference {
+    width: 50px;
+    margin-right: 5px; }

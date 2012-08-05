@@ -48,6 +48,13 @@ class _Utility(object):
 
         return grad_range
 
+    def enum(*sequential, **named):
+        """Generates an enum using *args and **kwargs. If you want a special class
+        name to be used to enum members, pass the 'type_name' kwarg in."""
+        type_name = named.pop('type_name', 'Enum')
+        enums = dict(zip(sequential, range(len(sequential))), **named)
+        return type(type_name, (), enums)
+
     def create_grades(self):
         letters = ['A', 'B', 'C', 'D', 'F', 'P', 'HP',
                    'INC',  # incomplete

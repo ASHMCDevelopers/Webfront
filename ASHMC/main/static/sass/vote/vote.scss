@@ -94,6 +94,14 @@ a {
             text-align: right;
         }
     }
+
+    ul {
+        margin-left: 1em;
+
+        &.errors {
+            margin-left: 0;
+        }
+    }
 }
 
 ol {
@@ -101,6 +109,7 @@ ol {
     & > div {
         margin-bottom: 15px;
     }
+
 }
 
 .ballot {
@@ -134,4 +143,9 @@ ol {
 input[type=text] {
     padding: 5px 10px;
     margin-left: 25px;
+    &.preference {
+        width: 50px;
+        margin-right: 5px;
+    }
 }
+

@@ -15,6 +15,10 @@ class RestrictionsInline(admin.StackedInline):
     model = Restrictions
 
 
+class CandidateUserInline(admin.TabularInline):
+    model = CandidateUser
+
+
 class BallotAdmin(admin.ModelAdmin):
 
     list_filter = ('measure',)
@@ -59,17 +63,25 @@ def get_measure(obj):
 
 
 class PopularityVoteAdmin(admin.ModelAdmin):
-
     list_display = ('__unicode__', get_measure, 'ballot')
-
 admin.site.register(PopularityVote, PopularityVoteAdmin)
 
 
+class PreferentialVoteAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__', get_measure, 'ballot')
+admin.site.register(PreferentialVote, PreferentialVoteAdmin)
+
+
 class CandidateAdmin(admin.ModelAdmin):
-    pass
+    def get_title(obj):
+        return u'{}'.format(obj.cast())
+    list_display = (get_title, 'ballot',)
+    list_filter = ('ballot__measure__vote_start', 'ballot', 'ballot__measure',)
 admin.site.register(Candidate, CandidateAdmin)
 
 
 class PersonCandidateAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('__unicode__', 'ballot',)
+    list_filter = ('ballot', 'ballot__measure',)
+    inlines = [CandidateUserInline,]
 admin.site.register(PersonCandidate, PersonCandidateAdmin)

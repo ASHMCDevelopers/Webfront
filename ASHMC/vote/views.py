@@ -9,7 +9,7 @@ from django.views.generic.edit import FormMixin
 from ASHMC.main.models import Semester
 from ASHMC.roster.models import UserRoom
 from .forms import BallotForm
-from .models import Measure, Vote, PopularityVote
+from .models import Ballot, Candidate, Measure, Vote, PopularityVote, PreferentialVote
 
 import datetime
 import pytz
@@ -67,6 +67,7 @@ class MeasureDetail(DetailView, FormMixin):
         context['form_errors'] = self.bad_forms
 
         context['forms'] = [BallotForm(b, data=self.request.POST) for b in self.get_object().ballot_set.all()]
+        context['VOTE_TYPES'] = Ballot.VOTE_TYPES
 
         return context
 
@@ -85,7 +86,6 @@ class MeasureDetail(DetailView, FormMixin):
             if not f.is_valid():
                 print dir(f)
                 self.bad_forms[f.ballot.id] = f.errors
-                print self.bad_forms
 
         if self.bad_forms:
             return self.get(*args, **kwargs)
@@ -97,19 +97,43 @@ class MeasureDetail(DetailView, FormMixin):
         )
 
         for form in forms:
-            if form.cleaned_data['choice'] is None:
-                # Valid form with None choice means write in
-                # TODO: Document this assumption
-                pv = PopularityVote.objects.create(
-                    ballot=form.ballot,
-                    vote=vote,
-                    write_in_value=form.cleaned_data['write_in_value'],
-                )
-            else:
-                pv = PopularityVote.objects.create(
-                    ballot=form.ballot,
-                    vote=vote,
-                    candidate=form.cleaned_data['choice'],
-                )
+            if form.ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY:
+                if form.cleaned_data['choice'] is None:
+                    # Valid form with None choice means write in
+                    # TODO: Document this assumption
+                    pv = PopularityVote.objects.create(
+                        ballot=form.ballot,
+                        vote=vote,
+                        write_in_value=form.cleaned_data['write_in_value'],
+                    )
+                else:
+                    pv = PopularityVote.objects.create(
+                        ballot=form.ballot,
+                        vote=vote,
+                        candidate=form.cleaned_data['choice'],
+                    )
+            elif form.ballot.vote_type == Ballot.VOTE_TYPES.SELECT_X:
+                if form.cleaned_data['abstains']:
+                    continue
+
+                for candidate in form.cleaned_data['choice']:
+                    pv = PopularityVote.objects.create(
+                        ballot=form.ballot,
+                        vote=vote,
+                        candidate=candidate,
+                    )
+            elif form.ballot.vote_type == Ballot.VOTE_TYPES.PREFERENCE:
+                print form.cleaned_data
+                for candidate_field in form.cleaned_data:
+                    candidate = Candidate.objects.get(
+                        title=candidate_field,
+                        ballot=form.ballot,
+                    )
+                    prv = PreferentialVote.objects.create(
+                        ballot=form.ballot,
+                        vote=vote,
+                        candidate=candidate,
+                        amount=form.cleaned_data[candidate_field],
+                    )
 
         return redirect('measure_list')

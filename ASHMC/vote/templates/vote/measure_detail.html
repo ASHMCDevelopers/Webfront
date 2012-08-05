@@ -29,7 +29,7 @@
             <ul>
         {% endif %}
                 <li class='surrounder light'>
-                    <h5>{{candidate.title}}</h5>
+                    <h5>{{candidate.cast}}</h5>
                     {% if candidate.description %}
                     {{candidate.description|markdown:"safe"}}
                     {% else %}
@@ -43,20 +43,32 @@
         {% endif %}
         {% endfor %}
             <div class='empty spacer'></div>
+            {% if form.ballot.vote_type == VOTE_TYPES.POPULARITY %}
             <h4>Choose an option</h4>
+            {% elif form.ballot.vote_type == VOTE_TYPES.SELECT_X %}
+            <h4>Select up to <span class='select_x'>{{form.ballot.number_to_select}}</span> option{{form.ballot.number_to_select|pluralize}}</h4>
+            {% elif form.ballot.vote_type == VOTE_TYPES.PREFERENCE %}
+            <h4>Rank the following options ({{form.ballot.candidate_set.all|length}} is best, 1 is worst)</h4>
+            {% endif %}
             {%with form.ballot.id as bid %}
             {{form_errors|prettify_error_listings:bid}}
             {% endwith %}
         <ul>
-            {% for candidate in form.choice %}
-            <li class='candidate'>
-                {{candidate}}
-            </li>
-            {% endfor %}
             {% if form.ballot.can_abstain %}
-                <li>
-                    {{form.abstains}}
+                <li class='candidate'>
+                    <label>{{form.abstains}} {{form.abstains.label}}</label>
                 </li>
+            {% endif %}
+            {% if form.ballot.vote_type == VOTE_TYPES.PREFERENCE %}
+                {% for field in form %}
+                   <li><label>{{field}} {{field.label}}</label></li>
+                {% endfor %}
+            {% else %}
+                {% for candidate in form.choice %}
+                    <li class='candidate'>
+                        {{candidate}}
+                    </li>
+                {% endfor %}
             {% endif %}
             {% if form.ballot.can_write_in %}
                 <li>
@@ -83,9 +95,26 @@
 <script type="text/javascript">
 $(function(){
     $('.write_in').click(function(){
+        // Unselect things if you're writing in.
         var ballot_num = $(this).prop('id').split('-')[0].split('_')[1];
         var name = '' + ballot_num + '-choice';
         $('input[name='+name+']').prop('checked', false);
+    });
+
+    $('.abstains').click(function(){
+        // If abstaining, unchoose other things.
+        var ballot_num = $(this).prop('id').split('-')[0].split('_')[1];
+        var name= '' + ballot_num + '-choice';
+        $('input[name='+name+']').prop('checked', false);
+    });
+
+    $('input[type!=text]').click(function(){
+        // If not abstaining, unchoose abstaining.
+        if ($(this).hasClass('abstains'))
+            return
+        var ballot_num = $(this).prop('name').split('-')[0];
+        var id = 'id_'+ballot_num+"-abstains";
+        $('#'+id).prop('checked', false);
     });
 });
 </script>

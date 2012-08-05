@@ -1,12 +1,12 @@
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.db import models
+from django.db import models, IntegrityError
 from django.db.models.signals import post_save
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 # Create your models here.
 
-from ASHMC.main.models import GradYear
+from ASHMC.main.models import GradYear, Utility
 from ASHMC.roster.models import Dorm, DormRoom, UserRoom
 import datetime
 
@@ -30,10 +30,16 @@ class Ballot(models.Model):
         you can have a ballot for ASHMC President election and
         one for VP election in the same measure.
     """
+    VOTE_TYPES = Utility.enum('POPULARITY', 'PREFERENCE', 'SELECT_X', type_name='BallotVoteType')
 
     TYPES = (
-        ("PL", "Popularity"),
+        (VOTE_TYPES.POPULARITY, "Popularity"),
+        (VOTE_TYPES.PREFERENCE, 'Preference'),
+        (VOTE_TYPES.SELECT_X, 'Select Top X'),
     )
+
+    vote_type = models.SmallIntegerField(default=1, choices=TYPES)
+    number_to_select = models.PositiveIntegerField(blank=True, null=True)
 
     measure = models.ForeignKey('Measure', null=True)
 
@@ -51,6 +57,12 @@ class Ballot(models.Model):
 
     class Meta:
         unique_together = (('measure', 'display_position'), ('measure', 'title'))
+
+    def save(self, *args, **kwargs):
+        if self.vote_type == self.VOTE_TYPES.SELECT_X and self.number_to_select is None:
+            raise IntegrityError("Can't have a SELECT_X vote type and no number_to_select.")
+
+        super(Ballot, self).save(*args, **kwargs)
 
 
 class Measure(models.Model):
@@ -103,7 +115,7 @@ class Measure(models.Model):
         verbose_name_plural = _('Mesures')
 
     def __unicode__(self):
-        return u"{}: Ballots {}".format(self.name, self.ballot_set.all())
+        return u"{}".format(self.name)
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -158,7 +170,7 @@ class PopularityVote(models.Model):
     """Represents the most common kind of vote: where each student
     gets a single vote."""
 
-    vote = models.ForeignKey(Vote)
+    vote = models.ForeignKey(Vote, null=True)
     ballot = models.ForeignKey(Ballot)
     candidate = models.ForeignKey("Candidate", null=True, blank=True)
     write_in_value = models.CharField(max_length=50, null=True, blank=True)
@@ -174,6 +186,21 @@ class PopularityVote(models.Model):
             votee = self.write_in_value
 
         return "{} ({}) for {}".format(self.vote, self.ballot, votee)
+
+
+class PreferentialVote(models.Model):
+    vote = models.ForeignKey(Vote, null=True)
+    ballot = models.ForeignKey(Ballot)
+    candidate = models.ForeignKey("Candidate")
+    amount = models.PositiveSmallIntegerField()
+
+    def __unicode__(self):
+        return u"{} ({}) ranked {} at {}".format(
+            self.vote,
+            self.ballot,
+            self.candidate.cast(),
+            self.amount
+        )
 
 
 class Candidate(models.Model):
@@ -206,7 +233,28 @@ class Candidate(models.Model):
 
 
 class PersonCandidate(Candidate):
-    users = models.ManyToManyField(User, null=True, blank=True)
+    users = models.ManyToManyField(User, null=True, blank=True, through="CandidateUser")
+
+    def __unicode__(self):
+        return u"{}".format(
+            ', '.join(
+                map(
+                    lambda x: x.get_full_name(),
+                    self.users.all()
+                )
+           )
+        )
+
+
+class CandidateUser(models.Model):
+    user = models.ForeignKey(User)
+    person_candidate = models.ForeignKey(PersonCandidate)
+
+    def save(self, *args, **kwargs):
+        super(CandidateUser, self).save(*args, **kwargs)
+
+        self.person_candidate.title = str(self.person_candidate)
+        self.person_candidate.save()
 
 
 def set_end_on_quorum_reached(sender, **kwargs):
