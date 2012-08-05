@@ -28,6 +28,7 @@
             </section>
         </div>
     </div>
+    {% if top_stories|length > 1 %}
     <section id="latest_news">
         <ul>
             {% for item in top_stories %}
@@ -35,6 +36,7 @@
             {% endfor %}
         </ul>
     </section>
+    {% endif %}
     <div class="clearer"> </div>
 {% endif %}
 {% endblock pre_header %}
