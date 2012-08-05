@@ -584,6 +584,9 @@ h2, h3, h4, h5 {
     margin-left: -1.5em;
     background: white; }
 
+h3 + p {
+  margin-left: 2.25em; }
+
 .intro p {
   padding: 0 1.5em; }
 
