@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
     # DON'T user the soft_link if you can avoid it.
     url(r'^soft_link/(?P<url_name>.*)/', lambda x, url_name: redirect(url_name)),
+    url(r'^object_perms/', include('object_permissions.urls')),
     url(r'^', include('ASHMC.main.urls')),
 )
 
