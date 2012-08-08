@@ -1,0 +1,245 @@
+[
+  {
+    "model": "main.ASHMCRole",
+    "pk": 1,
+    "fields": {
+      "title": "President",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 2,
+    "fields": {
+      "title": "Vice-President",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 3,
+    "fields": {
+      "title": "Treasurer",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 4,
+    "fields": {
+      "title": "Honor Board Representative",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 5,
+    "fields": {
+      "title": "Social Chair",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 6,
+    "fields": {
+      "title": "Disciplinary Board Chair",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 7,
+    "fields": {
+      "title": "Food Committee Chair",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 8,
+    "fields": {
+      "title": "Appeals Board Chair",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 9,
+    "fields": {
+      "title": "Committee for Acitivites Planning Chair",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 10,
+    "fields": {
+      "title": "Athletics Director",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 11,
+    "fields": {
+      "title": "Dormitory Affairs Committee Chair",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 12,
+    "fields": {
+      "title": "Senior Class President",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 13,
+    "fields": {
+      "title": "Junior Class President",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 14,
+    "fields": {
+      "title": "Sophomore Class President",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 15,
+    "fields": {
+      "title": "Freshman Class President",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 16,
+    "fields": {
+      "title": "Judiciary Board Chair",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 17,
+    "fields": {
+      "title": "Appeals Board Representative",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 18,
+    "fields": {
+      "title": "Language Tables Director",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 19,
+    "fields": {
+      "title": "Representative to the HMC Computer Committee",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 20,
+    "fields": {
+      "title": "Student Security Director",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 21,
+    "fields": {
+      "title": "Students-l Moderator",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 22,
+    "fields": {
+      "title": "Representative to the Educational Planning Committee",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 23,
+    "fields": {
+      "title": "Representative to the Student Affairs Committee",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 24,
+    "fields": {
+      "title": "Representative to the Campus Planning and Physical Plant Committee",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 25,
+    "fields": {
+      "title": "Executive Assitant",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 26,
+    "fields": {
+      "title": "Publicity Director",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  },
+  {
+    "model": "main.ASHMCRole",
+    "pk": 27,
+    "fields": {
+      "title": "Web Editor",
+      "description": "",
+      "real_type": ["main","ashmcrole"]
+    }
+  }
+]
