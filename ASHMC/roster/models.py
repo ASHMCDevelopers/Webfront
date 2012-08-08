@@ -50,7 +50,7 @@ class UserRoom(models.Model):
     user = models.ForeignKey(User)
     room = models.ForeignKey(DormRoom)
 
-    semester = models.ForeignKey('main.Semester')
+    semesters = models.ManyToManyField('main.Semester')
 
     class Meta:
         verbose_name = _('User Room')

@@ -70,5 +70,37 @@
             "code": "BPA",
             "name": "Brighton Park"
         }
+    },
+    {
+        "pk": 10,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "CGA",
+            "name": "CGU A"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "CGB",
+            "name": "CGU B"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "CGC",
+            "name": "CGU C"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "OFF",
+            "name": "Off Campus"
+        }
     }
 ]
