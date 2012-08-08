@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
-from django.db import IntegrityError
 from optparse import make_option
 
 from ASHMC.main.models import Campus, GradYear, Semester, Student
@@ -92,32 +92,30 @@ class Command(BaseCommand):
             last_name = l_f_m_name[0]
             f_m_name = ', '.join(l_f_m_name[1:]).split(' ')
             first_name = f_m_name[0]
-            if len(f_m_name) > 1:
-                middle_name = ' '.join(f_m_name)
-            else:
-                middle_name = ''
+            middle_name = ''
 
             temp_password = User.objects.make_random_password()
 
             try:
+                new_user = User.objects.get(email=row[FIELD_ORDERING.index('Email Address')].value.lower().replace('hmc.edu', 'g.hmc.edu'))
+            except ObjectDoesNotExist:
                 new_user = User.objects.create_user(
                     username=row[FIELD_ORDERING.index('Email Address')].value.lower().replace('hmc.edu', 'g.hmc.edu'),
                     email=row[FIELD_ORDERING.index('Email Address')].value.lower().replace('hmc.edu', 'g.hmc.edu'),
                     password=temp_password,
                 )
-            except IntegrityError:
-                new_user = User.objects.get(username=row[FIELD_ORDERING.index('Email Address')].value.lower().replace('hmc.edu', 'g.hmc.edu'))
 
             new_user.first_name = first_name
             new_user.last_name = last_name
 
             new_user.save()
-
+            studentid = int(row[FIELD_ORDERING.index('ID')].value),
+            studentid = None
             new_student, _ = Student.objects.get_or_create(
                 user=new_user,
                 class_of=gradyear,
                 at=hmc,
-                studentid=int(row[FIELD_ORDERING.index('ID')].value),
+                studentid=studentid,
             )
 
             new_student.middle_name = middle_name,
