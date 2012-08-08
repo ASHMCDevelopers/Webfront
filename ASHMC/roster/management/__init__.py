@@ -1,4 +1,4 @@
-from django.db.models import signals
+#from django.db.models import signals
 
 from .. import models as features
 from ..models import Dorm, DormRoom
