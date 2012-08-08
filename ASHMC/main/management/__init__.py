@@ -1,7 +1,7 @@
 from django.db.models.signals import post_save
 
 from ASHMC.roster.models import Dorm
-from ..models import Utility, Day, Semester, Building, GradYear, Campus, DormRole
+from ..models import Utility, Day, Semester, Building, GradYear, Campus, DormRole, DormPresident
 from .. import models as features
 from django.db.models import signals
 
@@ -100,10 +100,28 @@ signals.post_syncdb.connect(prepopulate_gradyears, sender=features)
 
 def create_official_dorm_roles(sender, **kwargs):
     dorm = kwargs['instance']
+    if not 'verbosity' in kwargs:
+        kwargs['verbosity'] = 0
     for title in DormRole.OFFICIAL_TITLES:
-        print "\t {} - {}".format(dorm, title)
+        if kwargs['verbosity'] > 0:
+            print "\t {} - {}".format(dorm, title)
+
         dr, _ = DormRole.objects.get_or_create(
             dorm=dorm,
             title=title,
         )
 post_save.connect(create_official_dorm_roles, sender=Dorm)
+
+
+def create_dorm_presidents(sender, **kwargs):
+    dorm = kwargs['instance']
+    if not 'verbosity' in kwargs:
+        kwargs['verbosity'] = 0
+    if kwargs['verbosity'] > 0:
+        print "Creating President for dorm {}".format(dorm)
+
+    dp, _ = DormPresident.objects.get_or_create(
+        dorm=dorm,
+        title=" ",
+    )
+post_save.connect(create_dorm_presidents, sender=Dorm)

@@ -125,7 +125,7 @@ class CourseSearcher(TemplateResponseMixin, View):
                 qs = qs.filter(~Q(section__enrollment__student___linked_id=request.user.id))
 
             if form.cleaned_data['in_reach']:
-                course_ids = Enrollment.objects.filter(student=request.user.student_profile)\
+                course_ids = Enrollment.objects.filter(student=request.user.student)\
                                                .values_list('section__course', flat=True)
                 noreqs = qs.filter(Q(prerequisites=None))  # no prereqs
 

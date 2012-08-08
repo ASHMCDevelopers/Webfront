@@ -30,7 +30,7 @@
                 {% if apptmts %}
                 <ul>
                     {% for apptmt in apptmts|order_by:"user__student__class_of" %}{% spaceless %}
-                    <li><a href="mailto:{{apptmt.user.username}}">{% firstof apptmt.user.get_full_name apptmt.user.username %}</a> ({{apptmt.user.profile.class_of}})</li>
+                    <li><a href="mailto:{{apptmt.user.username}}">{% firstof apptmt.user.get_full_name apptmt.user.username %}</a> ({{apptmt.user.student.class_of}})</li>
                     {% endspaceless %}{% endfor %}
                 </ul>
                 {% else %}
