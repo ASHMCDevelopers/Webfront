@@ -359,7 +359,6 @@ class Student(models.Model):
 
     def __unicode__(self):
         return u"{}".format(self.user.get_full_name)
-User.profile = property(lambda u: Student.objects.get_or_create(user=u)[0])
 
 
 class Campus(models.Model):
@@ -376,7 +375,7 @@ class Campus(models.Model):
                     ('UN', 'Unknown Campus'),
                 )
     ABSTRACTIONS = ['NA', 'UN']
-    title = models.CharField(max_length=100, choices=((x[1],x[1]) for x in CAMPUSES))
+    title = models.CharField(max_length=100, choices=((x[1], x[1]) for x in CAMPUSES))
     code = models.CharField(max_length=2, unique=True, choices=CAMPUSES)
 
     class Meta:
@@ -564,5 +563,3 @@ class Day(models.Model):
         return u"{}".format(self.code)
 
 ### SIGNALS ###
-
-

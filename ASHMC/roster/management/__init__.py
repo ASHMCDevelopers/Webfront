@@ -16,7 +16,7 @@ def create_dorms(sender, **kwargs):
                 name=name,
                 code=code,
             )
-signals.post_syncdb.connect(create_dorms, sender=features)
+#signals.post_syncdb.connect(create_dorms, sender=features)
 
 
 def create_dorm_rooms(sender, **kwargs):
@@ -94,4 +94,4 @@ def create_dorm_rooms(sender, **kwargs):
             )
             if kwargs['verbosity'] > 1:
                 print "done."
-signals.post_syncdb.connect(create_dorm_rooms, sender=features)
+#signals.post_syncdb.connect(create_dorm_rooms, sender=features)

@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+#from django.db.models.signals import post_save
 
 from ASHMC.roster.models import Dorm
 from ..models import Utility, Day, Semester, Building, GradYear, Campus, DormRole
