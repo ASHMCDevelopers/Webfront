@@ -110,3 +110,9 @@ class OfficialForm(models.Model):
 
     def __unicode__(self):
         return u"{}".format(self.name)
+
+
+class GDocSheet(models.Model):
+    key = models.CharField(max_length=100, unique=True)
+    title = models.CharField(max_length=100, unique=True)
+    description = models.TextField(null=True, blank=True)
