@@ -34,3 +34,8 @@ class OfficialFormAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', get_file_path, get_file_url)
     list_filter = ('last_updated',)
 admin.site.register(OfficialForm, OfficialFormAdmin)
+
+
+class GDocSheetAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(GDocSheet, GDocSheetAdmin)

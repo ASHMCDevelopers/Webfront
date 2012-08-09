@@ -12,6 +12,11 @@ register = template.Library()
 
 
 @register.filter
+def split(str, splitter):
+    return str.split(splitter)
+
+
+@register.filter
 def is_today(value):
     assert isinstance(value, datetime.date)
     now = datetime.datetime.now()
