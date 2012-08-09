@@ -24,8 +24,7 @@
    {% block right_header %}
 	   {% if user.is_authenticated %}
 	   <div id="salutation">
-	        <h2>{% greeting %}{{user.first_name}}!</h2>
-
+	        <h2>{{user.get_full_name}}</h2>
 
 	        <div id="ashmcroles">
 	        	<ul>

@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
+class OfficialDormManager(models.Manager):
+    def get_query_set(self):
+        return super(OfficialDormManager, self).get_query_set().filter(official_dorm=True)
 
 class Dorm(models.Model):
     DORMS = (
@@ -17,6 +20,11 @@ class Dorm(models.Model):
     )
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=3)
+
+    official_dorm = models.BooleanField(default=True)
+
+    objects = OfficialDormManager()
+    all_objects = models.Manager()
 
     class Meta:
         verbose_name = _('Dorm')

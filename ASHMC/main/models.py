@@ -359,7 +359,7 @@ class Student(models.Model):
     birthdate = models.DateField(null=True, blank=True)
     phonenumber = models.CharField(null=True, blank=True, max_length=20)
 
-    temp_pass = models.CharField(max_length=50, null=True, blank=True)
+    temp_pass = models.CharField(max_length=50, null=True, blank=True, editable=False)
 
     def __unicode__(self):
         return u"{}".format(self.user.get_full_name())

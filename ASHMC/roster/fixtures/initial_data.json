@@ -76,7 +76,8 @@
         "model": "roster.dorm",
         "fields": {
             "code": "CGA",
-            "name": "CGU A"
+            "name": "CGU A",
+            "official_dorm": false
         }
     },
     {
@@ -84,7 +85,8 @@
         "model": "roster.dorm",
         "fields": {
             "code": "CGB",
-            "name": "CGU B"
+            "name": "CGU B",
+            "official_dorm": false
         }
     },
     {
@@ -92,7 +94,8 @@
         "model": "roster.dorm",
         "fields": {
             "code": "CGC",
-            "name": "CGU C"
+            "name": "CGU C",
+            "official_dorm": false
         }
     },
     {
