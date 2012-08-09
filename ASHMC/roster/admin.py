@@ -17,7 +17,10 @@ admin.site.register(DormRoom, DormRoomAdmin)
 
 
 class UserRoomAdmin(admin.ModelAdmin):
-    pass
+    def dorm(obj):
+        return obj.room.dorm
+    list_display = ('room', dorm, 'user',)
+    list_filter = ('room__dorm', 'semesters',)
 admin.site.register(UserRoom, UserRoomAdmin)
 
 

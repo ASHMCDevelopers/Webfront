@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 
 from django.utils.translation import ugettext as _
@@ -57,7 +58,16 @@ class TopNewsItemAdmin(admin.ModelAdmin):
 admin.site.register(TopNewsItem, TopNewsItemAdmin)
 
 
+class StudentAdminForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        widgets = {
+          'temp_pass': forms.widgets.PasswordInput(),
+        }
+
+
 class StudentAdmin(admin.ModelAdmin):
+    form = StudentAdminForm
 
     def first_name(self):
         return self.user.first_name

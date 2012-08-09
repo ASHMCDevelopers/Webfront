@@ -285,11 +285,11 @@ class Semester(models.Model):
                                      ('SM', "Summer"))
                             )
 
-    @classmethod
-    def get_this_semester(cls):
+    @staticmethod
+    def get_this_semester():
         half = Utility.current_semester()
         year = datetime.datetime.now().year
-        return cls.objects.get(half=half,
+        return Semester.objects.get(half=half,
                                year=year)
 
     def next_with_summer(self):
@@ -330,35 +330,39 @@ class Semester(models.Model):
 class GradYear(models.Model):
     year = models.IntegerField()
 
-    @property
-    def senior_class(self):
-        sem = Semester.get_this_semester()
+    @staticmethod
+    def senior_class(sem=None):
+        if sem is None:
+            sem = Semester.get_this_semester()
         if sem.half in ['SP', 'SM']:
-            return GradYear.objects.get(year=sem.year)
+            return GradYear.objects.get_or_create(year=sem.year)[0]
         else:
-            return GradYear.objects.get(year=sem.year + 1)
+            return GradYear.objects.get_or_create(year=sem.year + 1)[0]
 
     def __unicode__(self):
         return u"{}".format(self.year)
 
 
 class Student(models.Model):
-    """
-    Student is a sorta-proxy for User, since they're (probably)
-    stored on different databases.
-
-    This means that direct FK and M2M relations aren't supported by Django, so we have
-    to 'coerce' them.
-    """
     user = models.OneToOneField(User)
 
     class_of = models.ForeignKey(GradYear)
+    last_semester = models.ForeignKey(Semester, null=True, blank=True)
+
+    nickname = models.CharField(null=True, blank=True, max_length=50)
+
+    middle_name = models.CharField(null=True, blank=True, max_length=50)
+
     at = models.ForeignKey('Campus')  # This will default to HMC
-    studentid = models.IntegerField(unique=True)
+    studentid = models.IntegerField(unique=True, null=True)
     credit_requirement = models.IntegerField(default=128)
+    birthdate = models.DateField(null=True, blank=True)
+    phonenumber = models.CharField(null=True, blank=True, max_length=20)
+
+    temp_pass = models.CharField(max_length=50, null=True, blank=True)
 
     def __unicode__(self):
-        return u"{}".format(self.user.get_full_name)
+        return u"{}".format(self.user.get_full_name())
 
 
 class Campus(models.Model):

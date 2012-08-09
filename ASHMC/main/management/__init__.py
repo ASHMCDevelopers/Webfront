@@ -122,6 +122,6 @@ def create_dorm_presidents(sender, **kwargs):
 
     dp, _ = DormPresident.objects.get_or_create(
         dorm=dorm,
-        title=" ",
+        title="{} President".format(dorm),
     )
 post_save.connect(create_dorm_presidents, sender=Dorm)

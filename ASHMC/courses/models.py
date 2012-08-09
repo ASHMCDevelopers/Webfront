@@ -572,5 +572,5 @@ def attach_core_to_mudders(sender, **kwargs):
         except Exception, e:
             e.args = ("Couldn't attach HMC hum reqs") + e.args
             raise e
-signals.post_save.connect(attach_core_to_mudders, sender=Student)
+#signals.post_save.connect(attach_core_to_mudders, sender=Student)
 
