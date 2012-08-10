@@ -4,6 +4,7 @@ from django.views.generic import DetailView, TemplateView, ListView
 
 from .models import Article, OfficialForm, GDocSheet
 
+from BeautifulSoup import BeautifulSoup
 import gdata.docs.service
 import gdata.spreadsheet.service
 import socket
@@ -65,15 +66,19 @@ class AccountsListing(TemplateView):
         file_path = tempfile.mktemp(suffix=".xls")
 
         doc = GDocSheet.objects.get(title="ASHMC Budget")
+        context['doc'] = doc
 
         entry = gdc.GetDocumentListEntry(settings.GDOC_URL.format(doc.key))
         docs_auth_token = gdc.GetClientLoginToken()
         gdc.SetClientLoginToken(spread.GetClientLoginToken())
+
         gdc.Export(entry, file_path)
+
         gdc.SetClientLoginToken(docs_auth_token)
 
         wb = xlrd.open_workbook(file_path, formatting_info=True)
         context['wb'] = wb
+
         offset = int(self.kwargs['offset'] or 0)
         try:
             context['sheet'] = wb.sheets()[offset]

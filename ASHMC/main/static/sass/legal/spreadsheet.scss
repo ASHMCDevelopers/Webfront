@@ -9,10 +9,15 @@
     padding: 10px;
 }
 
+table {
+    margin: 0 auto;
+}
+
 tr {
     padding: 10px;
 
     td {
         padding: 5px;
+        border: 1px solid rgb(200,200,200);
     }
 }

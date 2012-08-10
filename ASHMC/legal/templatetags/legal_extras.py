@@ -92,9 +92,12 @@ def get_value_display(cell, format_map=None):
     elif cell.ctype == 4:
         return bool(cell.value)
     elif cell.ctype == 5:
-        return "ERROR"
+        try:
+            return xlrd.error_text_from_code[cell.value]
+        except KeyError:
+            return "ERROR"
     elif cell.ctype == 6:
-        return ""
+        return "BLANK"
 
 
 @register.filter
