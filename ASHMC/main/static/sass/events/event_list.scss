@@ -3,8 +3,9 @@
 #postheader {
     @include linear_gradient(left, $dark_background 30%, transparent 30%);
     min-height: 100px;
-    max-width: 1000px;
+    max-width: 850px;
     margin: 0 auto;
+    padding-top: 1em;
 }
 
 .list_wrap {
@@ -15,9 +16,7 @@
 .event_list {
     li {
 
-        &:not(:first-child) {
-            margin-top: 1.5em;
-        }
+        margin-top: 1.5em;
 
         .event_head {
             background: $light_background;

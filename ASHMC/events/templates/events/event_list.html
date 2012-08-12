@@ -19,9 +19,7 @@
                 <div class='event_head'>
                     <a href=""><div class='event_title'><h2>{{event.title}}</h2></div></a>
                     <div class='calendar'>
-                        {% with event.start_time.date|calendarize as matrix %}
-                            {% include "events/calendar.html" %}
-                        {% endwith %}
+                        {% calendarize event.start_time event.end_time mark_today=True %}
                     </div>
                     <div class='clearer'></div>
                 </div>

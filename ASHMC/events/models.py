@@ -8,6 +8,11 @@ import datetime
 import pytz
 
 
+class EventsNotOverManger(models.Manager):
+    def get_query_set(self):
+        return super(EventsNotOverManger, self).get_query_set().filter(end_time__gt=datetime.datetime.now(pytz.utc))
+
+
 class Event(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
@@ -19,6 +24,9 @@ class Event(models.Model):
     guests_per_user = models.IntegerField(null=True, blank=True)
 
     location = models.ForeignKey("Location")
+
+    objects = models.Manager()
+    not_ended = EventsNotOverManger()
 
     @property
     def is_today(self):

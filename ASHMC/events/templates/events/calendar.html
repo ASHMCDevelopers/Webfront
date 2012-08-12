@@ -1,11 +1,12 @@
+{% load event_extras %}
 <table class='calendar'>
 {% for row in matrix  %}
     <tr>
     {% for cell in row %}
         <td class="
-        {% if cell == event.start_time.day %}
+        {% if start.day <= cell and cell <= end.day %}
             day_of {%endif%}
-        {% if cell == now.day %}
+        {% if cell == today.day %}
             today
         {% endif %}">
         {% if cell != 0 %}

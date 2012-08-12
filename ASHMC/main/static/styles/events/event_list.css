@@ -541,32 +541,33 @@ footer {
   background: -o-linear-gradient(left, #1c1c1c 30%, transparent 30%);
   background: -ms-linear-gradient(left, #1c1c1c 30%, transparent 30%);
   min-height: 100px;
-  max-width: 1000px;
-  margin: 0 auto; }
+  max-width: 850px;
+  margin: 0 auto;
+  padding-top: 1em; }
 
 .list_wrap {
   max-width: 800px;
   margin: 0 auto; }
 
-.event_list li:not(:first-child) {
+.event_list li {
   margin-top: 1.5em; }
-.event_list li .event_head {
-  background: white; }
-.event_list li h2 {
-  padding: 0.5em;
-  margin: 0; }
-.event_list li .time {
-  float: right;
-  padding: 0.5em; }
-  .event_list li .time h2 {
-    padding: 0; }
-.event_list li .event_title {
-  display: inline-block; }
-.event_list li .event_description {
-  float: right;
-  background: white;
-  padding: 0.5em;
-  max-width: 450px; }
+  .event_list li .event_head {
+    background: white; }
+  .event_list li h2 {
+    padding: 0.5em;
+    margin: 0; }
+  .event_list li .time {
+    float: right;
+    padding: 0.5em; }
+    .event_list li .time h2 {
+      padding: 0; }
+  .event_list li .event_title {
+    display: inline-block; }
+  .event_list li .event_description {
+    float: right;
+    background: white;
+    padding: 0.5em;
+    max-width: 450px; }
 
 .calendar {
   float: right; }

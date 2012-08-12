@@ -11,8 +11,7 @@ class EventList(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        now = datetime.datetime.now(pytz.utc)
-        return Event.objects.exclude(end_time__lt=now).order_by('start_time')
+        return Event.not_ended.order_by('start_time')
 
     def get_context_data(self, *args, **kwargs):
         context = super(EventList, self).get_context_data(*args, **kwargs)
