@@ -111,12 +111,6 @@ class Measure(models.Model):
     def __unicode__(self):
         return u"{}".format(self.name)
 
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.real_type = self._get_real_type()
-
-        super(Measure, self).save(*args, **kwargs)
-
     def destroy_user_associations(self):
         """This method *should* destroy the links between users
         and their votes."""

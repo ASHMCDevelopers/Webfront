@@ -42,7 +42,7 @@ class BallotForm(forms.Form):
             self.fields['choice'] = CandidateMultipleChoiceField(
                 widget=ListItemCheckboxSelectMultiple,
                 queryset=choices,
-                required=(not ballot.can_write_in and not ballot.can_abstain),
+                required=(not ballot.can_abstain),
             )
             if ballot.can_abstain:
                 self.fields['abstains'] = forms.BooleanField(
@@ -105,6 +105,7 @@ class BallotForm(forms.Form):
                 )
 
         elif self.ballot.vote_type == Ballot.VOTE_TYPES.SELECT_X:
+            cleaned_data.setdefault('choice', [])
             if self.ballot.can_abstain:
                 if not cleaned_data['abstains'] and not cleaned_data['choice']:
                     raise forms.ValidationError("You must either abstain or choose at least one option.")

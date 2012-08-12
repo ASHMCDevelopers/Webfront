@@ -26,7 +26,7 @@ class MeasureListing(ListView):
 
         room = UserRoom.objects.filter(
             user=self.request.user,
-            semester__id=this_sem.id,
+            semesters__id=this_sem.id,
         )[0].room
 
         return Measure.objects.filter(
