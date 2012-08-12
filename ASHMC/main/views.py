@@ -12,9 +12,9 @@ from .models import TopNewsItem, ASHMCRole, ASHMCAppointment, Semester
 
 from blogger.models import Entry
 
-from urllib2 import URLError
 import datetime
 import pytz
+from urllib2 import URLError
 # Create your views here.
 
 
