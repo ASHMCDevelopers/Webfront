@@ -1,0 +1,74 @@
+@import "events/events_base";
+
+#postheader {
+    @include linear_gradient(left, $dark_background 30%, transparent 30%);
+    min-height: 100px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.list_wrap {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.event_list {
+    li {
+
+        &:not(:first-child) {
+            margin-top: 1.5em;
+        }
+
+        .event_head {
+            background: $light_background;
+        }
+
+        h2 {
+            padding: 0.5em;
+            margin: 0;
+        }
+
+        .time {
+            float: right;
+            padding: 0.5em;
+            h2 {
+                padding: 0;
+            }
+        }
+
+        .event_title {
+            display: inline-block;
+        }
+
+        .event_description {
+            float: right;
+            background: $light_background;
+            padding: 0.5em;
+            max-width: 450px;
+        }
+
+        .event_location {
+
+        }
+    }
+}
+
+.calendar {
+    float: right;
+    table {
+        margin: 0.5em;
+    }
+
+    td {
+        padding: 0.25em;
+
+        &.day_of {
+            background: $dark_background;
+            color: white;
+        }
+
+        &.today {
+            border: 2px solid $mudd_gold;
+        }
+    }
+}

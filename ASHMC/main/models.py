@@ -48,7 +48,7 @@ class _Utility(object):
 
         return grad_range
 
-    def enum(*sequential, **named):
+    def enum(self, *sequential, **named):
         """Generates an enum using *args and **kwargs. If you want a special class
         name to be used to enum members, pass the 'type_name' kwarg in."""
         type_name = named.pop('type_name', 'Enum')
@@ -74,6 +74,18 @@ class _Utility(object):
             else:
                 final_letters += [letter]
         return final_letters
+
+    def chunk(self, iterable, chunksize):
+        copy_iter = iterable
+        ret = []
+        while len(copy_iter) > chunksize:
+            ret += iterable[:chunksize]
+            copy_iter = copy_iter[chunksize:]
+
+        ret += copy_iter[:chunksize]
+
+        return ret
+
 Utility = _Utility()
 
 

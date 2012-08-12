@@ -4,6 +4,9 @@ from django.db import models, IntegrityError
 from ASHMC.roster.models import Dorm, Suite
 from ASHMC.main.models import Campus, Building
 
+import datetime
+import pytz
+
 
 class Event(models.Model):
     title = models.CharField(max_length=100)
@@ -16,6 +19,11 @@ class Event(models.Model):
     guests_per_user = models.IntegerField(null=True, blank=True)
 
     location = models.ForeignKey("Location")
+
+    @property
+    def is_today(self):
+        now = datetime.datetime.now(pytz.utc)
+        return self.start_time - now < datetime.timedelta(days=1)
 
     def __unicode__(self):
         return "{}".format(self.title)

@@ -1,0 +1,50 @@
+{% extends "main_base_page.html" %}
+{% load static %}
+{% load event_extras %}
+
+{% block right_header %}
+{% endblock right_header %}
+
+{% block stylin %}
+   <link rel="stylesheet" type="text/css" href="{% static 'styles/events/event_list.css'%}">
+{% endblock stylin %}
+
+{% block post_header %}
+{% for event in object_list %}
+    {% if forloop.first %}
+    <div class='list_wrap'>
+        <ul class='event_list'>
+    {% endif %}
+            <li>
+                <div class='event_head'>
+                    <a href=""><div class='event_title'><h2>{{event.title}}</h2></div></a>
+                    <div class='calendar'>
+                        {% with event.start_time.date|calendarize as matrix %}
+                            {% include "events/calendar.html" %}
+                        {% endwith %}
+                    </div>
+                    <div class='clearer'></div>
+                </div>
+                <div class='event_posthead'>
+                    <div class='location'></div>
+                    <div class='time'>
+                        <h2>
+                            {{event.start_time|date_presenter}}
+                        {% if event.end_time and event.is_today%}
+                            - {{event.end_time|date:"H:i"}}
+                        {% endif %}
+                        </h2>
+                    </div>
+                </div>
+                <div class='clearer'></div>
+            </li>
+    {% if forloop.last %}
+       </ul>
+   </div>
+    {% endif %}
+
+{% empty %}
+    <h2>No events registered!</h2>
+    <h3>Why don't you take care of that?</h3>
+{% endfor %}
+{% endblock post_header %}

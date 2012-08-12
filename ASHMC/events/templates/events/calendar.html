@@ -1,0 +1,18 @@
+<table class='calendar'>
+{% for row in matrix  %}
+    <tr>
+    {% for cell in row %}
+        <td class="
+        {% if cell == event.start_time.day %}
+            day_of {%endif%}
+        {% if cell == now.day %}
+            today
+        {% endif %}">
+        {% if cell != 0 %}
+           {{cell}}
+        {% endif %}
+        <td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+</table>

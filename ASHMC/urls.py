@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^comments/', include('django.contrib.comments.urls')),
     url(r'^legal/', include('ASHMC.legal.urls')),
     url(r'^vote/', include('ASHMC.vote.urls')),
+    url(r'^events/', include('ASHMC.events.urls')),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name="login"),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
     # DON'T user the soft_link if you can avoid it.
