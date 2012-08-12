@@ -24,10 +24,14 @@ class MeasureListing(ListView):
 
         this_sem = Semester.get_this_semester()
 
-        room = UserRoom.objects.filter(
-            user=self.request.user,
-            semesters__id=this_sem.id,
-        )[0].room
+        try:
+            room = UserRoom.objects.filter(
+                user=self.request.user,
+                semesters__id=this_sem.id,
+            )[0].room
+        except IndexError:
+            # If they don't have a room, they're probably not eligible to vote.
+            raise PermissionDenied()
 
         return Measure.objects.filter(
             # Hide measures that the user has already voted in.
