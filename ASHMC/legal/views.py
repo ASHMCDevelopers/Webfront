@@ -49,7 +49,7 @@ class AccountsListing(TemplateView):
         gdc.source = settings.GDOC_SOURCE
         try:
             gdc.ProgrammaticLogin()
-        except socket.sslerror:
+        except Exception:
             context['error'] = "Could not connect to Google Docs"
             return context
 
@@ -59,7 +59,7 @@ class AccountsListing(TemplateView):
         spread.source = settings.GDOC_SOURCE
         try:
             spread.ProgrammaticLogin()
-        except socket.sslerror:
+        except Exception:
             context['error'] = "Could not connect to Google Docs"
             return context
 
