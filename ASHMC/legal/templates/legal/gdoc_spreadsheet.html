@@ -10,6 +10,7 @@
 
 <h2>{{doc.title}}</h2>
 
+{% if sheet %}
 <table>
 {% for row in sheet|row_generator %}
     <tr>
@@ -19,5 +20,12 @@
     </tr>
 {% endfor %}
 </table>
+{% else %}
+<div class='centered'>
+    <h2>Google is giving us the cold shoulder.</h2>
+
+    <h4>Please try again later.</h4>
+</div>
+{% endif %}
 
 {% endblock post_header %}

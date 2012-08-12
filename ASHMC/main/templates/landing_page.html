@@ -93,6 +93,8 @@
                     </div>
                     <div class='text'>{{tweet.text|urlize}}</div>
                 </div>
+                {% empty %}
+                <h5 class='error centered'>Couldn't find twitter!</h5>
             {% endfor %}
             </div>
         </section>

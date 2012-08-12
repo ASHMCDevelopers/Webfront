@@ -8,12 +8,13 @@ from ASHMC.courses.models import Course
 from ASHMC.roster.models import Dorm
 
 from .forms import LandingLoginForm
-from .models import TopNewsItem, ASHMCRole, ASHMCAppointment, DormAppointment, Semester
+from .models import TopNewsItem, ASHMCRole, ASHMCAppointment, Semester
 
 from blogger.models import Entry
 
 import datetime
 import pytz
+from urllib2 import URLError
 # Create your views here.
 
 
@@ -32,7 +33,10 @@ class LandingPage(TemplateView):
             context['latest_tweets'] = tweets
 
         else:
-            tweets = settings.TWITTER_AGENT.statuses.user_timeline()[:6]
+            try:
+                tweets = settings.TWITTER_AGENT.statuses.user_timeline()[:6]
+            except URLError:
+                tweets = []
             for tweet in tweets:
                 tweet['date'] = pytz.utc.localize(datetime.datetime.strptime(tweet['created_at'], "%a %b %d %H:%M:%S +0000 %Y"))
 

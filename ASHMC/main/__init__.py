@@ -7,6 +7,8 @@ from blogger.models import Entry
 
 from .models import TopNewsItem
 
+from urllib2 import URLError
+
 
 def send_tweet_after_new_entry(sender, **kwargs):
     """Sends a tweet with an entry's title and the author's name,
@@ -25,7 +27,10 @@ def send_tweet_after_new_entry(sender, **kwargs):
         instance.get_absolute_url(),
     )
 
-    settings.TWITTER_AGENT.statuses.update(status=tweet_body)
+    try:
+        settings.TWITTER_AGENT.statuses.update(status=tweet_body)
+    except URLError:
+        pass
 
 post_save.connect(send_tweet_after_new_entry, sender=Entry)
 
@@ -42,7 +47,10 @@ def send_tweet_after_top_story(sender, **kwargs):
         instance.slug,
     )
 
-    settings.TWITTER_AGENT.statuses.update(status=tweet_body)
+    try:
+        settings.TWITTER_AGENT.statuses.update(status=tweet_body)
+    except URLError:
+        pass
 
 post_save.connect(send_tweet_after_top_story, sender=TopNewsItem)
 
