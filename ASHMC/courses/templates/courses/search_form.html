@@ -1,0 +1,45 @@
+{% load url from future %}
+{{form.non_field_errors}}
+
+
+<form id="course_search_form" action="{% url "search_courses" %}" method="GET">
+	<div id="preamble">I want a course...</div>
+	<div id="namelike">about {{form.title}}</div>
+	<div id="oncampus">affiliated with 
+		<div class="centerer centered">
+			{{form.campus}}
+		</div>
+	</div>
+	<div id="dept">In the {{form.department}} department</div>
+	<div id="numbered">With a number <em>n</em> s.t.: 
+		{{form.numberlow}}  &le; <em>n</em> &lt; {{form.numberhigh}} 
+	</div>
+	
+	<div id="coursecode">
+		With a code like: {{form.code}}
+	</div>
+	
+	<div id="days" class='horizontal'>
+		Which meets {{form.day_limit}} on {{form.days}}
+	</div>
+	
+	<div id='times'>
+		<div id='timestart'>Which starts after {{form.timestart}}</div>
+		<div id="timeend">but ends before {{form.timeend}}</div>
+	</div>
+	
+	<div id="taughtby">
+		Taught by {{form.professors}}
+	</div>
+	<ul>
+	<li><div id="notfull">{{form.only_open}} Only show me sections that aren't full.</div></li>
+	<li><div id="pfable">{{form.pf_able}} Show me classes that can be pass/failed.</div></li>
+	{% if request.user.is_authenticated %}
+		<li><div id="nottaken" >{{form.not_taken}} Only show me classes I haven't taken.</div></li>
+		<li><div id="inreach" > {{form.in_reach}} Only show me classes I meet prerequisites for. <span class="warning">experimental!</span></div></li> 
+	{% endif %}
+	</ul>
+	<input  type='submit' id="searchSubmit" class="button-submit" value='Search!'/>
+</form>
+
+

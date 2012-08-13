@@ -1,0 +1,116 @@
+@font-face {
+  font-family: "Eutemia";
+  src: url(/static/fonts/Precious.ttf) format("truetype"); }
+
+header {
+  min-height: 450px; }
+
+header * {
+  font-size: 70pt;
+  text-align: center; }
+
+#welcome {
+  font-family: "Eutemia";
+  font-size: 200pt;
+  line-height: 180pt;
+  color: #bcbcbc;
+  padding-right: 160pt; }
+
+#to {
+  font-family: Arial, Helvetica, sans-serif;
+  font-variant: small-caps;
+  font-weight: bold;
+  width: 10%;
+  margin: 0 auto;
+  margin-top: -70pt; }
+
+#toleft {
+  background-image: url(/static/images/dashline.png);
+  background-repeat: repeat-x;
+  display: inline-block;
+  top: 62px;
+  height: 1px;
+  width: 44%;
+  max-width: 442px;
+  float: left;
+  position: relative; }
+
+#toright {
+  background-image: url(/static/images/dashline.png);
+  background-repeat: repeat-x;
+  display: inline-block;
+  top: -47px;
+  height: 1px;
+  width: 44%;
+  max-width: 442px;
+  float: right;
+  position: relative; }
+
+#login_form_hold_left {
+  background-image: url(/static/images/header/leftbrace.png);
+  background-repeat: no-repeat;
+  background-position: center left;
+  height: 265px;
+  width: 95px;
+  float: left; }
+
+#login_form_hold_right {
+  background-image: url(/static/images/header/rightbrace.png);
+  background-repeat: no-repeat;
+  background-position: center right;
+  height: 265px;
+  width: 95px;
+  float: right; }
+
+#login_form_hold {
+  width: 700px;
+  text-align: center;
+  margin: 0 auto;
+  padding: 35px 0px;
+  border-radius: 10px; }
+
+#login_form_hold input {
+  width: 85%;
+  font-size: 20pt;
+  padding: 5px;
+  margin-top: 20px; }
+
+.tooltip {
+  background-color: #000;
+  border: 1px solid #fff;
+  padding: 10px 15px;
+  width: 200px;
+  display: none;
+  color: #fff;
+  text-align: center;
+  font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+  /* outline radius for mozilla/firefox only */
+  -moz-box-shadow: 0 0 10px #000;
+  -webkit-box-shadow: 0 0 10px #000; }
+
+#login_form_hold input[type=submit] {
+  width: 30%; }
+
+#introfooter {
+  background-color: #6195e8;
+  padding: 15px;
+  margin: 0 auto;
+  border-radius: 5px;
+  overflow: hidden;
+  color: white;
+  display: none; }
+
+#introfooter .horstack li:first-child div {
+  max-width: 350px;
+  margin-right: 25px; }
+
+#introfooter .horstack li:last-child div {
+  max-width: 350px;
+  margin-left: 25px; }
+
+#introfooter .chart {
+  width: 375px; }
+
+#introfooter h2 {
+  margin-bottom: 15px; }

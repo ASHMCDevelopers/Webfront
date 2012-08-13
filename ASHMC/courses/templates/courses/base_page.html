@@ -1,0 +1,58 @@
+{% extends "main_base_page.html" %}
+{% load static %}
+{% load url from future %}
+  {%block title%}COURSES{%endblock%}
+  {% block stylin %}
+  <link rel="stylesheet" type="text/css" media="screen" href="{%static "styles/courses/base.css"%}" />
+
+  {% endblock %}
+
+    {% block left_header %}
+    <div id="coursewrap">
+        <ul>
+            <li id="c" title="PHYS">C</li>
+            <li id="o" title="CSCI">O</li>
+            <li id="u" title="BIOL">U</li>
+            <li id="r" title="MATH">R</li>
+            <li id="s1" title="CHEM">S</li>
+            <li id="e" title="ENGR">&epsilon;</li>
+            <li id="s2" title="HUM">S</li>
+       </ul>
+    </div>
+    {% endblock %}
+
+{% block post_header %}
+
+<div id="container">
+
+    {% block container %}
+
+
+    {% endblock %}
+
+
+
+</div>
+{% endblock post_header %}
+
+
+{# scripts go at the end, when the page has mostly been loaded already. #}
+{% block scriptin %}
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+
+<script type="text/javascript" src="http://ui.jquery.com/latest/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="http://ui.jquery.com/latest/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="http://ui.jquery.com/latest/ui/jquery.effects.core.js"></script>
+
+<script type="text/javascript">
+
+    // create custom animation algorithm for jQuery called "bouncy"
+    $.easing.bouncy = function (x, t, b, c, d) {
+        var s = 1.70158;
+        if ((t/=d/2) < 1) return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;
+        return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
+    }
+</script>
+<script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>
+<script src="https://raw.github.com/cowboy/jquery-resize/v1.1/jquery.ba-resize.min.js"></script>
+{% endblock scriptin %}
