@@ -17,4 +17,4 @@ urlpatterns = patterns(
     url(r'^by_author/(?P<author_id>\d*)/$', AuthorEntryList.as_view(),
         name='blogger_author_entry_list',
     )
-    )
+)

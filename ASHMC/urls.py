@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
+from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
 
 # Uncomment the next two lines to enable the admin:
@@ -26,7 +27,7 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name="login"),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
     url(r'^accounts/change_password/$', 'django.contrib.auth.views.password_change', name='change_password',
-        kwargs={'post_change_redirect': '/home'},
+        kwargs={'post_change_redirect': reverse_lazy('main_home')},
     ),
     # DON'T user the soft_link if you can avoid it.
     url(r'^soft_link/(?P<url_name>.*)/', lambda x, url_name: redirect(url_name)),
