@@ -1,59 +1,48 @@
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg); }
+
+  50% {
+    -webkit-transform: rotate(180deg); }
+
+  to {
+    -webkit-transform: rotate(360deg); } }
+
+@-ms-keyframes spin {
+  from {
+    -ms-transform: rotate(0deg); }
+
+  50% {
+    -ms-transform: rotate(180deg); }
+
+  to {
+    -ms-transform: rotate(360deg); } }
+
+@-moz-keyframes spin {
+  from {
+    -moz-transform: rotate(0deg); }
+
+  50% {
+    -moz-transform: rotate(180deg); }
+
+  to {
+    -moz-transform: rotate(360deg); } }
+
+@-o-keyframes spin {
+  from {
+    -o-transform: rotate(0deg); }
+
+  50% {
+    -o-transform: rotate(180deg); }
+
+  to {
+    -o-transform: rotate(360deg); } }
+
+/* _functions.scss */
 #calsearch {
   max-width: 1500px;
   overflow: hidden;
   background-color: white; }
-
-@-webkit-keyframes spin {
-  from {
-    -webkit-transform: rotate(0deg);
-    opacity: 0.2; }
-
-  50% {
-    -webkit-transform: rotate(180deg);
-    opacity: 1.0; }
-
-  to {
-    -webkit-transform: rotate(360deg);
-    opacity: 0.2; } }
-
-@-ms-keyframes spin {
-  from {
-    -ms-transform: rotate(0deg);
-    opacity: 0.2; }
-
-  50% {
-    -ms-transform: rotate(180deg);
-    opacity: 1.0; }
-
-  to {
-    -ms-transform: rotate(360deg);
-    opacity: 0.2; } }
-
-@-moz-keyframes spin {
-  from {
-    -moz-transform: rotate(0deg);
-    opacity: 0.2; }
-
-  50% {
-    -moz-transform: rotate(180deg);
-    opacity: 1.0; }
-
-  to {
-    -moz-transform: rotate(360deg);
-    opacity: 0.2; } }
-
-@-o-keyframes spin {
-  from {
-    -o-transform: rotate(0deg);
-    opacity: 0.2; }
-
-  50% {
-    -o-transform: rotate(180deg);
-    opacity: 1.0; }
-
-  to {
-    -o-transform: rotate(360deg);
-    opacity: 0.2; } }
 
 #ajaxloader {
   margin-bottom: 10px;
@@ -69,14 +58,14 @@
   -ms-animation: spin 1s linear infinite;
   -o-animation: spin 1s linear infinite; }
 
-section#search {
+#search {
   float: right;
   width: 50%;
   max-height: 700px;
   overflow-y: auto;
   padding: 5px; }
 
-section#calendar {
+#calendar {
   float: left;
   width: 45%;
   margin: 15px;
@@ -302,7 +291,7 @@ ul.campus_selection li {
   color: #FFF; }
 
 .warning {
-  padding: 1px 2px;
+  padding: 4px 7px;
   background-color: #FF4500;
   color: white;
   margin: 5px;

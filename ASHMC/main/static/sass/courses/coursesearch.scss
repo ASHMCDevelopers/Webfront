@@ -1,35 +1,10 @@
+@import "../animations";
+@import "../functions";
+
 #calsearch {
 	max-width: 1500px;
 	overflow: hidden;
 	background-color: white;
-}
-
-@-webkit-keyframes spin
-{
-    from { -webkit-transform: rotate(0deg);   opacity: 0.2; }
-    50%  { -webkit-transform: rotate(180deg); opacity: 1.0; }
-    to   { -webkit-transform: rotate(360deg); opacity: 0.2; }
-}
-
-@-ms-keyframes spin
-{
-    from { -ms-transform: rotate(0deg);   opacity: 0.2; }
-    50%  { -ms-transform: rotate(180deg); opacity: 1.0; }
-    to   { -ms-transform: rotate(360deg); opacity: 0.2; }
-}
-
-@-moz-keyframes spin
-{
-    from { -moz-transform: rotate(0deg);   opacity: 0.2; }
-    50%  { -moz-transform: rotate(180deg); opacity: 1.0; }
-    to   { -moz-transform: rotate(360deg); opacity: 0.2; }
-}
-
-@-o-keyframes spin
-{
-    from { -o-transform: rotate(0deg);   opacity: 0.2; }
-    50%  { -o-transform: rotate(180deg); opacity: 1.0; }
-    to   { -o-transform: rotate(360deg); opacity: 0.2; }
 }
 
 #ajaxloader
@@ -41,16 +16,10 @@
     border-right-color: transparent;
     border-radius: 50%;
     box-shadow: 0 0 25px 2px #222;
-    animation: spin 1s linear infinite;
-    -webkit-animation: spin 1s linear infinite;
-	-moz-animation: spin 1s linear infinite;
-	-ms-animation: spin 1s linear infinite;
-	-o-animation: spin 1s linear infinite;
+    @include animation(spin, 1s, linear, infinite);
 }
 
-
-
-section#search {
+#search {
 	float: right;
 	width: 50%;
 	max-height: 700px;
@@ -59,7 +28,7 @@ section#search {
 
 }
 
-section#calendar{
+#calendar{
 	float: left;
 	width: 45%;
 	margin: 15px;
@@ -225,23 +194,13 @@ ul.campus_selection li {
 	color: #fff;
 	text-shadow: 0 1px rgba(0,0,0,0.1);
 	background-color: #00CC00;
-	background-image: -webkit-gradient(linear,left top,left bottom,from(#00CC00),to(#37DE6A));
-	background-image: -webkit-linear-gradient(top,#00CC00,#37DE6A);
-	background-image: -moz-linear-gradient(top,#00CC00,#37DE6A);
-	background-image: -ms-linear-gradient(top,#00CC00,#37DE6A);
-	background-image: -o-linear-gradient(top,#00CC00,#37DE6A);
-	background-image: linear-gradient(top,#00CC00,#37DE6A);
+    @include gradient(#00CC00, #37DE6A);
 }
 
 .sections .addsection.rem {
 	border-color: rgb(220, 60, 52);
 	background-color: #FF6726;
-	background-image: -webkit-gradient(linear,left top,left bottom,from(#FF6726),to(#FF5326));
-	background-image: -webkit-linear-gradient(top,#FF6726,#FF5326);
-	background-image: -moz-linear-gradient(top,#FF6726,#FF5326);
-	background-image: -ms-linear-gradient(top,#FF6726,#FF5326);
-	background-image: -o-linear-gradient(top,#FF6726,#FF5326);
-	background-image: linear-gradient(top,#ff6726,#FF5326);
+    @include gradient(#FF6726, #FF5326);
 }
 
 .sections .addsection:hover {
@@ -249,23 +208,13 @@ ul.campus_selection li {
     color: #fff;
     text-shadow: 0 1px rgba(0,0,0,0.3);
     background-color: #00BD39;
-    background-image: -webkit-gradient(linear,left top,left bottom,from(#00CC00),to(#00BD39));
-    background-image: -webkit-linear-gradient(top,#00CC00,#00BD39);
-    background-image: -moz-linear-gradient(top,#00CC00,#00BD39);
-    background-image: -ms-linear-gradient(top,#00CC00,#00BD39);
-    background-image: -o-linear-gradient(top,#00CC00,#00BD39);
-    background-image: linear-gradient(top,#00CC00,#00BD39);
+    @include gradient(#00CC00, #00BD39);
 }
 
 .sections .addsection.rem:hover {
 	border-color: rgb(200, 30, 32);
-	background-color: #FF6726;
-	background-image: -webkit-gradient(linear,left top,left bottom,from(#FF6726),to(#A62C0C));
-	background-image: -webkit-linear-gradient(top,#FF6726,#A62C0C);
-	background-image: -moz-linear-gradient(top,#FF6726,#A62C0C);
-	background-image: -ms-linear-gradient(top,#FF6726,#A62C0C);
-	background-image: -o-linear-gradient(top,#FF6726,#A62C0C);
-	background-image: linear-gradient(top,#FF6726,#A62C0C);
+    background-color: #FF6726;
+    @include gradient(#FF6726, #A62C0C);
 }
 
 .sections .addsection:active {
@@ -330,7 +279,7 @@ ul.campus_selection li {
 }
 
 .warning {
-	padding: 1px 2px;
+	padding: 4px 7px;
 	background-color: #FF4500;
 	color: white;
 	margin: 5px;

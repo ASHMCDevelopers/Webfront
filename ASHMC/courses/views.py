@@ -122,7 +122,7 @@ class CourseSearcher(TemplateResponseMixin, View):
                 qs = qs.filter(Q(code__icontains=form.cleaned_data['code']))
 
             if form.cleaned_data['not_taken']:
-                qs = qs.filter(~Q(section__enrollment__student___linked_id=request.user.id))
+                qs = qs.filter(~Q(section__enrollment__student__user=request.user.id))
 
             if form.cleaned_data['in_reach']:
                 course_ids = Enrollment.objects.filter(student=request.user.student)\

@@ -70,3 +70,12 @@
     background: -o-linear-gradient($direction, $color_from, $color_to);
     background: -ms-linear-gradient($direction, $color_from, $color_to);
 }
+
+@mixin animation($type, $period, $function, $duration) {
+    // You should probably include _animations if you're using this function.
+    animation: $type $period $function $duration;
+    -webkit-animation: $type $period $function $duration;
+    -moz-animation: $type $period $function $duration;
+    -ms-animation: $type $period $function $duration;
+    -o-animation: $type $period $function $duration;
+}
