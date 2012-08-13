@@ -40,7 +40,6 @@ def prettify_error_listings(error_dict, ballot_id):
             response += """</ul>"""
             response += """</li>"""
 
-
     response += """</ul>"""
 
     return mark_safe(response)

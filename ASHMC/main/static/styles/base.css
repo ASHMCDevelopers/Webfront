@@ -392,7 +392,8 @@ p + p {
 
 .errors {
   background: #ff6a6a;
-  color: #fff; }
+  color: #fff;
+  text-align: center; }
 
 li {
   padding: .2em; }

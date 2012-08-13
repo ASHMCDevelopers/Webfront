@@ -1,0 +1,80 @@
+{% extends "main_base_page.html" %}
+{% load event_extras %}
+{% load markup %}
+{% load static %}
+
+{% block right_header %}
+{% endblock right_header %}
+
+{% block stylin %}
+   <link rel="stylesheet" type="text/css" href="{% static 'styles/events/event_detail.css' %}">
+{% endblock stylin %}
+
+{% block post_header %}
+    <div class='sidebar surrounder bright'>
+        <div class='surrounder body'>
+            <div class='surrounder bright'>
+                <h4 class='centered'>{{event.start_time|date:"b 'y"}}</h4>
+                {% calendarize event.start_time event.end_time mark_today=True %}
+            </div>
+        <div class='time'>
+            <h3>
+                {{event.start_time|date_presenter}}
+                {% if event.end_time and event.is_today%}
+                    -
+                    {{event.end_time|date_presenter}}
+                {% endif %}
+            </h3>
+        </div>
+        <div class='clearer'></div>
+        </div>
+    </div>
+    <div class='mainbar'>
+        {% if form.errors %} <h5 class='errors centered'>There was a problem with your registration.</h5>{%endif%}
+        <h2>{{object.title}}</h2>
+        <div class='description'>
+            {{object.description|markdown:"safe"}}
+        </div>
+
+        {% if attendance %}
+            <div class='register'>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="
+                    I'm not going. {% if attendance.guests.count %} (neither are my guests) {% endif%}
+                    " class='button-submit reject'/>
+                </form>
+            </div>
+        {% else %}
+
+            {% for i in form.event.guests_per_user|rangify:True %}
+                {% if forloop.first and not forloop.last %}
+                        <div class='register'>
+                        <h4>You may register up to {{form.event.guests_per_user}} guest{{form.event.guests_per_user|pluralize}}:</h4>
+                        {% if form.errors %}
+                            <div class='errors'>
+                                {{form|prettify_error_listings}}
+                            </div>
+                        {% endif %}
+                    <form method='POST'>
+                    {% csrf_token %}
+                    <ul>
+                {% endif %}
+                    <li>
+
+                        {% for f in form|get_fields_postfix:i %}
+                            {{f}}
+                        {% endfor %}
+                    </li>
+                {% if forloop.last %}
+                   </ul>
+                   <input type='submit' class='button-submit' value="I'm going!"/>
+                </form>
+                </div>
+                {% endif %}
+            {% endfor %}
+
+        {% endif %}
+    </div>
+    <div class='clearer'></div>
+{% endblock post_header %}

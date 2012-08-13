@@ -535,54 +535,68 @@ footer {
     #ashmc h3 .AS {
       font-family: "Walkway Expand Bold", sans-serif; }
 
-#login_form {
-  float: right;
-  height: inherit;
-  margin-right: 2%;
-  margin-top: 0px; }
-  #login_form div {
-    width: 413px; }
-  #login_form::before {
-    content: "}";
-    font-size: 235px;
-    font-family: "Baskerville";
-    float: right;
-    margin-top: -68px; }
-  #login_form::after {
-    content: "{";
-    font-size: 235px;
-    font-family: "Baskerville";
-    float: left;
-    margin-top: -202px;
-    margin-left: -113px; }
-  #login_form form input {
-    width: 300px;
-    padding: 5px;
-    margin-top: 10px;
-    font-size: 20px; }
-
-#salutation {
-  float: right;
-  min-width: 300px;
-  margin-top: 1em;
-  margin-right: 15%; }
-  #salutation h2 {
-    float: left;
-    margin-right: 1em; }
-
 #postheader {
-  width: 1050px;
+  background: linear-gradient(left, #1c1c1c 30%, transparent 30%);
+  background: -webkit-linear-gradient(left, #1c1c1c 30%, transparent 30%);
+  background: -moz-linear-gradient(left, #1c1c1c 30%, transparent 30%);
+  background: -o-linear-gradient(left, #1c1c1c 30%, transparent 30%);
+  background: -ms-linear-gradient(left, #1c1c1c 30%, transparent 30%);
+  min-height: 100px;
+  max-width: 850px;
   margin: 0 auto;
-  background: white;
-  padding: 2em; }
+  padding-top: 1em; }
 
-ul {
-  padding-left: 1em;
-  margin-bottom: 1.5em; }
+.list_wrap {
+  max-width: 800px;
+  margin: 0 auto; }
 
-h2:not(:first-child) {
-  margin-top: 0.875em;
-  margin-bottom: 0; }
+.event_list li {
+  margin-top: 1.5em; }
+  .event_list li .attending {
+    background-color: #77dd77;
+    padding: 5px; }
+  .event_list li .location {
+    text-align: center;
+    padding: 5px; }
+    .event_list li .location h3 {
+      padding: 0; }
+  .event_list li .attendance {
+    padding: 5px; }
+    .event_list li .attendance h6 {
+      padding: 0;
+      display: inline; }
+    .event_list li .attendance ul {
+      display: inline; }
+      .event_list li .attendance ul li {
+        display: inline; }
+        .event_list li .attendance ul li:not(:last-child):after {
+          content: ","; }
+  .event_list li .event_head {
+    background: white; }
+  .event_list li h2 {
+    padding: 0.5em;
+    margin: 0; }
+  .event_list li .time {
+    float: right;
+    padding: 0.5em;
+      padding-top: 0; }
+    .event_list li .time h2 {
+      padding: 0; }
+  .event_list li .event_title {
+    display: inline-block; }
+  .event_list li .event_description {
+    float: right;
+    background: white;
+    padding: 0.5em;
+    max-width: 450px; }
 
-h4 {
-  padding-top: 0.75em; }
+.calendar table {
+  margin: 0.5em; }
+.calendar td {
+  padding: 0.25em;
+  text-align: center; }
+  .calendar td.day_of {
+    background: #1c1c1c;
+    color: white; }
+  .calendar td.today {
+    border: 0.25em solid #c9b147; }

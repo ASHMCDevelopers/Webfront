@@ -1,0 +1,92 @@
+@import "events/events_base";
+
+#postheader {
+    @include linear_gradient(left, $dark_background 30%, transparent 30%);
+    min-height: 100px;
+    max-width: 850px;
+    margin: 0 auto;
+    padding-top: 1em;
+}
+
+.list_wrap {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.event_list {
+    li {
+
+        margin-top: 1.5em;
+
+        .attending {
+            background-color: $green;
+            padding: 5px;
+        }
+
+        .location {
+            text-align: center;
+            padding: 5px;
+
+            h3 {
+                padding: 0;
+            }
+        }
+
+        .attendance {
+            padding: 5px;
+
+            h6 {
+                padding: 0;
+                display: inline;
+            }
+
+            ul {
+                display: inline;
+
+                li {
+                    display: inline;
+
+                    &:not(:last-child):after {
+                        content:",";
+                    }
+                }
+            }
+        }
+
+        .event_head {
+            background: $light_background;
+        }
+
+        h2 {
+            padding: 0.5em;
+            margin: 0;
+        }
+
+        .time {
+            float: right;
+            padding: 0.5em {
+                top: 0;
+            }
+            h2 {
+                padding: 0;
+            }
+        }
+
+        .event_title {
+            display: inline-block;
+        }
+
+        .event_description {
+            float: right;
+            background: $light_background;
+            padding: 0.5em;
+            max-width: 450px;
+        }
+
+        .event_location {
+
+        }
+    }
+}
+
+@import "calendar";

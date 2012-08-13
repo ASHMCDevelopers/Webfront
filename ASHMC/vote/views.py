@@ -46,7 +46,7 @@ class MeasureListing(ListView):
         ).order_by('vote_end')
 
 
-class MeasureDetail(DetailView, FormMixin):
+class MeasureDetail(DetailView):
     model = Measure
 
     def get_object(self):

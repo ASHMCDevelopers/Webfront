@@ -535,54 +535,73 @@ footer {
     #ashmc h3 .AS {
       font-family: "Walkway Expand Bold", sans-serif; }
 
-#login_form {
-  float: right;
-  height: inherit;
-  margin-right: 2%;
-  margin-top: 0px; }
-  #login_form div {
-    width: 413px; }
-  #login_form::before {
-    content: "}";
-    font-size: 235px;
-    font-family: "Baskerville";
-    float: right;
-    margin-top: -68px; }
-  #login_form::after {
-    content: "{";
-    font-size: 235px;
-    font-family: "Baskerville";
-    float: left;
-    margin-top: -202px;
-    margin-left: -113px; }
-  #login_form form input {
-    width: 300px;
-    padding: 5px;
-    margin-top: 10px;
-    font-size: 20px; }
-
-#salutation {
-  float: right;
-  min-width: 300px;
-  margin-top: 1em;
-  margin-right: 15%; }
-  #salutation h2 {
-    float: left;
-    margin-right: 1em; }
-
 #postheader {
-  width: 1050px;
-  margin: 0 auto;
+  max-width: 1000px;
+  margin: 0 auto; }
+
+.description ol {
+  list-style: decimal;
+  margin-left: 2.5em; }
+.description ul {
+  list-style: disc;
+  margin-left: 2.5em; }
+
+.calendar table {
+  margin: 0.5em; }
+.calendar td {
+  padding: 0.25em;
+  text-align: center; }
+  .calendar td.day_of {
+    background: #1c1c1c;
+    color: white; }
+  .calendar td.today {
+    border: 0.25em solid #c9b147; }
+
+.calendar {
+  font-size: 1.25em; }
+
+.sidebar {
+  float: left; }
+  .sidebar .time {
+    text-align: center;
+    margin: 0.5em; }
+    .sidebar .time h3 {
+      margin: 0;
+      padding: 0; }
+  .sidebar h4 {
+    padding: 0;
+      padding-bottom: 1em; }
+
+.mainbar {
   background: white;
-  padding: 2em; }
+  padding: 1.5em;
+  float: left;
+  max-width: 62%; }
+  .mainbar h2 {
+    text-align: center; }
+  .mainbar input[type="text"] {
+    padding: 0.25em; }
+    .mainbar input[type="text"].age_input {
+      width: 3em;
+      text-align: center; }
+  .mainbar form {
+    text-align: center; }
+    .mainbar form ul {
+      margin-bottom: 1em; }
 
-ul {
-  padding-left: 1em;
-  margin-bottom: 1.5em; }
+ul.errors {
+  margin-bottom: 0.5em; }
+  ul.errors ul {
+    margin-left: 1.5em; }
+  ul.errors .fielderror {
+    text-align: left; }
 
-h2:not(:first-child) {
-  margin-top: 0.875em;
-  margin-bottom: 0; }
+h5.errors {
+  padding: 0.25em;
+  margin-bottom: 0.5em; }
 
-h4 {
-  padding-top: 0.75em; }
+.register {
+  padding: 1em; }
+  .register h4 {
+    margin-bottom: 1em;
+    text-align: center; }
