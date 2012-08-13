@@ -13,6 +13,33 @@
 <header>
 {% block header %}
 <div id="logo">
+    {% block right_header %}
+       {% if user.is_authenticated %}
+       <div id="salutation">
+            <h2>{{user.get_full_name}}</h2>
+
+            <div id="ashmcroles">
+                <ul>
+            {% for role in user.ashmcrole_set.all %}
+                <li>{{role.cast}}</li>
+            {% endfor %}
+                </ul>
+            </div>
+            <div class="righty" id="logout"><a href="{% url 'logout' %}">logout</a></div>
+       </div>
+        {% else %}
+            <div id="login_form" class="righty">
+                <div id="login_form_hold">
+                    <form action="{% url  "login" %}" method="POST">
+                        {% csrf_token %}
+                    <div>{{form.username}}<div class='tooltip'>Your HMC email: first_last@hmc.edu</div></div>
+                    <div>{{form.password}}<div class='tooltip'>Don't know your password?<br/>Click <a href="#">here</a>.</div></div>
+                    <input type=submit id="signIn" class="button-submit" value="Get Started" />
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    {% endblock %}
 	{% block left_header %}
 	    <div id="ashmc">
 	        <a href="{% url "main_landing_page" %}"><h1><span class='AS'>AS</span><span class='HMC'>HMC</span></h1></a>
@@ -20,37 +47,6 @@
 	        <h3><span class="AS">Associated Students of Harvey Mudd College</span></h3>
 	   </div>
    {% endblock %}
-
-   {% block right_header %}
-	   {% if user.is_authenticated %}
-	   <div id="salutation">
-	        <h2>{{user.get_full_name}}</h2>
-
-	        <div id="ashmcroles">
-	        	<ul>
-	        {% for role in user.ashmcrole_set.all %}
-	        	<li>{{role.cast}}</li>
-	        {% endfor %}
-	        	</ul>
-	        </div>
-	        <div class="righty" id="logout"><a href="{% url 'logout' %}">logout</a></div>
-	   </div>
-	    {% else %}
-		    <div id="login_form">
-		        <div class="centerer centered">
-
-		            <div id="login_form_hold">
-			            <form action="{% url  "login" %}" method="POST">
-			                {% csrf_token %}
-			            <div>{{form.username}}<div class='tooltip'>Your HMC email: first_last@hmc.edu</div></div>
-			            <div>{{form.password}}<div class='tooltip'>Don't know your password?<br/>Click <a href="#">here</a>.</div></div>
-			            <input type=submit id="signIn" class="button-submit" value="Get Started" />
-			            </form>
-		        	</div>
-		    	</div>
-			</div>
-	    {% endif %}
-    {% endblock %}
 </div>
 {% endblock header %}
 </header>
