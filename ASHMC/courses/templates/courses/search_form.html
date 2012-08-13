@@ -11,12 +11,12 @@
 		</div>
 	</div>
 	<div id="dept"><h4>In the</h4> {{form.department}} <h4>department</h4></div>
-	<div id="numbered"><h4>With a number <em>n</em> s.t.:</h4>
+	<div id="numbered"><h4>With a number <em>n</em> s.t.</h4>
 		{{form.numberlow}} <h4>&le; <em>n</em> &lt;</h4> {{form.numberhigh}}
 	</div>
 
 	<div id="coursecode">
-		<h4>With a code like:</h4> {{form.code}}
+		<h4>With a code like</h4> {{form.code}}
 	</div>
 
 	<div id="days" class='horizontal'>
@@ -32,11 +32,11 @@
 		<h4>Taught by</h4> {{form.professors}}
 	</div>
 	<ul>
-	<li><div id="notfull">{{form.only_open}} Only show me sections that aren't full.</div></li>
-	<li><div id="pfable">{{form.pf_able}} Show me classes that can be pass/failed.</div></li>
+	<li><div id="notfull"><h4>{{form.only_open}} Only show me sections that aren't full.</h4></div></li>
+	<li><div id="pfable"><h4>{{form.pf_able}} Show me classes that can be pass/failed.</h4></div></li>
 	{% if request.user.is_authenticated %}
-		<li><div id="nottaken" >{{form.not_taken}} Only show me classes I haven't taken.</div></li>
-		<li><div id="inreach" > {{form.in_reach}} Only show me classes I meet prerequisites for. <span class="warning">experimental!</span></div></li>
+		<li><div id="nottaken" ><h4>{{form.not_taken}} Only show me classes I haven't taken.</h4></div></li>
+		<li class='warning'><div id="inreach" ><h4>{{form.in_reach}} Only show me classes I meet prerequisites for.</h4></div></li>
 	{% endif %}
 	</ul>
 	<input  type='submit' id="searchSubmit" class="button-submit" value='Search!'/>
