@@ -4,7 +4,7 @@ Syntax error: Undefined variable: "$dark_background".
 
 7:     td {
 8:         padding: 0.25em;
-9:         text-align: right;
+9:         text-align: center;
 10: 
 11:         &.day_of {
 12:             background: $dark_background;
@@ -12,7 +12,7 @@ Syntax error: Undefined variable: "$dark_background".
 14:         }
 15: 
 16:         &.today {
-17:             border: 2px solid $mudd_gold;
+17:             border: 0.25em solid $light_gold;
 
 Backtrace:
 sass/events/calendar.scss:12
@@ -100,4 +100,4 @@ sass/events/calendar.scss:12
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Syntax error: Undefined variable: \"$dark_background\".\A         on line 12 of sass/events/calendar.scss\A \A 7:     td {\A 8:         padding: 0.25em;\A 9:         text-align: right;\A 10: \A 11:         &.day_of {\A 12:             background: $dark_background;\A 13:             color: white;\A 14:         }\A 15: \A 16:         &.today {\A 17:             border: 2px solid $mudd_gold;"; }
+  content: "Syntax error: Undefined variable: \"$dark_background\".\A         on line 12 of sass/events/calendar.scss\A \A 7:     td {\A 8:         padding: 0.25em;\A 9:         text-align: center;\A 10: \A 11:         &.day_of {\A 12:             background: $dark_background;\A 13:             color: white;\A 14:         }\A 15: \A 16:         &.today {\A 17:             border: 0.25em solid $light_gold;"; }

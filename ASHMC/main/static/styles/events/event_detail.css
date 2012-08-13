@@ -536,7 +536,7 @@ footer {
       font-family: "Walkway Expand Bold", sans-serif; }
 
 #postheader {
-  max-width: 920px;
+  max-width: 1000px;
   margin: 0 auto; }
 
 .description ol {
@@ -550,12 +550,12 @@ footer {
   margin: 0.5em; }
 .calendar td {
   padding: 0.25em;
-  text-align: right; }
+  text-align: center; }
   .calendar td.day_of {
     background: #1c1c1c;
     color: white; }
   .calendar td.today {
-    border: 2px solid #cc9933; }
+    border: 0.25em solid #c9b147; }
 
 .calendar {
   font-size: 1.25em; }
@@ -576,7 +576,7 @@ footer {
   background: white;
   padding: 1.5em;
   float: left;
-  max-width: 59%; }
+  max-width: 62%; }
   .mainbar h2 {
     text-align: center; }
   .mainbar input[type="text"] {
