@@ -1,15 +1,17 @@
 {% load courses_extras %}
 {% load url from future %}
-<div class="course_result"><a name={{course.id}}></a>
+<div class=""><a name={{course.id}}></a>
 	<header>
 		<div class="seccount">{{course.get_active_sections.count}} section{{course.section_set.count|pluralize}} match{{course.section_set.count|pluralize:"es,"}}</div>
-		<h1>{{course}} &mdash; {{course.title|make_nbsp}}</h1>
-		
+		<h3>{{course}} &mdash; {{course.title|make_nbsp}}</h3>
+
 	</header>
 	{{course.description}}
 	{% if course.description %}<div class="more_link centered"><a href="#{{course.id}}">see more...</a></div>{%endif%}
-	<div class="requisites">
-			<ul>
+
+    {% if course.prerequisites.all.count or course.corequisites.all.count %}
+    <div class="requisites">
+            <ul>
 			{% if course.prerequisites.all.count > 0 %}<li class="prereq">
 				Prereqs:
 					<ul>
@@ -29,7 +31,9 @@
 				</li>
 			{% endif %}
 			</ul>
-		</div>
+        </div>
+            {% endif %}
+
 	<div class="more_info {%if course.description %}hidden{% endif %}"></div>
 	<div class="sections">
 		<ul>
@@ -40,9 +44,9 @@
 					<input type='hidden' name='id' value="{{section.id}}" />
 					<div class='addsection'><span>Add</span></div>
 				</form>
-				<div class='seats'>{{section.openseats}}/{{section.seats}} seat{{section.openseats|pluralize}} remaining</div>
+				<div class='seats'><h4>{{section.openseats}}/{{section.seats}} seat{{section.openseats|pluralize}} remaining</h4></div>
 			{% endif %}
-			<div class='secnum'><h3>Section&nbsp;{{section.number|stringformat:"02d"}}{% if section.title %}: {{section.title|make_nbsp}}{%endif%}</h3></div>
+			<div class='secnum'><h4>Section&nbsp;{{section.number|stringformat:"02d"}}{% if section.title %}: {{section.title|make_nbsp}}{%endif%}</h4></div>
 			<div class="centerer"><div class='meta'>{{section.get_instructors|prettify:'instructors'}} &mdash; credit: {{section.mudd_creds|floatformat:"2"}} ({{section.credit_hours|floatformat:"2"}}) </div></div>
 			<div class='meetings'>
 				<ul>
@@ -65,11 +69,11 @@
 			<hr/>
 		{% endif %}
 		</li>
-		
+
 		{% empty %}
 			This is an error! Whoopsie...
 		{% endfor %}
 		</ul>
 	</div>
-	
-</div> 
+
+</div>

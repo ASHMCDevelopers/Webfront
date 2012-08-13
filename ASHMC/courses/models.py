@@ -392,25 +392,25 @@ class Meeting(models.Model):
 
     def get_timeslot_tuples(self):
         times = self.timeslots.all()
-        if times.count() > 0:  # sometimes there's not a meeting time
-            time_copy = self.timeslots.all()
-            all_times = []
-            for slot in time_copy:
-                slots = times.filter(starts=slot.starts,
-                                     ends=slot.ends)
-                times = times.exclude(starts=slot.starts,
-                                              ends=slot.ends)
-                time_copy = times
-                if len(slots) == 0:
-                    break
-                subtimes = ("".join([x.day.code for x in slots]),
-                                             slot.starts,
-                                             slot.ends, slot)
+        if times.count() < 1:  # sometimes there's not a meeting time
+            return []
 
-                all_times += [subtimes]
-            times = all_times
-        else:
-            times = []
+        time_copy = self.timeslots.all()
+        all_times = []
+        for slot in time_copy:
+            slots = times.filter(starts=slot.starts,
+                                 ends=slot.ends)
+            times = times.exclude(starts=slot.starts,
+                                          ends=slot.ends)
+            time_copy = times
+            if len(slots) == 0:
+                break
+            subtimes = ("".join([x.day.code for x in slots]),
+                                         slot.starts,
+                                         slot.ends, slot)
+
+            all_times += [subtimes]
+        times = all_times
         return times
 
     def get_roominfos(self):

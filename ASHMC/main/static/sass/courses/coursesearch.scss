@@ -5,6 +5,7 @@
 	max-width: 1500px;
 	overflow: hidden;
 	background-color: white;
+    margin: 0 auto;
 }
 
 #ajaxloader
@@ -30,13 +31,23 @@
 
 #calendar{
 	float: left;
-	width: 45%;
+	width: 47%;
 	margin: 15px;
 	margin-right: 0px;
 }
 
 .fc-today {
 	background: #fff; /* prevent calendar from highlighting today*/
+}
+
+#searchwrap {
+    input[type="text"] {
+        padding: 3px 7px;
+    }
+
+    h4 {
+        display: inline;
+    }
 }
 
 .horizontal ul {
@@ -52,18 +63,18 @@
 	display: inline;
 }
 
-ul.campus_selection {
+.campus_selection {
 	display: inline-block;
 	text-align: left;
 	padding: 5px;
 }
 
-ul.campus_selection label {
+.campus_selection label {
 	padding: 2px 4px;
 	color: white;
 }
 
-ul.campus_selection li {
+.campus_selection li {
 	margin-top: 4px;
 }
 
@@ -124,12 +135,17 @@ ul.campus_selection li {
 	border-bottom: 1pt solid rgb(0,0,0);
 }
 
-#preamble {
-	font-size: 20pt;
-}
+#course_search_form {
 
-#course_search_form div {
-	margin: 5px;
+        & > div {
+    	margin: 5px {
+            top: 10px;
+        }
+    }
+
+    #times > div {
+        margin-top: 5px;
+    }
 }
 
 #results {
@@ -137,17 +153,21 @@ ul.campus_selection li {
 	padding: 5px;
 }
 
-.course_result {
-	padding: 5px;
-}
-
 .course_result:nth-child(odd){
 	background-color: rgb(247, 247, 247);
 }
 
-.course_result .seccount {
-	float: right;
+.course_result {
+
+    h3 {
+        padding-top: 0.5em;
+    }
+
+    .seccount {
+	   float: right;
+    }
 }
+
 .more_link {
 	cursor: pointer;
 }
@@ -182,6 +202,7 @@ ul.campus_selection li {
 }
 
 .sections .addsection {
+    margin-top: 1em;
 	padding: 2px 15px;
 	float: right;
 	margin-left: 15px;
@@ -230,7 +251,7 @@ ul.campus_selection li {
 }
 
 .timefield {
-	width: 75px;
+	width: 110px;
 	text-align:center;
 }
 

@@ -292,7 +292,7 @@ body {
   font-size: 1em;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; }
 
-a {
+a, .linklike {
   color: #3079ed;
   transition: color 0.2s linear 0.1s;
   -moz-transition: color 0.2s linear 0.1s;
@@ -301,7 +301,7 @@ a {
   /* Safari and Chrome */
   -o-transition: color 0.2s linear 0.1s;
   /* Opera */ }
-  a:hover {
+  a:hover, .linklike:hover {
     color: #e53b2c !important;
     transition: color 0.2s linear ;
     -moz-transition: color 0.2s linear ;

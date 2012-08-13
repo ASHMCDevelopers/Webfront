@@ -45,7 +45,7 @@ body {
 }
 
 
-a {
+a,.linklike {
     color: $link_color;
     @include transition(color, .2s, $delay:.1s);
 

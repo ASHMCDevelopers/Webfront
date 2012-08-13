@@ -42,7 +42,8 @@
 #calsearch {
   max-width: 1500px;
   overflow: hidden;
-  background-color: white; }
+  background-color: white;
+  margin: 0 auto; }
 
 #ajaxloader {
   margin-bottom: 10px;
@@ -67,13 +68,18 @@
 
 #calendar {
   float: left;
-  width: 45%;
+  width: 47%;
   margin: 15px;
   margin-right: 0px; }
 
 .fc-today {
   background: #fff;
   /* prevent calendar from highlighting today*/ }
+
+#searchwrap input[type="text"] {
+  padding: 3px 7px; }
+#searchwrap h4 {
+  display: inline; }
 
 .horizontal ul {
   list-style-type: none;
@@ -86,16 +92,16 @@
 .horizontal ul li {
   display: inline; }
 
-ul.campus_selection {
+.campus_selection {
   display: inline-block;
   text-align: left;
   padding: 5px; }
 
-ul.campus_selection label {
+.campus_selection label {
   padding: 2px 4px;
   color: white; }
 
-ul.campus_selection li {
+.campus_selection li {
   margin-top: 4px; }
 
 .colored {
@@ -144,22 +150,21 @@ ul.campus_selection li {
 .alternatives > div:not(:last-child) {
   border-bottom: 1pt solid black; }
 
-#preamble {
-  font-size: 20pt; }
-
-#course_search_form div {
-  margin: 5px; }
+#course_search_form > div {
+  margin: 5px;
+    margin-top: 10px; }
+#course_search_form #times > div {
+  margin-top: 5px; }
 
 #results {
   margin-top: 15px;
   padding: 5px; }
 
-.course_result {
-  padding: 5px; }
-
 .course_result:nth-child(odd) {
   background-color: #f7f7f7; }
 
+.course_result h3 {
+  padding-top: 0.5em; }
 .course_result .seccount {
   float: right; }
 
@@ -190,6 +195,7 @@ ul.campus_selection li {
   float: right; }
 
 .sections .addsection {
+  margin-top: 1em;
   padding: 2px 15px;
   float: right;
   margin-left: 15px;
@@ -251,7 +257,7 @@ ul.campus_selection li {
   text-align: center; }
 
 .timefield {
-  width: 75px;
+  width: 110px;
   text-align: center; }
 
 #searchSubmit {
