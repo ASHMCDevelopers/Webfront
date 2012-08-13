@@ -24,9 +24,6 @@ class LandingPage(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LandingPage, self).get_context_data(**kwargs)
 
-        login_form = LandingLoginForm()
-        context['form'] = login_form
-
         tweets = cache.get('latest_tweets')
 
         if tweets:

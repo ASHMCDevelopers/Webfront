@@ -116,6 +116,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
+    "ASHMC.context_processors.add_login_form",
 )
 
 MIDDLEWARE_CLASSES = (

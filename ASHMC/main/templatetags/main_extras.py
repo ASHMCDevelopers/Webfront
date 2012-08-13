@@ -2,13 +2,38 @@ from django import template
 
 import feedparser
 
+from ..models import ASHMCRole, DormPresident, DormRole, DormAppointment, ASHMCAppointment, Semester
+from ASHMC.roster.models import UserRoom
+
 import random
 import re
 import datetime
 
-from ..models import ASHMCRole, DormPresident, DormRole, DormAppointment, ASHMCAppointment, Semester
 
 register = template.Library()
+
+
+@register.filter
+def maximum(iterable):
+    return max(iterable)
+
+
+@register.filter
+def get_living_situation(user):
+    sem = Semester.get_this_semester()
+    try:
+        room = UserRoom.objects.get(
+            user=user,
+            semesters__id=sem.id,
+        )
+    except:
+        return ""
+
+    return "{} {} ({})".format(
+        room.room.dorm,
+        room.room.number,
+        room.semesters.all()[0],
+    )
 
 
 @register.filter

@@ -10,13 +10,14 @@ $line_height: 1.75em;
 $mudd_gold: #cc9933;
 $dark_gold: #7E580D;
 $light_gold: #C9B147;
+$dark_color: #1c1c1c;
 $green: #77DD77;
 
 $link_hover_color: #e53b2c;
 $link_color: #3079ed;
 $text_color: #333;
 
-$dark_background: #1c1c1c;
+$dark_background: $dark_color;
 $light_background: #fff;
 $error_background: #FF6A6A;
 
