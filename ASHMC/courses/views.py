@@ -33,7 +33,7 @@ class CourseSearcher(TemplateResponseMixin, View):
     :template:`courses/course_search_results.html`
     """
 
-    template_name = "course_search_results.html"
+    template_name = "courses/course_search_results.html"
 
     def get(self, request, page=1):
         """Typical 'get' method."""
@@ -214,7 +214,7 @@ class JSONifySectionData(View):
 
 
 class CourseDetail(TemplateResponseMixin, View):
-    template_name = "course_detail.html"
+    template_name = "courses/course_detail.html"
 
     def get(self, request, cid="Q"):
         try:
@@ -226,7 +226,7 @@ class CourseDetail(TemplateResponseMixin, View):
 
 
 class SplashPage(TemplateView):
-    template_name = 'splash.html'
+    template_name = 'courses/splash.html'
 
     def get_context_data(self, **kwargs):
         context = super(SplashPage, self).get_context_data(**kwargs)
