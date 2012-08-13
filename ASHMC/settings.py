@@ -152,7 +152,7 @@ TEMPLATE_DIRS = (
 TESTING = local_settings.TESTING
 
 AUTHENTICATION_BACKENDS = (
-    'ASHMC.auth_backends.CheckHasRolePerm',
+    'ASHMC.authbackends.CheckHasRolePerm',
     'django.contrib.auth.backends.ModelBackend',
 )
 
