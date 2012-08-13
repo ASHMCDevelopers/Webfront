@@ -47,6 +47,12 @@ class EventDetail(DetailView, FormMixin):
             event=event,
         )
 
+        if not _:
+            # get rid of the guests, and the attendance
+            a.guests.all().delete()
+            a.delete()
+            return redirect('event_list')
+
         for number in range(1, event.guests_per_user):
             try:
                 name = f.cleaned_data['name_{}'.format(number)]

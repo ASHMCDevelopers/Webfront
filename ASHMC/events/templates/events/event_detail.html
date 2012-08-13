@@ -36,32 +36,43 @@
             {{object.description|markdown:"safe"}}
         </div>
 
-        {% for i in form.event.guests_per_user|rangify:True %}
-            {% if forloop.first and not forloop.last %}
-                    <div class='register'>
-                    <h4>You may register up to {{form.event.guests_per_user}} guest{{form.event.guests_per_user|pluralize}}:</h4>
-                    {% if form.errors %}
-                        <div class='errors'>
-                            {{form|prettify_error_listings}}
-                        </div>
-                    {% endif %}
-                <form method='POST'>
-                {% csrf_token %}
-                <ul>
-            {% endif %}
-                <li>
-
-                    {% for f in form|get_fields_postfix:i %}
-                        {{f}}
-                    {% endfor %}
-                </li>
-            {% if forloop.last %}
-               </ul>
-               <input type='submit' class='button-submit' value="I'm going!"/>
-            </form>
+        {% if request.user in object.attendees.all %}
+            <div class='register'>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="I'm not going." class='button-submit reject'/>
+                </form>
             </div>
-            {% endif %}
-        {% endfor %}
+        {% else %}
+
+            {% for i in form.event.guests_per_user|rangify:True %}
+                {% if forloop.first and not forloop.last %}
+                        <div class='register'>
+                        <h4>You may register up to {{form.event.guests_per_user}} guest{{form.event.guests_per_user|pluralize}}:</h4>
+                        {% if form.errors %}
+                            <div class='errors'>
+                                {{form|prettify_error_listings}}
+                            </div>
+                        {% endif %}
+                    <form method='POST'>
+                    {% csrf_token %}
+                    <ul>
+                {% endif %}
+                    <li>
+
+                        {% for f in form|get_fields_postfix:i %}
+                            {{f}}
+                        {% endfor %}
+                    </li>
+                {% if forloop.last %}
+                   </ul>
+                   <input type='submit' class='button-submit' value="I'm going!"/>
+                </form>
+                </div>
+                {% endif %}
+            {% endfor %}
+
+        {% endif %}
     </div>
     <div class='clearer'></div>
 {% endblock post_header %}
