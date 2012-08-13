@@ -1,4 +1,5 @@
 {% load blogger_filters %}
+{% load url from future %}
 <h2><a href="{{entry.get_absolute_url}}"><span class="catch_headline">{{entry.catch_title}}
     {% with entry|has_been_updated as u %}
     {% if u == 1 %}

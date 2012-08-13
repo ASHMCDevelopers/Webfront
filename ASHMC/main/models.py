@@ -221,7 +221,7 @@ class ASHMCRole(Role):
     def short_repr(self):
         return u"{}".format(self.title)
 
-setattr(User, "highest_ashmc_role", property(lambda x: max(x.ashmcrole_set.all())))
+setattr(User, "highest_ashmc_role", property(lambda x: max(x.ashmcrole_set.all() or [None])))
 
 
 class DormPresident(ASHMCRole):

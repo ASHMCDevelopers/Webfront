@@ -149,8 +149,8 @@ TEMPLATE_DIRS = (
 TESTING = local_settings.TESTING
 
 AUTHENTICATION_BACKENDS = (
-    'object_permissions.backend.ObjectPermBackend',
-    'django.contrib.auth.backends.ModelBackend',
+    'ASHMC.auth_backends.CheckHasRolePerm',
+    #'django.contrib.auth.backends.ModelBackend',
 )
 
 INSTALLED_APPS = (
@@ -172,7 +172,6 @@ INSTALLED_APPS = (
 
     'taggit',
     'mptt',
-    'object_permissions',
 
     'ASHMC.main',  # landing page handler
     'ASHMC.courses',
