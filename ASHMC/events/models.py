@@ -56,6 +56,25 @@ class Location(models.Model):
     suite = models.ForeignKey(Suite, null=True, blank=True)
     building = models.ForeignKey(Building, null=True, blank=True)
 
+    def __unicode__(self):
+        if self.suite:
+            return u"{}: {} - {}".format(
+                self.campus,
+                self.suite.dorm,
+                self.suite,
+            )
+
+        if self.building:
+            return u"{}: {}".format(
+                self.dorm,
+                self.building,
+            )
+
+        return u"{}: {}".format(
+            self.campus,
+            self.dorm,
+        )
+
     def save(self, *args, **kwargs):
         if self.dorm is self.building is None:
             raise IntegrityError("Either specify a dorm or a building for this location.")

@@ -30,24 +30,30 @@
         </div>
     </div>
     <div class='mainbar'>
+        {% if form.errors %} <h5 class='errors centered'>There was a problem with your registration.</h5>{%endif%}
         <h2>{{object.title}}</h2>
         <div class='description'>
             {{object.description|markdown:"safe"}}
         </div>
 
         {% for i in form.event.guests_per_user|rangify:True %}
-            {% if forloop.first %}
-            <div class='register'>
-            <form class='centered'>
-                {% if not forloop.last %}
-                   <h4>You may register up to {{form.event.guests_per_user}} guest{{form.event.guests_per_user|pluralize}}:</h4>
-                {% endif %}
+            {% if forloop.first and not forloop.last %}
+                    <div class='register'>
+                    <h4>You may register up to {{form.event.guests_per_user}} guest{{form.event.guests_per_user|pluralize}}:</h4>
+                    {% if form.errors %}
+                        <div class='errors'>
+                            {{form|prettify_error_listings}}
+                        </div>
+                    {% endif %}
+                <form method='POST'>
+                {% csrf_token %}
                 <ul>
             {% endif %}
                 <li>
-            {% for f in form|get_fields_postfix:i %}
-                {{f}}
-            {% endfor %}
+
+                    {% for f in form|get_fields_postfix:i %}
+                        {{f}}
+                    {% endfor %}
                 </li>
             {% if forloop.last %}
                </ul>

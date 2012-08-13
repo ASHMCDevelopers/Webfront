@@ -392,7 +392,8 @@ p + p {
 
 .errors {
   background: #ff6a6a;
-  color: #fff; }
+  color: #fff;
+  text-align: center; }
 
 li {
   padding: .2em; }
@@ -549,7 +550,7 @@ footer {
   margin: 0.5em; }
 .calendar td {
   padding: 0.25em;
-  text-align: center; }
+  text-align: right; }
   .calendar td.day_of {
     background: #1c1c1c;
     color: white; }
@@ -583,10 +584,24 @@ footer {
     .mainbar input[type="text"].age_input {
       width: 3em;
       text-align: center; }
-  .mainbar form ul {
-    margin-bottom: 0.75em; }
+  .mainbar form {
+    text-align: center; }
+    .mainbar form ul {
+      margin-bottom: 1em; }
+
+ul.errors {
+  margin-bottom: 0.5em; }
+  ul.errors ul {
+    margin-left: 1.5em; }
+  ul.errors .fielderror {
+    text-align: left; }
+
+h5.errors {
+  padding: 0.25em;
+  margin-bottom: 0.5em; }
 
 .register {
   padding: 1em; }
   .register h4 {
-    margin-bottom: 0.75em; }
+    margin-bottom: 1em;
+    text-align: center; }

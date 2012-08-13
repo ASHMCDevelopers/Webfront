@@ -16,13 +16,23 @@
         <ul class='event_list'>
     {% endif %}
             <li>
+            <div class='
+            {% if request.user in event.attendees.all %}
+                attending
+            {% else %}
+                surrounder body
+            {% endif %}'>
                 <div class='event_head'>
                     <a href="{% url 'event_detail' event.id %}"><div class='event_title'><h2>{{event.title}}</h2></div></a>
                     <div class='calendar righty'>
                         {% calendarize event.start_time event.end_time mark_today=True %}
                     </div>
+                    <div class='location'>
+                        <h4>{{event.location}}</h4>
+                    </div>
                     <div class='clearer'></div>
                 </div>
+            </div>
                 <div class='event_posthead'>
                     <div class='location'></div>
                     <div class='time'>

@@ -66,15 +66,36 @@
     }
 
     form {
+        text-align: center;
+
         ul {
-            margin-bottom: 0.75em;
+            margin-bottom: 1em;
+
         }
     }
+}
+
+ul.errors {
+    margin-bottom: 0.5em;
+
+    ul {
+        margin-left: 1.5em;
+    }
+
+    .fielderror {
+        text-align: left;
+    }
+}
+
+h5.errors {
+    padding: 0.25em;
+    margin-bottom: 0.5em;
 }
 
 .register {
     padding: 1em;
     h4 {
-        margin-bottom: 0.75em;
+        margin-bottom: 1em;
+        text-align: center;
     }
 }

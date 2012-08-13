@@ -1,5 +1,8 @@
 from django import template
 from django.conf import settings
+from django.utils.safestring import mark_safe
+
+from ASHMC.main.models import Utility
 
 import calendar
 import datetime
@@ -42,6 +45,45 @@ def rangify(integer, index_1=False):
 def get_fields_postfix(form, name):
     name = str(name)
     return [form[f] for f in form.fields if f.endswith(name)]
+
+
+@register.filter
+def get_errors_postfix(form, name):
+    name = str(name)
+    fields = [form[f] for f in form.fields if f.endswith(name)]
+
+    errors = [f.errors for f in fields if f.errors]
+    print errors
+    return errors
+
+
+@register.filter
+def prettify_error_listings(form):
+    errordict = form.errors
+    print "errordict ", errordict
+
+    response = """<ul class='errors'>"""
+
+    response += '\n'.join(["""<li>{}</li>""".format(e) for e in errordict.pop('__all__', [])])
+
+    for key, values in errordict.iteritems():
+        if key != "__all__":
+            response += """<li class='fielderror'>"""
+            response += """Guest {}'s {}:<ul>""".format(
+                Utility.apnumber(int(key.split('_')[1])),
+                key.split('_')[0]
+            )
+
+        for error in values:
+            response += """<li>{}</li>""".format(error)
+
+        if key != "__all__":
+            response += """</ul>"""
+            response += """</li>"""
+
+    response += """</ul>"""
+
+    return mark_safe(response)
 
 
 @register.inclusion_tag('events/calendar.html')

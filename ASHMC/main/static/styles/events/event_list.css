@@ -392,7 +392,8 @@ p + p {
 
 .errors {
   background: #ff6a6a;
-  color: #fff; }
+  color: #fff;
+  text-align: center; }
 
 li {
   padding: .2em; }
@@ -551,6 +552,14 @@ footer {
 
 .event_list li {
   margin-top: 1.5em; }
+  .event_list li .attending {
+    background-color: #77dd77;
+    padding: 5px; }
+  .event_list li .location {
+    text-align: center;
+    padding: 5px; }
+    .event_list li .location h3 {
+      padding: 0; }
   .event_list li .event_head {
     background: white; }
   .event_list li h2 {
@@ -558,7 +567,8 @@ footer {
     margin: 0; }
   .event_list li .time {
     float: right;
-    padding: 0.5em; }
+    padding: 0.5em;
+      padding-top: 0; }
     .event_list li .time h2 {
       padding: 0; }
   .event_list li .event_title {
@@ -573,7 +583,7 @@ footer {
   margin: 0.5em; }
 .calendar td {
   padding: 0.25em;
-  text-align: center; }
+  text-align: right; }
   .calendar td.day_of {
     background: #1c1c1c;
     color: white; }

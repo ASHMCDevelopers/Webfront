@@ -10,6 +10,7 @@ $line_height: 1.75em;
 $mudd_gold: #cc9933;
 $dark_gold: #7E580D;
 $light_gold: #C9B147;
+$green: #77DD77;
 
 $link_hover_color: #e53b2c;
 $link_color: #3079ed;
@@ -178,6 +179,7 @@ p + p { // proper typogrpahic styling
 .errors {
     background: $error_background;
     color: #fff;
+    text-align: center;
 }
 
 li {
