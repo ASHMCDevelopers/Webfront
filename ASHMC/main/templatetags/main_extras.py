@@ -1,4 +1,5 @@
 from django import template
+from django.utils.safestring import mark_safe
 
 import feedparser
 
@@ -97,6 +98,32 @@ def is_today(value):
         value.month == now.month and
         value.year == now.year
         )
+
+
+@register.filter
+def prettify_error_listings(form):
+    errordict = form.errors
+    print "errordict ", errordict
+
+    response = """<ul class='errors'>"""
+
+    response += '\n'.join(["""<li>{}</li>""".format(e) for e in errordict.pop('__all__', [])])
+
+    for key, values in errordict.iteritems():
+        if key != "__all__":
+            response += """<li class='fielderror'>"""
+            response += """{}:<ul>""".format(key)
+
+        for error in values:
+            response += """<li>{}</li>""".format(error)
+
+        if key != "__all__":
+            response += """</ul>"""
+            response += """</li>"""
+
+    response += """</ul>"""
+
+    return mark_safe(response)
 
 
 @register.filter

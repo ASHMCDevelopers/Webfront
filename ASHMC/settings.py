@@ -2,6 +2,9 @@
 import local_settings
 
 from twitter import Twitter, OAuth
+import django.template
+
+django.template.add_to_builtins('django.templatetags.future')
 
 DEBUG = local_settings.DEBUG
 TEMPLATE_DEBUG = local_settings.TEMPLATE_DEBUG
@@ -150,7 +153,7 @@ TESTING = local_settings.TESTING
 
 AUTHENTICATION_BACKENDS = (
     'ASHMC.auth_backends.CheckHasRolePerm',
-    #'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 INSTALLED_APPS = (

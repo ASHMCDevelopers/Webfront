@@ -1,4 +1,5 @@
 {% extends "main_base_page.html" %}
+{% load main_extras %}
 {% load static %}
 {% block stylin %}
     <link rel="stylesheet" href="{%static "styles/registration/registration.css"%}">
@@ -20,6 +21,9 @@
 <h4> or, return to the <a href="{% url 'main_landing_page' %}">landing page</a>.</h4>
 <div id="login_form">
     <div class="centerer centered">
+        <div class='errors'>
+            {{form|prettify_error_listings}}
+        </div>
         <div id="login_form_hold">
             <form action="{% url  "login" %}" method="POST">
                 {% csrf_token %}
