@@ -209,10 +209,10 @@ class Course(models.Model):
         with this course
         """
         qs = self.section_set.all()
+        qs = qs.exclude(meeting__needs_attention=True)
+        qs = qs.filter(semester__id=Semester.get_this_semester().next().id)
         qs = qs.annotate(num_meetings=models.Count('meeting'))\
                .filter(num_meetings__gte=1)
-        qs = qs.exclude(meeting__needs_attention=True)
-        qs = qs.filter(semester=Semester.get_this_semester().next())
         return qs.order_by('number')
 
     def set_writingintense(self, sem=None):
@@ -235,7 +235,7 @@ class Course(models.Model):
 
     def __unicode__(self):
         if not self.codeletters:
-            return u"{}{}{}".format(self.area.code.rjust(4),
+            return u"{}{}{}".format(self.areas.all()[0].code.rjust(4),
                                     self.codenumber.zfill(3).ljust(5),
                                     self.codecampus)
         else:

@@ -5,14 +5,14 @@ Created on May 2, 2012
 '''
 from django import template
 from django.utils.safestring import mark_safe
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.db.models.query import QuerySet
 
 register = template.Library()
 
-from ..models import RoomInfo, Timeslot, Campus, Room, Major,\
+from ..models import RoomInfo, Campus, Room, Major,\
                     Enrollment, Student
+
 
 @register.filter
 def clean_sections(value, qex=None):
@@ -44,6 +44,7 @@ def get_room(value, timeslottuple):
                                 timeslot=timeslottuple[3])
     return ri
 
+
 @register.filter
 def prettify(value, flag=None):
     """
@@ -69,17 +70,19 @@ def prettify(value, flag=None):
     if isinstance(value, Campus):
         ret = "<span class=\"colored {}\">{}</span>".format(value.code, value.code)
     elif isinstance(value, Room):
-        if value.building.code not in ['LAC','TIER','DU']:
+        if value.building.code not in ['LAC', 'TIER', 'DU']:
             ret = "Room {}a".format(value.title)
         else:
-            if value.title: ret = value.title
-            else: ret = "TBD"
+            if value.title:
+                ret = value.title
+            else:
+                ret = "TBD"
     elif isinstance(value, RoomInfo):
         if value.room.building.code in ['ARR', 'TBA']:
             ret = '{}'.format(value.room.building.name)
         else:
             ret = "{}, {}".format(value.room.building.name,
-                              prettify(value.room)) # yeahhh recursion
+                              prettify(value.room))  # yeahhh recursion
     elif isinstance(value, QuerySet):
         if flag == None:
             ret = ', '.join(value)
@@ -98,6 +101,7 @@ def prettify(value, flag=None):
     return mark_safe(ret)
 prettify.is_safe = True
 
+
 @register.filter
 def make_nbsp(value):
     """
@@ -107,6 +111,7 @@ def make_nbsp(value):
     return mark_safe(ret)
 make_nbsp.is_safe = True
 
+
 @register.filter
 def has_taken(value, course):
     """
@@ -114,8 +119,10 @@ def has_taken(value, course):
     instance of :model:`courses.Course`.
     """
     if not isinstance(value, Student):
-        try: value = value.student
-        except AttributeError: return False # AnonymousUser
+        try:
+            value = value.student
+        except AttributeError:
+            return False  # AnonymousUser
 
     return Enrollment.objects.filter(student=value)\
                             .filter(section__course=course) > 0
@@ -133,6 +140,7 @@ def get_next_page_count(value):
 
     return p.end_index() - p.start_index() + 1
 
+
 @register.filter
 def get_hidden_store(value):
     """
@@ -142,12 +150,14 @@ def get_hidden_store(value):
     """
     return "??"
 
+
 @register.filter
 def replace_space(value, new):
     return value.replace(' ', new)
 
+
 @register.tag
-def create_major_divs(parser,token):
+def create_major_divs(parser, token):
 
     try:
         tag_name, = token.split_contents()
@@ -156,18 +166,19 @@ def create_major_divs(parser,token):
 
     return CreateMajorDivs()
 
+
 @register.filter
 def prereq_order(value):
     return value.annotate(num_prereqs=Count('prerequisites')).order_by('num_prereqs')
+
 
 class CreateMajorDivs(template.Node):
     def __init__(self):
         self.majors = Major.objects.filter(primary_campus__code="HM").exclude(title='Core')
 
-
     def render(self, context):
         t = template.loader.get_template("major_track.html")
-        return t.render(template.Context({'majors':self.majors},autoescape=context.autoescape))
+        return t.render(template.Context({'majors': self.majors}, autoescape=context.autoescape))
 
 
 
