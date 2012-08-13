@@ -20,10 +20,16 @@
     }
 
     &::before {
+        content: "";
         margin-left: -36px;
     }
 
     &::after {
+        content: "";
         margin-left: 0;
+    }
+
+    h4 {
+        margin-top: 0.5em;
     }
 }

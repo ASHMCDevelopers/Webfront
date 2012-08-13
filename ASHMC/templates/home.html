@@ -1,9 +1,79 @@
 {% extends "landing_page.html" %}
+{% load main_extras %}
+{% load static %}
+
+{% block stylin %}
+   <link rel="stylesheet" type="text/css" href="{% static 'styles/home.css' %}"/>
+{% endblock stylin %}
 
 {% block pre_header %}
-    
 {% endblock pre_header %}
 
+{% block right_header %}
+{% endblock right_header %}
+
 {% block post_header %}
-    YO
+    <h2 class='name'>{{user.first_name}}
+        {{user.last_name}}
+    </h2>
+
+    <div class='password_change'>
+        <a href="{% url 'change_password' %}">change your password</a> |
+        <a href="{% url 'logout' %}">logout</a>
+    </div>
+
+    <div class="info">
+        <ul>
+            {% for role in user|current_roles:"ashmc" %}
+            {% if forloop.first %}
+                <li><h3>ASHMC Roles</h3></li>
+            {% endif %}
+            <li><h4>{{role.cast}}</h4></li>
+            {% endfor %}
+            {% for role in user|current_roles:"dorm" %}
+               {% if forloop.first %}
+                <li><h3>Dorm Roles</h3></li>
+                {% endif %}
+                <li><h4>{{role}}</li>
+            {% endfor %}
+        </ul>
+        <ul>
+            <li><h3>Living Situation</h3></li>
+            {% with user|get_living_situation as room %}
+
+            <li><h4>{{room.room}} ({{room.semesters.all.0}})</h4></li>
+            {% if room.room.suite or user|current_suites %}
+            <li class='subhead'><h4>Suites:</h4>
+                <ul>
+                    {% if room.room.suite %}
+                     <li><h5>{{room.room.suite}}</h5></li>
+                    {% endif %}
+            {% for suite in user|current_suites %}
+            {% if forloop.first %}
+            {% endif %}
+            <li>
+                <form method="POST" action="{% url 'roster_tsuite_update' pk=suite.id action='leave' %}">
+                    {% csrf_token %}
+                    <h5><a class='submitter' href="#">X</a> {{suite}}</h5>
+                </form>
+            </li>
+            {% if forloop.last %}
+                </ul>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </ul>
+    </div>
 {% endblock post_header %}
+
+{% block scriptin %}
+<script>
+$(function(){
+    $('.submitter').click(function(){
+        $(this).parents('form')[0].submit();
+    });
+});
+</script>
+{% endblock scriptin %}

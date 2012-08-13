@@ -25,9 +25,13 @@ urlpatterns = patterns('',
     url(r'^events/', include('ASHMC.events.urls')),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name="login"),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout"),
+    url(r'^accounts/change_password/$', 'django.contrib.auth.views.password_change', name='change_password',
+        kwargs={'post_change_redirect': '/home'},
+    ),
     # DON'T user the soft_link if you can avoid it.
     url(r'^soft_link/(?P<url_name>.*)/', lambda x, url_name: redirect(url_name)),
     url(r'^object_perms/', include('object_permissions.urls')),
+    url(r'^roster/', include('ASHMC.roster.urls')),
     url(r'^', include('ASHMC.main.urls')),
 )
 
