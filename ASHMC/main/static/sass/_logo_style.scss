@@ -1,3 +1,5 @@
+@import "login_form";
+
 #logo {
 	$border_width: 10px;
     height: 150px;
@@ -8,7 +10,7 @@
     }
     z-index: 2;
 	background: $dark_background;
-    
+
     color: $mudd_gold;
 
 	border: {
@@ -19,7 +21,7 @@
         color: $dark_gold;
 	}
 
-    z-index: 100;
+    z-index: 90;
 }
 #ashmc {
 	float: left;
@@ -39,7 +41,7 @@
             decoration: none;
         }
 
-        
+
 
         &:active {
             color: rgb(200, 26, 70);
@@ -55,16 +57,16 @@
 				left: 0;
 				right: 0;
 			}
-		
+
 			display: inline block;
 			list-style: None;
-		
+
     		&.HMC {
                 font:{
     			    size: 125px;
     		    }
             }
-                
+
             color: $mudd_gold;
 
     		&.AS {

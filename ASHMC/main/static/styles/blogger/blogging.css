@@ -481,6 +481,45 @@ footer {
     margin-left: 0.5em;
     list-style: none; }
 
+#login_form {
+  float: right;
+  height: inherit;
+  margin-right: 2%;
+  margin-top: 0px; }
+  #login_form div {
+    width: 415px; }
+  #login_form::before {
+    content: "}";
+    font-size: 235px;
+    font-family: "Baskerville";
+    float: right;
+    margin-top: -68px; }
+  #login_form::after {
+    content: "{";
+    font-size: 235px;
+    font-family: "Baskerville";
+    float: left;
+    margin-top: -202px;
+    margin-left: -113px; }
+  #login_form form input {
+    width: 300px;
+    padding: 5px;
+    margin-top: 10px;
+    font-size: 20px; }
+
+#salutation {
+  float: right;
+  text-align: center;
+  min-width: 300px;
+  margin-top: 1em;
+  margin-right: 15%; }
+  #salutation .info {
+    text-align: left;
+    display: inline-block; }
+  #salutation .header_action_links {
+    display: inline-block;
+    text-align: right; }
+
 #logo {
   height: 150px;
   min-width: 1080px;
@@ -494,7 +533,7 @@ footer {
   border-right: None;
   border-width: 10px;
   border-color: #7e580d;
-  z-index: 100; }
+  z-index: 90; }
 
 #ashmc {
   float: left;

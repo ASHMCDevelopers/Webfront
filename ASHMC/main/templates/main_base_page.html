@@ -6,39 +6,48 @@
 {% block content %}
 <section id="preheader">
 	{% block pre_header %}
-		Login Stuff
+
 	{% endblock pre_header %}
 	</section>
 
 <header>
 {% block header %}
 <div id="logo">
+
+        <div class='clearer'></div>
     {% block right_header %}
        {% if user.is_authenticated %}
        <div id="salutation">
             <h2>{{user.get_full_name}}</h2>
 
-            <div id="ashmcroles">
+            <div class="info">
                 <ul>
-            {% for role in user.ashmcrole_set.all %}
-                <li>{{role.cast}}</li>
-            {% endfor %}
+                    {% with user.ashmcrole_set.all|maximum as ashmcrole %}
+                    <li>{{ashmcrole.cast}}</li>
+                    {% endwith %}
+                    <li>{{user|get_living_situation}}
                 </ul>
             </div>
-            <div class="righty" id="logout"><a href="{% url 'logout' %}">logout</a></div>
+            <div class='header_action_links'>
+            <ul>
+                <li><a href="">account</a>
+                <li><a href="{% url 'logout' %}">logout</a></li>
+            </ul>
+            </div>
        </div>
         {% else %}
             <div id="login_form" class="righty">
                 <div id="login_form_hold">
                     <form action="{% url  "login" %}" method="POST">
                         {% csrf_token %}
-                    <div>{{form.username}}<div class='tooltip'>Your HMC email: first_last@hmc.edu</div></div>
-                    <div>{{form.password}}<div class='tooltip'>Don't know your password?<br/>Click <a href="#">here</a>.</div></div>
+                    <div>{{login_form.username}}<div class='tooltip'>Your HMC email: first_last@hmc.edu</div></div>
+                    <div>{{login_form.password}}<div class='tooltip'>Don't know your password?<br/>Click <a href="#">here</a>.</div></div>
                     <input type=submit id="signIn" class="button-submit" value="Get Started" />
                     </form>
                 </div>
             </div>
         {% endif %}
+
     {% endblock %}
 	{% block left_header %}
 	    <div id="ashmc">

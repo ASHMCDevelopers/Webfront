@@ -69,6 +69,8 @@
 #salutation {
     float: right;
 
+    text-align: center;
+
     min-width: 300px;
 
     margin: {
@@ -76,8 +78,13 @@
         right: 15%;
     }
 
-    h2 {
-        float: left;
-        margin-right: 1em;
+    .info {
+        text-align: left;
+        display: inline-block;
+    }
+
+    .header_action_links {
+        display: inline-block;
+        text-align: right;
     }
 }
