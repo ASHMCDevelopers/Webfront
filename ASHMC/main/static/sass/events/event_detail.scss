@@ -1,0 +1,80 @@
+@import "events_base";
+
+
+#postheader {
+    max-width: 920px;
+    margin: 0 auto;
+}
+
+.description {
+    ol {
+        list-style: decimal;
+        margin-left: 2.5em;
+    }
+
+    ul {
+        list-style: disc;
+        margin-left: 2.5em;
+    }
+}
+@import "calendar";
+
+.calendar {
+    $cal_size: $font_size * 1.25;
+    font: {
+        size: $cal_size;
+    }
+}
+
+.sidebar {
+    float: left;
+
+    .time {
+        text-align: center;
+        margin: 0.5em;
+
+        h3 {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    h4 {
+        padding: 0 {
+            bottom: 1em;
+        }
+    }
+}
+
+.mainbar {
+    background: $light_background;
+    padding: 1.5em;
+    float: left;
+    max-width: 59%;
+
+    h2 {
+        text-align: center;
+    }
+
+    input[type="text"] {
+        padding: 0.25em;
+
+        &.age_input {
+            width: 3em;
+            text-align: center;
+        }
+    }
+
+    form {
+        ul {
+            margin-bottom: 0.75em;
+        }
+    }
+}
+
+.register {
+    padding: 1em;
+    h4 {
+        margin-bottom: 0.75em;
+    }
+}

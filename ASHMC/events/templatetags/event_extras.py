@@ -17,10 +17,31 @@ def date_presenter(datet):
     now = datetime.datetime.now(pytz.utc)
     print now.__repr__()
 
-    if datet - now < datetime.timedelta(days=1):
+    if abs(datet - now) < datetime.timedelta(days=1):
         return datet.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%H:%M")
 
     return datet.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%b %d")
+
+
+@register.filter
+def stringify(thing):
+    try:
+        return str(thing)
+    except:
+        return ""
+
+
+@register.filter
+def rangify(integer, index_1=False):
+    if index_1:
+        return range(1, integer + 1)
+    return range(integer)
+
+
+@register.filter
+def get_fields_postfix(form, name):
+    name = str(name)
+    return [form[f] for f in form.fields if f.endswith(name)]
 
 
 @register.inclusion_tag('events/calendar.html')
@@ -40,7 +61,7 @@ def calendarize(dt_one, dt_two=None, mark_today=False):
         dt_two = dt_two.astimezone(pytz.timezone(settings.TIME_ZONE))
 
     if mark_today:
-        today = datetime.datetime.now(pytz.utc)
+        today = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(settings.TIME_ZONE))
     else:
         today = None
 

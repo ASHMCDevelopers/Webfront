@@ -1,5 +1,6 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
+from .forms import AttendanceForm
 from .models import Event
 
 import datetime
@@ -17,5 +18,18 @@ class EventList(ListView):
         context = super(EventList, self).get_context_data(*args, **kwargs)
 
         context['now'] = datetime.datetime.now(pytz.utc)
+
+        return context
+
+
+class EventDetail(DetailView):
+    model = Event
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(EventDetail, self).get_context_data(*args, **kwargs)
+
+        context['form'] = AttendanceForm(event=context['object'])
+
+        print dir(context['form'])
 
         return context

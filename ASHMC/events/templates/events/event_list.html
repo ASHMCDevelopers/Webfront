@@ -17,8 +17,8 @@
     {% endif %}
             <li>
                 <div class='event_head'>
-                    <a href=""><div class='event_title'><h2>{{event.title}}</h2></div></a>
-                    <div class='calendar'>
+                    <a href="{% url 'event_detail' event.id %}"><div class='event_title'><h2>{{event.title}}</h2></div></a>
+                    <div class='calendar righty'>
                         {% calendarize event.start_time event.end_time mark_today=True %}
                     </div>
                     <div class='clearer'></div>
@@ -28,8 +28,8 @@
                     <div class='time'>
                         <h2>
                             {{event.start_time|date_presenter}}
-                        {% if event.end_time and event.is_today%}
-                            - {{event.end_time|date:"H:i"}}
+                        {% if event.end_time %}
+                            - {{event.end_time|date_presenter}}
                         {% endif %}
                         </h2>
                     </div>

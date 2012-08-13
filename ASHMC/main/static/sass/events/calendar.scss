@@ -1,0 +1,20 @@
+
+.calendar {
+    table {
+        margin: 0.5em;
+    }
+
+    td {
+        padding: 0.25em;
+        text-align: center;
+
+        &.day_of {
+            background: $dark_background;
+            color: white;
+        }
+
+        &.today {
+            border: 2px solid $mudd_gold;
+        }
+    }
+}

@@ -52,22 +52,4 @@
     }
 }
 
-.calendar {
-    float: right;
-    table {
-        margin: 0.5em;
-    }
-
-    td {
-        padding: 0.25em;
-
-        &.day_of {
-            background: $dark_background;
-            color: white;
-        }
-
-        &.today {
-            border: 2px solid $mudd_gold;
-        }
-    }
-}
+@import "calendar";

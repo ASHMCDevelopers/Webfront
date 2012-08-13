@@ -27,6 +27,7 @@ $body_background:  white url(/static/images/bg.jpg) repeat;
 @import "reset";
 @import "classes";
 @import "inputs";
+
 ::selection {
     background-color: $mudd_gold;
     color: white;
