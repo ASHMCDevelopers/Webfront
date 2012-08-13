@@ -25,12 +25,14 @@
                     {% with user.ashmcrole_set.all|maximum as ashmcrole %}
                     <li>{{ashmcrole.cast}}</li>
                     {% endwith %}
-                    <li>{{user|get_living_situation}}
+                    {% with user|get_living_situation as room %}
+                    <li>{{room.room}}</li>
+                    {% endwith %}
                 </ul>
             </div>
             <div class='header_action_links'>
             <ul>
-                <li><a href="">account</a>
+                <li><a href="{% url 'main_home' %}">account</a></li>
                 <li><a href="{% url 'logout' %}">logout</a></li>
             </ul>
             </div>

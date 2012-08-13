@@ -33,3 +33,8 @@ admin.site.register(Suite, SuiteAdmin)
 class TransientSuiteAdmin(admin.ModelAdmin):
     pass
 admin.site.register(TransientSuite, TransientSuiteAdmin)
+
+
+class TransientSuiteMembershipAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(TransientSuiteMembership, TransientSuiteMembershipAdmin)

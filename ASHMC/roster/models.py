@@ -69,23 +69,23 @@ class UserRoom(models.Model):
 
 
 class Suite(models.Model):
-
+    name = models.CharField(max_length=100)
     dorm = models.ForeignKey(Dorm)
 
     class Meta:
         verbose_name = _('Suite')
         verbose_name_plural = _('Suites')
+        unique_together = (('name', 'dorm'),)
 
     def __unicode__(self):
-        return u"{}: {}".format(self.dorm, self.room_set.all())
+        return u"{}: {}".format(self.dorm, self.name)
 
 
 class TransientSuite(models.Model):
 
-    name = models.CharField(max_length=100)
-    year = models.IntegerField()
+    name = models.CharField(max_length=100, unique=True)
 
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(User, through="TransientSuiteMembership")
 
     class Meta:
         verbose_name = _('Transient Suite')
@@ -93,3 +93,17 @@ class TransientSuite(models.Model):
 
     def __unicode__(self):
         return u"{}".format(self.name)
+
+
+class TransientSuiteMembership(models.Model):
+    user = models.ForeignKey(User)
+    tsuite = models.ForeignKey(TransientSuite)
+
+    semesters = models.ManyToManyField('main.Semester')
+
+    def __unicode__(self):
+        return "{} in {} ({})".format(
+            self.user,
+            self.tsuite,
+            self.semesters.all(),
+        )

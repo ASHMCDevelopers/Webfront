@@ -3,7 +3,7 @@ from django import template
 import feedparser
 
 from ..models import ASHMCRole, DormPresident, DormRole, DormAppointment, ASHMCAppointment, Semester
-from ASHMC.roster.models import UserRoom
+from ASHMC.roster.models import UserRoom, TransientSuiteMembership
 
 import random
 import re
@@ -19,6 +19,31 @@ def maximum(iterable):
 
 
 @register.filter
+def current_roles(user, type=None):
+    if type is None:
+        return []
+
+    sem = Semester.get_this_semester()
+
+    if type == 'ashmc':
+        return sorted(
+        [x.role for x in ASHMCAppointment.objects.filter(
+            user=user,
+            semesters__id=sem.id
+        )])
+
+    elif type == 'dorm':
+        return sorted(
+        [x.dorm_role for x in DormAppointment.objects.filter(
+            user=user,
+            semesters__id=sem.id,
+        )]
+        )
+
+    return []
+
+
+@register.filter
 def get_living_situation(user):
     sem = Semester.get_this_semester()
     try:
@@ -29,11 +54,33 @@ def get_living_situation(user):
     except:
         return ""
 
-    return "{} {} ({})".format(
-        room.room.dorm,
-        room.room.number,
-        room.semesters.all()[0],
+    return room
+
+
+@register.filter
+def current_suites(user, type="transient"):
+    sem = Semester.get_this_semester()
+
+    room = UserRoom.objects.get(
+        user=user,
+        semesters__id=sem.id,
     )
+
+    if type == 'dorm':
+        if room.room.suite:
+            suites = [room.room.suite]
+        else:
+            suites = []
+        return suites
+
+    elif type == 'transient':
+        tsms = TransientSuiteMembership.objects.filter(
+            user=user,
+            semesters__id=sem.id,
+        )
+        return [tsm.tsuite for tsm in tsms]
+
+    return []
 
 
 @register.filter

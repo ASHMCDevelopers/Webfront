@@ -105,5 +105,12 @@
             "code": "OFF",
             "name": "Off Campus"
         }
+    },
+    {
+        "pk": 1,
+        "model": "roster.transientsuite",
+        "fields": {
+            "name": "Timeland"
+        }
     }
 ]

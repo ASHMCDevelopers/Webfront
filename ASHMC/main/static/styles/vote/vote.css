@@ -517,6 +517,7 @@ footer {
     text-align: left;
     display: inline-block; }
   #salutation .header_action_links {
+    margin-left: 1.5em;
     display: inline-block;
     text-align: right; }
 
