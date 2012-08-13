@@ -2,6 +2,7 @@ from django import template
 from django.conf import settings
 from django.utils.safestring import mark_safe
 
+from ..models import Attendance
 from ASHMC.main.models import Utility
 
 import calendar
@@ -24,6 +25,17 @@ def date_presenter(datet):
         return datet.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%H:%M")
 
     return datet.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%b %d")
+
+
+@register.filter
+def get_attendance(event, user):
+    try:
+        return Attendance.objects.get(
+            user=user,
+            event=event,
+        )
+    except:
+        return None
 
 
 @register.filter

@@ -34,6 +34,14 @@ class EventDetail(DetailView, FormMixin):
 
         context['form'] = AttendanceForm(context['object'], self.request.POST)
 
+        try:
+            context['attendance'] = Attendance.objects.get(
+                user=self.request.user,
+                event=self.get_object(),
+            )
+        except:
+            context['attendance'] = None
+
         return context
 
     def post(self, *args, **kwargs):
@@ -53,7 +61,7 @@ class EventDetail(DetailView, FormMixin):
             a.delete()
             return redirect('event_list')
 
-        for number in range(1, event.guests_per_user):
+        for number in range(1, event.guests_per_user + 1):
             try:
                 name = f.cleaned_data['name_{}'.format(number)]
                 age = f.cleaned_data['age_{}'.format(number)]

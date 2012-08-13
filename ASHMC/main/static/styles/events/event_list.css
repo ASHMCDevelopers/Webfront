@@ -560,6 +560,17 @@ footer {
     padding: 5px; }
     .event_list li .location h3 {
       padding: 0; }
+  .event_list li .attendance {
+    padding: 5px; }
+    .event_list li .attendance h6 {
+      padding: 0;
+      display: inline; }
+    .event_list li .attendance ul {
+      display: inline; }
+      .event_list li .attendance ul li {
+        display: inline; }
+        .event_list li .attendance ul li:not(:last-child):after {
+          content: ","; }
   .event_list li .event_head {
     background: white; }
   .event_list li h2 {

@@ -32,6 +32,27 @@
             }
         }
 
+        .attendance {
+            padding: 5px;
+
+            h6 {
+                padding: 0;
+                display: inline;
+            }
+
+            ul {
+                display: inline;
+
+                li {
+                    display: inline;
+
+                    &:not(:last-child):after {
+                        content:",";
+                    }
+                }
+            }
+        }
+
         .event_head {
             background: $light_background;
         }

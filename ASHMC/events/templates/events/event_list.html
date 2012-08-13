@@ -30,6 +30,22 @@
                     <div class='location'>
                         <h4>{{event.location}}</h4>
                     </div>
+                    {% with event|get_attendance:request.user as attendance %}
+                        {% if attendance %}
+                            <div class='attendance'>
+                                {% for guest in attendance.guests.all  %}
+                                    {% if forloop.first %}
+                                        <h6>You are bringing:</h6>
+                                        <ul>
+                                    {% endif %}
+                                            <li>{{guest}}</li>
+                                    {% if forloop.last %}
+                                        </ul>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
                     <div class='clearer'></div>
                 </div>
             </div>

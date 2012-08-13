@@ -36,11 +36,13 @@
             {{object.description|markdown:"safe"}}
         </div>
 
-        {% if request.user in object.attendees.all %}
+        {% if attendance %}
             <div class='register'>
                 <form method="POST">
                     {% csrf_token %}
-                    <input type="submit" value="I'm not going." class='button-submit reject'/>
+                    <input type="submit" value="
+                    I'm not going. {% if attendance.guests.count %} (neither are my guests) {% endif%}
+                    " class='button-submit reject'/>
                 </form>
             </div>
         {% else %}

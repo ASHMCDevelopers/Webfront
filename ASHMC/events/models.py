@@ -43,11 +43,17 @@ class Attendance(models.Model):
 
     guests = models.ManyToManyField("GuestAttendance")
 
+    class Meta:
+        unique_together = (('user', 'event'),)
+
 
 class GuestAttendance(models.Model):
     """For non-user attendees (i.e., registering an off-campus guest)"""
     name = models.CharField(max_length=100)
     age = models.IntegerField()
+
+    def __unicode__(self):
+        return u"{}".format(self.name)
 
 
 class Location(models.Model):
