@@ -51,7 +51,7 @@
             {% elif form.ballot.vote_type == VOTE_TYPES.SELECT_X %}
             <h4>Select up to <span class='select_x'>{{form.ballot.number_to_select}}</span> option{{form.ballot.number_to_select|pluralize}}</h4>
             {% elif form.ballot.vote_type == VOTE_TYPES.PREFERENCE %}
-            <h4>Rank the following options ({{form.ballot.candidate_set.all|length}} is best, 1 is worst)</h4>
+            <h4>Rank the following options ({{form.ballot.candidate_set.all|length}} is worst, 1 is best)</h4>
             {% endif %}
             {%with form.ballot.id as bid %}
             {{form_errors|prettify_error_listings:bid}}

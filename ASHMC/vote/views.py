@@ -117,7 +117,7 @@ class MeasureDetail(DetailView):
                         candidate=form.cleaned_data['choice'],
                     )
             elif form.ballot.vote_type == Ballot.VOTE_TYPES.SELECT_X:
-                if form.cleaned_data['abstains']:
+                if 'abstains' in form.cleaned_data and form.cleaned_data['abstains']:
                     continue
 
                 for candidate in form.cleaned_data['choice']:
@@ -127,7 +127,6 @@ class MeasureDetail(DetailView):
                         candidate=candidate,
                     )
             elif form.ballot.vote_type == Ballot.VOTE_TYPES.PREFERENCE:
-                print form.cleaned_data
                 for candidate_field in form.cleaned_data:
                     candidate = Candidate.objects.get(
                         title=candidate_field,
