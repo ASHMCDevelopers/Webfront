@@ -35,8 +35,6 @@ questions. One of the devs will get back to you ASAP.
 
 ## What if I'm a moderator?
 
-Well, first of all I weep for you.
-
 The moderator's non-development duties look like this:
 
 * Look through pull requests. If there's a hotfix, it gets priority. Hotfixes are
@@ -55,7 +53,13 @@ Nobody besides managers should be doing work on either `master` or `develop`, so
 
     Feature branches are merged into develop just like hotfixes are into `master`.
 
+    Feature pull requests are the simplest (and, hopefully, the most common): they're just
+    regular pull requests. Code review, and when the feature looks good, accept the pull into
+    `develop` (and _only_ `develop`).
+
     Release branches are created by managers, and pushed to `canon`, so that devs can work on them
-    and submit pull requests against them.
+    and submit pull requests against them. When the release is satisfactory, merge into both `master` and
+    `develop`, then push those to `canon`. The release branch should then be deleted.
 
 * Look through issues, assign to developers/ask for more info/etc.
+* Repeat.
