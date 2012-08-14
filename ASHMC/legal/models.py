@@ -105,6 +105,13 @@ class OfficialForm(models.Model):
 
     file_actual = models.FileField(upload_to="legal/forms/%Y/%m/%d")
 
+    @property
+    def dl_url(self):
+        try:
+            return self.file_actual.url
+        except ValueError:
+            return ''
+
     class Meta:
         unique_together = ('name', 'last_updated')
 
