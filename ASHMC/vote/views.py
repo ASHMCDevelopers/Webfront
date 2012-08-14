@@ -105,13 +105,13 @@ class MeasureDetail(DetailView):
                 if form.cleaned_data['choice'] is None:
                     # Valid form with None choice means write in
                     # TODO: Document this assumption
-                    pv = PopularityVote.objects.create(
+                    PopularityVote.objects.create(
                         ballot=form.ballot,
                         vote=vote,
                         write_in_value=form.cleaned_data['write_in_value'],
                     )
                 else:
-                    pv = PopularityVote.objects.create(
+                    PopularityVote.objects.create(
                         ballot=form.ballot,
                         vote=vote,
                         candidate=form.cleaned_data['choice'],
@@ -121,7 +121,7 @@ class MeasureDetail(DetailView):
                     continue
 
                 for candidate in form.cleaned_data['choice']:
-                    pv = PopularityVote.objects.create(
+                    PopularityVote.objects.create(
                         ballot=form.ballot,
                         vote=vote,
                         candidate=candidate,
@@ -132,7 +132,7 @@ class MeasureDetail(DetailView):
                         title=candidate_field,
                         ballot=form.ballot,
                     )
-                    prv = PreferentialVote.objects.create(
+                    PreferentialVote.objects.create(
                         ballot=form.ballot,
                         vote=vote,
                         candidate=candidate,
@@ -140,3 +140,30 @@ class MeasureDetail(DetailView):
                     )
 
         return redirect('measure_list')
+
+
+class MeasureResultList(ListView):
+    model = Measure
+    template_name = 'vote/measure_results.html'
+
+    def get_queryset(self):
+        this_sem = Semester.get_this_semester()
+
+        try:
+            room = UserRoom.objects.filter(
+                user=self.request.user,
+                semesters__id=this_sem.id,
+            )[0].room
+        except IndexError:
+            # If they don't have a room, they're probably not eligible to vote.
+            raise PermissionDenied()
+
+        return Measure.objects.filter(
+            Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
+            Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None),
+            # Only show measures which have already closed for voting
+            vote_end__lte=datetime.datetime.now(pytz.utc),
+        ).exclude(
+            banned_accounts__id__exact=self.request.user.id,
+        ).order_by('vote_end')
+

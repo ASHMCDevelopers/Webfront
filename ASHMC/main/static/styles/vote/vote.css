@@ -595,6 +595,10 @@ footer {
 p {
   text-align: justify; }
 
+.measure_list li .errors {
+  padding: 3px 6px; }
+  .measure_list li .errors h4 {
+    display: inline; }
 .measure_list li:not(:first-child) {
   margin-top: 1.5em; }
 .measure_list li .measure_head {
@@ -617,6 +621,17 @@ p {
   background: white;
   padding: 0.5em;
   max-width: 450px; }
+
+.winners {
+  float: right;
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: 1em;
+  padding-left: 1em; }
+  .winners h3 {
+    padding-top: 0.5em; }
+  .winners ul {
+    margin-left: 1em; }
 
 a .number {
   color: #333333;
