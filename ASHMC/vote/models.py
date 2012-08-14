@@ -102,11 +102,21 @@ class Measure(models.Model):
 
     @property
     def eligible_voters(self):
+        if self.restrictions is None:
+            return User.objects.all()
         return self.restrictions.get_grad_year_users() & self.restrictions.get_dorm_users()
 
     class Meta:
         verbose_name = _('Mesure')
         verbose_name_plural = _('Mesures')
+
+    def save(self, *args, **kwargs):
+        # Ensures there's a restrictions object to check against in views.
+        try:
+            self.restrictions
+        except models.ObjectDoesNotExist:
+            Restrictions.objects.create(restricted_to=self)
+        super(Measure, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return u"{}".format(self.name)
