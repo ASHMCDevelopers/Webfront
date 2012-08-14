@@ -132,7 +132,10 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     #'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
+
+INTERNAL_IPS = local_settings.INTERNAL_IPS
 
 ROOT_URLCONF = 'ASHMC.urls'
 
@@ -175,6 +178,7 @@ INSTALLED_APPS = (
 
     'taggit',
     'mptt',
+    'debug_toolbar',
 
     'ASHMC.main',  # landing page handler
     'ASHMC.courses',
