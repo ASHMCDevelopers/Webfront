@@ -37,15 +37,13 @@ questions. One of the devs will get back to you ASAP.
 
 The moderator's non-development duties look like this:
 
-* Look through pull requests. If there's a hotfix, it gets priority. Hotfixes are
-requests to be pulled into master, by definition. Otherwise, skip the next few steps.
-    2. If the hotfix looks ready, great. accept the pull request. In your own repository,
-`pull canon master`. Run tests to make sure it's actually a good release.
-    2. If the tests don't pass, roll back the changes and push to canon (restoring
-the old master). Yell at the pull-requester for sucking.
-    2. If the tests *do* pass, celebrate! merge your `master` into `develop`, and `push canon`.
-Nobody besides managers should be doing work on either `master` or `develop`, so this is safe
-(they should be working in feature/hotfix/release branches).
+* Look through pull requests. If there's a hotfix, it gets priority. Hotfixes skip the standard
+'live in develop for a while' lifecycle of a branch, because they are urgent things that need to be
+in production immediately (as opposed to later in the day, or maybe tomorrow).
+
+    Hotfix branches are created by managers and pushed to canon so that others can pull-request into them.
+    When a hotfix branch is complete, a manager will merge it into `master` and `develop`, then
+    push both of those to `canon` so that the changes will head downstream.
 
     Pull requests for `develop` work similarly, except you don't merge the result into `master`.
     * release branches will be named like `release/`.
