@@ -70,7 +70,7 @@ class MeasureDetail(DetailView):
             self.bad_forms = {}
         context['form_errors'] = self.bad_forms
 
-        context['forms'] = [BallotForm(b, data=self.request.POST) for b in self.get_object().ballot_set.all()]
+        context['forms'] = [BallotForm(b, data=self.request.POST) for b in self.get_object().ballot_set.all().order_by('display_position')]
         context['VOTE_TYPES'] = Ballot.VOTE_TYPES
 
         return context

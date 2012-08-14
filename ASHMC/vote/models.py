@@ -69,7 +69,7 @@ class Ballot(models.Model):
         return u"Ballot #{}: {}".format(self.id, self.title)
 
     class Meta:
-        unique_together = (('measure', 'display_position'), ('measure', 'title'))
+        unique_together = (('measure', 'title'), )
 
     def save(self, *args, **kwargs):
         if self.vote_type == self.VOTE_TYPES.SELECT_X and self.number_to_select is None:
@@ -125,11 +125,11 @@ class Measure(models.Model):
 
     def save(self, *args, **kwargs):
         # Ensures there's a restrictions object to check against in views.
+        super(Measure, self).save(*args, **kwargs)
         try:
             self.restrictions
         except models.ObjectDoesNotExist:
             Restrictions.objects.create(restricted_to=self)
-        super(Measure, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return u"{}".format(self.name)
