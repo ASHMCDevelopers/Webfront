@@ -600,8 +600,8 @@ footer {
 
 #latest_news {
   display: inline;
-  float: left;
-  width: 44.1%;
+  float: right;
+  width: 44%;
   min-width: 300px;
   background: white;
   padding-bottom: 20px;

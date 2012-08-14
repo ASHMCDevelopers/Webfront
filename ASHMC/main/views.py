@@ -45,10 +45,12 @@ class LandingPage(TemplateView):
         context['latest_entries'] = latest_entries
 
         context['top_stories'] = TopNewsItem.objects.filter(
-            date_expired__gt=datetime.datetime.now(),
-            date_published__lte=datetime.datetime.now(),
+            date_expired__gt=datetime.datetime.now(pytz.utc),
+            date_published__lte=datetime.datetime.now(pytz.utc),
             should_display=True
         ).order_by('-date_published')[:7]
+
+        print context['top_stories']
         return context
 
 
