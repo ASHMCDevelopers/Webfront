@@ -20,9 +20,8 @@ little jiggering to fit it into a more active development cycle and GitHub.
 1. fork off ASHMCDeveloper/Webfront (hereafter, the core)
 1. Make a feature branch off of `develop`.
 2. code code code.
-3. periodically `pull canon` to keep up to date with the core - rebase on top of `develop`
-   (or `release`, if you're working on a release branch).
-4. commit! push to your fork - do *not* merge into your version of `develop`.
+3. periodically `pull canon` to keep up to date with the core - only rebase your features on top of `develop`.
+4. commit! push to your fork (usually `origin`) - do *not* merge into your version of `develop`.
 5. submit a pull request, destination `canon develop`.
 6. profit!
 
@@ -35,7 +34,7 @@ questions. One of the devs will get back to you ASAP.
 
 ## What if I'm a moderator?
 
-The moderator's non-development duties look like this:
+The moderator's non-development duties look like this (a slightly modified form of git-flow):
 
 * Look through pull requests. If there's a hotfix, it gets priority. Hotfixes skip the standard
 'live in develop for a while' lifecycle of a branch, because they are urgent things that need to be
@@ -44,6 +43,23 @@ in production immediately (as opposed to later in the day, or maybe tomorrow).
     Hotfix branches are created by managers and pushed to canon so that others can pull-request into them.
     When a hotfix branch is complete, a manager will merge it into `master` and `develop`, then
     push both of those to `canon` so that the changes will head downstream.
+
+    ```
+    git pull canon
+    git checkout master
+    git branch --set-upstream hotfix/{$identifier} canon/hotfix/{$identifier}
+    // ...
+    // After devs have solved the issue:
+    git pull canon
+    git checkout master
+    git merge --no-ff hotfix/{$identifier}
+    git tag -a {$tag}
+    // if there's no release branch:
+    git checkout develop
+    // if there's a release branch:
+    git checkout release/{$release}
+    git merge --no-ff hotfix/{$identifier}
+    ```
 
     Pull requests for `develop` work similarly, except you don't merge the result into `master`.
     * release branches will be named like `release/`.
@@ -58,6 +74,22 @@ in production immediately (as opposed to later in the day, or maybe tomorrow).
     Release branches are created by managers, and pushed to `canon`, so that devs can work on them
     and submit pull requests against them. When the release is satisfactory, merge into both `master` and
     `develop`, then push those to `canon`. The release branch should then be deleted.
+
+    ```
+    git pull canon
+    git checkout develop
+    git branch --set-upstream release/{$identifier} canon/release/{$identifier}
+    // ...
+    // ...
+    // After devs have fixed all the bugs:
+    git pull canon
+    git checkout master
+    git merge --no-ff release/{$identifier}
+    git tag -a ${tag}
+    git checkout develop
+    git merge --no-ff release/{$identifier}
+    git push canon
+    ```
 
 * Look through issues, assign to developers/ask for more info/etc.
 * Repeat.
