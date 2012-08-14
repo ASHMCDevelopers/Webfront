@@ -18,6 +18,9 @@ class Modification(models.Model):
     user = models.ForeignKey(User)
     article = models.ForeignKey("Article")
 
+    diff_title = models.TextField(default="", blank=True)
+    diff_body = models.TextField(blank=True, default="")
+
     time = models.DateTimeField(default=datetime.datetime.now)
 
     def __unicode__(self):
