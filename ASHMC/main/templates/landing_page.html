@@ -61,7 +61,7 @@
         {% cache 1500 rss_display %}
             {% get_rss "http://emsweb.claremont.edu/HarveyMC/RSSFeeds.aspx?data=j%2fxqvgLhwZs%2bG6vJ6fo56Qf9BN3JUl%2fAnKeSNhsCD7%2fPdUPWrw1HBw%3d%3d" as rss %}
             <ul>
-            {% for entry in rss.entries %}
+            {% for entry in rss.entries|slice:":5" %}
             <li class='rss_entry'>
                 <p>{{entry.title}}</p>
             </li>
