@@ -67,6 +67,12 @@ class UserRoom(models.Model):
     def __unicode__(self):
         return u"{} -> {}".format(self.user, self.room)
 
+    @classmethod
+    def get_current_room(cls, user):
+        from ASHMC.main.models import Semester
+        sem = Semester.get_this_semester()
+        return cls.objects.get(user=user, semesters__id=sem.id)
+
 
 class Suite(models.Model):
     name = models.CharField(max_length=100)

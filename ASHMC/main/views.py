@@ -9,6 +9,7 @@ from ASHMC.roster.models import Dorm
 
 from .forms import LandingLoginForm
 from .models import TopNewsItem, ASHMCRole, ASHMCAppointment, Semester
+from ASHMC.roster.models import UserRoom
 
 from blogger.models import Entry
 
@@ -41,7 +42,11 @@ class LandingPage(TemplateView):
 
             context['latest_tweets'] = tweets
 
-        latest_entries = Entry.published.all()[:3]
+        user_dorm = UserRoom.get_current_room(self.request.user)
+
+        latest_entries = Entry.published.exclude(
+            dorms_hidden_from__id=user_dorm.room.dorm.id,
+        )[:3]
         context['latest_entries'] = latest_entries
 
         context['top_stories'] = TopNewsItem.objects.filter(
