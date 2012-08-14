@@ -1,0 +1,78 @@
+@import "../base.scss";
+@import "../logo_style.scss";
+
+$screen_min_width: 1115px;
+
+#postheader {
+	max-width: $screen_max_width + 100px;
+	min-width: $screen_min_width;
+	min-height: 500px;
+
+	margin: 0 auto;
+
+}
+
+#entry {
+	max-width: $text_max_width;
+	float: left;
+	@import "entry";
+
+    ul {
+        margin-left: 1em;
+        list-style: disc;
+    }
+
+    ol {
+        list-style: decimal;
+    }
+}
+
+#comments {
+	width: 422px;
+	float: left;
+	padding: 5px;
+	margin-top: 6em;
+	margin-left: 1em;
+	margin-bottom: 1em;
+	background: $body_background;
+	outline: 0.5em solid $light_background;
+	z-index: 90;
+	@import "comments";
+
+	.intro {
+		background: $light_background;
+		padding: 15px;
+	}
+
+	form {
+		background: $light_background;
+
+		margin-bottom: 1em;
+
+		h2 {
+			font-size: $font_size * 1.25;
+			padding-top: 0.5em;
+		}
+
+		.comment_submit {
+			text-align: right;
+		}
+
+		input[type='submit'] {
+			padding: 5px 8px;
+		}
+	}
+	.flag_this form {
+		background: none;
+	}
+	.comment_comment {
+		textarea {
+			height: 4em;
+			width: 32em;
+			max-width: 32em;
+
+			font-size: $font_size * 0.75;
+			padding: 0.25em;
+		}
+	}
+}

@@ -1,0 +1,11 @@
+{% extends "blogger/blogger_base_page.html" %}
+
+{% block post_header %}
+    <ul id='entry'>
+   {% for entry in object_list %}
+    <li>{% include "front_post.html" %}</li>
+   {% empty %}
+    <h2> No entries found! </h2>
+   {% endfor %}
+</ul>
+{% endblock post_header %}

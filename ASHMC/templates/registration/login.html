@@ -1,0 +1,39 @@
+{% extends "main_base_page.html" %}
+{% load main_extras %}
+{% load static %}
+{% block stylin %}
+    <link rel="stylesheet" href="{%static "styles/registration/registration.css"%}">
+{% endblock stylin %}
+
+
+{% block pre_header %}
+{% endblock pre_header %}
+
+{% block right_header %}
+{% endblock right_header %}
+
+
+{% block post_header %}
+
+
+<div class='centerer centered'>
+<h2>Please log in to continue</h2>
+<h4> or, return to the <a href="{% url 'main_landing_page' %}">landing page</a>.</h4>
+<div id="login_form">
+    <div class="centerer centered">
+        <div class='errors'>
+            {{form|prettify_error_listings}}
+        </div>
+        <div id="login_form_hold">
+            <form action="{% url  "login" %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}" />
+                <div>{{form.username}}<div class='tooltip'>Your HMC email: first_last@hmc.edu</div></div>
+                <div>{{form.password}}<div class='tooltip'>Don't know your password?<br/>Click <a href="#">here</a>.</div></div>
+                <input type=submit id="signIn" class="button-submit" value="Get Started" />
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock post_header %}

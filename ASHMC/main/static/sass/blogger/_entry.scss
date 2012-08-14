@@ -1,0 +1,122 @@
+p {
+    //text-align: justify;
+    padding: 0.5em 0;
+    //text-align-last: size;
+}
+
+article {
+    $author_size: $font_size * 0.9;
+    line_height: 1.4em;
+    min-width: 591px;
+
+    padding: 35px{
+        bottom: 3em;
+    }
+
+    background: $light_background;
+
+    color: $text_color;
+
+    blockquote {
+        margin: 1em 0;
+        padding: 1em 2em;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-left: 8px solid #41B7DB;
+        background: $body_background;// #F7F7F7;
+        font: italic 1.05em/1.55em "Skolar Italic", "Times New Roman", serif;
+        color: rgba(0, 0, 0, 0.75);
+    }
+
+    ol {
+        list-style-type: decimal;
+        margin-left: 1em;
+    }
+
+    h2 {
+       color: #000;
+        a {
+            color: #333;
+
+            &:hover {
+                color: $link_hover_color;
+            }
+        }
+        .catch_headline {
+            display: block;
+            color: scale-color($text_color, $alpha:-70%);
+            font-size: 0.4em;
+            line-height: 1.5em;
+            text-transform: uppercase;
+            font-family: "Proxima Nova";
+            font-weight: bold;
+            letter-spacing: 1px;
+            padding-bottom: 0.5em;
+        }
+    }
+    .metadata {
+        text-align: right;
+        padding-bottom: 2em;
+        li {
+            color: scale-color($text_color, $alpha:-60%);
+            display: inline-block;
+            list-style: none;
+            padding: 1em 2em 0 1.5em;
+            white-space: nowrap;
+            &.author {
+                border-bottom: 1px solid scale-color($text_color, $alpha:-65%);
+                display: block;
+                padding: 0.5em 0.5em 0.5em 0;
+                font-size: 1.25em;
+                line-height: 1.35em;
+                margin: 0;
+                text-align: left;
+                font-family: "Museo Slab","Times New Roman",serif;
+                font-weight: 500;
+                font-style: normal;
+                text-transform: capitalize;
+            }
+        }
+
+        & + p {
+            font-family: "Museo Slab","Times New Roman",serif;
+            font-weight: 500;
+            font-style: normal;
+            font-size: 1.125em;
+            line-height: 1.35em;
+            margin: 0;
+            color: scale-color($text_color, $lightness:-30%);
+        }
+    }
+    p {
+        &.read_more {
+            text-align: right;
+            a {
+                color: #fff;
+                background-color: $link_color;
+                padding: 8px 8px;
+                @include rounded(5px);
+                @include transition(background-color, .2s);
+                &:hover {
+                    background-color: $link_hover_color;
+                    color: #fff!important;
+                    @include transition(background-color, .2s);
+                }
+            }
+        }
+    }
+    .adieu {
+        &:first-child {
+            margin-top: #{2*$line_height/$font_size}em;
+        }
+        text-align: right;
+
+        &.signature {
+            font-size: $font-size*1.75;
+            //font-family: Lucida;
+        }
+
+        &.role {
+            font-family: "Adobe Caslon Pro";
+        }
+    }
+}

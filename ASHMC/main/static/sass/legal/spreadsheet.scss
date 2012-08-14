@@ -1,0 +1,23 @@
+@import "base";
+@import "logo_style";
+
+#postheader {
+    background: $light_background;
+    max-width: 66%;
+    min-width: 900px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+table {
+    margin: 0 auto;
+}
+
+tr {
+    padding: 10px;
+
+    td {
+        padding: 5px;
+        border: 1px solid rgb(200,200,200);
+    }
+}

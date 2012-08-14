@@ -1,0 +1,46 @@
+{% extends "vote/vote_base.html" %}
+{% load main_extras %}
+
+{% block post_header %}
+        <ul class='measure_list'>
+    {% for measure in object_list %}
+            <li>
+            <div class="surrounder light">
+                <div class='measure_head'>
+                    <div class='number'><h2># {{measure.id}}</h2></div>
+                    <div class="measure_name"><h2>{{measure.name}}</h2></div>
+                    <div class='expiry_date'><h3>Voting Ended {{measure.vote_end|date:"n/j/y"}}</h3></div>
+                    <div class='clearer'></div>
+                    <div class="surrounder bright winners">
+                        <h3>Winners:</h3>
+                        <ul>
+                        {% for ballot in measure.ballot_set|order_by:"display_position" %}
+                            <li>
+                                #{{ballot.display_position}} {{ballot.title}}:
+                                {% if ballot.get_winners|length > 1 %}
+                                    <span class='errors'><h4 class='inline'>Tied</h4></span>
+                                    {% for winner in ballot.get_winners %}
+                                        {{winner}}{% if not forloop.last %};
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    {{ballot.get_winners.0}}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class='clearer'></div>
+            </div>
+        </li>
+
+    {% empty %}
+        <li>
+            <div class='surrounder bright'>
+                <h1 class="centered">Looks like no measures have closed yet.</h1>
+            </div>
+        </li>
+    {% endfor %}
+        </ul>
+{% endblock post_header %}

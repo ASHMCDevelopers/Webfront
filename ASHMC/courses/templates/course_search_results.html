@@ -1,0 +1,18 @@
+{% load courses_extras %}
+{% load url from future %}
+{{form.errors}}
+{% for course in results %}
+{% if forloop.first and results.start_index == 1%} <div id="totals" class="pagination">
+										Showing {{results.start_index}}&ndash;{{results.end_index}} of {{results.paginator.count}}</div>{%endif%}
+
+{% include "search_result.html"%}
+{% if forloop.last and results.has_next %}
+<form id="loadmore" class="pagination" action="{% url "search_courses_page" page=results.next_page_number %}" method=get>
+	<div class="hidden" id="loadmoredata" alt="{{path}}"></div>
+	<div class="linklike">Load next {{results|get_next_page_count}} courses</div>
+</form>
+{% endif %}
+{% empty %}
+<div>No courses found!</div>
+{% endfor %}
+

@@ -1,0 +1,86 @@
+{% extends 'base_page.html' %}
+{%load staticfiles %}
+
+
+{% block container%}
+<h1>Writeup! Yeahhhhhh</h1>
+
+<ol>
+	<li>
+		<h2>Goals</h2>
+		<p>
+			Courses has a simple goal: show the world how bad Portal really is.
+		</p>
+		<p>
+			<a href="http://aspc.pomona.edu/courses/schedule/">ASPC</a> has a pretty
+			good starting point, design wise &mdash; it handles pretty well the most student-facing
+			features of Portal: course-searching and schedule design.
+		</p>
+		<p>
+			But Portal does more than just let students search for courses. It keeps track
+			of which courses you are eligible to enroll for, which courses you've taken,
+			and how you've done in those courses.
+		</p>
+		<p>
+			Courses attempts to do all of those things, while <em>still</em> allowing you to use
+			your back button to navigate, if you wish; it does so, somehow, without being terribly 
+			insecure, and providing options to make its extant security extensible and more robust,
+			if desired.
+		</p>
+		<p>
+			Courses features a robust administrative interface, courtesy of the Django Framework, that
+			makes it easy and painless for department chairs, teachers, and other eligible school officials
+			to make changes to their courses' descriptions, seating availability, and more. Just because it can.
+		</p>
+	</li>
+	<li>
+		<h2>Progress</h2>
+		<p>
+			Mostly done. The course search feature works (and is, I believe, already more robust than
+			the search offered by ASPC) for everything that I've used it for.
+		</p>
+		<p>
+			The user-account-driven features also work, though currently new user registration is disabled.
+			It's my intention that users be automatically registered using electronic copies of the school roster.
+		</p>
+		<p>
+			The modeling of courses and their interactions is also (ridiculously) more robust and detailed than
+			that done by ASPC&mdash;and perhaps even that done by the registrar. Though I've only seen a limited
+			subset of Portal's modeling scheme, I can say with confidence that mine is clearer.
+		</p>
+	</li>
+	<li>
+		<h2>Difficulties</h2>
+		<p>
+			The largest hurdle was actually <em>using</em> the registrar's data. It's abhorrent&mdash;certain common-sense
+			and (in my experience) common database abstractions aren't used where one would expect them to be. A lot of 
+			(questionable) fenangling was required to translate the exported Portal information into usable format for my
+			models. As of now, there are {{qcourses}} course{{qcourses|pluralize}} (out of {{courses}} total) that 'need attention' for one reason or 
+			another---generally to do with being listed as offered next semester, but have no sections or meetings attached
+			to them. 
+		</p>
+		<p>
+			Another difficulty was the design of the user-interface. Schedule design
+			takes up an upsetting amount of real-estate, but it makes no sense, from an
+			interface design standpoint, to have the schedule anywhere but directly beside 
+			the search results.
+		</p>
+	</li>
+	<li>
+		<h2>Planned Features</h2>
+		<ol>
+			<li>Major Progression</li>
+			<li>Suggested Courses</li>
+			<li>Course Reviews and Ratings</li>
+			<li>Professor Detail/Review pages</li>
+			<li>Course Statistics</li>
+			<li>A More Interactive Calendar</li>
+		</ol>
+	</li>
+	<li>
+		<h2>Lessons Learned and the Benefits of Hindsight</h2>
+		
+	</li>
+</ol>
+
+{% endblock%}

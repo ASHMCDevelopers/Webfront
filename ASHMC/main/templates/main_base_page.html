@@ -1,0 +1,125 @@
+{% extends "base_page.html" %}
+{% load main_extras %}
+{% load cache %}
+{% load webdesign %}
+
+{% block content %}
+<section id="preheader">
+	{% block pre_header %}
+
+	{% endblock pre_header %}
+	</section>
+
+<header>
+{% block header %}
+<div id="logo">
+
+        <div class='clearer'></div>
+    {% block right_header %}
+       {% if user.is_authenticated %}
+       <div id="salutation">
+            <h2>{{user.get_full_name}}</h2>
+
+            <div class="info">
+                <ul>
+                    {% with user.ashmcrole_set.all|maximum as ashmcrole %}
+                    <li>{{ashmcrole.cast}}</li>
+                    {% endwith %}
+                    {% with user|get_living_situation as room %}
+                    <li>{{room.room}}</li>
+                    {% endwith %}
+                </ul>
+            </div>
+            <div class='header_action_links'>
+            <ul>
+                <li><a href="{% url 'main_home' %}">account</a></li>
+                <li><a href="{% url 'logout' %}">logout</a></li>
+            </ul>
+            </div>
+       </div>
+        {% else %}
+            <div id="login_form" class="righty">
+                <div id="login_form_hold">
+                    <form action="{% url  "login" %}" method="POST">
+                        {% csrf_token %}
+                    <div>{{login_form.username}}<div class='tooltip'>Your HMC email: first_last@hmc.edu</div></div>
+                    <div>{{login_form.password}}<div class='tooltip'>Don't know your password?<br/>Click <a href="#">here</a>.</div></div>
+                    <input type=submit id="signIn" class="button-submit" value="Get Started" />
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+    {% endblock %}
+	{% block left_header %}
+	    <div id="ashmc">
+	        <a href="{% url "main_landing_page" %}"><h1><span class='AS'>AS</span><span class='HMC'>HMC</span></h1></a>
+
+	        <h3><span class="AS">Associated Students of Harvey Mudd College</span></h3>
+	   </div>
+   {% endblock %}
+</div>
+{% endblock header %}
+</header>
+
+<section id="postheader">
+{% block post_header %}
+
+{% endblock post_header %}
+    <div class="clearer"> </div>
+</section>
+{% endblock content %}
+
+{% block footer %}
+
+    <ul class="lefty" id="social-media-links">
+        {% comment %}
+        <li><a href="http://www.flickr.com/photos/micamultimedia/" title="Take a look at ASHMC on Flickr." class="social-media flickr">Take a look at ASHMC on Flickr.</a></li>
+        <li><a href="" class="social-media youtube">Watch our YouTube channel.</a></li>
+        {% endcomment %}
+        <li><a href=''><div class='facebook'>F<span class="hidden">acebook</span></div></a></li>
+        <li><a href='http://www.youtube.com/user/HarveyMuddCollege'><div class='youtube'>You<span class='hidden'>Tube</span></div></a></li>
+        <li><a href='http://www.twitter.com/ashmc_council'><div class='twitter'>T<span class="hidden">witter</span></div></a></li>
+    </ul>
+
+
+    <div class='righty'>
+        <h5>About ASHMC</h5>
+        <ul class="footer-links">
+            <li><a href="{% url 'about_ashmc' %}">What is ASHMC?</a></li>
+            <li><a href="{% url "legal_document_detail" 'ashmc-constitution' %}">Read the Constitution</a></li>
+            <li><a href="{% url "legal_document_detail" 'ashmc-bylaws' %}">Read the Bylaws</a></li>
+            <li><a href="{% url 'legal_form_list' %}">Find a form</a></li>
+            <li><a href="">Get the Minutes</a></li>
+        </ul>
+    </div>
+
+    <div class='righty'>
+        <h5>ASHMC Affiliates</h5>
+        <ul class="footer-links">
+            <li><a href="http://www.hmc.edu/about1/administrativeoffices/dos.html">Dean of Students</a></li>
+            <li><a href="https://sites.google.com/site/capactivities/">Committee for Activities Planning</a></li>
+            <li><a href="http://www.hmc.edu/studentlife1/ashmc1/committees1/dac.html">Dormitory Affairs Committee</a></li>
+        </ul>
+    </div>
+    <div class='righty'>
+        <h5>Community & Blogs</h5>
+        <ul class="footer-links">
+            <li><a href="http://hmcafter5.wordpress.com/">HMC After 5</a></li>
+            <li><a href="http://www.admissionedition.blogspot.com/">Admissions Edition</a></li>
+            <li><a href="http://www.muddraker.com/">The Muddraker</a></li>
+            <li><a href="http://www.robswatsonadventure.blogspot.com/">Rob Watson's Adventure</a></li>
+        </ul>
+    </div>
+    <div class='righty'>
+        <h5>The 5C's</h5>
+        <ul class="footer-links">
+            <li><a href="http://www.hmc.edu">HMC</a></li>
+            <li><a href="http://www.scrippscollege.edu">Scripps</a></li>
+            <li><a href="http://www.cmc.edu">CMC</a></li>
+            <li><a href="http://www.pitzer.edu">Pitzer</a></li>
+            <li><a href="http://www.pomona.edu">Pomona</a></li>
+        </ul>
+    </div>
+    <div class="clearer"></div>
+{% endblock footer %}

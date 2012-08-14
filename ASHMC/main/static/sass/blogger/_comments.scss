@@ -1,0 +1,66 @@
+.comment {
+	font-size: $font-size * 0.75;
+	background: $light_background;
+
+	padding: 4px 8px;
+
+	&:nth-child(even){
+		// Preven comments from blending together:
+		background: scale_color($light_background, $lightness:-10%);
+	}
+
+	&.ashmc {
+		background: $light_gold;
+
+		a {color: white;}
+
+		&:nth-child(odd) {
+			// Prevent comments from blending together:
+			background: scale_color($light_gold, $lightness:-10%);
+		}
+	}
+
+	&.author {
+		padding-right: 2em;
+		margin-right: -1em;
+		z-index: 100;
+
+
+	}
+
+	.metadata {
+
+		li {
+			display: inline-block;
+			list-style: none;
+
+			&.author {
+				display: block;
+				h3 {
+					padding-top: 0px;
+					font-size: $font_size;
+				}
+			}
+
+			&.date {
+				float: right;
+			}
+		}
+	}
+
+	&.author .author {
+		color: $dark_gold;
+	}
+
+	.comment_body {
+		min-width: 400px;
+		p:first-child {
+			margin-top: 0px;
+		}
+	}
+
+	.flag_this {
+		margin-top: 0.5em;
+		text-align: right;
+	}
+}

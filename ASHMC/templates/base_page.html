@@ -1,0 +1,65 @@
+{% load staticfiles %}
+{% load url from future %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+       Remove this if you use the .htaccess -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>{%block title%}ASHMC - Associated Students of Harvey Mudd College{%endblock%}</title>
+  <meta name="description" content="" />
+  <meta name="author" content="Haak Saxberg" />
+
+  <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+  <link rel="shortcut icon" href="{% static "images/favicon.png" %}" />
+  <link rel="apple-touch-icon" href="{% static "images/apple-touch-icon.png"%}" />
+  {% block stylin %}
+    {# multiple http queries are slower than one big css file. #}
+    {# you should use sass to include this in subsequent stylesheets. #}
+    <link rel="stylesheet" type="text/css" href="{%static "styles/base.css"%}" />
+  {% endblock %}
+</head>
+
+<body>
+
+<div id="container">
+	
+  {% block content %}
+	
+	{% endblock content %}
+
+<footer>
+  {% block footer %}
+  {% endblock %}
+
+  <div id="copyright"><p>Code and design by <a href="http://www.haaksmash.com">Haak Saxberg</a> &copy; 2012</p></div>
+</footer>
+
+</div>
+
+
+
+{# scripts go at the end, when the page has mostly been loaded already. #}
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+
+<script type="text/javascript">
+	
+    // create custom animation algorithm for jQuery called "bouncy"
+    $.easing.bouncy = function (x, t, b, c, d) {
+        var s = 1.70158;
+        if ((t/=d/2) < 1) return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;
+        return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
+    }
+</script>
+<script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>
+<script src="https://raw.github.com/cowboy/jquery-resize/v1.1/jquery.ba-resize.min.js"></script> 
+{% block scriptin %}
+{% endblock %}
+</body>
+</html>

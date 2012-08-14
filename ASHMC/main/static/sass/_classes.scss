@@ -1,0 +1,134 @@
+/* _classes.scss */
+
+.AS {
+    font-family: "Walkway Bold", sans-serif;
+}
+
+.HMC {
+    font-family: "Adobe Caslon Pro", serif;
+}
+
+.centerer{
+    width: 100%;
+    margin: 0 auto;
+}
+
+.clearfix {
+    zoom: 1;
+}
+
+.smallcaps {
+    font-variant: smallcaps;
+}
+
+.clearer {
+    clear: both;
+}
+
+.righty {
+    float: right;
+}
+
+.lefty {
+    float: left;
+}
+
+.hidden {
+    display: none;
+}
+
+.centered{
+    text-align: center;
+}
+
+.tooltip {
+    background-color:#000;
+    border:1px solid #fff;
+    padding:10px 15px;
+    width:200px;
+    display:none;
+    color:#fff;
+    text-align:center;
+    font-size:12px;
+    font-family: Arial, Helvetica, sans-serif;
+    /* outline radius for mozilla/firefox only */
+    -moz-box-shadow:0 0 10px #000;
+    -webkit-box-shadow:0 0 10px #000;
+}
+
+a.social-media {
+
+    display: block;
+    width: 34px;
+    height: 34px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    text-indent: -8888px;
+    overflow: hidden;
+    float: left;
+
+    &.facebook {
+        background: {
+            image: url(/static/images/sm-facebook.png);
+        }
+    }
+
+    &.twitter {
+        background: {
+            image: url(/static/images/sm-twitter.png);
+        }
+    }
+
+    &.youtube {
+        background: {
+            image: url(/static/images/sm-youtube.png);
+        }
+    }
+
+    &.flickr {
+        background: {
+            image: url(/static/images/sm-flickr.png);
+        }
+    }
+}
+
+.scrollable {
+  /* required settings */
+  position:relative;
+  overflow:hidden;
+  width: 600px;
+  height:250px;
+}
+
+.scrollable .items {
+  /* this cannot be too large */
+  width:20000em;
+  position:absolute;
+}
+
+.items div {
+  float:left;
+  height: 250px;
+  width: 600px;
+
+  div {
+    position: relative;
+  }
+}
+
+.surrounder {
+    padding: 5px;
+    &.body, &.light {
+        background: $body_background;
+    }
+
+    &.bright {
+        background: $light_background;
+    }
+
+    &.dark {
+        background: $dark_background;
+    }
+}
+
+/* end _classes.scss */

@@ -1,0 +1,31 @@
+{% extends "legal/legal_base.html" %}
+{% load legal_extras %}
+{% load static %}
+
+{% block stylin %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/legal/spreadsheet.css' %}">
+{% endblock stylin %}
+
+{% block post_header %}
+
+<h2>{{doc.title}}</h2>
+
+{% if sheet %}
+<table>
+{% for row in sheet|row_generator %}
+    <tr>
+        {% for cell in row %}
+            <td style="{{cell|get_styles:wb}}">{{cell|get_value_display:wb.format_map}}</td>
+        {% endfor %}
+    </tr>
+{% endfor %}
+</table>
+{% else %}
+<div class='centered'>
+    <h2>Google is giving us the cold shoulder.</h2>
+
+    <h4>Please try again later.</h4>
+</div>
+{% endif %}
+
+{% endblock post_header %}

@@ -1,0 +1,44 @@
+@import "base";
+@import "logo_style";
+
+
+#postheader {
+    background: $light_background;
+
+    max-width: 900px;
+    margin: 0 auto;
+
+    padding: 1em;
+}
+
+.editable {
+    cursor: pointer;
+}
+
+.name {
+    text-align: center;
+}
+
+.password_change {
+    margin-bottom: 1em;
+    margin-top: -1.5em;
+    text-align: center;
+}
+
+.info {
+    ul {
+        float:left;
+        margin-left:10px;
+        min-width:250px;
+
+        &:first-child {
+            margin-left:0px;
+        }
+
+        .subhead {
+            margin-top: 1em;
+
+        }
+    }
+
+}

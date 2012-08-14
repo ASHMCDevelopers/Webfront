@@ -1,0 +1,116 @@
+[
+    {
+        "pk": 1,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "AT",
+            "name": "Atwood"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "CA",
+            "name": "Case"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "WE",
+            "name": "West"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "SU",
+            "name": "Sontag"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "SO",
+            "name": "South"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "EA",
+            "name": "East"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "LI",
+            "name": "Linde"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "NO",
+            "name": "North"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "BPA",
+            "name": "Brighton Park"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "CGA",
+            "name": "CGU A",
+            "official_dorm": false
+        }
+    },
+    {
+        "pk": 11,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "CGB",
+            "name": "CGU B",
+            "official_dorm": false
+        }
+    },
+    {
+        "pk": 12,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "CGC",
+            "name": "CGU C",
+            "official_dorm": false
+        }
+    },
+    {
+        "pk": 13,
+        "model": "roster.dorm",
+        "fields": {
+            "code": "OFF",
+            "name": "Off Campus"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "roster.transientsuite",
+        "fields": {
+            "name": "Timeland"
+        }
+    }
+]

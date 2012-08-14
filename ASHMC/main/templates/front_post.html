@@ -1,0 +1,8 @@
+{% load blogger_filters %}
+<article class="">
+
+    {% include "blogger_entry_header.html" %}
+    {{entry|naive_excerpt|safe}}
+
+    <p class='read_more'><a href="{{entry.get_absolute_url}}">Read more...</a></p>
+</article>

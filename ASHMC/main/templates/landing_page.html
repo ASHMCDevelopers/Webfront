@@ -1,0 +1,155 @@
+{% extends 'main_base_page.html' %}
+{%load staticfiles %}
+{% load main_extras %}
+{% load cache %}
+
+{% block stylin %}
+    <link rel="stylesheet" href="{%static "styles/landing_page.css"%}">
+    {# This is fucking gross. TODO: Find a better way to do this. #}
+    <style>
+        {% for item in top_stories %}
+            {{item.render_css}}
+        {% endfor %}
+    </style>
+{% endblock stylin %}
+
+{% block pre_header %}
+{% if top_stories.count != 0 %}
+    <div class='scrollable_holder lefty'>
+        <div>
+            <section class='scrollable'>
+                <div class='items'>
+                    {% for item in top_stories %}
+                        <div id="slider{{item.id}}">
+                            {{item.panel_html|safe}}
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </div>
+    {% if top_stories|length > 1 %}
+    <section id="latest_news">
+        <ul>
+            {% for item in top_stories %}
+                <li {% if forloop.first %}class='current'{%endif%}>{{item.slug}}</li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+    <div class="clearer"> </div>
+{% endif %}
+{% endblock pre_header %}
+
+
+
+{% block post_header %}
+
+    <aside id="sidebar">
+        <section id="navlinks">
+            <div>
+                <h2>What should I do?</h2>
+                <ul>
+                    <li><a href="{% url 'council_list' %}"><h3>Meet the Council</h3></a></li>
+                    <li><a href="{% url "vote_main" %}"><h3>Vote</h3></a></li>
+                    <li><a href="{% url "event_list" %}"><h3>Check Events</h3></a></li>
+                </ul>
+            </div>
+        </section>
+        <section id="pipeline">
+        <h2>In the pipe @<a href="http://www.hmc.edu">HMC</a></h2>
+        {% cache 1500 rss_display %}
+            {% get_rss "http://emsweb.claremont.edu/HarveyMC/RSSFeeds.aspx?data=j%2fxqvgLhwZs%2bG6vJ6fo56Qf9BN3JUl%2fAnKeSNhsCD7%2fPdUPWrw1HBw%3d%3d" as rss %}
+            <ul>
+            {% for entry in rss.entries|slice:":5" %}
+            <li class='rss_entry'>
+                <p>{{entry.title}}</p>
+            </li>
+            {% endfor %}
+            </ul>
+       {% endcache %}
+        </section>
+
+        <section id="twitter_feed">
+            <div>
+            <h2>Twitter</h2>
+            {% for tweet in latest_tweets  %}
+                <div class='tweet'>
+                    <div class='spacer'>
+
+                        <div class='author'>
+                            <a
+                            style='color:#{{tweet.user.student_link_color}};'
+                            href="http://twitter.com/{{tweet.user.screen_name}}">@{{tweet.user.screen_name}}</a>
+                        </div>
+                        <div class='time'>
+                        {% if tweet.date|is_today %}
+                            {{tweet.date|date:"g:i a"}}
+                        {% else %}
+                            {{tweet.date|date:"m/d/y"}}
+                        {% endif %}
+
+
+                        </div>
+                    </div>
+                    <div class='text'>{{tweet.text|urlize}}</div>
+                </div>
+                {% empty %}
+                <h5 class='error centered'>Couldn't find twitter!</h5>
+            {% endfor %}
+            </div>
+        </section>
+    </aside>
+
+    <section id="blogger">
+        {% for entry in latest_entries %}
+            {% include "front_post.html" %}
+        {% endfor %}
+    </section>
+{% endblock post_header %}
+
+{% block scriptin %}
+<script type="text/javascript">
+$(function() {
+  // initialize scrollable
+  $("#preheader .scrollable").scrollable({
+    circular: true,
+    keyboard: false,
+    onBeforeSeek: function(event, index){
+        var children = $('#preheader ul').children('li');
+        if (index != children.length){
+            var target = $(children[index]);
+            children.removeClass('current');
+            target.toggleClass('current');
+        }
+    },
+    }).autoscroll({
+        interval: 3500,
+    });
+
+  $("#latest_news ul").hover(function(){
+    var target = $('#preheader .scrollable').data('scrollable');
+    target.stop();
+  },
+  function(){
+    var target = $('#preheader .scrollable').data('scrollable');
+    target.play();
+  }
+  );
+
+  $("#latest_news ul li").each(function(i){
+    var target = $('#preheader .scrollable').data('scrollable');
+    $(this).click(function(){
+        target.seekTo(i);
+    });
+  });
+
+  //make tweet links prettier
+  $(".tweet").each(function(i){
+    var color = $($(this).children('.spacer').children('.author').children('a')[0]).css('color');
+    $(this).children('.text').children('a').css('color', color);
+  });
+
+});
+</script>
+{% endblock scriptin %}

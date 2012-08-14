@@ -1,0 +1,100 @@
+@import "login_form";
+
+#logo {
+	$border_width: 10px;
+    height: 150px;
+    min-width: $logo_banner_min_width;
+    position: relative;
+    margin: {
+        top: 15px;
+    }
+    z-index: 2;
+	background: $dark_background;
+
+    color: $mudd_gold;
+
+	border: {
+		style: solid;
+		left: None;
+		right: None;
+		width: $border_width;
+        color: $dark_gold;
+	}
+
+    z-index: 90;
+}
+#ashmc {
+	float: left;
+	height: 150px;
+	list-style: None;
+	list-style-type: None;
+
+	margin: {
+		top: 0px;
+		left: 3%;
+	}
+    color: black;
+    text-align: center;
+
+    a {
+        text: {
+            decoration: none;
+        }
+
+
+
+        &:active {
+            color: rgb(200, 26, 70);
+        }
+    }
+
+    h1 {
+        line-height: 4.5em;
+        margin: 0;
+
+		span {
+			margin: {
+				left: 0;
+				right: 0;
+			}
+
+			display: inline block;
+			list-style: None;
+
+    		&.HMC {
+                font:{
+    			    size: 125px;
+    		    }
+            }
+
+            color: $mudd_gold;
+
+    		&.AS {
+    			font:{
+    				size: 130px;
+    			}
+
+                color: #fff;
+
+                &::after {
+                    content: "|";
+                    color: #C9B147;
+                }
+    		}
+        }
+    }
+    h3 {
+        position: relative;
+        top: -4em;
+        font: {
+            family: Helvetica sans-serif;
+        }
+        color: white;
+        font-size: 1em;
+        .AS {
+            font: {
+                family: "Walkway Expand Bold", sans-serif;
+            }
+        }
+    }
+}

@@ -1,0 +1,72 @@
+/* _functions.scss */
+
+@mixin rounded_corner($corner, $radius: 5px) {
+    -webkit-border-#{$corner}-radius: $radius;
+
+    border-#{$corner}-radius: $radius;
+    @if $corner == top-left {
+        -moz-border-radius-topleft: $radius;
+    } @else if $corner == top-right {
+        -moz-border-radius-topright: $radius;
+    } @else if $corner == bottom-right {
+        -moz-border-radius-bottomright: $radius;
+    } @else {
+        -moz-border-radius-bottomleft: $radius;
+    }
+}
+
+@mixin rounded($radius: 5px) {
+  @include rounded_corner(top-right, $radius);
+  @include rounded_corner(top-left, $radius);
+  @include rounded_corner(bottom-right, $radius);
+  @include rounded_corner(bottom-left, $radius);
+}
+
+@mixin cute-scrollbar($size: 8px, $track-background: grey, $thumb-color: grey, $inactive-thumb-color: grey){
+  &::-webkit-scrollbar {
+    width: $size;
+    height: $size;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: $size / 2;
+    background: $track-background;
+    box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.2) 0 1px 1px 1px inset;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: $size / 2;
+    background: $thumb-color;
+    box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.7) 0 1px 7px 0px inset;
+  }
+
+  &::-webkit-scrollbar-thumb:window-inactive {
+    border-radius: $size / 2;
+    background: $thumb-color;
+    box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(0, 0, 0, 0.4) 0 1px 1px 1px inset;
+  }
+}
+
+@mixin transition($properties, $time, $function:linear, $delay:"") {
+  @each $property in $properties{
+    transition: $property $time #{$function} #{$delay};
+    -moz-transition: $property $time #{$function} #{$delay}; /* Firefox 4 */
+    -webkit-transition: $property $time #{$function} #{$delay}; /* Safari and Chrome */
+    -o-transition: $property $time #{$function} #{$delay}; /* Opera */
+  }
+}
+
+@mixin gradient($color_from, $color_to) {
+  background-image: -webkit-gradient(linear,left top,left bottom,from($color_from),to($color_to));
+  background-image: -webkit-linear-gradient(top,$color_from,$color_to);
+  background-image: -moz-linear-gradient(top,$color_from,$color_to);
+  background-image: -ms-linear-gradient(top,$color_from,$color_to);
+  background-image: -o-linear-gradient(top,$color_from,$color_to);
+  background-image: linear-gradient(top,$color_from,$color_to);
+}
+
+@mixin linear_gradient($direction, $color_from, $color_to) {
+    background: linear-gradient($direction, $color_from, $color_to);
+    background: -webkit-linear-gradient($direction, $color_from, $color_to);
+    background: -moz-linear-gradient($direction, $color_from, $color_to);
+    background: -o-linear-gradient($direction, $color_from, $color_to);
+    background: -ms-linear-gradient($direction, $color_from, $color_to);
+}
