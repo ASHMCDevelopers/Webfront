@@ -53,7 +53,7 @@ class Ballot(models.Model):
     is_secret = models.BooleanField(default=False)
 
     def get_winners(self):
-        """Ties are arbitrarily broken."""
+        """does not break ties."""
         if self.vote_type == self.VOTE_TYPES.POPULARITY:
             max_choices = max(self.candidate_set.annotate(pv_max=models.Count('popularityvote')).values_list('pv_max', flat=True))
             return self.candidate_set.annotate(models.Count('popularityvote')).filter(popularityvote__count=max_choices)
