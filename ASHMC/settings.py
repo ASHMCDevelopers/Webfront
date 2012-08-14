@@ -2,6 +2,9 @@
 import local_settings
 
 from twitter import Twitter, OAuth
+import django.template
+
+django.template.add_to_builtins('django.templatetags.future')
 
 DEBUG = local_settings.DEBUG
 TEMPLATE_DEBUG = local_settings.TEMPLATE_DEBUG
@@ -129,7 +132,10 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     #'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
+
+INTERNAL_IPS = local_settings.INTERNAL_IPS
 
 ROOT_URLCONF = 'ASHMC.urls'
 
@@ -149,7 +155,7 @@ TEMPLATE_DIRS = (
 TESTING = local_settings.TESTING
 
 AUTHENTICATION_BACKENDS = (
-    'object_permissions.backend.ObjectPermBackend',
+    'ASHMC.authbackends.CheckHasRolePerm',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -172,7 +178,7 @@ INSTALLED_APPS = (
 
     'taggit',
     'mptt',
-    'object_permissions',
+    'debug_toolbar',
 
     'ASHMC.main',  # landing page handler
     'ASHMC.courses',

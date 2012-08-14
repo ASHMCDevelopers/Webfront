@@ -9,6 +9,7 @@ class CandidateInline(admin.TabularInline):
 
 class BallotInline(admin.TabularInline):
     model = Ballot
+    ordering = ('display_position',)
 
 
 class RestrictionsInline(admin.StackedInline):

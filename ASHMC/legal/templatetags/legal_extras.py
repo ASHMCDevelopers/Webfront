@@ -73,7 +73,10 @@ register.filter('roman_number', roman_number)
 
 @register.simple_tag
 def get_file_form_url(file_form_name):
-    return OfficialForm.objects.get(name=file_form_name).file_actual.url
+    try:
+        return OfficialForm.objects.get(name=file_form_name).dl_url
+    except OfficialForm.DoesNotExist:
+        return ""
 
 
 @register.filter

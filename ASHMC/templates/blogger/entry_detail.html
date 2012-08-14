@@ -50,7 +50,7 @@
 		</ul>
 
 		<div class='comment_body'>
-			{{comment.comment|markdown|safe}}
+			{{comment.comment|markdown}}
 		</div>
 		<div class='flag_this'>{% if comment.flags.count == 0 %}<form action="/comments/flag/{{comment.id}}/" method="POST">
 			<input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{{ cf.target_object.get_absolute_url }}{% endif %}" />

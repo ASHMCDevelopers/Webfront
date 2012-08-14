@@ -21,7 +21,7 @@ class Event(models.Model):
     end_time = models.DateTimeField(null=True, blank=True)
 
     attendees = models.ManyToManyField(User, through="Attendance")
-    guests_per_user = models.IntegerField(null=True, blank=True)
+    guests_per_user = models.IntegerField(default=0)
 
     location = models.ForeignKey("Location")
 

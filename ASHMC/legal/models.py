@@ -18,6 +18,9 @@ class Modification(models.Model):
     user = models.ForeignKey(User)
     article = models.ForeignKey("Article")
 
+    diff_title = models.TextField(default="", blank=True)
+    diff_body = models.TextField(blank=True, default="")
+
     time = models.DateTimeField(default=datetime.datetime.now)
 
     def __unicode__(self):
@@ -104,6 +107,13 @@ class OfficialForm(models.Model):
     description = models.TextField(blank=True, null=True)
 
     file_actual = models.FileField(upload_to="legal/forms/%Y/%m/%d")
+
+    @property
+    def dl_url(self):
+        try:
+            return self.file_actual.url
+        except ValueError:
+            return ''
 
     class Meta:
         unique_together = ('name', 'last_updated')

@@ -52,11 +52,24 @@ class Ballot(models.Model):
     can_abstain = models.BooleanField(default=True)
     is_secret = models.BooleanField(default=False)
 
+    def get_winners(self):
+        """does not break ties."""
+        if self.vote_type == self.VOTE_TYPES.POPULARITY:
+            max_choices = max(self.candidate_set.annotate(pv_max=models.Count('popularityvote')).values_list('pv_max', flat=True))
+            return self.candidate_set.annotate(models.Count('popularityvote')).filter(popularityvote__count=max_choices)
+        elif self.vote_type == self.VOTE_TYPES.PREFERENCE:
+            # The lower the sum of the ranks of a candidate, the better they're doing overall.
+            min_choices = min(self.candidate_set.annotate(pf_sum=models.Sum('preferentialvote__amount')).values_list('pf_sum', flat=True))
+            return self.candidate_set.annotate(models.Sum('preferentialvote__amount')).filter(preferentialvote__amount=min_choices)
+        elif self.vote_type == self.VOTE_TYPES.SELECT_X:
+            max_choices = self.candidate_set.annotate(pv_max=models.Count('popularityvote')).order_by('-pv_max').values_list('pv_max', flat=True)[0]
+            return self.candidate_set.annotate(models.Count('popularityvote')).filter(popularityvote__count=max_choices)
+
     def __unicode__(self):
         return u"Ballot #{}: {}".format(self.id, self.title)
 
     class Meta:
-        unique_together = (('measure', 'display_position'), ('measure', 'title'))
+        unique_together = (('measure', 'title'), )
 
     def save(self, *args, **kwargs):
         if self.vote_type == self.VOTE_TYPES.SELECT_X and self.number_to_select is None:
@@ -70,9 +83,7 @@ class Measure(models.Model):
     to calculate things like quorum."""
 
     name = models.CharField(max_length=50)
-    summary = models.TextField(blank=True, null=True,
-        default="""There is no summary for this measure."""
-    )
+    summary = models.TextField()
 
     vote_start = models.DateTimeField(default=datetime.datetime.now)
     vote_end = models.DateTimeField(null=True, blank=True,
@@ -102,11 +113,21 @@ class Measure(models.Model):
 
     @property
     def eligible_voters(self):
+        if self.restrictions is None:
+            return User.objects.all()
         return self.restrictions.get_grad_year_users() & self.restrictions.get_dorm_users()
 
     class Meta:
         verbose_name = _('Mesure')
         verbose_name_plural = _('Mesures')
+
+    def save(self, *args, **kwargs):
+        # Ensures there's a restrictions object to check against in views.
+        super(Measure, self).save(*args, **kwargs)
+        try:
+            self.restrictions
+        except models.ObjectDoesNotExist:
+            Restrictions.objects.create(restricted_to=self)
 
     def __unicode__(self):
         return u"{}".format(self.name)

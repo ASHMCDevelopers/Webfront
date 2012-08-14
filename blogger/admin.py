@@ -153,10 +153,17 @@ class EntryAdmin(admin.ModelAdmin):
         entry.last_update = timezone.now()
         entry.save()
 
+    def get_form(self, request, obj=None, **kwargs):
+        kwargs.setdefault('exclude', [])
+        if not request.user.is_superuser:
+            kwargs['exclude'] += ['primary_author']
+
+        return super(EntryAdmin, self).get_form(request, obj, **kwargs)
+
     def queryset(self, request):
         """Make special filtering by user permissions"""
         queryset = super(EntryAdmin, self).queryset(request)
-        if request.user.has_perm('blogger.can_view_all'):
+        if request.user.is_superuser:
             return queryset
         return request.user.entries.all()
 

@@ -56,8 +56,8 @@
             {% endif %}
             <li>
                 <form method="POST" action="{% url 'roster_tsuite_update' pk=suite.id action='leave' %}">
+                    <h5><a class='submitter' href="#" title='Leave this suite'>X</a> {{suite}}</h5>
                     {% csrf_token %}
-                    <h5><a class='submitter' href="#">X</a> {{suite}}</h5>
                 </form>
             </li>
             {% if forloop.last %}

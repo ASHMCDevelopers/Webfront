@@ -311,6 +311,9 @@ a {
     -o-transition: color 0.2s linear ;
     /* Opera */ }
 
+code {
+  font-family: monospace; }
+
 em, figcaption {
   font-weight: normal;
   font-style: italic; }
@@ -371,7 +374,7 @@ h3 {
   padding: 1.5em 0 0.5em 0;
   line-height: 1.3em; }
 
-h5 {
+h4 {
   font-size: 1em;
   padding: 1em 0 0.25em 0;
   line-height: 1.25em; }
@@ -392,8 +395,11 @@ p + p {
 
 .errors {
   background: #ff6a6a;
-  color: #fff;
-  text-align: center; }
+  color: #fff; }
+  .errors.heading {
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 1em; }
 
 li {
   padding: .2em; }
@@ -597,8 +603,8 @@ footer {
 
 #latest_news {
   display: inline;
-  float: left;
-  width: 44.1%;
+  float: right;
+  width: 44%;
   min-width: 300px;
   background: white;
   padding-bottom: 20px;

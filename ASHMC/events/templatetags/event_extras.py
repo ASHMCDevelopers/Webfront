@@ -19,7 +19,6 @@ def date_presenter(datet):
     Because this is a filter, we need to muck around with timezones /sadface.
     """
     now = datetime.datetime.now(pytz.utc)
-    print now.__repr__()
 
     if abs(datet - now) < datetime.timedelta(days=1):
         return datet.astimezone(pytz.timezone(settings.TIME_ZONE)).strftime("%H:%M")
@@ -114,6 +113,7 @@ def calendarize(dt_one, dt_two=None, mark_today=False):
     else:
         dt_two = dt_two.astimezone(pytz.timezone(settings.TIME_ZONE))
 
+    print "Marking today: ", mark_today
     if mark_today:
         today = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(settings.TIME_ZONE))
     else:

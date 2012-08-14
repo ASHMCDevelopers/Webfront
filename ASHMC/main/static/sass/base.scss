@@ -55,6 +55,10 @@ a {
     }
 }
 
+code {
+    font-family: monospace;
+}
+
 em, figcaption {
     font-weight: normal;
     font-style: italic;
@@ -150,7 +154,7 @@ h3 {
     line-height: 1.3em;
 }
 
-h5 {
+h4 {
     font-size: $font_size;
     padding: 1em 0 0.25em 0;
     line-height: 1.25em;
@@ -180,7 +184,12 @@ p + p { // proper typogrpahic styling
 .errors {
     background: $error_background;
     color: #fff;
-    text-align: center;
+
+    &.heading {
+        text-align: center;
+        padding: 5px;
+        margin-bottom: 1em;
+    }
 }
 
 li {
