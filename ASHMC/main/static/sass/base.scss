@@ -180,7 +180,12 @@ p + p { // proper typogrpahic styling
 .errors {
     background: $error_background;
     color: #fff;
-    text-align: center;
+
+    &.heading {
+        text-align: center;
+        padding: 5px;
+        margin-bottom: 1em;
+    }
 }
 
 li {

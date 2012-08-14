@@ -59,7 +59,7 @@ class EventDetail(DetailView, FormMixin):
             # get rid of the guests, and the attendance
             a.guests.all().delete()
             a.delete()
-            return redirect('event_list')
+            return self.get(*args, **kwargs)
 
         for number in range(1, event.guests_per_user + 1):
             try:

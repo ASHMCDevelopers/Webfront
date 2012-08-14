@@ -12,7 +12,7 @@
         <div class='surrounder body'>
             <div class='surrounder bright'>
                 <h4 class='centered'>{{event.start_time|date:"b 'y"}}</h4>
-                {% calendarize event.start_time event.end_time mark_today=True %}
+                {% calendarize event.start_time event.end_time mark_today="True" %}
             </div>
         <div class='time'>
             <h3>
@@ -27,7 +27,7 @@
         </div>
     </div>
     <div class='mainbar'>
-        {% if form.errors %} <h5 class='errors centered'>There was a problem with your registration.</h5>{%endif%}
+        {% if form.errors %} <h5 class='errors heading'>There was a problem with your registration.</h5>{%endif%}
         <h2>{{object.title}}</h2>
         <div class='description'>
             {{object.description|markdown:"safe"}}
@@ -44,7 +44,7 @@
             </div>
         {% else %}
 
-            {% for i in form.event.guests_per_user|rangify:True %}
+            {% for i in form.event.guests_per_user|rangify:"True" %}
                 {% if forloop.first and not forloop.last %}
                         <div class='register'>
                         <h4>You may register up to {{form.event.guests_per_user}} guest{{form.event.guests_per_user|pluralize}}:</h4>

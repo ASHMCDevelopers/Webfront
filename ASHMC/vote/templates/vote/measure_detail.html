@@ -6,6 +6,9 @@
 <div class="measure_wrap_wrap">
 <div class="surrounder light">
 <div class="measure_wrap">
+    {% if form_errors %}
+       <div class="errors heading">There was a problem with your submission - see below</div>
+    {% endif %}
     <a href="{% url 'measure_list' %}"><div class='number'><h2># {{object.id}}</h2></div></a>
     <h2>{{object.name}}</h2>
     <div class='measure_description'>

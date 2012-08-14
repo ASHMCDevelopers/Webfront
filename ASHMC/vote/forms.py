@@ -40,20 +40,23 @@ class BallotForm(forms.Form):
 
         elif ballot.vote_type == Ballot.VOTE_TYPES.SELECT_X:
             self.fields['choice'] = CandidateMultipleChoiceField(
-                widget=ListItemCheckboxSelectMultiple,
                 queryset=choices,
                 required=(not ballot.can_abstain),
+                error_messages={
+                    'required': "You have to choose at least one.",
+                },
+                widget=ListItemCheckboxSelectMultiple,
             )
             if ballot.can_abstain:
                 self.fields['abstains'] = forms.BooleanField(
                     required=False,
+                    initial=True,
+                    label="I'm abstaining",
                     widget=forms.CheckboxInput(
                         attrs={
                             'class': 'abstains',
                         }
                     ),
-                    initial=True,
-                    label="I'm abstaining",
                 )
 
         elif ballot.vote_type == Ballot.VOTE_TYPES.PREFERENCE:

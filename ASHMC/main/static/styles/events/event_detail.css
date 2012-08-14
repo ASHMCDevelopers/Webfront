@@ -392,8 +392,11 @@ p + p {
 
 .errors {
   background: #ff6a6a;
-  color: #fff;
-  text-align: center; }
+  color: #fff; }
+  .errors.heading {
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 1em; }
 
 li {
   padding: .2em; }
