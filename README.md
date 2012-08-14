@@ -65,7 +65,8 @@ in production immediately (as opposed to later in the day, or maybe tomorrow).
     ```
     git pull canon
     git checkout master
-    git branch --set-upstream hotfix/{$identifier} canon/hotfix/{$identifier}
+    git checkout -b hotfix/{$identifier}
+    git push -u canon hotfix/{$identifier}
     // ...
     // After devs have solved the issue:
     git pull canon
@@ -96,7 +97,8 @@ in production immediately (as opposed to later in the day, or maybe tomorrow).
     ```
     git pull canon
     git checkout develop
-    git branch --set-upstream release/{$identifier} canon/release/{$identifier}
+    git checkout -b release/{$identifier}
+    git push -u canon release/{$identifier}
     // ...
     // ...
     // After devs have fixed all the bugs:
