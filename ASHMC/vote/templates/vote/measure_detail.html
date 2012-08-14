@@ -12,7 +12,7 @@
     <a href="{% url 'measure_list' %}"><div class='number'><h2># {{object.id}}</h2></div></a>
     <h2>{{object.name}}</h2>
     <div class='measure_description'>
-        {{object.summary|markdown:"safe"}}
+        {{object.summary|markdown}}
     </div>
     <form action="{% url 'measure_detail' object.id %}" method="POST">
         {% csrf_token %}

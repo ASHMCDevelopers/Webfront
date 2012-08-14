@@ -83,9 +83,7 @@ class Measure(models.Model):
     to calculate things like quorum."""
 
     name = models.CharField(max_length=50)
-    summary = models.TextField(blank=True, null=True,
-        default="""There is no summary for this measure."""
-    )
+    summary = models.TextField()
 
     vote_start = models.DateTimeField(default=datetime.datetime.now)
     vote_end = models.DateTimeField(null=True, blank=True,

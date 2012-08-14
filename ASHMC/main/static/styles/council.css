@@ -311,6 +311,9 @@ a {
     -o-transition: color 0.2s linear ;
     /* Opera */ }
 
+code {
+  font-family: monospace; }
+
 em, figcaption {
   font-weight: normal;
   font-style: italic; }
