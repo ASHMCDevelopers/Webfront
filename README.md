@@ -17,16 +17,34 @@ Fork! Develop feature branches based on the `develop` branch; pull requests for
 Our lead(s) use a workflow that's pretty close to nvie's `git-flow` - with a
 little jiggering to fit it into a more active development cycle and GitHub.
 
-1. fork off ASHMCDeveloper/Webfront (hereafter, the core)
+1. fork off ASHMCDeveloper/Webfront (hereafter, `canon`)
 1. Make a feature branch off of `develop`.
 2. code code code.
-3. periodically `pull canon` to keep up to date with the core - only rebase your features on top of `develop`.
-4. commit! push to your fork (usually `origin`) - do *not* merge into your version of `develop`.
+3. periodically `pull canon` to keep up to date with `canon` and rebase your features on top of `develop`.
+4. commit! push to your fork (usually `origin`) - there's no reason to merge into your local develop branch.
 5. submit a pull request, destination `canon develop`.
 6. profit!
 
+For example:
+```
+git pull canon
+git flow feature start my-sweet-feature
+// code code code
+// pull
+// code code code
+// I think i'm done coding!
+git commit -am "done!"
+git flow feature publish
+// on github, make pull request into canon/develop
+// code as necessary in response to reviews.
+// when the feature is accepted, you can delete your local and origin feature branches.
+git branch -D feature/my-sweet-feature
+git push origin --delete feature/my-sweet-feature
+// or not, as you choose.
+```
+
 Managers have a slightly different life than regular contributers, but we won't
-go into that here.
+go into that until the next section.
 
 If you're not into coding (or Python, or Django), 1. what's wrong with you,
 and 2. no worries! If you're a student, you can submit bugs, enhancements or
