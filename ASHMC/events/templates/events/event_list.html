@@ -7,11 +7,11 @@
 {% endblock stylin %}
 
 {% block post_header %}
+<div class='list_wrap'>
+    <ul class='event_list'>
+
 {% for event in object_list %}
-    {% if forloop.first %}
-    <div class='list_wrap'>
-        <ul class='event_list'>
-    {% endif %}
+
             <li>
             <div class='
             {% if request.user in event.attendees.all %}
@@ -59,13 +59,15 @@
                 </div>
                 <div class='clearer'></div>
             </li>
-    {% if forloop.last %}
-       </ul>
-   </div>
-    {% endif %}
-
 {% empty %}
-    <h2>No events registered!</h2>
-    <h3>Why don't you take care of that?</h3>
+    <li>
+        <h2>No events registered!</h2>
+        <h3>Why don't you take care of that?</h3>
+    </li>
 {% endfor %}
+
+   </ul>
+</div>
+
+
 {% endblock post_header %}
