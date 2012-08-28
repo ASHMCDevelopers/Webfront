@@ -45,7 +45,7 @@
         {% else %}
 
             {% for i in form.event.guests_per_user|rangify:"True" %}
-                {% if forloop.first and not forloop.last %}
+                {% if forloop.first %}
                         <div class='register'>
                         <h4>You may register up to {{form.event.guests_per_user}} guest{{form.event.guests_per_user|pluralize}}:</h4>
                         {% if form.errors %}
