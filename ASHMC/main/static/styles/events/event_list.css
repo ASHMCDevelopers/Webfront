@@ -590,7 +590,7 @@ footer {
   min-height: 100px;
   max-width: 850px;
   margin: 0 auto;
-  padding-top: 1em; }
+  padding-top: 1.5em; }
 
 .list_wrap {
   max-width: 800px;
@@ -607,7 +607,8 @@ footer {
     .event_list li .location h3 {
       padding: 0; }
   .event_list li .attendance {
-    padding: 5px; }
+    padding: 10px;
+    float: left; }
     .event_list li .attendance h6 {
       padding: 0;
       display: inline; }
