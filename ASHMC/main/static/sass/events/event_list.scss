@@ -18,6 +18,10 @@
 
         margin-top: 1.5em;
 
+        &:last-child {
+            margin-bottom: 1em;
+        }
+
         .attending {
             background-color: $green;
             padding: 5px;
