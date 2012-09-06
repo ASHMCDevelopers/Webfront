@@ -598,6 +598,8 @@ footer {
 
 .event_list li {
   margin-top: 1.5em; }
+  .event_list li:last-child {
+    margin-bottom: 1em; }
   .event_list li .attending {
     background-color: #77dd77;
     padding: 5px; }
