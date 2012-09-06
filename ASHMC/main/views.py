@@ -43,7 +43,7 @@ class LandingPage(TemplateView):
             context['latest_tweets'] = tweets
 
         if self.request.user.is_authenticated():
-            if request.user.is_superuser:
+            if self.request.user.is_superuser:
                 latest_entries = Entry.published.all()
             else:
                 user_dorm = UserRoom.get_current_room(self.request.user)
