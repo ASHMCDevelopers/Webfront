@@ -16,7 +16,10 @@ register = template.Library()
 
 @register.filter
 def maximum(iterable):
-    return max(iterable)
+    if iterable:
+        return max(iterable)
+    else:
+        return None
 
 
 @register.filter

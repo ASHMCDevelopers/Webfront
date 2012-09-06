@@ -104,7 +104,7 @@ Utility = _Utility()
 
 class Role(models.Model):
 
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=150)
 
     description = models.TextField(blank=True, null=True)
 

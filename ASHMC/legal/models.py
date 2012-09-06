@@ -51,7 +51,7 @@ class Article(MPTTModel):
         default="",
         blank=True,
     )
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True, max_length=150)
     body = models.TextField(
         default="",
         blank=True,
