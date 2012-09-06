@@ -596,48 +596,46 @@ footer {
   max-width: 800px;
   margin: 0 auto; }
 
-.event_list {
-  margin-bottom: 1em; }
-  .event_list li {
-    margin-top: 1.5em; }
-    .event_list li .attending {
-      background-color: #77dd77;
-      padding: 5px; }
-    .event_list li .location {
-      text-align: center;
-      padding: 5px; }
-      .event_list li .location h3 {
-        padding: 0; }
-    .event_list li .attendance {
-      padding: 10px;
-      float: left; }
-      .event_list li .attendance h6 {
-        padding: 0;
+.event_list li {
+  margin-top: 1.5em; }
+  .event_list li .attending {
+    background-color: #77dd77;
+    padding: 5px; }
+  .event_list li .location {
+    text-align: center;
+    padding: 5px; }
+    .event_list li .location h3 {
+      padding: 0; }
+  .event_list li .attendance {
+    padding: 10px;
+    float: left; }
+    .event_list li .attendance h6 {
+      padding: 0;
+      display: inline; }
+    .event_list li .attendance ul {
+      display: inline; }
+      .event_list li .attendance ul li {
         display: inline; }
-      .event_list li .attendance ul {
-        display: inline; }
-        .event_list li .attendance ul li {
-          display: inline; }
-          .event_list li .attendance ul li:not(:last-child):after {
-            content: ","; }
-    .event_list li .event_head {
-      background: white; }
-    .event_list li h2 {
-      padding: 0.5em;
-      margin: 0; }
-    .event_list li .time {
-      float: right;
-      padding: 0.5em;
-        padding-top: 0; }
-      .event_list li .time h2 {
-        padding: 0; }
-    .event_list li .event_title {
-      display: inline-block; }
-    .event_list li .event_description {
-      float: right;
-      background: white;
-      padding: 0.5em;
-      max-width: 450px; }
+        .event_list li .attendance ul li:not(:last-child):after {
+          content: ","; }
+  .event_list li .event_head {
+    background: white; }
+  .event_list li h2 {
+    padding: 0.5em;
+    margin: 0; }
+  .event_list li .time {
+    float: right;
+    padding: 0.5em;
+      padding-top: 0; }
+    .event_list li .time h2 {
+      padding: 0; }
+  .event_list li .event_title {
+    display: inline-block; }
+  .event_list li .event_description {
+    float: right;
+    background: white;
+    padding: 0.5em;
+    max-width: 450px; }
 
 .calendar table {
   margin: 0.5em; }
