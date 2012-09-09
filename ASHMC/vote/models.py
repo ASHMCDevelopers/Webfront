@@ -35,8 +35,8 @@ class Ballot(models.Model):
     TYPES = (
         (VOTE_TYPES.POPULARITY, "Popularity"),
         (VOTE_TYPES.PREFERENCE, 'Preference'),
-        (VOTE_TYPES.INOROUT, 'Yes or No'),
         (VOTE_TYPES.SELECT_X, 'Select Top X'),
+        (VOTE_TYPES.INOROUT, 'Yes or No'),
     )
 
     vote_type = models.SmallIntegerField(default=0, choices=TYPES)
