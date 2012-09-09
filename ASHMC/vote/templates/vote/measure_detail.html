@@ -25,7 +25,7 @@
         <div class='ballot_blurb'>
             {{form.ballot.blurb|markdown:"safe"}}
         </div>
-        {% for candidate in form.ballot.candidate_set.all %}
+        {% for candidate in form.ballot|get_valid_candidates %}
         {% if forloop.first %}
         <div class='surrounder body'>
         <div class='candidate_blurbs'>

@@ -28,7 +28,7 @@ class BallotForm(forms.Form):
         prefix = kwargs.pop('prefix', ballot.id)
         super(BallotForm, self).__init__(*args, prefix=prefix, **kwargs)
         self.ballot = ballot
-        choices = ballot.candidate_set.all()
+        choices = ballot.candidate_set.all().exclude(is_write_in=True)
 
         if ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY:
             self.fields['choice'] = CandidateChoiceField(
