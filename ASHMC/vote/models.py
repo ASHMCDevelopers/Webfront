@@ -55,7 +55,7 @@ class Ballot(models.Model):
 
     def get_winners(self):
         """does not break ties."""
-        if self.vote_type == self.VOTE_TYPES.POPULARITY:
+        if self.vote_type == self.VOTE_TYPES.POPULARITY or self.vote_type == self.VOTE_TYPES.INOROUT:
             max_choices = max(self.candidate_set.annotate(pv_max=models.Count('popularityvote')).values_list('pv_max', flat=True))
             return self.candidate_set.annotate(models.Count('popularityvote')).filter(popularityvote__count=max_choices)
         elif self.vote_type == self.VOTE_TYPES.PREFERENCE:
