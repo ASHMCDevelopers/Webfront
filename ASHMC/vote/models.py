@@ -35,7 +35,7 @@ class Ballot(models.Model):
     TYPES = (
         (VOTE_TYPES.POPULARITY, "Popularity"),
         (VOTE_TYPES.PREFERENCE, 'Preference'),
-        (VOTE_TYPES.INOROUT, 'Yes or No')
+        (VOTE_TYPES.INOROUT, 'Yes or No'),
         (VOTE_TYPES.SELECT_X, 'Select Top X'),
     )
 
