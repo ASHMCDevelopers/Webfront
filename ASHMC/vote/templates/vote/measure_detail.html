@@ -25,28 +25,30 @@
         <div class='ballot_blurb'>
             {{form.ballot.blurb|markdown:"safe"}}
         </div>
-        {% for candidate in form.ballot|get_valid_candidates %}
-        {% if forloop.first %}
-        <div class='surrounder body'>
-        <div class='candidate_blurbs'>
-            <ul>
+        {% if form.ballot.vote_type != VOTE_TYPES.INOROUT %}
+            {% for candidate in form.ballot|get_valid_candidates %}
+                {% if forloop.first %}
+                <div class='surrounder body'>
+                <div class='candidate_blurbs'>
+                    <ul>
+                {% endif %}
+                        <li class='surrounder light'>
+                            <h5>{{candidate.cast}}</h5>
+                            {% if candidate.description %}
+                            {{candidate.description|markdown:"safe"}}
+                            {% else %}
+                            <p>No information provided.</p>
+                            {% endif %}
+                        </li>
+                {% if forloop.last %}
+                    </ul>
+                </div>
+                </div>
+                {% endif %}
+            {% endfor %}
         {% endif %}
-                <li class='surrounder light'>
-                    <h5>{{candidate.cast}}</h5>
-                    {% if candidate.description %}
-                    {{candidate.description|markdown:"safe"}}
-                    {% else %}
-                    <p>No information provided.</p>
-                    {% endif %}
-                </li>
-        {% if forloop.last %}
-            </ul>
-        </div>
-        </div>
-        {% endif %}
-        {% endfor %}
             <div class='empty spacer'></div>
-            {% if form.ballot.vote_type == VOTE_TYPES.POPULARITY %}
+            {% if form.ballot.vote_type == VOTE_TYPES.POPULARITY or form.ballot.vote_type == VOTE_TYPES.INOROUT %}
             <h4>Choose an option</h4>
             {% elif form.ballot.vote_type == VOTE_TYPES.SELECT_X %}
             <h4>Select up to <span class='select_x'>{{form.ballot.number_to_select}}</span> option{{form.ballot.number_to_select|pluralize}}</h4>

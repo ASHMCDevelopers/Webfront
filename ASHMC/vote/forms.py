@@ -30,7 +30,7 @@ class BallotForm(forms.Form):
         self.ballot = ballot
         choices = ballot.candidate_set.all().exclude(is_write_in=True)
 
-        if ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY:
+        if ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY or ballot.vote_type == Ballot.VOTE_TYPES.INOROUT:
             self.fields['choice'] = CandidateChoiceField(
                 widget=forms.RadioSelect,
                 empty_label=None if not ballot.can_abstain else "I'm abstaining",

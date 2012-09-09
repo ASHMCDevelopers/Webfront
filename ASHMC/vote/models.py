@@ -30,15 +30,16 @@ class Ballot(models.Model):
         you can have a ballot for ASHMC President election and
         one for VP election in the same measure.
     """
-    VOTE_TYPES = Utility.enum('POPULARITY', 'PREFERENCE', 'SELECT_X', type_name='BallotVoteType')
+    VOTE_TYPES = Utility.enum('POPULARITY', 'PREFERENCE', 'SELECT_X', 'INOROUT', type_name='BallotVoteType')
 
     TYPES = (
         (VOTE_TYPES.POPULARITY, "Popularity"),
         (VOTE_TYPES.PREFERENCE, 'Preference'),
         (VOTE_TYPES.SELECT_X, 'Select Top X'),
+        (VOTE_TYPES.INOROUT, 'Yes or No'),
     )
 
-    vote_type = models.SmallIntegerField(default=1, choices=TYPES)
+    vote_type = models.SmallIntegerField(default=0, choices=TYPES)
     number_to_select = models.PositiveIntegerField(blank=True, null=True)
 
     measure = models.ForeignKey('Measure', null=True)
@@ -76,6 +77,17 @@ class Ballot(models.Model):
             raise IntegrityError("Can't have a SELECT_X vote type and no number_to_select.")
 
         super(Ballot, self).save(*args, **kwargs)
+        if self.vote_type == self.VOTE_TYPES.INOROUT:
+            # create the two candidates now.
+            yes, _ = Candidate.objects.get_or_create(
+                title="Yes",
+                ballot=self,
+            )
+
+            no, _ = Candidate.objects.get_or_create(
+                title="No",
+                ballot=self,
+            )
 
 
 class Measure(models.Model):
