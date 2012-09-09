@@ -15,6 +15,11 @@ def get_candidate(ballot, choice):
 
 
 @register.filter
+def get_valid_candidates(ballot):
+    return ballot.candidate_set.all().exclude(is_write_in=True)
+
+
+@register.filter
 def dir_this(thing):
     return dir(thing)
 

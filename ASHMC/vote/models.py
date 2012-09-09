@@ -193,18 +193,13 @@ class PopularityVote(models.Model):
     vote = models.ForeignKey(Vote, null=True)
     ballot = models.ForeignKey(Ballot)
     candidate = models.ForeignKey("Candidate", null=True, blank=True)
-    write_in_value = models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:
         verbose_name = _('PopularityVote')
         verbose_name_plural = _('PopularityVotes')
 
     def __unicode__(self):
-        if self.candidate is not None:
-            votee = self.candidate
-        else:
-            votee = self.write_in_value
-
+        votee = self.candidate
         return "{} ({}) for {}".format(self.vote, self.ballot, votee)
 
 
@@ -230,6 +225,8 @@ class Candidate(models.Model):
 
     description = models.TextField(null=True, blank=True)
     title = models.CharField(max_length=200, blank=True, null=True)
+
+    is_write_in = models.BooleanField(default=False)
 
  # This FK is what makes the polymorphic magic work (esp. for printing)
     real_type = models.ForeignKey(ContentType, editable=False, null=True)
