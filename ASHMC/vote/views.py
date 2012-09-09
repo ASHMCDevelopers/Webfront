@@ -33,7 +33,10 @@ class MeasureListing(ListView):
             # If they don't have a room, they're probably not eligible to vote.
             raise PermissionDenied()
 
-        return Measure.objects.filter(
+        return Measure.objects.exclude(
+            # Immediately filter out expired measures. Otherwise shit gets weird.
+            vote_end__lte=datetime.datetime.now(pytz.utc),
+        ).filter(
             # Hide measures that the user has already voted in.
             ~Q(id__in=Vote.objects.filter(account=self.request.user).values_list('measure__id', flat=True)),
             Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
