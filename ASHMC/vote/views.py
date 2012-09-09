@@ -105,10 +105,15 @@ class MeasureDetail(DetailView):
                 if form.cleaned_data['choice'] is None:
                     # Valid form with None choice means write in
                     # TODO: Document this assumption
+                    c, _ = Candidate.objects.get_or_create(
+                        title=form.cleaned_data['write_in_value'],
+                        ballot=form.ballot,
+                        is_write_in=True,
+                    )
                     PopularityVote.objects.create(
                         ballot=form.ballot,
                         vote=vote,
-                        write_in_value=form.cleaned_data['write_in_value'],
+                        candidate=c,
                     )
                 else:
                     PopularityVote.objects.create(
