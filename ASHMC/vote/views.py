@@ -104,6 +104,9 @@ class MeasureDetail(DetailView):
         )
 
         for form in forms:
+            if 'abstains' in form.cleaned_data and form.cleaned_data['abstains']:
+                continue
+
             if form.ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY:
                 if form.cleaned_data['choice'] is None:
                     # Valid form with None choice means write in
@@ -125,9 +128,6 @@ class MeasureDetail(DetailView):
                         candidate=form.cleaned_data['choice'],
                     )
             elif form.ballot.vote_type == Ballot.VOTE_TYPES.SELECT_X:
-                if 'abstains' in form.cleaned_data and form.cleaned_data['abstains']:
-                    continue
-
                 for candidate in form.cleaned_data['choice']:
                     PopularityVote.objects.create(
                         ballot=form.ballot,
@@ -146,6 +146,13 @@ class MeasureDetail(DetailView):
                         candidate=candidate,
                         amount=form.cleaned_data[candidate_field],
                     )
+
+            elif form.ballot.vote_type == Ballot.VOTE_TYPES.INOROUT:
+                PopularityVote.objects.create(
+                    ballot=form.ballot,
+                    vote=vote,
+                    candidate=form.cleaned_data['choice']
+                )
 
         return redirect('measure_list')
 
