@@ -180,5 +180,5 @@ class MeasureResultList(ListView):
             vote_end__lte=datetime.datetime.now(pytz.utc),
         ).exclude(
             banned_accounts__id__exact=self.request.user.id,
-        ).order_by('vote_end')
+        ).order_by('-vote_end')
 
