@@ -134,8 +134,12 @@ class Measure(models.Model):
         verbose_name_plural = _('Mesures')
 
     def save(self, *args, **kwargs):
-        # Ensures there's a restrictions object to check against in views.
+        if self.vote_end is not None:
+            # Ensure that the measure is open for at least 2 days.
+            if self.vote_end - self.vote_start < datetime.timedelta(days=2):
+                self.vote_end = self.vote_start + datetime.timedelta(days=2)
         super(Measure, self).save(*args, **kwargs)
+        # Ensures there's a restrictions object to check against in views.
         try:
             self.restrictions
         except models.ObjectDoesNotExist:
@@ -300,8 +304,12 @@ def set_end_on_quorum_reached(sender, **kwargs):
         return
 
     if measure.actual_quorum >= measure.quorum:
-        midnight = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
-        measure.vote_end = midnight
+        # set vote_end to midnight (technically tomorrow morning, so we add one day.)
+        midnight = (timezone.now() + datetime.timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+
+        # Measures have to be open for at least 48 hours.
+        if midnight - measure.vote_start >= datetime.timedelta(days=2):
+            measure.vote_end = midnight
 
         measure.save()
 post_save.connect(set_end_on_quorum_reached, sender=Vote)
