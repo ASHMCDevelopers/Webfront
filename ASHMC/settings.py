@@ -1,8 +1,9 @@
 # Django settings for ASHMC project.
+import django.template
+
 import local_settings
 
 from twitter import Twitter, OAuth
-import django.template
 
 VERSION = "1.0.8"
 
@@ -157,9 +158,16 @@ TEMPLATE_DIRS = (
 TESTING = local_settings.TESTING
 
 AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
     'ASHMC.authbackends.CheckHasRolePerm',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+AUTH_LDAP_SERVER_URI = local_settings.AUTH_LDAP_SERVER_URI
+AUTH_LDAP_BIND_DN = local_settings.AUTH_LDAP_BIND_DN
+AUTH_LDAP_BIND_PASSWORD = local_settings.AUTH_LDAP_BIND_PASSWORD
+AUTH_LDAP_USER_SEARCH = local_settings.AUTH_LDAP_USER_SEARCH
+AUTH_LDAP_START_TLS = True
 
 INSTALLED_APPS = (
     'django.contrib.auth',
