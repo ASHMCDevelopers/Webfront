@@ -1,0 +1,23 @@
+{% extends "main_base_page.html" %}
+{% load static %}
+{% block stylin %}
+    <link rel="stylesheet" type="text/css" href="{% static "styles/404.css"%}">
+{% endblock stylin %}
+
+{% block pre_header %}
+{% endblock pre_header %}
+
+{% block post_header %}
+<h2>Houston, we have a 404 here.</h2>
+
+<p><a href="">{{request.META.HTTP_HOST}}{{request.META.PATH_INFO}}</a> is a URL we don't recognize. Make sure you've
+    <ul>
+        <li>typed it in correctly</li>
+        <li>ensured the page is actually supposed to exist</li>
+    </ul>
+</p>
+<p>If you're sure you've gotten it right, file a
+    ticket with the ASHMCDevelopers group
+    <a href="http://github.com/ASHMCDevelopers/Webfront/issues">here</a>.
+</p>
+{% endblock %}
