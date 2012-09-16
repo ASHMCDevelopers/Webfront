@@ -1,0 +1,13 @@
+{% load static from staticfiles %}
+
+<html>
+  <head>
+    <title>ASHMC Treasury</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/treasury.css' %}"/>
+    {% block extrahead %}{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>

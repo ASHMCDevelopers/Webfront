@@ -1,0 +1,51 @@
+{% extends 'treasury/base.html' %}
+
+{% block content %}
+<h1>{{club.name}}</h1>
+
+<a href="{% url 'new_check_request' club_name=club.name %}">Submit a check request</a>
+<a href="">Request additional ASHMC funding</a>
+
+<h2>General information</h2>
+<ul>
+  <li>Total balance: {{club.balance|floatformat:2}}</li>
+</ul>
+
+<h2>Check requests</h2>
+<table class="listing">
+  <tr>
+    <th style="width: 2in">Date</th>
+    <th style="width: 1.5in">Request No</th>
+    <th style="width: 2.5in">Payee</th>
+    <th style="width: 1in">Amount</th>
+    <th style="width: 2.5in">Approved</th>
+  </tr>
+  {% for request in club.check_requests.all %}
+  <tr>
+    <td>{{request.date_filed}}</td>
+    <td>{{request.pk|stringformat:"06d"}}</td>
+    <td>{{request.payee}}</td>
+    <td>{{request.amount|floatformat:2}}</td>
+    <td>{{request.status}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<h2>Allocations</h2>
+<table class="listing">
+  <tr>
+    <th style="width: 2in">Date</th>
+    <th style="width: 2in">Allocation Number</th>
+    <th style="width: 1.5in">Amount</th>
+    <th style="width: 1.5in">Balance</th>
+  </tr>
+  {% for allocation in club.current_allocations %}
+  <tr>
+    <td>{{allocation.date_approved}}</td>
+    <td>{{allocation.allocation_number|stringformat:"06d"}}</td>
+    <td>{{allocation.amount|floatformat:2}}</td>
+    <td>{{allocation.amount_left|floatformat:2}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

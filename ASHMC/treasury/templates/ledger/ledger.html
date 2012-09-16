@@ -1,0 +1,27 @@
+{% extends 'treasury/base.html' %}
+{% load ledger %}
+
+{% block content %}
+<h1>Account details for {{account.name}}</h1>
+Real balance: {{account.bank_amount|floatformat:2}}
+<table class="listing" id="ledger">
+  <tr>
+    <th style="width: 2in">Time</th>
+    <th style="width: 1.5in">Club</th>
+    <th style="width: 4in">Description</th>
+    <th style="width: 0.5in">Status</th>
+    <th style="width: 1in">Amount</th>
+    <th style="width: 1in">Balance</th>
+  </tr>
+  {% for line_item in account.line_items.all %}
+  <tr>
+    <td>{{line_item.date_created}}</td>
+    <td>{{line_item.request.club.name}}</td>
+    <td>{{line_item.description}}</td>
+    <td>{{line_item.check_status}} </td>
+    <td class="align-right {{line_item.amount|ledger_class}}">{{line_item.amount|ledger_format}}</td>
+    <td class="align-right {{line_item.balance|amount_class}}">{{line_item.balance|amount_format}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

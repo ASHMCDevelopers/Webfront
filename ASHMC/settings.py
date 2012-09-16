@@ -189,6 +189,7 @@ INSTALLED_APPS = (
     'ASHMC.legal',
     'ASHMC.roster',
     'ASHMC.events',
+    'ASHMC.treasury'
 )
 
 # A sample logging configuration. The only tangible logging

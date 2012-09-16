@@ -1,0 +1,78 @@
+body {
+    font-family: HelveticaNeue-Light, Helvetica, Arial, Verdana, sans-serif;
+    width: 10in;
+    margin: 0 auto;
+    padding: 1.3em;
+}
+
+h1 {
+    font-weight: normal;
+}
+
+table {
+    margin-left: 0.3in;
+    border-collapse: collapse;
+}
+
+table tr:first-child th{
+    border-bottom: 1px solid black;
+}
+
+table tr:nth-child(2n) td {
+    background-color: #ddd;
+}
+
+/* Front page actions list */
+ul.actions {
+    width: 4in;
+    margin: 0 auto;
+    list-style: none;
+}
+
+ul.actions li {
+    padding: 0;
+    margin: 0.5em;
+}
+
+ul.actions li a {
+    display: block;
+    padding: 1em;
+    border: 1px solid black;
+    text-decoration: none;
+    color: black;
+}
+
+ul.actions li a:hover {
+    background-color: #ccc;
+}
+
+/* Forms */
+form ul
+{
+    margin: 0 auto;
+    list-style: none;
+    padding: 0;
+}
+
+form ul li label
+{
+    display: block;
+    float: left;
+    width: 1in;
+}
+
+.helptext
+{
+    font-size: 10pt;
+}
+
+/* Ledger tables */
+.align-right
+{
+    text-align: right;
+}
+
+.inthered
+{
+    color: red;
+}
