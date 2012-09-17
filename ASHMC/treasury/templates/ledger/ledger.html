@@ -3,7 +3,16 @@
 
 {% block content %}
 <h1>Account details for {{account.name}}</h1>
-Real balance: {{account.bank_amount|floatformat:2}}
+  <table class="info">
+    <tr>
+      <td>
+        Real balance
+      </td>
+      <td>
+        {{account.bank_amount|floatformat:2}}
+      </td>
+    </tr>
+  </table>
 <table class="listing" id="ledger">
   <tr>
     <th style="width: 2in">Time</th>

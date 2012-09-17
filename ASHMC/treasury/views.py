@@ -20,7 +20,7 @@ def club_permissions_required(f):
     new_func.__name__ = f.__name__
     return new_func
 
-
+@login_required
 def club_detail(request, club_name):
     club = get_object_or_404(Club, name=club_name)
     return render_to_response('clubs/detail.html',
@@ -62,15 +62,22 @@ def club_select(request):
     return render_to_response('clubs/select.html',
                               context_instance=RequestContext(request, {'clubs': clubs}))
 
+@login_required
 def overview(request):
     accounts = Account.objects.all()
     clubs = Club.objects.all()
 
     total_funds = sum([account.balance for account in accounts])
+    total_allocated = sum([account.currently_allocated for account in accounts])
+    total_free = sum([account.currently_free for account in accounts])
 
     return render_to_response('treasury/overview.html',
-                              context_instance=RequestContext(request,{'accounts': accounts, 'clubs': clubs, 'total_funds': total_funds}))
+                              context_instance=RequestContext(request,{'accounts': accounts, 'clubs': clubs,
+                                                                       'total_funds': total_funds,
+                                                                       'total_allocated': total_allocated,
+                                                                       'total_free': total_free}))
 
+@login_required
 def ledger(request, account_name):
     account = get_object_or_404(Account, name=account_name)
     return render_to_response('ledger/ledger.html',

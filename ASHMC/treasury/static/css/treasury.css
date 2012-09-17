@@ -5,6 +5,46 @@ body {
     padding: 1.3em;
 }
 
+.ASHMC {
+    font-size: 48pt;
+}
+
+.etreasury {
+    padding-left: 0.5em;
+    font-size: 40pt;
+}
+
+header {
+    border-bottom: 1px solid gray;
+    padding-bottom: 0.6em;
+    margin-bottom: 0.7em;
+}
+
+table.info {
+    padding: 0.6em;
+    margin-bottom: 0.5em;
+    border: 1px solid gray;
+    margin-left: 0.3in;
+    width: 5in;
+}
+
+table.info tr td:nth-child(2) {
+    text-align: right;
+}
+
+table.info td {
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+}
+
+table.info tr:first-child td {
+    padding-top: 0.6em;
+}
+
+table.info tr:last-child td {
+    padding-bottom: 0.6em;
+}
+
 h1 {
     font-weight: normal;
 }
@@ -18,7 +58,7 @@ table tr:first-child th{
     border-bottom: 1px solid black;
 }
 
-table tr:nth-child(2n) td {
+table.listing tr:nth-child(2n) td {
     background-color: #ddd;
 }
 
