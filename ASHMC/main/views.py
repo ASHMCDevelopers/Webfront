@@ -54,7 +54,7 @@ class LandingPage(TemplateView):
 
         else:
             latest_entries = Entry.published.filter(
-                dorms_hidden_from=None,        
+                dorms_hidden_from=None,
             )
 
         context['latest_entries'] = latest_entries
