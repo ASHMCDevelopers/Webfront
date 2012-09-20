@@ -40,9 +40,9 @@
             {% endfor %}
         </ul>
         <ul>
-            <li><h3>Living Situation</h3></li>
             {% with user|get_living_situation as room %}
-
+            {% if room %}
+            <li><h3>Living Situation</h3></li>
             <li><h4>{{room.room}} ({{room.semesters.all.0}})</h4></li>
             {% if room.room.suite or user|current_suites %}
             <li class='subhead'><h4>Suites:</h4>
@@ -50,6 +50,7 @@
                     {% if room.room.suite %}
                      <li><h5>{{room.room.suite}}</h5></li>
                     {% endif %}
+            {% endif %}
             {% for suite in user|current_suites %}
             {% if forloop.first %}
             {% endif %}
