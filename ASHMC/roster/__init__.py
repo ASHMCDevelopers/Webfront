@@ -33,19 +33,11 @@ def create_user_related_things(*args, **kwargs):
     s = workbook.sheets()[0]
 
     # On what row does the actual information start?
-    ROSTER_ROW_START = 3
+    ROSTER_ROW_START = settings.ROSTER_ROW_START
 
     # TODO: make this more programmatic?
-    FIELD_ORDERING = [
-        'ID',
-        'Fullname',
-        'Nickname',
-        'Class',
-        'Dorm',
-        'Room',
-        'Phone',
-        'Email',
-    ]
+    FIELD_ORDERING = settings.ROSTER_FIELD_ORDERING
+
     senior = GradYear.senior_class(
         sem=this_sem,
     ).year
