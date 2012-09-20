@@ -348,6 +348,19 @@ class Semester(models.Model):
     class Meta:
         unique_together = (('year', 'half'),)
 
+    def verbose_unicode(self):
+        """Produces something like 'Fall 2012', rather than 'FA2012' """
+        if self.half == 'FA':
+            long_half = "Fall"
+        elif self.half == 'SP':
+            long_half = 'Spring'
+        else:
+            long_half = "Summer"
+        return u"{} {}".format(
+            long_half,
+            self.year,
+        )
+
     def __unicode__(self):
         return u"{}{}".format(self.half, self.year)
 
@@ -381,8 +394,12 @@ class Student(models.Model):
     at = models.ForeignKey('Campus')  # This will default to HMC
     studentid = models.IntegerField(unique=True, null=True)
     credit_requirement = models.IntegerField(default=128)
+
     birthdate = models.DateField(null=True, blank=True)
+    #show_birthday = models.BooleanField(default=False)
+
     phonenumber = models.CharField(null=True, blank=True, max_length=20)
+    #show_phone = models.BooleanField(default=False)
 
     temp_pass = models.CharField(max_length=50, null=True, blank=True, editable=False)
 

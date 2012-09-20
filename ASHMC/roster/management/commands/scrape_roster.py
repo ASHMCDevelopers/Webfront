@@ -118,8 +118,8 @@ class Command(BaseCommand):
                 studentid=studentid,
             )
 
-            new_student.middle_name = middle_name,
-            new_student.temp_pass = temp_password,
+            new_student.middle_name = middle_name
+            new_student.temp_pass = temp_password
 
             new_student.save()
 
