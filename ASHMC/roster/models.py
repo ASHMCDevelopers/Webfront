@@ -71,7 +71,10 @@ class UserRoom(models.Model):
     def get_current_room(cls, user):
         from ASHMC.main.models import Semester
         sem = Semester.get_this_semester()
-        return cls.objects.get(user=user, semesters__id=sem.id)
+        try:
+            return cls.objects.get(user=user, semesters__id=sem.id)
+        except models.ObjectDoesNotExist:
+            return None
 
 
 class Suite(models.Model):
