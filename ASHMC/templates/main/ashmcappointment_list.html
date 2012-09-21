@@ -17,7 +17,7 @@
         {% for title, apptmts in council_main|council_ordered %}
             <li><h4>{{title}}{{apptmts|pluralize}} &mdash; {% for apptmt in apptmts %}{% spaceless %}
             {% endspaceless %}{% if not forloop.first and forloop.last %} and {% elif not forloop.first %}, {%endif%}
-            <a href="mailto:{{apptmt.user.username}}">{% firstof apptmt.user.get_full_name apptmt.user.username %}</a>{% spaceless %}
+            <a href="mailto:{{apptmt.user.email}}">{% firstof apptmt.user.get_full_name apptmt.user.username %}</a>{% spaceless %}
             {% endspaceless %}{% empty %}Nobody's been elected yet!{% endfor %}
             </li>
         {% endfor %}
