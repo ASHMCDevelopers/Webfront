@@ -117,7 +117,7 @@ class Measure(models.Model):
 
     @property
     def actual_quorum(self):
-        return (float(Vote.objects.filter(measure=self).count()) / self.eligible_voters.count()) * 100
+        return Vote.objects.filter(measure=self).count()  # (float(Vote.objects.filter(measure=self).count()) / self.eligible_voters.count()) * 100
 
     @property
     def has_reached_quorum(self):
@@ -312,4 +312,4 @@ def set_end_on_quorum_reached(sender, **kwargs):
             measure.vote_end = midnight
 
         measure.save()
-post_save.connect(set_end_on_quorum_reached, sender=Vote)
+#post_save.connect(set_end_on_quorum_reached, sender=Vote)
