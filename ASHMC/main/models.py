@@ -216,6 +216,8 @@ class ASHMCRole(Role):
         return my_index > their_index
 
     def __unicode__(self):
+        if self.title.startswith('ASHMC'):
+            return u"{}".format(self.title)
         return u"ASHMC {}".format(self.title)
 
     def short_repr(self):
