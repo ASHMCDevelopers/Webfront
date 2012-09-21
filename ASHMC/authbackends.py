@@ -1,7 +1,7 @@
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
 
-from ASHMC.main.models import ASHMCAppointment, DormPresident, Semester, User
+from ASHMC.main.models import ASHMCAppointment, DormPresident, Semester
 
 
 class CheckHasRolePerm(ModelBackend):
