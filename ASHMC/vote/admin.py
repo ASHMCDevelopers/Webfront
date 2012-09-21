@@ -56,7 +56,7 @@ admin.site.register(Restrictions, RestrictionsAdmin)
 
 class VoteAdmin(admin.ModelAdmin):
     pass
-admin.site.register(Vote, VoteAdmin)
+#admin.site.register(Vote, VoteAdmin)
 
 
 def get_measure(obj):
@@ -65,12 +65,12 @@ def get_measure(obj):
 
 class PopularityVoteAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', get_measure, 'ballot')
-admin.site.register(PopularityVote, PopularityVoteAdmin)
+#admin.site.register(PopularityVote, PopularityVoteAdmin)
 
 
 class PreferentialVoteAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', get_measure, 'ballot')
-admin.site.register(PreferentialVote, PreferentialVoteAdmin)
+#admin.site.register(PreferentialVote, PreferentialVoteAdmin)
 
 
 class CandidateAdmin(admin.ModelAdmin):
