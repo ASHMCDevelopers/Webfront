@@ -159,7 +159,6 @@ TESTING = local_settings.TESTING
 
 AUTHENTICATION_BACKENDS = (
     'django_auth_ldap.backend.LDAPBackend',
-    'ASHMC.authbackends.CheckHasRolePerm',
     'django.contrib.auth.backends.ModelBackend',
 )
 
