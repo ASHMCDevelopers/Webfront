@@ -2,9 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
+
 class OfficialDormManager(models.Manager):
     def get_query_set(self):
         return super(OfficialDormManager, self).get_query_set().filter(official_dorm=True)
+
 
 class Dorm(models.Model):
     DORMS = (
@@ -71,7 +73,10 @@ class UserRoom(models.Model):
     def get_current_room(cls, user):
         from ASHMC.main.models import Semester
         sem = Semester.get_this_semester()
-        return cls.objects.get(user=user, semesters__id=sem.id)
+        try:
+            return cls.objects.get(user=user, semesters__id=sem.id)
+        except models.ObjectDoesNotExist:
+            return None
 
 
 class Suite(models.Model):

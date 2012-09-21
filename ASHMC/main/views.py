@@ -48,13 +48,18 @@ class LandingPage(TemplateView):
             else:
                 user_dorm = UserRoom.get_current_room(self.request.user)
 
-                latest_entries = Entry.published.exclude(
-                    dorms_hidden_from__id=user_dorm.room.dorm.id,
-                )[:3]
+                if user_dorm:
+                    latest_entries = Entry.published.exclude(
+                        dorms_hidden_from__id=user_dorm.room.dorm.id,
+                    )[:3]
+                else:
+                    latest_entries = Entry.published.filter(
+                        dorms_hidden_from=None,
+                    )
 
         else:
             latest_entries = Entry.published.filter(
-                dorms_hidden_from=None,        
+                dorms_hidden_from=None,
             )
 
         context['latest_entries'] = latest_entries

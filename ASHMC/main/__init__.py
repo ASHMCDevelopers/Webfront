@@ -32,7 +32,7 @@ def send_tweet_after_new_entry(sender, **kwargs):
     except URLError:
         pass
 
-post_save.connect(send_tweet_after_new_entry, sender=Entry)
+#post_save.connect(send_tweet_after_new_entry, sender=Entry)
 
 
 def send_tweet_after_top_story(sender, **kwargs):
@@ -52,7 +52,7 @@ def send_tweet_after_top_story(sender, **kwargs):
     except URLError:
         pass
 
-post_save.connect(send_tweet_after_top_story, sender=TopNewsItem)
+#post_save.connect(send_tweet_after_top_story, sender=TopNewsItem)
 
 
 def create_welcoming_blog_post(sender, **kwargs):
