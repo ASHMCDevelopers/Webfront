@@ -20,9 +20,11 @@
     <div class='password_change'>
         <a href="{% url 'logout' %}">logout</a>
     </div>
+    {% if  user.student.studentid %}
     <div class='centered'>
         <h4>{{user.student.studentid}}</h4>
     </div>
+    {% endif %}
 
     <div class="info">
         <ul>
