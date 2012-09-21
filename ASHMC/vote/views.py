@@ -31,7 +31,9 @@ class MeasureListing(ListView):
             )[0].room
         except IndexError:
             # If they don't have a room, they're probably not eligible to vote.
-            raise PermissionDenied()
+            #raise PermissionDenied()
+            # Until we have roster data importing, this is bad
+            pass
 
         return Measure.objects.exclude(
             # Immediately filter out expired measures. Otherwise shit gets weird.
@@ -39,8 +41,9 @@ class MeasureListing(ListView):
         ).filter(
             # Hide measures that the user has already voted in.
             ~Q(id__in=Vote.objects.filter(account=self.request.user).values_list('measure__id', flat=True)),
-            Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
-            Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None),
+            # TODO: Un-disable these things when we can parse rosters again.
+            #Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
+            #Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None),
             is_open=True,
             # Only show measures which have already opened for voting
             vote_start__lte=datetime.datetime.now(pytz.utc),
