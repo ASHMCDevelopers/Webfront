@@ -173,7 +173,7 @@ class ASHMCRole(Role):
         'Representative to the Campus Planning and Physical Plant Committee',
         'ASHMC Executive Assistant',
         'ASHMC Publicity Director',
-        'ASHMC Web Editor',
+        'ASHMC Webmaster',
     )
 
     # This defines the hierarchy of roles.
