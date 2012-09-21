@@ -71,7 +71,6 @@ def create_user_related_things(*args, **kwargs):
 
         hmc = Campus.objects.get(code='HM')
 
-        studentid = int(row[FIELD_ORDERING.index('ID')].value),
         studentid = None
         new_student, _ = Student.objects.get_or_create(
             user=new_user,
