@@ -3,6 +3,13 @@
 
 
 #postheader {
+    & > .successes {
+        width: 75%;
+        h4 {
+            padding-top: 0.5em;
+            padding-bottom: 0.5em;
+        }
+    }
     max-width: $screen_max_width;
     margin: 0 auto;
     @include linear_gradient(left, transparent 70%, $dark_background 70%);

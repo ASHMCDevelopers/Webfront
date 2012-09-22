@@ -192,6 +192,17 @@ p + p { // proper typogrpahic styling
     }
 }
 
+.successes {
+    background: $green;
+    color: #fff;
+
+    &.heading {
+        text-align: center;
+        padding: 5px;
+        margin-bottom: 1em;
+    }
+}
+
 li {
     padding: .2em;
 }

@@ -51,6 +51,16 @@ class MeasureListing(ListView):
             banned_accounts__id__exact=self.request.user.id,
         ).order_by('vote_end')
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(MeasureListing, self).get_context_data(*args, **kwargs)
+
+        # Get the last measure the user voted on, and clear it.
+        last_measure_voted_id = self.request.session.pop('VOTE_LAST_MEASURE_ID', None)
+        if last_measure_voted_id:
+            context['last_measure_voted'] = Measure.objects.get(pk=last_measure_voted_id)
+
+        return context
+
 
 class MeasureDetail(DetailView):
     model = Measure
@@ -157,6 +167,8 @@ class MeasureDetail(DetailView):
                     candidate=form.cleaned_data['choice']
                 )
 
+        # Store the voted-on measure for confirmation
+        self.request.session['VOTE_LAST_MEASURE_ID'] = measure.id
         return redirect('measure_list')
 
 
