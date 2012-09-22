@@ -126,7 +126,7 @@ class Measure(models.Model):
     @property
     def eligible_voters(self):
         if self.restrictions is None:
-            return User.objects.all()
+            return User.objects.filter(inactive=False)
         return self.restrictions.get_grad_year_users() & self.restrictions.get_dorm_users()
 
     class Meta:
