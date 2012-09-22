@@ -401,6 +401,14 @@ p + p {
     padding: 5px;
     margin-bottom: 1em; }
 
+.successes {
+  background: #77dd77;
+  color: #fff; }
+  .successes.heading {
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 1em; }
+
 li {
   padding: .2em; }
 

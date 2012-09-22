@@ -2,6 +2,12 @@
 {% load markup %}
 
 {% block post_header %}
+
+    {% if last_measure_voted %}
+        <div class='centerer successes heading'>
+            <h4>Your vote on {{last_measure_voted.name}} has been recorded</h4>
+        </div>
+    {% endif %}
     <div class='list_wrap'>
     <ul class="measure_list">
     {% for measure in object_list  %}
