@@ -1,12 +1,18 @@
 from django.contrib import admin
 
-from django.utils.translation import ugettext as _
-
-from .models import *
+from .models import Dorm, DormRoom, UserRoom, Suite, TransientSuite, TransientSuiteMembership
 
 
 class DormAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'code')
+    list_display = ('__unicode__', 'code', 'official_dorm')
+
+    def queryset(self, request):
+        """Show all the dorms, not just the official ones"""
+        qs = self.model.all_objects.get_query_set()
+        ordering = self.ordering or ()
+        if ordering:
+            qs = qs.order_by(*ordering)
+        return qs
 admin.site.register(Dorm, DormAdmin)
 
 
