@@ -401,6 +401,14 @@ p + p {
     padding: 5px;
     margin-bottom: 1em; }
 
+.successes {
+  background: #77dd77;
+  color: #fff; }
+  .successes.heading {
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 1em; }
+
 li {
   padding: .2em; }
 
@@ -590,6 +598,11 @@ footer {
   background: -o-linear-gradient(left, transparent 70%, #1c1c1c 70%);
   background: -ms-linear-gradient(left, transparent 70%, #1c1c1c 70%);
   padding: 15px 0; }
+  #postheader > .successes {
+    width: 75%; }
+    #postheader > .successes h4 {
+      padding-top: 0.5em;
+      padding-bottom: 0.5em; }
 
 .list_wrap {
   margin: 0 auto;

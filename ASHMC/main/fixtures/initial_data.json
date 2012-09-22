@@ -75,7 +75,7 @@
     "model": "main.ASHMCRole",
     "pk": 9,
     "fields": {
-      "title": "Committee for Acitivites Planning Chair",
+      "title": "Committee for Activities Planning Chair",
       "description": "",
       "real_type": ["main","ashmcrole"]
     }

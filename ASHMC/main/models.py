@@ -173,7 +173,7 @@ class ASHMCRole(Role):
         'Representative to the Campus Planning and Physical Plant Committee',
         'ASHMC Executive Assistant',
         'ASHMC Publicity Director',
-        'ASHMC Web Editor',
+        'ASHMC Webmaster',
     )
 
     # This defines the hierarchy of roles.
@@ -216,6 +216,8 @@ class ASHMCRole(Role):
         return my_index > their_index
 
     def __unicode__(self):
+        if self.title.startswith('ASHMC'):
+            return u"{}".format(self.title)
         return u"ASHMC {}".format(self.title)
 
     def short_repr(self):

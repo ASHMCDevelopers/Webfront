@@ -117,7 +117,7 @@ class Measure(models.Model):
 
     @property
     def actual_quorum(self):
-        return (float(Vote.objects.filter(measure=self).count()) / self.eligible_voters.count()) * 100
+        return Vote.objects.filter(measure=self).count()  # (float(Vote.objects.filter(measure=self).count()) / self.eligible_voters.count()) * 100
 
     @property
     def has_reached_quorum(self):
@@ -126,7 +126,7 @@ class Measure(models.Model):
     @property
     def eligible_voters(self):
         if self.restrictions is None:
-            return User.objects.all()
+            return User.objects.filter(inactive=False)
         return self.restrictions.get_grad_year_users() & self.restrictions.get_dorm_users()
 
     class Meta:
@@ -312,4 +312,4 @@ def set_end_on_quorum_reached(sender, **kwargs):
             measure.vote_end = midnight
 
         measure.save()
-post_save.connect(set_end_on_quorum_reached, sender=Vote)
+#post_save.connect(set_end_on_quorum_reached, sender=Vote)

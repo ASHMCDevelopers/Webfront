@@ -5,7 +5,7 @@ import local_settings
 
 from twitter import Twitter, OAuth
 
-VERSION = "1.0.8"
+VERSION = "20120922"
 
 django.template.add_to_builtins('django.templatetags.future')
 
@@ -145,14 +145,7 @@ ROOT_URLCONF = 'ASHMC.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'ASHMC.wsgi.application'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    "/home/courses/sites/courses.env/site/ASHMC/templates",  # courses
-    "C:/Users/haak/Documents/My Dropbox/git_projects/ASHMC/ASHMC/templates",  # Lolth
-    "/Users/haak/Dropbox/git_projects/ASHMC/ASHMC/templates",  # Macbook pro
-)
+TEMPLATE_DIRS = local_settings.TEMPLATE_DIRS
 
 # This is required for object_permissions testing.
 TESTING = local_settings.TESTING
