@@ -588,3 +588,7 @@ footer {
     font-size: 1em; }
     #ashmc h3 .AS {
       font-family: "Walkway Expand Black", sans-serif; }
+
+#postheader {
+  background: white;
+  max_width: 1050px; }
