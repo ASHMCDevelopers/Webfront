@@ -3,7 +3,9 @@ from django.core.exceptions import ObjectDoesNotExist
 
 import datetime
 
-class SchoolYear(models.Model):
+class TreasuryYear(models.Model):
+    '''Represents an ASHMC Treasury Year (Slightly different from normal school years)'''
+
     description=models.CharField(max_length=9, unique=True, db_index=True)
     date=models.DateField()
 
@@ -18,9 +20,9 @@ class SchoolYear(models.Model):
 
         description = '%04d-%04d' % (year, year+1)
         try:
-            return SchoolYear.objects.get(description=description)
+            return TreasuryYear.objects.get(description=description)
         except ObjectDoesNotExist:
-            ret = SchoolYear(description=description, date=datetime.date(year,9, 1))
+            ret = TreasuryYear(description=description, date=datetime.date(year,9, 1))
             ret.save()
             return ret
 
@@ -28,7 +30,7 @@ class SchoolYear(models.Model):
         return self.description
 
     def __repr__(self):
-        return "<SchoolYear %s>" % self
+        return "<TreasuryYear %s>" % self
 
 class Account(models.Model):
     name = models.CharField(max_length=200, help_text='The name of the account', unique=True)
@@ -46,7 +48,7 @@ class Account(models.Model):
 
     @property
     def currently_allocated(self):
-        return self.allocations.filter(school_year=SchoolYear.get_current()).aggregate(models.Sum('amount'))['amount__sum'] or 0
+        return self.allocations.filter(school_year=TreasuryYear.get_current()).aggregate(models.Sum('amount'))['amount__sum'] or 0
 
     @property
     def currently_free(self):
@@ -74,7 +76,7 @@ class Allocation(models.Model):
         return num + 1
 
     allocation_number = models.IntegerField(default=new_allocation_number, unique=True)
-    school_year = models.ForeignKey(SchoolYear, default=SchoolYear.get_current)
+    school_year = models.ForeignKey(TreasuryYear, default=TreasuryYear.get_current)
     for_club = models.ForeignKey('Club', blank=True, null=True, related_name='allocations')
 
     amount = models.DecimalField(decimal_places=2,max_digits=8)
@@ -122,15 +124,15 @@ class Club(models.Model):
 
     @property
     def current_allocations(self):
-        return self.allocations.filter(school_year=SchoolYear.get_current())
+        return self.allocations.filter(school_year=TreasuryYear.get_current())
 
     @property
     def current_officers(self):
-        return self.officers.filter(school_year=SchoolYear.get_current())
+        return self.officers.filter(school_year=TreasuryYear.get_current())
 
     @property
     def current_officers_for_allocation(self):
-        officers = list(self.officers.filter(school_year=SchoolYear.get_current())[:5])
+        officers = list(self.officers.filter(school_year=TreasuryYear.get_current())[:5])
         officers += [{'position': '', 'student': ''}] * (5 - len(officers))
         return officers
 
@@ -145,7 +147,7 @@ class Club(models.Model):
 
 class Officer(models.Model):
     club = models.ForeignKey('Club', related_name='officers')
-    school_year = models.ForeignKey('SchoolYear', default=SchoolYear.get_current)
+    school_year = models.ForeignKey('TreasuryYear', default=TreasuryYear.get_current)
 
     student = models.ForeignKey('main.Student', related_name='club_positions')
     position = models.CharField(max_length=512, blank=False, null=False)
@@ -213,7 +215,7 @@ class LineItem(models.Model):
             AllocationLineItem.objects.filter(line_item=self).delete()
             with transaction.commit_on_success():
                 # Find allocations based on account source
-                allocations = self.request.club.allocations.filter(source=self.account, school_year=SchoolYear.get_current())
+                allocations = self.request.club.allocations.filter(source=self.account, school_year=TreasuryYear.get_current())
                 amount_left = self.amount
                 for allocation in allocations:
                     if allocation.amount_left > amount_left:
@@ -257,7 +259,7 @@ class BudgetRequest(models.Model):
     club = models.ForeignKey('Club')
     date_filed = models.DateTimeField(auto_now=True)
 
-    for_school_year = models.ForeignKey('SchoolYear')
+    for_school_year = models.ForeignKey('TreasuryYear')
 
     filer = models.ForeignKey('main.Student')
 
@@ -313,7 +315,7 @@ class CheckRequest(models.Model):
     ENTIRE_YEAR = 'Entire year'
 
     club = models.ForeignKey(Club, null=True, related_name='check_requests')
-    year = models.ForeignKey(SchoolYear, null=True, default=SchoolYear.get_current)
+    year = models.ForeignKey(TreasuryYear, null=True, default=TreasuryYear.get_current)
 
     date_filed = models.DateTimeField(auto_now=True)
 

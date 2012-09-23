@@ -1,5 +1,5 @@
 from django import template
-from ASHMC.treasury.models import SchoolYear
+from ASHMC.treasury.models import TreasuryYear
 
 register = template.Library()
 

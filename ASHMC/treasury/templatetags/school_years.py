@@ -1,8 +1,8 @@
 from django import template
-from ASHMC.treasury.models import SchoolYear
+from ASHMC.treasury.models import TreasuryYear
 
 register = template.Library()
 
 @register.simple_tag
 def school_year():
-    return str(SchoolYear.get_current())
+    return str(TreasuryYear.get_current())
