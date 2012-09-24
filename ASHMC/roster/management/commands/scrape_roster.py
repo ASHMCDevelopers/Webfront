@@ -65,10 +65,24 @@ LDAP gives us a list of the following dicts:
 search using:
 l = ldap.initialize()
 l.bind_s()
-results = l.search_s("OU=Academic Students,DC=HMC,DC=EDU", ldap.SCOPE_SUBTREE, filterstr="(mail={})".format(
+result = l.search_s("OU=Academic Students,DC=HMC,DC=EDU", ldap.SCOPE_SUBTREE, filterstr="(mail={})".format(
         student_email_from_roster
     )
+)[0]
+# first check if the user exists, then do this
+u = User.objects.create_user(result['sAMAccountName'])
+u.email = result['mail']
+u.first_name = result['givenName']
+u.last_name = result['sn']
+u.save()
+
+s = Student.objects.create(
+    user=u,
+    # etc.
 )
+
+# If the user existed already, just update the roster information -
+# don't mess with Student or User.
 
 """
 
@@ -141,42 +155,20 @@ class Command(BaseCommand):
             )
             print row
 
-
-            fullname = row[FIELD_ORDERING.index('Fullname')].value
-            l_f_m_name = fullname.split(', ')
-            last_name = l_f_m_name[0]
-            f_m_name = ', '.join(l_f_m_name[1:]).split(' ')
-            first_name = f_m_name[0]
-            middle_name = ''
-
-            temp_password = User.objects.make_random_password()
-
             try:
                 new_user = User.objects.get(email=row[FIELD_ORDERING.index('Email Address')].value.lower().replace('hmc.edu', 'g.hmc.edu'))
             except ObjectDoesNotExist:
                 new_user = User.objects.create_user(
                     username=row[FIELD_ORDERING.index('Email Address')].value.lower().replace('hmc.edu', 'g.hmc.edu'),
                     email=row[FIELD_ORDERING.index('Email Address')].value.lower().replace('hmc.edu', 'g.hmc.edu'),
-                    password=temp_password,
                 )
 
-            new_user.first_name = first_name
-            new_user.last_name = last_name
-
-            new_user.save()
-            studentid = int(row[FIELD_ORDERING.index('ID')].value),
-            studentid = None
             new_student, _ = Student.objects.get_or_create(
                 user=new_user,
                 class_of=gradyear,
                 at=hmc,
-                studentid=studentid,
+                studentid=None,
             )
-
-            new_student.middle_name = middle_name
-            new_student.temp_pass = temp_password
-
-            new_student.save()
 
             dormname = row[FIELD_ORDERING.index('Dorm')].value.split(' ')
 
