@@ -591,4 +591,5 @@ footer {
 
 #postheader {
   background: white;
-  max_width: 1050px; }
+  max_width: 1050px;
+  padding: 1em; }
