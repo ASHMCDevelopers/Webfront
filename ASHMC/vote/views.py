@@ -12,7 +12,11 @@ from .forms import BallotForm
 from .models import Ballot, Candidate, Measure, Vote, PopularityVote, PreferentialVote
 
 import datetime
+import logging
 import pytz
+
+
+logger = logging.getLogger(__name__)
 
 
 class MeasureListing(ListView):
@@ -32,6 +36,7 @@ class MeasureListing(ListView):
         except IndexError:
             # If they don't have a room, they're probably not eligible to vote.
             #raise PermissionDenied()
+            #logger.info("blocked access to {}".format(self.request.user))
             # Until we have roster data importing, this is bad
             pass
 
@@ -72,6 +77,7 @@ class MeasureDetail(DetailView):
 
         # make sure it's a vote-able object.
         if not object.is_open or (object.vote_end is not None and object.vote_end < datetime.datetime.now(pytz.utc)):
+            logger.info('{} attempted vote on closed measure {}'.format(self.request.user, object))
             raise Http404
 
         if Vote.objects.filter(account=self.request.user, measure=object).count() != 0:
@@ -108,6 +114,11 @@ class MeasureDetail(DetailView):
                 self.bad_forms[f.ballot.id] = f.errors
 
         if self.bad_forms:
+            logger.info("bad forms on {} from {}".format(
+                    [f.ballot.id for f in forms],
+                    self.request.user
+                )
+            )
             return self.get(*args, **kwargs)
 
         # all forms valid - safe to create the vote.
@@ -169,6 +180,7 @@ class MeasureDetail(DetailView):
 
         # Store the voted-on measure for confirmation
         self.request.session['VOTE_LAST_MEASURE_ID'] = measure.id
+        logger.info('new vote {} from {}'.format(vote.id, self.request.user))
         return redirect('measure_list')
 
 
@@ -189,8 +201,8 @@ class MeasureResultList(ListView):
             raise PermissionDenied()
 
         return Measure.objects.filter(
-            Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
-            Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None),
+            #Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
+            #Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None),
             # Only show measures which have already closed for voting
             vote_end__lte=datetime.datetime.now(pytz.utc),
         ).exclude(
