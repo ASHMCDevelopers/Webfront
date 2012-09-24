@@ -6,14 +6,19 @@ from .models import *
 from . import forms
 
 def club_permissions_required(f):
+    '''A decorator for functions requiring that the current user have permissions for the given
+    club. The club_name parameter must be specified as a request parameter'''
     def new_func(request, *args, **kwargs):
+        # Get the club from the request
         club = get_object_or_404(Club, name=kwargs['club_name'])
         user = request.user
+        # If the user is a superuser, s/he has access to every club.
         if not user.is_superuser:
             try:
                 officer_entry = club.current_officers.get(student=user.student)
             except Officer.DoesNotExist:
                 return redirect('login')
+            # If the officer doesn't have club permissions, redirect
             if not officer_entry.is_club_superuser:
                 return redirect('login')
         return f(request, *args, **kwargs)
@@ -42,8 +47,11 @@ def check_request(request, club_name):
         form = forms.CheckRequestForm(request.POST)
         if form.is_valid():
             new_check_request = form.save(commit=False)
+
+            # Set default parameters
             new_check_request.club = club
             new_check_request.filer = request.user.student
+
             new_check_request.save()
             return redirect('club_admin', club_name=club_name)
     else:
@@ -64,7 +72,7 @@ def club_select(request):
 
 @login_required
 def overview(request):
-    accounts = Account.objects.all()
+    accounts = Fund.objects.all()
     clubs = Club.objects.all()
 
     total_funds = sum([account.balance for account in accounts])
@@ -78,7 +86,7 @@ def overview(request):
                                                                        'total_free': total_free}))
 
 @login_required
-def ledger(request, account_name):
-    account = get_object_or_404(Account, name=account_name)
+def ledger(request, fund_name):
+    fund = get_object_or_404(Fund, name=fund_name)
     return render_to_response('ledger/ledger.html',
-                              context_instance=RequestContext(request, {'account': account}))
+                              context_instance=RequestContext(request, {'fund': fund}))

@@ -1,15 +1,15 @@
 {% extends 'treasury/base.html' %}
 {% load ledger %}
 
-{% block content %}
-<h1>Account details for {{account.name}}</h1>
+{% block treasury_content %}
+<h1>Fund details for {{fund.name}}</h1>
   <table class="info">
     <tr>
       <td>
         Real balance
       </td>
       <td>
-        {{account.bank_amount|floatformat:2}}
+        {{fund.bank_amount|floatformat:2}}
       </td>
     </tr>
   </table>
@@ -19,10 +19,10 @@
     <th style="width: 1.5in">Club</th>
     <th style="width: 4in">Description</th>
     <th style="width: 0.5in">Status</th>
-    <th style="width: 1in">Amount</th>
-    <th style="width: 1in">Balance</th>
+    <th style="width: 1in" class="align-right">Amount</th>
+    <th style="width: 1in" class="align-right">Balance</th>
   </tr>
-  {% for line_item in account.line_items.all %}
+  {% for line_item in fund.line_items.all %}
   <tr>
     <td>{{line_item.date_created}}</td>
     <td>{{line_item.request.club.name}}</td>

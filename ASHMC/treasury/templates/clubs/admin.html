@@ -1,15 +1,20 @@
 {% extends 'treasury/base.html' %}
 
-{% block content %}
+{% block treasury_content %}
 <h1>{{club.name}}</h1>
 
-<a href="{% url 'new_check_request' club_name=club.name %}">Submit a check request</a>
-<a href="">Request additional ASHMC funding</a>
+<div class="actions">
+  <a href="{% url 'new_check_request' club_name=club.name %}" class="action">Submit a check request</a>
+  <a href="" class="action">Request additional ASHMC funding</a>
+</div>
 
 <h2>General information</h2>
-<ul>
-  <li>Total balance: {{club.balance|floatformat:2}}</li>
-</ul>
+<table class="info">
+  <tr>
+    <td>Total balance</td>
+    <td>{{club.balance|floatformat:2}}</td>
+  </tr>
+</table>
 
 <h2>Check requests</h2>
 <table class="listing">

@@ -1,14 +1,6 @@
 {% extends 'treasury/base.html' %}
 
-{% block extrahead %}
-<style>
-  form ul li label {
-  width: 2in;
-  }
-</style>
-{% endblock %}
-
-{% block content %}
+{% block treasury_content %}
 <h1>New check request for {{club.name}}</h1>
 <form method="POST">
   {% csrf_token %}

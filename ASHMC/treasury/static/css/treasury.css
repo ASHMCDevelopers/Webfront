@@ -1,12 +1,23 @@
-body {
-    font-family: HelveticaNeue-Light, Helvetica, Arial, Verdana, sans-serif;
-    width: 10in;
-    margin: 0 auto;
-    padding: 1.3em;
-}
+/* body { */
+/*     font-family: HelveticaNeue-Light, Helvetica, Arial, Verdana, sans-serif; */
+/*     width: 10in; */
+/*     margin: 0 auto; */
+/*     padding: 1.3em; */
+/* } */
 
 .ASHMC {
     font-size: 48pt;
+}
+
+#treasury-content
+{
+    width: 11in;
+    margin: 0 auto;
+}
+
+#treasury-content table
+{
+    width: 10.6in;
 }
 
 .etreasury {
@@ -20,7 +31,7 @@ header {
     margin-bottom: 0.7em;
 }
 
-table.info {
+#treasury-content table.info {
     padding: 0.6em;
     margin-bottom: 0.5em;
     border: 1px solid gray;
@@ -28,21 +39,38 @@ table.info {
     width: 5in;
 }
 
-table.info tr td:nth-child(2) {
+#treasury-content table.info tr td:nth-child(2) {
     text-align: right;
 }
 
-table.info td {
+#treasury-content table.info td {
     padding-left: 0.6em;
     padding-right: 0.6em;
 }
 
-table.info tr:first-child td {
+#treasury-content table.info tr:first-child td {
     padding-top: 0.6em;
 }
 
-table.info tr:last-child td {
+#treasury-content table.info tr:last-child td {
     padding-bottom: 0.6em;
+}
+
+#treasury-content .actions
+{
+    margin-bottom: 19px;
+}
+
+#treasury-content .action
+{
+    padding: 8px;
+    background-color: #ccc;
+    color: black;
+}
+
+#treasury-content .action:hover
+{
+    background-color: #aaa;
 }
 
 h1 {
@@ -60,6 +88,11 @@ table tr:first-child th{
 
 table.listing tr:nth-child(2n) td {
     background-color: #ddd;
+}
+
+table.listing tr td {
+    padding-bottom: 8px;
+    padding-top: 8px;
 }
 
 /* Front page actions list */
@@ -115,4 +148,9 @@ form ul li label
 .inthered
 {
     color: red;
+}
+
+/* Forms */
+#treasury-content form ul li label {
+    width: 2in;
 }

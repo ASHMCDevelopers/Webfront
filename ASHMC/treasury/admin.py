@@ -137,6 +137,10 @@ class LineItemAdmin(admin.ModelAdmin):
     inlines = (AllocationLineItemInline,)
 admin.site.register(LineItem, LineItemAdmin)
 
+class FundAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Fund, FundAdmin)
+
 class AccountAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Account, AccountAdmin)
