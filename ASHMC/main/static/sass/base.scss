@@ -216,9 +216,11 @@ li {
 		style: italic;
 	}
 
-    p {
+    div {
         line-height: 1em;
-        margin: 0;
+        margin: 0 {
+            bottom: 0.25em;
+        }
     }
 }
 footer {
