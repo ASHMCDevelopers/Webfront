@@ -95,7 +95,7 @@ def create_user_related_things(*args, **kwargs):
                     dorm = Dorm.objects.get(code__iexact=dormcode)
                 except ObjectDoesNotExist:
                     try:
-                        dorm = Dorm.objects.get(name__startswith=dormcode)
+                        dorm = Dorm.objects.get(name__istartswith=dormcode)
                     except (ObjectDoesNotExist, MultipleObjectsReturned):
                         logger.error(
                             "ldap population failed for {} (on failed dorm lookup {})".format(new_user, dormcode)
