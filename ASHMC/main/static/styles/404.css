@@ -594,3 +594,10 @@ footer {
   background: white;
   max_width: 1050px;
   padding: 1em; }
+
+ul {
+  list-style-type: disc;
+  margin-left: 1em;
+  padding-left: 0.25em; }
+  ul li {
+    display: list-item; }
