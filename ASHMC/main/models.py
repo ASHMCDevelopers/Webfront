@@ -394,7 +394,7 @@ class Student(models.Model):
     middle_name = models.CharField(null=True, blank=True, max_length=50)
 
     at = models.ForeignKey('Campus')  # This will default to HMC
-    studentid = models.IntegerField(unique=True, null=True)
+    studentid = models.IntegerField(unique=True, blank=True, null=True)
     credit_requirement = models.IntegerField(default=128)
 
     birthdate = models.DateField(null=True, blank=True)

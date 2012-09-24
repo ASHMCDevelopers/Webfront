@@ -416,9 +416,10 @@ li {
   display: block;
   font-size: 10px;
   font-style: italic; }
-  #copyright p {
+  #copyright div {
     line-height: 1em;
-    margin: 0; }
+    margin: 0;
+      margin-bottom: 0.25em; }
 
 footer {
   margin: 0 auto;
@@ -588,3 +589,8 @@ footer {
     font-size: 1em; }
     #ashmc h3 .AS {
       font-family: "Walkway Expand Black", sans-serif; }
+
+#postheader {
+  background: white;
+  max_width: 1050px;
+  padding: 1em; }
