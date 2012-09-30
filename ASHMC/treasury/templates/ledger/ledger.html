@@ -1,0 +1,36 @@
+{% extends 'treasury/base.html' %}
+{% load ledger %}
+
+{% block treasury_content %}
+<h1>Fund details for {{fund.name}}</h1>
+  <table class="info">
+    <tr>
+      <td>
+        Real balance
+      </td>
+      <td>
+        {{fund.bank_amount|floatformat:2}}
+      </td>
+    </tr>
+  </table>
+<table class="listing" id="ledger">
+  <tr>
+    <th style="width: 2in">Time</th>
+    <th style="width: 1.5in">Club</th>
+    <th style="width: 4in">Description</th>
+    <th style="width: 0.5in">Status</th>
+    <th style="width: 1in" class="align-right">Amount</th>
+    <th style="width: 1in" class="align-right">Balance</th>
+  </tr>
+  {% for line_item in fund.line_items.all %}
+  <tr>
+    <td>{{line_item.date_created}}</td>
+    <td>{{line_item.request.club.name}}</td>
+    <td>{{line_item.description}}</td>
+    <td>{{line_item.check_status}} </td>
+    <td class="align-right {{line_item.amount|ledger_class}}">{{line_item.amount|ledger_format}}</td>
+    <td class="align-right {{line_item.balance|amount_class}}">{{line_item.balance|amount_format}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

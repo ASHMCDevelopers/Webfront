@@ -1,0 +1,59 @@
+{% extends 'treasury/base.html' %}
+{% load staticfiles %}
+{% load school_years %}
+{% load ledger %}
+
+
+{% block treasury_content %}
+<div class="actions" style="float: right; margin-top: 6px">
+  <a href="{% url 'club_select' %}" class="action">Club Administration</a>
+</div>
+
+<h1>Funds</h1>
+
+<table class="info">
+  <tr>
+    <td>Total ASHMC funds</td><td>{{total_funds|floatformat:2}}</td>
+  </tr>
+  <tr>
+    <td>Total allocated</td><td>{{total_allocated|floatformat:2}}</td>
+  </tr>
+  <tr>
+    <td>Total free</td><td>{{total_free|floatformat:2}}</td>
+  </tr>
+</table>
+<table id="funds" class="listing">
+  <tr>
+    <th style="width: 3in">Fund Name</th>
+    <th style="width: 1in" class="align-right">Balance</th>
+    <th style="width: 1in" class="align-right">Allocated</th>
+    <th style="width: 1in" class="align-right">Free</th>
+  </tr>
+  {% for account in accounts %}
+  {% if account.name != 'Unresolved' %}
+  <tr>
+    <td><a href="{% url 'ledger' fund_name=account.name %}">{{account.name}}</a></td>
+    <td class="align-right {{account.balance|amount_class}}">{{account.balance|amount_format}}</td>
+    <td class="align-right {{account.currently_allocated|amount_class}}">{{account.currently_allocated|amount_format}}</td>
+    <td class="align-right {{account.currently_free|amount_class}}">{{account.currently_free|amount_format}}</td>
+  </tr>
+  {% endif %}
+  {% endfor %}
+</table>
+
+<h1>Clubs</h1>
+<table id="clubs" class="listing">
+  <tr>
+    <th style="width: 4in">Club Name</th>
+    <th style="width: 1in" class="align-right">Balance</th>
+    <th style="width: 1.5in" class="align-right">Total {% school_year %} allocation</th>
+  </tr>
+  {% for club in clubs %}
+  <tr>
+    <td><a href="{% url 'club_detail' club_name=club.name %}">{{club.name}}</a></td>
+    <td class="align-right">{{club.balance|floatformat:2}}</td>
+    <td class="align-right">{{club.current_allocation|floatformat:2}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "main_base_page.html" %}
+
+{% load static from staticfiles %}
+
+{% block stylin %}
+<link rel="stylesheet" href="{% static "styles/treasury.css"%}">
+<link rel="stylesheet" href="{% static "css/treasury.css"%}">
+{% endblock stylin %}
+
+{% block header %}
+{{ block.super }}
+<div id="treasury-content">
+{% block treasury_content %}
+{% endblock %}
+</div>
+{% endblock %}

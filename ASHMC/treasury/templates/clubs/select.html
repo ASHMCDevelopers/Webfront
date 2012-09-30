@@ -1,0 +1,10 @@
+{% extends 'treasury/base.html' %}
+
+{% block treasury_content %}
+<h1>My clubs</h1>
+<ul class="listing">
+{% for club in clubs %}
+  <li><a href="{% url 'club_admin' club_name=club.name %}">{{club.name}}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

@@ -196,6 +196,7 @@ INSTALLED_APPS = (
     'ASHMC.legal',
     'ASHMC.roster',
     'ASHMC.events',
+    'ASHMC.treasury'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -205,3 +206,5 @@ INSTALLED_APPS = (
 # more details on how to customize your logging configuration.
 SERVER_EMAIL = local_settings.SERVER_EMAIL
 LOGGING = local_settings.LOGGING
+
+ASHMC_FORMS_FOLDER = local_settings.ASHMC_FORMS_FOLDER
