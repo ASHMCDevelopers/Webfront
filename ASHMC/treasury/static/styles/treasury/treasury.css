@@ -4,221 +4,158 @@
 /*     margin: 0 auto; */
 /*     padding: 1.3em; */
 /* } */
-
 .ASHMC {
-    font-size: 48pt;
-}
+  font-size: 48pt; }
 
-#treasury-content
-{
-    width: 11in;
-    margin: 0 auto;
-}
+#treasury-content {
+  width: 11in;
+  margin: 0 auto; }
 
-#treasury-content table
-{
-    width: 10.6in;
-}
+#treasury-content table {
+  width: 10.6in; }
 
 .etreasury {
-    padding-left: 0.5em;
-    font-size: 40pt;
-}
+  padding-left: 0.5em;
+  font-size: 40pt; }
 
 header {
-    border-bottom: 1px solid gray;
-    padding-bottom: 0.6em;
-    margin-bottom: 0.7em;
-}
+  border-bottom: 1px solid gray;
+  padding-bottom: 0.6em;
+  margin-bottom: 0.7em; }
 
 #treasury-content table.info {
-    padding: 0.6em;
-    margin-bottom: 0.5em;
-    border: 1px solid gray;
-    margin-left: 0.3in;
-    width: 5in;
-}
+  padding: 0.6em;
+  margin-bottom: 0.5em;
+  border: 1px solid gray;
+  margin-left: 0.3in;
+  width: 5in; }
 
 #treasury-content table.info tr td:nth-child(2) {
-    text-align: right;
-}
+  text-align: right; }
 
 #treasury-content table.info td {
-    padding-left: 0.6em;
-    padding-right: 0.6em;
-}
+  padding-left: 0.6em;
+  padding-right: 0.6em; }
 
 #treasury-content table.info tr:first-child td {
-    padding-top: 0.6em;
-}
+  padding-top: 0.6em; }
 
 #treasury-content table.info tr:last-child td {
-    padding-bottom: 0.6em;
-}
+  padding-bottom: 0.6em; }
 
-#treasury-content .actions
-{
-    margin-bottom: 19px;
-}
+#treasury-content .actions {
+  margin-bottom: 19px; }
 
-#treasury-content .action
-{
-    padding: 8px;
-    background-color: #ccc;
-    color: black;
-}
+#treasury-content .action {
+  padding: 8px;
+  background-color: #ccc;
+  color: black; }
 
-#treasury-content .action:hover
-{
-    background-color: #aaa;
-}
+#treasury-content .action:hover {
+  background-color: #aaa; }
 
 h1 {
-    font-weight: normal;
-}
+  font-weight: normal; }
 
 table {
-    margin-left: 0.3in;
-    border-collapse: collapse;
-}
+  margin-left: 0.3in;
+  border-collapse: collapse; }
 
-table tr:first-child th{
-    border-bottom: 1px solid black;
-}
+table tr:first-child th {
+  border-bottom: 1px solid black; }
 
 table.listing tr:nth-child(2n) td {
-    background-color: #ddd;
-}
+  background-color: #ddd; }
 
 table.listing tr td {
-    padding-bottom: 8px;
-    padding-top: 8px;
-}
+  padding-bottom: 8px;
+  padding-top: 8px; }
 
-table input
-{
-    width: 100%;
-}
+table input {
+  width: 100%; }
 
 /* Front page actions list */
 ul.actions {
-    width: 4in;
-    margin: 0 auto;
-    list-style: none;
-}
+  width: 4in;
+  margin: 0 auto;
+  list-style: none; }
 
 ul.actions li {
-    padding: 0;
-    margin: 0.5em;
-}
+  padding: 0;
+  margin: 0.5em; }
 
 ul.actions li a {
-    display: block;
-    padding: 1em;
-    border: 1px solid black;
-    text-decoration: none;
-    color: black;
-}
+  display: block;
+  padding: 1em;
+  border: 1px solid black;
+  text-decoration: none;
+  color: black; }
 
 ul.actions li a:hover {
-    background-color: #ccc;
-}
+  background-color: #ccc; }
 
 /* Forms */
-form .errorlist
-{
-    margin: 0.1em;
-    border: 1px solid red;
-    padding: 0.1em;
-}
+form .errorlist {
+  margin: 0.1em;
+  border: 1px solid red;
+  padding: 0.1em; }
 
-form ul
-{
-    margin: 0 auto;
-    list-style: none;
-    padding: 0;
-}
+form ul {
+  margin: 0 auto;
+  list-style: none;
+  padding: 0; }
 
-form li
-{
-    overflow: auto;
-}
+form li {
+  overflow: auto; }
 
-form li.inline-set
-{
-    margin-left: 2in;
-    padding-top: 0.4em;
-    padding-bottom: 0.4em;
-}
+form li.inline-set {
+  margin-left: 2in;
+  padding-top: 0.4em;
+  padding-bottom: 0.4em; }
 
-form div.inline-set
-{
-    float: left;
-}
+form div.inline-set {
+  float: left; }
 
-form  ul li label
-{
-    display: block;
-    float: left;
-    width: 2in;
-}
+form ul li label {
+  display: block;
+  float: left;
+  width: 2in; }
 
-form ul li > .errorlist
-{
-    margin-left: 2in;
-}
+form ul li > .errorlist {
+  margin-left: 2in; }
 
-form ul ul
-{
-    margin-left: 2in;
-}
+form ul ul {
+  margin-left: 2in; }
 
-form ul ul li label
-{
-    display: inline;
-    width: auto;
-}
+form ul ul li label {
+  display: inline;
+  width: auto; }
 
-form ul ul li > .errorlist
-{
-    margin-left: 0.1em;
-}
+form ul ul li > .errorlist {
+  margin-left: 0.1em; }
 
-form .inline-field
-{
-    float: left;
-    overflow: auto;
-    margin: 0.4em;
-}
+form .inline-field {
+  float: left;
+  overflow: auto;
+  margin: 0.4em; }
 
-form textarea
-{
-    width: 8.5in;
-}
+form textarea {
+  width: 8.5in; }
 
-.helptext
-{
-    font-size: 10pt;
-    display: block;
-    margin-left: 2in;
-}
+.helptext {
+  font-size: 10pt;
+  display: block;
+  margin-left: 2in; }
 
 /* Legends */
-
-form fieldset
-{
-    padding: 0.5em;
-    border: 1px solid black;
-    margin-bottom: 1em;
-}
+form fieldset {
+  padding: 0.5em;
+  border: 1px solid black;
+  margin-bottom: 1em; }
 
 /* Ledger tables */
-.align-right
-{
-    text-align: right;
-}
+.align-right {
+  text-align: right; }
 
-.inthered
-{
-    color: red;
-}
+.inthered {
+  color: red; }

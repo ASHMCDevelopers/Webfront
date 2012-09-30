@@ -47,7 +47,7 @@ class Account(models.Model):
     description = models.TextField()
 
     def __unicode__(self):
-        return "{}".format(self.name)
+        return u"{}".format(self.name)
 
 
 class FundManager(models.Manager):
@@ -96,7 +96,7 @@ class Fund(models.Model):
         return self.balance + total_pending
 
     def __unicode__(self):
-        return "{}".format(self.name)
+        return u"{}".format(self.name)
 
 
 class Allocation(models.Model):
