@@ -6,10 +6,7 @@
 <link rel="stylesheet" href="{% static "styles/treasury/treasury.css"%}">
 {% endblock stylin %}
 
-{% block header %}
-{{ block.super }}
-<div id="treasury-content">
+{% block post_header %}
 {% block treasury_content %}
 {% endblock %}
-</div>
 {% endblock %}

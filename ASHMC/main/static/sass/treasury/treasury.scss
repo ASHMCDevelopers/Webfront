@@ -5,66 +5,56 @@
     font-size: 48pt;
 }
 
-#treasury-content
-{
-    width: 11in;
-    margin: 0 auto;
-}
-
-#treasury-content table
-{
-    width: 10.6in;
-}
-
 .etreasury {
     padding-left: 0.5em;
     font-size: 40pt;
 }
 
-header {
-    border-bottom: 1px solid gray;
-    padding-bottom: 0.6em;
-    margin-bottom: 0.7em;
+#post_header {
+    width: 11in;
+    margin: 0 auto;
+    padding: 1em;
+
+
+    table {
+        width: 10.6in;
+
+        &.info {
+            padding: 0.6em;
+            margin-bottom: 0.5em;
+            border: 1px solid gray;
+            margin-left: 0.3in;
+            width: 5in;
+
+            td:nth-child(2) {
+                text-align: right;
+            }
+        }
+    }
 }
 
-#treasury-content table.info {
-    padding: 0.6em;
-    margin-bottom: 0.5em;
-    border: 1px solid gray;
-    margin-left: 0.3in;
-    width: 5in;
-}
-
-#treasury-content table.info tr td:nth-child(2) {
-    text-align: right;
-}
-
-#treasury-content table.info td {
+td {
     padding-left: 0.6em;
     padding-right: 0.6em;
 }
 
-#treasury-content table.info tr:first-child td {
+tr:first-child td {
     padding-top: 0.6em;
 }
 
-#treasury-content table.info tr:last-child td {
-    padding-bottom: 0.6em;
-}
-
-#treasury-content .actions
+.actions
 {
     margin-bottom: 19px;
 }
 
-#treasury-content .action
+.action
 {
     padding: 8px;
     background-color: #ccc;
     color: black;
 }
 
-#treasury-content .action:hover
+.action:hover
 {
     background-color: #aaa;
 }
