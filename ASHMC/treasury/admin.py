@@ -3,12 +3,20 @@ from django.contrib import admin
 from django.template.loader import render_to_string
 from django.core.files import temp
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseServerError
 
 from .models import *
 
 import subprocess
 import os
+
+def run_latex(latex_fn, output_dir):
+    pdflatex = subprocess.Popen(["pdflatex", latex_fn], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=output_dir)
+    while pdflatex.returncode is None:
+        output = pdflatex.communicate()
+        print output[0]
+        pdflatex.poll()
+    return pdflatex.returncode
 
 class AllocationLineItemInline(admin.TabularInline):
     model = AllocationLineItem
@@ -36,7 +44,7 @@ class AllocationAdmin(admin.ModelAdmin):
             # Add allocations directory to filled forms folder
             output_dir = os.path.join(settings.ASHMC_FORMS_FOLDER, 'allocations')
             if not os.path.exists(output_dir):
-                os.mkdir(output_dir)
+                os.makedirs(output_dir)
 
             pdf_fn = os.path.join(output_dir, '%06d.pdf' % allocation.allocation_number)
             pdf_files.append(pdf_fn)
@@ -47,11 +55,9 @@ class AllocationAdmin(admin.ModelAdmin):
                 with open(latex_fn, "wt") as latex_out:
                     print >>latex_out, render_to_string('forms/allocation_number.tex',  {'allocation': allocation})
 
-
-                pdflatex = subprocess.Popen(["pdflatex", latex_fn], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=output_dir)
-                while pdflatex.returncode is None:
-                    output = pdflatex.communicate()
-                    pdflatex.poll()
+                code = run_latex(latex_fn, output_dir)
+                if code != 0:
+                    return HttpResponseServerError()
 
         if allocations.count() == 1:
             with open(pdf_fn, "rb") as pdf_file:
@@ -95,7 +101,7 @@ class ClubAdmin(admin.ModelAdmin):
         # Add clubs directory to filled forms folder
         output_dir = os.path.join(settings.ASHMC_FORMS_FOLDER, 'clubs')
         if not os.path.exists(output_dir):
-            os.mkdir(output_dir)
+            os.makedirs(output_dir)
 
         pdf_fn = os.path.join(output_dir, '%s.pdf' % club.name)
         latex_fn = os.path.join(output_dir, '%s.tex' % club.name)
@@ -104,16 +110,15 @@ class ClubAdmin(admin.ModelAdmin):
         with open(latex_fn, "wt") as latex_out:
             print >>latex_out, render_to_string('ledgers/club.tex',  {'club': club})
 
-        pdflatex = subprocess.Popen(["pdflatex", latex_fn], stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=output_dir)
-        while pdflatex.returncode is None:
-            output = pdflatex.communicate()
-            print output[0]
-            pdflatex.poll()
-
-        with open(pdf_fn, "rb") as pdf_file:
-            pdf_data = pdf_file.read()
-            response = HttpResponse(pdf_data, content_type='application/pdf')
-            return response
+        run_latex(latex_fn, output_dir)
+        code = run_latex(latex_fn, output_dir)
+        if code == 0:
+            with open(pdf_fn, "rb") as pdf_file:
+                pdf_data = pdf_file.read()
+                response = HttpResponse(pdf_data, content_type='application/pdf')
+                return response
+        else:
+            return HttpResponseServerError()
     export_ledger_as_pdf.short_description = "Print club ledger as PDF"
 admin.site.register(Club, ClubAdmin)
 
@@ -138,7 +143,34 @@ class LineItemAdmin(admin.ModelAdmin):
 admin.site.register(LineItem, LineItemAdmin)
 
 class FundAdmin(admin.ModelAdmin):
-    pass
+    actions = ('export_ledger_as_pdf',)
+
+    def export_ledger_as_pdf(self, request, queryset):
+        funds = queryset.all()
+        fund = funds[0]
+
+        # Add clubs directory to filled forms folder
+        output_dir = os.path.join(settings.ASHMC_FORMS_FOLDER, 'funds')
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        pdf_fn = os.path.join(output_dir, '%s.pdf' % fund.name)
+        latex_fn = os.path.join(output_dir, '%s.tex' % fund.name)
+
+        # Render LaTeX output
+        with open(latex_fn, "wt") as latex_out:
+            print >>latex_out, render_to_string('ledgers/fund.tex',  {'fund': fund})
+
+        run_latex(latex_fn, output_dir)
+        code = run_latex(latex_fn, output_dir)
+        if code == 0:
+            with open(pdf_fn, "rb") as pdf_file:
+                pdf_data = pdf_file.read()
+                response = HttpResponse(pdf_data, content_type='application/pdf')
+                return response
+        else:
+            return HttpResponseServerError()
+    export_ledger_as_pdf.short_description = "Print ledger as PDF"
 admin.site.register(Fund, FundAdmin)
 
 class AccountAdmin(admin.ModelAdmin):

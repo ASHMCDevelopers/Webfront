@@ -198,3 +198,5 @@ INSTALLED_APPS = (
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = local_settings.LOGGING
+
+ASHMC_FORMS_FOLDER = local_settings.ASHMC_FORMS_FOLDER
