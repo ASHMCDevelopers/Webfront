@@ -172,11 +172,13 @@ class MeasureDetail(DetailView):
                     )
 
             elif form.ballot.vote_type == Ballot.VOTE_TYPES.INOROUT:
-                PopularityVote.objects.create(
-                    ballot=form.ballot,
-                    vote=vote,
-                    candidate=form.cleaned_data['choice']
-                )
+                # Don't create a popularityvote if their choice is 'abstain'
+                if form.cleaned_data['choice']:
+                    PopularityVote.objects.create(
+                        ballot=form.ballot,
+                        vote=vote,
+                        candidate=form.cleaned_data['choice']
+                    )
 
         # Store the voted-on measure for confirmation
         self.request.session['VOTE_LAST_MEASURE_ID'] = measure.id
