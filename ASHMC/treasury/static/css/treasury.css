@@ -95,6 +95,11 @@ table.listing tr td {
     padding-top: 8px;
 }
 
+table input
+{
+    width: 100%;
+}
+
 /* Front page actions list */
 ul.actions {
     width: 4in;
@@ -120,6 +125,13 @@ ul.actions li a:hover {
 }
 
 /* Forms */
+form .errorlist
+{
+    margin: 0.1em;
+    border: 1px solid red;
+    padding: 0.1em;
+}
+
 form ul
 {
     margin: 0 auto;
@@ -127,16 +139,77 @@ form ul
     padding: 0;
 }
 
-form ul li label
+form li
+{
+    overflow: auto;
+}
+
+form li.inline-set
+{
+    margin-left: 2in;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+}
+
+form div.inline-set
+{
+    float: left;
+}
+
+form  ul li label
 {
     display: block;
     float: left;
-    width: 1in;
+    width: 2in;
+}
+
+form ul li > .errorlist
+{
+    margin-left: 2in;
+}
+
+form ul ul
+{
+    margin-left: 2in;
+}
+
+form ul ul li label
+{
+    display: inline;
+    width: auto;
+}
+
+form ul ul li > .errorlist
+{
+    margin-left: 0.1em;
+}
+
+form .inline-field
+{
+    float: left;
+    overflow: auto;
+    margin: 0.4em;
+}
+
+form textarea
+{
+    width: 8.5in;
 }
 
 .helptext
 {
     font-size: 10pt;
+    display: block;
+    margin-left: 2in;
+}
+
+/* Legends */
+
+form fieldset
+{
+    padding: 0.5em;
+    border: 1px solid black;
+    margin-bottom: 1em;
 }
 
 /* Ledger tables */
@@ -148,9 +221,4 @@ form ul li label
 .inthered
 {
     color: red;
-}
-
-/* Forms */
-#treasury-content form ul li label {
-    width: 2in;
 }

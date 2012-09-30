@@ -1,11 +1,38 @@
 {% extends 'treasury/base.html' %}
 
-{% block content %}
+{% block treasury_content %}
 <h1>Club details for {{club.name}}</h1>
+<table class="info">
+  <tr>
+    <td>
+      Allocation
+    </td>
+    <td>
+      {{club.current_allocation}}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Balance
+    </td>
+    <td>
+      {{club.balance}}
+    </td>
+  </tr>
+</table>
+
 <table class="listing" id="club">
   <tr>
+    <th style="width: 2in">Date</th>
+    <th style="width: 5in">Description</th>
+    <th style="width: 1.5in" class="align-right">Amount</th>
   </tr>
+  {% for line_item in club.line_items %}
   <tr>
+    <td>{{line_item.date_created}}</td>
+    <td>{{line_item.description}}</td>
+    <td class="align-right">{{line_item.amount|floatformat:2}}</td>
   </tr>
-</tables>
+  {% endfor %}
+</table>
 {% endblock %}

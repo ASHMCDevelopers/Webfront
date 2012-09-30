@@ -164,6 +164,11 @@ class Club(models.Model):
         return self.allocations.filter(school_year=TreasuryYear.objects.get_current())
 
     @property
+    def current_budget_requests(self):
+        '''The QuerySet of all budget requests for this club for this school year'''
+        return self.budget_requests.filter(for_school_year=TreasuryYear.objects.get_current())
+
+    @property
     def current_officers(self):
         '''The QuerySet of this year's club officers'''
         return self.officers.filter(school_year=TreasuryYear.objects.get_current())
@@ -251,14 +256,32 @@ class LineItem(models.Model):
     request = models.ForeignKey('CheckRequest', null=True, related_name='line_items', blank=True) # The check request (if any) that spawned this line item
     category = models.ForeignKey('Category', null=True, default=Category.objects.get_default, help_text='Line item\'s category. Helps with taxes, etc.')
 
+    @property
+    def prev_balance(self):
+        try:
+            balance = self.account.line_items.filter(date_created__lt = self.date_created)[0].balance
+        except:
+            balance = 0
+        return balance
+
     def clean(self):
         # Update the appropriate balances, depending on this line item's amount
         if self.pk is None:
             # If we're being created, a simple subtraction suffices
             self.balance = self.account.balance - self.amount
         else:
-            # Update all line items after, if we're being updated
-            pass
+            # Update all line items after this, if the balances don't add up
+            balance = self.prev_balance
+            if self.balance != (balance - self.amount):
+                self.balance = balance - self.amount
+                prev_balance = self.balance
+                for line_item in self.account.line_items.filter(date_created__gt = self.date_created).order_by('date_created'):
+                    prev_balance = line_item._update_balance(prev_balance)
+                    line_item.save()
+
+    def _update_balance(self, prev_balance):
+        self.balance = prev_balance- self.amount
+        return self.balance
 
     @staticmethod
     def post_save(sender, **kwargs):
@@ -314,21 +337,17 @@ class AllocationLineItem(models.Model):
         return self.line_item.check_status
 
 class BudgetRequest(models.Model):
-    club = models.ForeignKey('Club')
+    club = models.ForeignKey('Club', related_name='budget_requests')
     date_filed = models.DateTimeField(auto_now=True)
 
-    for_school_year = models.ForeignKey('TreasuryYear')
+    for_school_year = models.ForeignKey('TreasuryYear', default=TreasuryYear.objects.get_current)
 
     filer = models.ForeignKey('main.Student')
 
-    mailing_address = models.TextField()
-
-    college = models.CharField(max_length=256)
-
     attended_budgeting_for = models.CharField('Which budget hearings did you attend last year?', max_length=32,
-                                              choices=(('HMC', 'Harvey Mudd College'),
-                                                       ('5C', '5C'),
-                                                       ('None', 'None')))
+                                              choices=(('None', 'None'),
+                                                       ('HMC', 'Harvey Mudd College'),
+                                                       ('5C', '5C')), default='None')
 
     # Membership info
     active_members = models.IntegerField(help_text="How many members consistently show up at meetings?")
@@ -343,7 +362,7 @@ class BudgetRequest(models.Model):
 
     # Budget info
     did_internal_fundraising = models.BooleanField('Have you done internal fundraising?')
-    internal_fundraising_amount = models.DecimalField(decimal_places=2, max_digits=11)
+    internal_fundraising_amount = models.DecimalField('Amount', decimal_places=2, max_digits=11, blank=True, null=True)
 
     # Budget request
     ashmc_amount = models.DecimalField('ASHMC request', decimal_places=2, max_digits=11)
@@ -354,14 +373,30 @@ class BudgetRequest(models.Model):
     other_amount = models.DecimalField(decimal_places=2, max_digits=11)
     other_explanation = models.TextField(help_text='Please explain your other source of funding')
 
-    budget_explanation = models.TextField('Please explain why your club deserves funding, or anything else that needs to be made clear')
+    budget_explanation = models.TextField(help_text='Please explain why your club deserves funding, or anything else that needs to be made clear', blank=True, null=True)
 
+    # ASHMC Use Only
     approved = models.BooleanField(default=False)
-    date_approved = models.DateTimeField(null=False)
-    amount_allocated = models.DecimalField(max_digits=11, decimal_places=2)
+    date_approved = models.DateTimeField(null=True, blank=True)
+    amount_allocated = models.DecimalField(max_digits=11, decimal_places=2, null=True)
+
+    @property
+    def denied(self):
+        return self.date_approved is not None and not self.approved
+
+    @property
+    def status(self):
+        '''String representation of the check status'''
+        if self.approved:
+            return 'Approved'
+        elif self.denied:
+            return 'Denied'
+        else:
+            return 'Pending'
+
 
 class BudgetItem(models.Model):
-    budget = models.ForeignKey(BudgetRequest)
+    budget = models.ForeignKey(BudgetRequest, related_name='budget_items')
     item = models.CharField(max_length=512)
     description = models.CharField(max_length=1024)
     amount = models.DecimalField(max_digits=11, decimal_places=2)
@@ -388,8 +423,8 @@ class CheckRequest(models.Model):
 
     request_type = models.CharField(max_length=20, choices=((REIMBURSEMENT, 'Reimbursement for past expenses'),
                                                             (UPFRONT, 'Upfront payment for planned purchase'),
-                                                            (SEMESTER, 'Enture allocation for semester'),
-                                                            (ENTIRE_YEAR, 'Entire allocation for year')), default=REIMBURSEMENT)
+                                                            (SEMESTER, 'Entire allocation for semester'),
+                                                            (ENTIRE_YEAR, 'Entire allocation for year (requires council approval)')), default=REIMBURSEMENT)
 
     other_information = models.TextField(help_text='Is there anything else we should know?', blank=True, null=True)
 

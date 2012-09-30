@@ -27,6 +27,7 @@ def club_permissions_required(f):
 
 @login_required
 def club_detail(request, club_name):
+    '''Public-viewable club detail'''
     club = get_object_or_404(Club, name=club_name)
     return render_to_response('clubs/detail.html',
                               context_instance=RequestContext(request, {'club': club}))
@@ -42,6 +43,7 @@ def club_admin(request, club_name):
 @login_required
 @club_permissions_required
 def check_request(request, club_name):
+    '''Let's the user create a new check request'''
     club = get_object_or_404(Club, name=club_name)
     if request.method == 'POST':
         form = forms.CheckRequestForm(request.POST)
@@ -59,6 +61,39 @@ def check_request(request, club_name):
 
     return render_to_response('requests/new_check_request.html',
                               context_instance=RequestContext(request, {'form': form, 'club': club}))
+
+@login_required
+@club_permissions_required
+def budget_request(request, club_name):
+    '''Let's the user create a new budget request'''
+    club = get_object_or_404(Club, name=club_name)
+    if request.method == 'POST':
+        form = forms.BudgetRequestForm(request.POST)
+        if 'add-more' in request.POST:
+            post_data = request.POST.copy()
+            post_data['budget_items-TOTAL_FORMS'] = int(post_data['budget_items-TOTAL_FORMS']) + 5,
+            items = forms.BudgetItemFormSet(post_data)
+        else:
+            items = forms.BudgetItemFormSet(request.POST)
+            if form.is_valid():
+                print 'form valid'
+                if items.is_valid():
+                    print 'items valid'
+                    request_instance = form.save(commit=False)
+                    items = forms.BudgetItemFormSet(request.POST, instance=request_instance)
+
+                    request_instance.club = club
+                    request_instance.filer = request.user.student
+                    request_instance.save()
+
+                    items.save()
+                    return redirect('club_admin', club_name=club_name)
+    else:
+        form = forms.BudgetRequestForm()
+        items = forms.BudgetItemFormSet()
+
+    return render_to_response('requests/new_budget_request.html',
+                              context_instance=RequestContext(request, {'form': form, 'items': items,'club': club}))
 
 @login_required
 def club_select(request):

@@ -156,8 +156,7 @@ class BudgetRequestAdmin(admin.ModelAdmin):
         (None, {
             'fields': (('club', 'for_school_year'))}),
         ('Contact Information', {
-            'fields': ('filer', 'mailing_address',
-                       'college')}),
+            'fields': ('filer',)}),
         ('Previous Budget Information', {
             'fields': ('attended_budgeting_for', ('did_internal_fundraising', 'internal_fundraising_amount'))}),
         ('Membership Information', {
