@@ -10,7 +10,7 @@
     font-size: 40pt;
 }
 
-#post_header {
+#postheader {
     width: 11in;
     margin: 0 auto;
     padding: 1em;
@@ -33,13 +33,33 @@
     }
 }
 
-td {
-    padding-left: 0.6em;
-    padding-right: 0.6em;
-}
+tr {
 
-tr:first-child td {
-    padding-top: 0.6em;
+    &:first-child {
+        td {
+            padding-top: 0.6em;
+        }
+    }
+
+    &:last-child {
+        td {
+            padding-bottom: 0.6em;
+        }
+    }
+
+    td {
+        padding: {
+            top: 0.25em;
+            bottom: 0.25em;
+        }
+    }
+
+    td:first-child {
+        padding-left: 0.6em;
+    }
+    td:last-child {
+        padding-right: 0.6em;
+    }
 }
 
 .actions

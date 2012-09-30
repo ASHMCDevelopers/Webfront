@@ -597,27 +597,32 @@ footer {
   padding-left: 0.5em;
   font-size: 40pt; }
 
-#post_header {
+#postheader {
   width: 11in;
   margin: 0 auto;
   padding: 1em; }
-  #post_header table {
+  #postheader table {
     width: 10.6in; }
-    #post_header table.info {
+    #postheader table.info {
       padding: 0.6em;
       margin-bottom: 0.5em;
       border: 1px solid gray;
       margin-left: 0.3in;
       width: 5in; }
-      #post_header table.info td:nth-child(2) {
+      #postheader table.info td:nth-child(2) {
         text-align: right; }
-
-td {
-  padding-left: 0.6em;
-  padding-right: 0.6em; }
 
 tr:first-child td {
   padding-top: 0.6em; }
+tr:last-child td {
+  padding-bottom: 0.6em; }
+tr td {
+  padding-top: 0.25em;
+  padding-bottom: 0.25em; }
+tr td:first-child {
+  padding-left: 0.6em; }
+tr td:last-child {
+  padding-right: 0.6em; }
 
 .actions {
   margin-bottom: 19px; }
