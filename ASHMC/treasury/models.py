@@ -3,6 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 import datetime
 
+
 class TreasuryYearManager(models.Manager):
     def get_current(self):
         '''Gets the current TreasuryYear'''
@@ -15,19 +16,20 @@ class TreasuryYearManager(models.Manager):
             year = now.year
 
         # Treasury years span New Years
-        description = '%04d-%04d' % (year, year+1)
+        description = '%04d-%04d' % (year, year + 1)
         try:
             return self.get(description=description)
         except ObjectDoesNotExist:
-            ret = TreasuryYear(description=description, date=datetime.date(year,5, 1))
+            ret = TreasuryYear(description=description, date=datetime.date(year, 5, 1))
             ret.save()
             return ret
+
 
 class TreasuryYear(models.Model):
     '''Represents an ASHMC Treasury Year (Slightly different from normal school years)'''
 
-    description=models.CharField(max_length=9, unique=True, db_index=True) # The string (i.e., '2012-2013') representation of this school year
-    date=models.DateField() # The start date of the treasury year
+    description = models.CharField(max_length=9, unique=True, db_index=True)  # The string (i.e., '2012-2013') representation of this school year
+    date = models.DateField()  # The start date of the treasury year
 
     objects = TreasuryYearManager()
 
@@ -36,6 +38,7 @@ class TreasuryYear(models.Model):
 
     def __repr__(self):
         return "<TreasuryYear %s>" % self
+
 
 # Classes involving bank ledgers
 
@@ -46,6 +49,7 @@ class Account(models.Model):
     def __str__(self):
         return self.name
 
+
 class FundManager(models.Manager):
     def get_default(self):
         '''Get a default fund source. Defaults to a fund named Unresolved'''
@@ -55,6 +59,7 @@ class FundManager(models.Manager):
             account = Fund(name='Unresolved', description='Fake account for unresolved allocations')
             account.save()
             return account
+
 
 class Fund(models.Model):
     '''An ASHMC fund, like the long-term fund, or club budgets, etc.'''
@@ -93,12 +98,13 @@ class Fund(models.Model):
     def __str__(self):
         return self.name
 
+
 class Allocation(models.Model):
     '''Represents an allocation given from ASHMC. Every allocation has a fund from which the money comes.'''
 
     def new_allocation_number():
         '''Coin a new allocation number, by incrementing the highest allocation number'''
-        num =  Allocation.objects.all().aggregate(models.Max('allocation_number'))['allocation_number__max']
+        num = Allocation.objects.all().aggregate(models.Max('allocation_number'))['allocation_number__max']
         if num is None:
             num = 0
         return num + 1
@@ -109,7 +115,7 @@ class Allocation(models.Model):
     for_club = models.ForeignKey('Club', blank=True, null=True, related_name='allocations')
 
     # Monetary information
-    amount = models.DecimalField(decimal_places=2,max_digits=8)
+    amount = models.DecimalField(decimal_places=2, max_digits=8)
     amount_requested = models.DecimalField(decimal_places=2, max_digits=8, default=0)
     source = models.ForeignKey(Fund, default=Fund.objects.get_default, related_name='allocations')
 
@@ -128,7 +134,8 @@ class Allocation(models.Model):
         return 'Allocation %06d' % self.allocation_number
 
     class Meta:
-        ordering = ('allocation_number',)
+        ordering = ('allocation_number', )
+
 
 class Club(models.Model):
     '''An ASHMC Club'''
@@ -140,7 +147,7 @@ class Club(models.Model):
     date_ended = models.DateField(blank=True, null=True)
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('name', )
 
     @property
     def line_items(self):
@@ -185,10 +192,11 @@ class Club(models.Model):
         return '%06d' % self.id
 
     def __str__(self):
-        return "%s" % (self.name,)
+        return "%s" % (self.name, )
 
     def __repr__(self):
         return "<Club %s>" % self
+
 
 class Officer(models.Model):
     '''Represents a club officer. These are the people who can sign for checks'''
@@ -210,7 +218,8 @@ class Officer(models.Model):
         return '<%s>' % self
 
     class Meta:
-        unique_together = ('club', 'school_year', 'student') # Ensure each member is listed only once
+        unique_together = ('club', 'school_year', 'student')  # Ensure each member is listed only once
+
 
 class CategoryManager(models.Manager):
     def get_default(self):
@@ -220,6 +229,7 @@ class CategoryManager(models.Manager):
             category = Category(name='Miscellaneous', description='Miscellaneous/Uncategorized items')
             category.save()
             return category
+
 
 class Category(models.Model):
     '''Categories for line items'''
@@ -231,6 +241,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class LineItem(models.Model):
     '''A line item in a fund ledger'''
@@ -252,14 +263,14 @@ class LineItem(models.Model):
     check_status = models.CharField(max_length=100, choices=((PENDING, 'Pending bank approval'),
                                                              (RECONCILED, 'Check cashed')), default=PENDING, help_text='Indicates whether or not this check has been cashed')
 
-    allocations = models.ManyToManyField('Allocation', related_name='line_items', through='AllocationLineItem') # The allocations from which this line item came. These are created automatically, when the line item is added
-    request = models.ForeignKey('CheckRequest', null=True, related_name='line_items', blank=True) # The check request (if any) that spawned this line item
+    allocations = models.ManyToManyField('Allocation', related_name='line_items', through='AllocationLineItem')  # The allocations from which this line item came. These are created automatically, when the line item is added
+    request = models.ForeignKey('CheckRequest', null=True, related_name='line_items', blank=True)  # The check request (if any) that spawned this line item
     category = models.ForeignKey('Category', null=True, default=Category.objects.get_default, help_text='Line item\'s category. Helps with taxes, etc.')
 
     @property
     def prev_balance(self):
         try:
-            balance = self.account.line_items.filter(date_created__lt = self.date_created)[0].balance
+            balance = self.account.line_items.filter(date_created__lt=self.date_created)[0].balance
         except:
             balance = 0
         return balance
@@ -275,12 +286,12 @@ class LineItem(models.Model):
             if self.balance != (balance - self.amount):
                 self.balance = balance - self.amount
                 prev_balance = self.balance
-                for line_item in self.account.line_items.filter(date_created__gt = self.date_created).order_by('date_created'):
+                for line_item in self.account.line_items.filter(date_created__gt=self.date_created).order_by('date_created'):
                     prev_balance = line_item._update_balance(prev_balance)
                     line_item.save()
 
     def _update_balance(self, prev_balance):
-        self.balance = prev_balance- self.amount
+        self.balance = prev_balance - self.amount
         return self.balance
 
     @staticmethod
@@ -294,11 +305,11 @@ class LineItem(models.Model):
 
         if total != self.amount and self.request is not None:
             AllocationLineItem.objects.filter(line_item=self).delete()
-            with transaction.commit_on_success(): # We want this to be atomic
+            with transaction.commit_on_success():  # We want this to be atomic
                 # Find allocations based on account source
-                allocations = self.request.club.allocations.filter(source=self.account, school_year=TreasuryYear.objects.get_current()) # Only get allocations for this year and from the same account
+                allocations = self.request.club.allocations.filter(source=self.account, school_year=TreasuryYear.objects.get_current())  # Only get allocations for this year and from the same account
 
-                amount_left = self.amount # The amount remaining after withdrawing money from allocations
+                amount_left = self.amount  # The amount remaining after withdrawing money from allocations
                 for allocation in allocations:
                     if allocation.amount_left > amount_left:
                         AllocationLineItem(line_item=self, allocation=allocation, amount=amount_left).save()
@@ -313,8 +324,9 @@ class LineItem(models.Model):
                         raise ValidationError('Insufficient funds')
 
     class Meta:
-        ordering = ('-date_created',)
+        ordering = ('-date_created', )
 models.signals.post_save.connect(LineItem.post_save, sender=LineItem)
+
 
 class AllocationLineItem(models.Model):
     '''Line items for allocations. These objects are created automatically, whenever a line item is assocatied with a request'''
@@ -335,6 +347,7 @@ class AllocationLineItem(models.Model):
     @property
     def check_status(self):
         return self.line_item.check_status
+
 
 class BudgetRequest(models.Model):
     club = models.ForeignKey('Club', related_name='budget_requests')
@@ -401,6 +414,7 @@ class BudgetItem(models.Model):
     description = models.CharField(max_length=1024)
     amount = models.DecimalField(max_digits=11, decimal_places=2)
 
+
 class CheckRequest(models.Model):
     '''A request for an ASHMC check'''
 
@@ -435,7 +449,7 @@ class CheckRequest(models.Model):
     reason_denied = models.TextField(null=True, blank=True)
 
     class Meta:
-        ordering = ('-date_filed',)
+        ordering = ('-date_filed', )
 
     def __str__(self):
         return 'Check Request for %s on %s (%s)' % (self.club.name, self.date_filed, self.amount)

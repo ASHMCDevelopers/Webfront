@@ -1,5 +1,4 @@
-from django.conf.urls import patterns, include, url
-from django.views.generic.simple import direct_to_template
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
     url(r'^$', 'ASHMC.treasury.views.overview', {}, name='fund_overview'),

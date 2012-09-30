@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from . import forms
 
+
 def club_permissions_required(f):
     '''A decorator for functions requiring that the current user have permissions for the given
     club. The club_name parameter must be specified as a request parameter'''
@@ -25,6 +26,7 @@ def club_permissions_required(f):
     new_func.__name__ = f.__name__
     return new_func
 
+
 @login_required
 def club_detail(request, club_name):
     '''Public-viewable club detail'''
@@ -32,13 +34,14 @@ def club_detail(request, club_name):
     return render_to_response('clubs/detail.html',
                               context_instance=RequestContext(request, {'club': club}))
 
+
 @login_required
 @club_permissions_required
 def club_admin(request, club_name):
     club = get_object_or_404(Club, name=club_name)
-    user = request.user
     return render_to_response('clubs/admin.html',
                               context_instance=RequestContext(request, {'club': club}))
+
 
 @login_required
 @club_permissions_required
@@ -61,6 +64,7 @@ def check_request(request, club_name):
 
     return render_to_response('requests/new_check_request.html',
                               context_instance=RequestContext(request, {'form': form, 'club': club}))
+
 
 @login_required
 @club_permissions_required
@@ -93,7 +97,8 @@ def budget_request(request, club_name):
         items = forms.BudgetItemFormSet()
 
     return render_to_response('requests/new_budget_request.html',
-                              context_instance=RequestContext(request, {'form': form, 'items': items,'club': club}))
+                              context_instance=RequestContext(request, {'form': form, 'items': items, 'club': club}))
+
 
 @login_required
 def club_select(request):
@@ -105,6 +110,7 @@ def club_select(request):
     return render_to_response('clubs/select.html',
                               context_instance=RequestContext(request, {'clubs': clubs}))
 
+
 @login_required
 def overview(request):
     accounts = Fund.objects.all()
@@ -115,10 +121,11 @@ def overview(request):
     total_free = sum([account.currently_free for account in accounts])
 
     return render_to_response('treasury/overview.html',
-                              context_instance=RequestContext(request,{'accounts': accounts, 'clubs': clubs,
+                              context_instance=RequestContext(request, {'accounts': accounts, 'clubs': clubs,
                                                                        'total_funds': total_funds,
                                                                        'total_allocated': total_allocated,
                                                                        'total_free': total_free}))
+
 
 @login_required
 def ledger(request, fund_name):
