@@ -33,8 +33,8 @@ class TreasuryYear(models.Model):
 
     objects = TreasuryYearManager()
 
-    def __str__(self):
-        return self.description
+    def __unicode__(self):
+        return u"{}".format(self.description)
 
     def __repr__(self):
         return "<TreasuryYear %s>" % self
@@ -46,8 +46,8 @@ class Account(models.Model):
     name = models.CharField(max_length=200, help_text='The name of the ASHMC account')
     description = models.TextField()
 
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return "{}".format(self.name)
 
 
 class FundManager(models.Manager):
@@ -95,8 +95,8 @@ class Fund(models.Model):
         total_pending = self.line_items.filter(check_status=LineItem.PENDING).aggregate(models.Sum('amount'))['amount__sum'] or 0
         return self.balance + total_pending
 
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return "{}".format(self.name)
 
 
 class Allocation(models.Model):
@@ -130,8 +130,8 @@ class Allocation(models.Model):
         total_spent = self.allocation_line_items.all().aggregate(models.Sum('amount'))['amount__sum'] or 0
         return self.amount - total_spent
 
-    def __str__(self):
-        return 'Allocation %06d' % self.allocation_number
+    def __unicode__(self):
+        return u'Allocation %06d' % self.allocation_number
 
     class Meta:
         ordering = ('allocation_number', )
@@ -191,8 +191,8 @@ class Club(models.Model):
         '''Correctly formats the club number'''
         return '%06d' % self.id
 
-    def __str__(self):
-        return "%s" % (self.name, )
+    def __unicode__(self):
+        return u"%s" % (self.name, )
 
     def __repr__(self):
         return "<Club %s>" % self
@@ -211,8 +211,8 @@ class Officer(models.Model):
 
     is_club_superuser = models.BooleanField(help_text='Whether this officer can access and change this club\'s treasury information', default=True)
 
-    def __str__(self):
-        return '%s %s of %s' % (self.school_year, self.position, self.club)
+    def __unicode__(self):
+        return u'%s %s of %s' % (self.school_year, self.position, self.club)
 
     def __repr__(self):
         return '<%s>' % self
@@ -239,8 +239,8 @@ class Category(models.Model):
 
     objects = CategoryManager()
 
-    def __str__(self):
-        return self.name
+    def __unicode__(self):
+        return u"{}".format(self.name)
 
 
 class LineItem(models.Model):
@@ -451,8 +451,8 @@ class CheckRequest(models.Model):
     class Meta:
         ordering = ('-date_filed', )
 
-    def __str__(self):
-        return 'Check Request for %s on %s (%s)' % (self.club.name, self.date_filed, self.amount)
+    def __unicode__(self):
+        return u'Check Request for %s on %s (%s)' % (self.club.name, self.date_filed, self.amount)
 
     @property
     def denied(self):
