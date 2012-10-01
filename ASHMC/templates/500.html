@@ -1,0 +1,25 @@
+{% extends "main_base_page.html" %}
+{% load static %}
+{% block stylin %}
+    <link rel="stylesheet" type="text/css" href="{% static "styles/404.css"%}">
+{% endblock stylin %}
+
+{% block pre_header %}
+{% endblock pre_header %}
+
+{% block right_header %}
+
+{% endblock right_header %}
+
+{% block post_header %}
+<div class='centerer'>
+<h2>Whoops, we got a 500</h2>
+
+<p>Something went wrong on our end - sorry about that!</p>
+<p>
+    An email has already been sent to
+    <a href='mailto:ashmc-developers-l@g.hmc.edu'>ashmc-developers-l@g.hmc.edu</a>,
+    to make sure we know it happened, but feel free to send one yourself if you
+    want to know more about what happened.
+</p>
+{% endblock %}
