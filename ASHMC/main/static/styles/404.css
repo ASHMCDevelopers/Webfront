@@ -591,8 +591,10 @@ footer {
       font-family: "Walkway Expand Black", sans-serif; }
 
 #postheader {
+  margin: 0 auto;
   background: white;
-  max_width: 1050px;
+  max-width: 800px;
+  min-height: 800px;
   padding: 1em; }
 
 ul {
