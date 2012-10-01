@@ -86,6 +86,7 @@ def create_user_related_things(*args, **kwargs):
             dormcode = row[FIELD_ORDERING.index('Dorm')].value.split(' ')
 
             if dormcode[0] != '':
+                # Roster has CGUA, whereas DB has CGA.
                 if dormcode[0] == "CGU":
                     dormcode = ' '.join(dormcode)
                 else:
@@ -107,11 +108,26 @@ def create_user_related_things(*args, **kwargs):
                     number=row[FIELD_ORDERING.index("Room")].value,
                 )
 
+                if dorm.code in Dorm.all_objects.filter(official_dorm=False).values_list('code', flat=True)\
+                  and dorm.code != "ABR":
+                    # If they're off-campus, make sure they're 'symbollically'
+                    # a part of the Offcampus dorm.
+                    symoff, _ = DormRoom.objects.get_or_create(
+                        dorm__code="OFF",
+                        number="Symbolic Room",
+                    )
+
+                    # Symroom is going to be full of people.
+                    symroomur, _ = UserRoom.objects.get_or_create(
+                        user=new_user,
+                        room=symoff,
+                    )
+                    symroomur.semesters.add(this_sem)
+
                 ur, _ = UserRoom.objects.get_or_create(
                     user=new_user,
                     room=room,
                 )
-
                 ur.semesters.add(this_sem)
 
             return
