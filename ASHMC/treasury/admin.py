@@ -181,6 +181,9 @@ class BudgetItemInline(admin.TabularInline):
     model = BudgetItem
 
 class BudgetRequestAdmin(admin.ModelAdmin):
+    list_display = ('date_filed', 'club', 'ashmc_amount', 'status', 'amount_allocated')
+    list_filter = ('club',)
+    search_fields = ('club__name', 'budget_items__item', 'budget_items__description', 'explanation', 'budget_explanation')
     readonly_fields = ('date_filed',)
     inlines = (BudgetItemInline,)
 
