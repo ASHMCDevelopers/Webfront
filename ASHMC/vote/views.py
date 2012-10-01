@@ -35,7 +35,7 @@ class MeasureListing(ListView):
         except IndexError:
             # If they don't have a room, they're probably not eligible to vote.
             #raise PermissionDenied()
-            #logger.info("blocked access to {}".format(self.request.user))
+            logger.info("blocked access to {}".format(self.request.user))
             # Until we have roster data importing, this is bad
             pass
 
@@ -45,7 +45,6 @@ class MeasureListing(ListView):
         ).filter(
             # Hide measures that the user has already voted in.
             ~Q(id__in=Vote.objects.filter(account=self.request.user).values_list('measure__id', flat=True)),
-            # TODO: Un-disable these things when we can parse rosters again.
             Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
             Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None),
             is_open=True,
