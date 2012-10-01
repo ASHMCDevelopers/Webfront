@@ -78,6 +78,10 @@ class MeasureDetail(DetailView):
             logger.info('{} attempted vote on closed measure {}'.format(self.request.user, object))
             raise Http404
 
+        if self.request.user not in object.eligible_voters:
+            logger.info("{} attempted to vote in disallowed measure {}".format(self.request.user, object))
+            raise Http404
+
         if Vote.objects.filter(account=self.request.user, measure=object).count() != 0:
             raise Http404
 
