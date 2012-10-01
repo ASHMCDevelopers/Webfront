@@ -3,7 +3,6 @@ from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import FormMixin
 
 
 from ASHMC.main.models import Semester
@@ -36,7 +35,7 @@ class MeasureListing(ListView):
         except IndexError:
             # If they don't have a room, they're probably not eligible to vote.
             #raise PermissionDenied()
-            #logger.info("blocked access to {}".format(self.request.user))
+            logger.info("blocked access to {}".format(self.request.user))
             # Until we have roster data importing, this is bad
             pass
 
@@ -46,9 +45,8 @@ class MeasureListing(ListView):
         ).filter(
             # Hide measures that the user has already voted in.
             ~Q(id__in=Vote.objects.filter(account=self.request.user).values_list('measure__id', flat=True)),
-            # TODO: Un-disable these things when we can parse rosters again.
-            #Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
-            #Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None),
+            Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
+            Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None),
             is_open=True,
             # Only show measures which have already opened for voting
             vote_start__lte=datetime.datetime.now(pytz.utc),
@@ -78,6 +76,10 @@ class MeasureDetail(DetailView):
         # make sure it's a vote-able object.
         if not object.is_open or (object.vote_end is not None and object.vote_end < datetime.datetime.now(pytz.utc)):
             logger.info('{} attempted vote on closed measure {}'.format(self.request.user, object))
+            raise Http404
+
+        if self.request.user not in object.eligible_voters:
+            logger.info("{} attempted to vote in disallowed measure {}".format(self.request.user, object))
             raise Http404
 
         if Vote.objects.filter(account=self.request.user, measure=object).count() != 0:
@@ -203,8 +205,8 @@ class MeasureResultList(ListView):
             raise PermissionDenied()
 
         return Measure.objects.filter(
-            #Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
-            #Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None),
+            Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
+            Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None),
             # Only show measures which have already closed for voting
             vote_end__lte=datetime.datetime.now(pytz.utc),
         ).exclude(
