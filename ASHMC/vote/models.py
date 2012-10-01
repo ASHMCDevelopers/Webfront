@@ -143,7 +143,11 @@ class Measure(models.Model):
         try:
             self.restrictions
         except models.ObjectDoesNotExist:
-            Restrictions.objects.create(restricted_to=self)
+            try:
+                Restrictions.objects.create(restricted_to=self)
+            except IntegrityError:
+                # This means that someone built in restrictions at creation time.
+                pass
 
     def __unicode__(self):
         return u"{}".format(self.name)
@@ -185,6 +189,9 @@ class Restrictions(models.Model):
         dormrooms = DormRoom.objects.filter(dorm__in=self.dorms.all())
         user_ids = UserRoom.objects.filter(room__in=dormrooms).values_list('user__id', flat=True)
         return User.objects.filter(id__in=user_ids)
+
+    def __unicode__(self):
+        return u"Restrictions for {}".format(self.restricted_to)
 
 
 class Vote(models.Model):
