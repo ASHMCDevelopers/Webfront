@@ -3,8 +3,10 @@
 
 
 #postheader {
+    margin: 0 auto;
     background: $light_background;
-    max_width: $screen_max_width;
+    max-width: 800px;
+    min-height: $postheader_min_height;
     padding: 1em;
 }
 
