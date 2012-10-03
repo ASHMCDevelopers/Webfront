@@ -1,6 +1,7 @@
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
 
 
@@ -13,7 +14,12 @@ class Command(BaseCommand):
             raise CommandError("Just the sessionid, please")
 
         session_key = args[0]
-        session = Session.objects.get(session_key=session_key)
+        try:
+            session = Session.objects.get(session_key=session_key)
+        except ObjectDoesNotExist:
+            print "no such session"
+            return
+
         uid = session.get_decoded().get('_auth_user_id')
         user = User.objects.get(pk=uid)
 
