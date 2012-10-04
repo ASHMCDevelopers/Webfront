@@ -12,7 +12,7 @@ class TaggedEntryList(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        print self.kwargs
+        #print self.kwargs
         return Entry.objects.filter(tags__name__in=[self.kwargs['tag']])
 
 

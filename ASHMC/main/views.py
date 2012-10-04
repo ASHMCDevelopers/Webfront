@@ -70,7 +70,7 @@ class LandingPage(TemplateView):
             should_display=True
         ).order_by('-date_published')[:7]
 
-        print context['top_stories']
+        #print context['top_stories']
         return context
 
 
