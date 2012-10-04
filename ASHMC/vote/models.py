@@ -66,6 +66,14 @@ class Ballot(models.Model):
             max_choices = self.candidate_set.annotate(pv_max=models.Count('popularityvote')).order_by('-pv_max').values_list('pv_max', flat=True)[0]
             return self.candidate_set.annotate(models.Count('popularityvote')).filter(popularityvote__count=max_choices)
 
+    def ordered_candidates(self):
+        if self.vote_type == self.VOTE_TYPES.POPULARITY or self.vote_type == self.VOTE_TYPES.INOROUT:
+            return self.candidate_set.annotate(votes=models.Count('popularityvote')).order_by('-votes')
+        elif self.vote_type == self.VOTE_TYPES.PREFERENCE:
+            return self.candidate_set.annotate(votes=models.Sum('preferentialvote__amount')).order_by('votes')
+        elif self.vote_type == self.VOTE_TYPES.SELECT_X:
+            return self.candidate_set.annotate(votes=models.Count('popularityvote')).order_by('-votes')
+
     def __unicode__(self):
         return u"Ballot #{}: {}".format(self.id, self.title)
 
