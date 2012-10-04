@@ -130,8 +130,8 @@ class Measure(models.Model):
         return self.restrictions.get_grad_year_users() & self.restrictions.get_dorm_users()
 
     class Meta:
-        verbose_name = _('Mesure')
-        verbose_name_plural = _('Mesures')
+        verbose_name = _('Measure')
+        verbose_name_plural = _('Measures')
 
     def save(self, *args, **kwargs):
         if self.vote_end is not None:
