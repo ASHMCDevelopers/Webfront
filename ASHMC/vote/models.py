@@ -66,6 +66,14 @@ class Ballot(models.Model):
             max_choices = self.candidate_set.annotate(pv_max=models.Count('popularityvote')).order_by('-pv_max').values_list('pv_max', flat=True)[0]
             return self.candidate_set.annotate(models.Count('popularityvote')).filter(popularityvote__count=max_choices)
 
+    def ordered_candidates(self):
+        if self.vote_type == self.VOTE_TYPES.POPULARITY or self.vote_type == self.VOTE_TYPES.INOROUT:
+            return self.candidate_set.annotate(votes=models.Count('popularityvote')).order_by('-votes')
+        elif self.vote_type == self.VOTE_TYPES.PREFERENCE:
+            return self.candidate_set.annotate(votes=models.Sum('preferentialvote__amount')).order_by('votes')
+        elif self.vote_type == self.VOTE_TYPES.SELECT_X:
+            return self.candidate_set.annotate(votes=models.Count('popularityvote')).order_by('-votes')
+
     def __unicode__(self):
         return u"Ballot #{}: {}".format(self.id, self.title)
 
@@ -130,8 +138,8 @@ class Measure(models.Model):
         return self.restrictions.get_grad_year_users() & self.restrictions.get_dorm_users()
 
     class Meta:
-        verbose_name = _('Mesure')
-        verbose_name_plural = _('Mesures')
+        verbose_name = _('Measure')
+        verbose_name_plural = _('Measures')
 
     def save(self, *args, **kwargs):
         if self.vote_end is not None:

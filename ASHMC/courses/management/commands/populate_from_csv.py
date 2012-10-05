@@ -11,19 +11,19 @@ from ...models import Campus, Course, Professor, Section, Meeting, Timeslot, Day
 
 import csv, pprint, re, datetime
 
-            
+
 class Command(BaseCommand):
     args = '<directory_of_csv_files>'
     help = 'Populates the Course tables with information from csv files.'
-    
+
     def handle(self, *args, **options):
         if len(args) != 1:
             raise CommandError("Expects a single directory as an argument.")
         dirs = args[0]
         if dirs[-1] != '/':
-            
+
             dirs += '/'
-        
+
         # Gather up the relevant csv files.
         # ENSURE THESE ARE ENCODED AS UTF-8 BEFORE RUNNING THIS SCRIPT
         MEETINGS = open(dirs + 'meetings 1.csv')
@@ -31,7 +31,7 @@ class Command(BaseCommand):
         DESCRIPT = open(dirs + 'courses 1.csv')
         AREAS = open(dirs + 'courses 2.csv')
         PREREQS = open(dirs + 'courses 3.csv')
-        
+
         # Gather campuses. We'll need them later.
         CAMPUS_LOOKUP = dict([ (x.code, x) for x in Campus.objects.all()])
         def find_campus(string, dictionary):
@@ -45,25 +45,25 @@ class Command(BaseCommand):
                     print "Falling back to UN"
                     camp = CAMPUS_LOOKUP['UN']
             return camp
-        
+
         SEMESTER_LOOKUP = dict([ ((x.half, x.year), x) for x in Semester.objects.all()])
-        
+
         DAY_LOOKUP = dict([(x.code, x) for x in Day.objects.all()])
-        
+
         self.stderr.write("{}\n{}\n{}\n".format(CAMPUS_LOOKUP, SEMESTER_LOOKUP, DAY_LOOKUP))
-        
+
         meetings_r = csv.DictReader(MEETINGS)
         sections_r = csv.DictReader(SECTIONS)
         descript_r = csv.DictReader(DESCRIPT)
         areas_r = csv.DictReader(AREAS)
         prereqs_r = csv.DictReader(PREREQS)
-        
 
-        
+
+
         # First, we go through the descriptions, since that's supposedly the
         # canonical list of courses that exist.
         # As we go, populate a dictionary with keys that are the course codes,
-        # creating a json-like dict of dicts. 
+        # creating a json-like dict of dicts.
         courses = {}
         for row in descript_r:
             # pull out some interesting data from this csv file, for later use.
@@ -71,7 +71,7 @@ class Command(BaseCommand):
             code = row['\xef\xbb\xbf"Course Number"'] # ugly because of unicode conversion
             course = {}
             #self.stderr.write("Parsing description for {}\n".format(code))
-            
+
             course['code'] = code[:4]
             course['number'] = code[4:9]
             course['code_campus'] = code[-2:]
@@ -88,21 +88,21 @@ class Command(BaseCommand):
             course['attention'] = False
             course['area'] = [] # a course can have more than one area associated with it
             courses[code] = course
-        
+
         # populate areas; use this to filter in place of department.
         for row in areas_r:
             code = row['\xef\xbb\xbf"Course Number"']
             #self.stderr.write("Parsing area for {}\n".format(code))
             course = courses[code]
-            
+
             course['area'] += [row["Course Area Code"]]
-        
+
         # populate prerequisite/concurrent enrollment requirements
         for row in prereqs_r:
             code = row['\xef\xbb\xbf"Course Number"']
             #self.stderr.write("Parsing requisites for {}\n".format(code))
             course = courses[code]
-            
+
             # C = Corequisite, P = Prerequisite, N = Concurrent Enrollment Required
             if row['Requisite Course Category'] in ['C', 'N', 'P']:
                 if '*' in row['Requisite Course Number']:
@@ -119,17 +119,17 @@ class Command(BaseCommand):
                 else:
                     requisite['req_attention'] = True
                     requisite['wildcard'] = '*' in requisite
-                course['requisites'] += [(row['Requisite Course Category'], 
+                course['requisites'] += [(row['Requisite Course Category'],
                                      requisite)]
-                
+
         # get sections, associate them with specific courses
         for row in sections_r:
             code = row['\xef\xbb\xbf"Course Number"']
-            
+
             course = courses[code]
-            
+
             section = {}
-            
+
             section['title'] = row['Section Title'] if len(row['Section Title']) > 0 else None
             section['number'] = row['Section Number']
             section['semester'] = row['Session Code']
@@ -141,9 +141,9 @@ class Command(BaseCommand):
             section['seats'] = row['Maximum Registration']
             section['meetings'] = {} # empty meeting dict for later use
             section['attention'] = False
-            
+
             course['sections'][section['number']] = section
-        
+
         # get meetings, associate them with specific sections
         for row in meetings_r:
             code = row['\xef\xbb\xbf"Course Number"']
@@ -168,15 +168,15 @@ class Command(BaseCommand):
                 section['number'] = row['Section Number']
                 section['meetings'] = {}
                 course['sections'][section['number']] = section
-                
-                
-            
+
+
+
             if section['meetings'].has_key(row['Meeting Number']):
                 meeting = section['meetings'][row["Meeting Number"]] # If we've seen this row before, don't mess with anything
             else:
                 meeting = {}
                 meeting['instructors'] = []
-                
+
                 meeting['meet_num'] = row['Meeting Number']
                 meeting['days'] = row['Class Meeting Days']
                 meeting['start_time'] = row['Class Begin Time (24 Hour)']
@@ -185,17 +185,17 @@ class Command(BaseCommand):
                 meeting['building'] = row['Building Code']
                 meeting['room'] = row['Room Number']
                 meeting['attention'] = False
-                
+
                 section['meetings'][meeting['meet_num']] = meeting
-                
-                
+
+
             meeting['instructors'] += [row['Instructor Name']] # multiple instructors
-            
+
         #self.stderr.write("{}\n".format(courses.keys()[-4]))
         #self.stderr.write("{}\n".format((courses.keys()[-4] == "SPAN033 PO")))
         #pprint.pprint(courses['PHYS051  HM'], self.stderr)
-            
-        # We've now gleaned all the information that we can from the csv's, and put them into a monster 
+
+        # We've now gleaned all the information that we can from the csv's, and put them into a monster
         # of a dict of nested dicts.
         non_base_courses = []
         base_courses = []
@@ -206,11 +206,11 @@ class Command(BaseCommand):
                 non_base_courses += [course]
             else:
                 base_courses += [course]
-        
+
         pprint.pprint("{} base courses".format(len(base_courses)), self.stderr)
         pprint.pprint("{} non-base courses".format(len(non_base_courses)),
                         self.stderr)
-        
+
         #created_courses = {}
         repeats = 0
         fucked_bases = []
@@ -229,29 +229,29 @@ class Command(BaseCommand):
                                                            name=area,
                                                            hard_science=science,
                                                            is_req_area=req_status)
-                
-            
+
+
             primary_campus = CAMPUS_LOOKUP[course['campus']]
             dept, new = Department.objects.get_or_create(code=course['dept'],
                                                       campus=primary_campus,
                                                       )
-            
+
             #print course['number'],course['code_campus'], course['title']
             #print course['descr']
-            
+
             # build the course itself
             c, new = Course.objects.get_or_create(
                                            title=course['title'],
-                                           
+
                                            codeletters=course['code'],
                                            codenumber=course['number'],
                                            codecampus=course['code_campus'],
-                                           
+
                                            campus=find_campus(course['code_campus'], course),
-                                           
-                                           
+
+
                                            description=unicode(course['descr'],"UTF-8"),
-                                           
+
                                            )
             if not new: repeats += 1
             c.departments.add(dept)
@@ -273,27 +273,27 @@ class Command(BaseCommand):
                                                        )
                     s.title=sec['title']
                     s.credit_hours=sec['cred_hours']
-                                                       
+
                     s.semester=SEMESTER_LOOKUP[(sec['semester'],sec['year'])]
-                    
+
                     s.seats=sec['seats']
                     s.openseats=sec['seats'] # assume totally free classes!
-                    
+
                     s.start_date=sec['starts']
                     s.end_date=sec['ends']
-                    
+
                     s.needs_attention=sec['attention']
-                    s.save() 
+                    s.save()
                 except IntegrityError, e:
                     print e
                     print "Adding this course to the 'fucked' list"
                     fucked_bases += [(course, section)]
-                    continue    
+                    continue
                 # add meetings to sections
                 for meet in sec['meetings'].keys():
                     print "\tMeeting code: ", meet
                     meeting = sec['meetings'][meet]
-                    
+
                     m, new = Meeting.objects.get_or_create(section=s,
                                                            meeting_code=int(meeting['meet_num']),
                                                            )
@@ -313,9 +313,9 @@ class Command(BaseCommand):
                                                                  )
                         p.departments.add(dept)
                         m.teachers.add(p)
-                    
-                    
-                    
+
+
+
                     # spatial location of this meeting
                     #print "\tBuilding: ",meeting['building']
                     print "\t Building: ", meeting['building']
@@ -329,38 +329,38 @@ class Command(BaseCommand):
                         b = Building.objects.get(code=meeting['building'])
                     room, new = Room.objects.get_or_create(building=b,
                                                        title=meeting['room'])
-                    
+
                     is_arr = b.code == "ARR"
                     is_tba = b.code == "TBA"
-                        
+
                     # temporal location of this meeting
                     for day in meeting['days']:
-                        
+
                         if day == '-': continue # don't care about days we don't meet on
                         #print "\t", day
                         d = DAY_LOOKUP[day]
-                        
+
                         try:
                             starter = datetime.datetime.strptime(meeting['start_time'],"%H%M")
                         except ValueError, e:
                             print e
                             starter = datetime.datetime.strptime(meeting['start_time'].zfill(2),"%H%M")
-                            
+
                         try:
                             ender = datetime.datetime.strptime(meeting['end_time'],"%H%M")
                         except ValueError, e:
                             print e
                             ender = datetime.datetime.strptime(meeting['end_time'].zfill(2),"%H%M")
-                        
+
                         t, new = Timeslot.objects.get_or_create(
                                                             starts=starter,
                                                             ends=ender,
                                                             day=d
                                                             )
-                    
+
                         # Finally register the meeting with a timeslot (in a room)
-                        ri, new = RoomInfo.objects.get_or_create(meeting=m, 
-                                                timeslot=t, 
+                        ri, new = RoomInfo.objects.get_or_create(meeting=m,
+                                                timeslot=t,
                                                 room=room,
                                                 )
                         ri.is_arr=is_arr,

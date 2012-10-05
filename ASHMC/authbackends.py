@@ -15,7 +15,7 @@ class CheckHasRolePerm(ModelBackend):
         ).count() > 0
 
     def has_perm(self, user, perm, obj=None, **kwargs):
-        print "Checking roles..."
+        #print "Checking roles..."
         if user.is_superuser:
             return True
         (app_label, codename) = perm.split('.')

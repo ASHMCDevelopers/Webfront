@@ -64,14 +64,14 @@ def get_errors_postfix(form, name):
     fields = [form[f] for f in form.fields if f.endswith(name)]
 
     errors = [f.errors for f in fields if f.errors]
-    print errors
+    #print errors
     return errors
 
 
 @register.filter
 def prettify_error_listings(form):
     errordict = form.errors
-    print "errordict ", errordict
+    #print "errordict ", errordict
 
     response = """<ul class='errors'>"""
 
@@ -113,7 +113,7 @@ def calendarize(dt_one, dt_two=None, mark_today=False):
     else:
         dt_two = dt_two.astimezone(pytz.timezone(settings.TIME_ZONE))
 
-    print "Marking today: ", mark_today
+    #print "Marking today: ", mark_today
     if mark_today:
         today = datetime.datetime.now(pytz.utc).astimezone(pytz.timezone(settings.TIME_ZONE))
     else:
