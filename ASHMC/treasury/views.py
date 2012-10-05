@@ -13,7 +13,7 @@ def club_permissions_required(f):
         # Get the club from the request
         club = get_object_or_404(Club, name=kwargs['club_name'])
         user = request.user
-        # If the user is a superuser, s/he has access to every club.
+        # If the user is a superuser, they have access to every club.
         if not user.is_superuser:
             try:
                 officer_entry = club.current_officers.get(student=user.student)
@@ -32,7 +32,7 @@ def club_detail(request, club_name):
     '''Public-viewable club detail'''
     club = get_object_or_404(Club, name=club_name)
     return render_to_response('clubs/detail.html',
-                              context_instance=RequestContext(request, {'club': club}))
+        context_instance=RequestContext(request, {'club': club}))
 
 
 @login_required
@@ -40,7 +40,7 @@ def club_detail(request, club_name):
 def club_admin(request, club_name):
     club = get_object_or_404(Club, name=club_name)
     return render_to_response('clubs/admin.html',
-                              context_instance=RequestContext(request, {'club': club}))
+        context_instance=RequestContext(request, {'club': club}))
 
 
 @login_required
@@ -63,7 +63,7 @@ def check_request(request, club_name):
         form = forms.CheckRequestForm()
 
     return render_to_response('requests/new_check_request.html',
-                              context_instance=RequestContext(request, {'form': form, 'club': club}))
+        context_instance=RequestContext(request, {'form': form, 'club': club}))
 
 
 @login_required
@@ -97,7 +97,12 @@ def budget_request(request, club_name):
         items = forms.BudgetItemFormSet()
 
     return render_to_response('requests/new_budget_request.html',
-                              context_instance=RequestContext(request, {'form': form, 'items': items, 'club': club}))
+        context_instance=RequestContext(request,
+            {'form': form,
+            'items': items,
+            'club': club}
+        )
+    )
 
 
 @login_required
@@ -108,7 +113,8 @@ def club_select(request):
         officers = request.user.student.club_positions.filter(is_club_superuser=True)
         clubs = [officer.club for officer in officers]
     return render_to_response('clubs/select.html',
-                              context_instance=RequestContext(request, {'clubs': clubs}))
+        context_instance=RequestContext(request, {'clubs': clubs})
+    )
 
 
 @login_required
@@ -121,14 +127,18 @@ def overview(request):
     total_free = sum([account.currently_free for account in accounts])
 
     return render_to_response('treasury/overview.html',
-                              context_instance=RequestContext(request, {'accounts': accounts, 'clubs': clubs,
-                                                                       'total_funds': total_funds,
-                                                                       'total_allocated': total_allocated,
-                                                                       'total_free': total_free}))
+        context_instance=RequestContext(request,
+            {'accounts': accounts, 'clubs': clubs,
+             'total_funds': total_funds,
+             'total_allocated': total_allocated,
+             'total_free': total_free}
+        )
+    )
 
 
 @login_required
 def ledger(request, fund_name):
     fund = get_object_or_404(Fund, name=fund_name)
     return render_to_response('ledger/ledger.html',
-                              context_instance=RequestContext(request, {'fund': fund}))
+        context_instance=RequestContext(request, {'fund': fund})
+    )

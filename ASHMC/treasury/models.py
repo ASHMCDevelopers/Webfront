@@ -20,15 +20,20 @@ class TreasuryYearManager(models.Manager):
         try:
             return self.get(description=description)
         except ObjectDoesNotExist:
-            ret = TreasuryYear(description=description, date=datetime.date(year, 5, 1))
-            ret.save()
-            return ret
+            return TreasuryYear.objects.create(
+                description=description,
+                date=datetime.date(year, 5, 1),
+            )
 
 
 class TreasuryYear(models.Model):
     '''Represents an ASHMC Treasury Year (Slightly different from normal school years)'''
 
-    description = models.CharField(max_length=9, unique=True, db_index=True)  # The string (i.e., '2012-2013') representation of this school year
+    description = models.CharField(  # The string (i.e., '2012-2013') representation of this school year
+        max_length=9,
+        unique=True,
+        db_index=True,
+    )
     date = models.DateField()  # The start date of the treasury year
 
     objects = TreasuryYearManager()
@@ -36,14 +41,14 @@ class TreasuryYear(models.Model):
     def __unicode__(self):
         return u"{}".format(self.description)
 
-    def __repr__(self):
-        return "<TreasuryYear %s>" % self
-
 
 # Classes involving bank ledgers
 
 class Account(models.Model):
-    name = models.CharField(max_length=200, help_text='The name of the ASHMC account')
+    name = models.CharField(
+        help_text='The name of the ASHMC account',
+        max_length=200,
+    )
     description = models.TextField()
 
     def __unicode__(self):
@@ -56,16 +61,25 @@ class FundManager(models.Manager):
         try:
             return self.get(name='Unresolved')
         except Fund.DoesNotExist:
-            account = Fund(name='Unresolved', description='Fake account for unresolved allocations')
-            account.save()
-            return account
+            return Fund.objects.create(
+                name='Unresolved',
+                description='Fake account for unresolved allocations'
+            )
 
 
 class Fund(models.Model):
     '''An ASHMC fund, like the long-term fund, or club budgets, etc.'''
 
-    name = models.CharField(max_length=200, help_text='The name of the fund', unique=True)
-    account = models.ForeignKey('Account', related_name='funds', null=True)
+    name = models.CharField(
+        help_text='The name of the fund',
+        max_length=200,
+        unique=True,
+    )
+    account = models.ForeignKey(
+        'Account',
+        related_name='funds',
+        null=True,
+    )
     description = models.TextField()
 
     objects = FundManager()
@@ -110,7 +124,10 @@ class Allocation(models.Model):
         return num + 1
 
     # Administrative information
-    allocation_number = models.IntegerField(default=new_allocation_number, unique=True)
+    allocation_number = models.IntegerField(
+        default=new_allocation_number,
+        unique=True
+    )
     school_year = models.ForeignKey(TreasuryYear, default=TreasuryYear.objects.get_current)
     for_club = models.ForeignKey('Club', blank=True, null=True, related_name='allocations')
 
@@ -120,9 +137,17 @@ class Allocation(models.Model):
     source = models.ForeignKey(Fund, default=Fund.objects.get_default, related_name='allocations')
 
     # ASHMC approvals/etc.
-    date_approved = models.DateTimeField(null=True, blank=True, help_text='The date the ASHMC council approved this allocation')
+    date_approved = models.DateTimeField(
+        help_text='The date the ASHMC council approved this allocation',
+        null=True,
+        blank=True,
+    )
 
-    explanation = models.TextField(help_text="Additional stipulations for use of funds or general comments", default="", blank=True)
+    explanation = models.TextField(
+        help_text="Additional stipulations for use of funds or general comments",
+        default="",
+        blank=True,
+    )
 
     @property
     def amount_left(self):
@@ -140,11 +165,16 @@ class Allocation(models.Model):
 class Club(models.Model):
     '''An ASHMC Club'''
 
-    name = models.CharField(max_length=512, unique=True, blank=False, null=False)
+    name = models.CharField(
+        max_length=512,
+        unique=True,
+        null=False,
+        blank=False,
+    )
     description = models.TextField()
 
     date_founded = models.DateField(null=True, blank=True)
-    date_ended = models.DateField(blank=True, null=True)
+    date_ended = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ('name', )
@@ -194,9 +224,6 @@ class Club(models.Model):
     def __unicode__(self):
         return u"%s" % (self.name, )
 
-    def __repr__(self):
-        return "<Club %s>" % self
-
 
 class Officer(models.Model):
     '''Represents a club officer. These are the people who can sign for checks'''
@@ -213,9 +240,6 @@ class Officer(models.Model):
 
     def __unicode__(self):
         return u'%s %s of %s' % (self.school_year, self.position, self.club)
-
-    def __repr__(self):
-        return '<%s>' % self
 
     class Meta:
         unique_together = ('club', 'school_year', 'student')  # Ensure each member is listed only once
@@ -329,7 +353,8 @@ models.signals.post_save.connect(LineItem.post_save, sender=LineItem)
 
 
 class AllocationLineItem(models.Model):
-    '''Line items for allocations. These objects are created automatically, whenever a line item is assocatied with a request'''
+    '''Line items for allocations. These objects are created automatically,
+    whenever a line item is assocatied with a request'''
 
     line_item = models.ForeignKey('LineItem', related_name='allocation_line_items')
     allocation = models.ForeignKey('Allocation', related_name='allocation_line_items')
@@ -357,10 +382,13 @@ class BudgetRequest(models.Model):
 
     filer = models.ForeignKey('main.Student')
 
-    attended_budgeting_for = models.CharField('Which budget hearings did you attend last year?', max_length=32,
-                                              choices=(('None', 'None'),
-                                                       ('HMC', 'Harvey Mudd College'),
-                                                       ('5C', '5C')), default='None')
+    attended_budgeting_for = models.CharField(
+        'Which budget hearings did you attend last year?',
+        max_length=32,
+        choices=(('None', 'None'),
+            ('HMC', 'Harvey Mudd College'),
+            ('5C', '5C')),
+        default='None')
 
     # Membership info
     active_members = models.IntegerField(help_text="How many members consistently show up at meetings?")
@@ -375,7 +403,13 @@ class BudgetRequest(models.Model):
 
     # Budget info
     did_internal_fundraising = models.BooleanField('Have you done internal fundraising?')
-    internal_fundraising_amount = models.DecimalField('Amount', decimal_places=2, max_digits=11, blank=True, null=True)
+    internal_fundraising_amount = models.DecimalField(
+        'Amount',
+        decimal_places=2,
+        max_digits=11,
+        blank=True,
+        null=True
+    )
 
     # Budget request
     ashmc_amount = models.DecimalField('ASHMC request', decimal_places=2, max_digits=11)
