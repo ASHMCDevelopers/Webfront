@@ -188,6 +188,7 @@ class MeasureDetail(DetailView):
 class MeasureResultList(ListView):
     model = Measure
     template_name = 'vote/measure_results.html'
+    paginate_by = 10
 
     def get_queryset(self):
         this_sem = Semester.get_this_semester()
