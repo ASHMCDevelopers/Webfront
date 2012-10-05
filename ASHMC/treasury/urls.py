@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^clubs/(?P<club_name>.*)/check_request$', 'ASHMC.treasury.views.check_request', {}, name='new_check_request'),
     url(r'^clubs/(?P<club_name>.*)/budget_request$', 'ASHMC.treasury.views.budget_request', {}, name='new_budget_request'),
     url(r'^clubs/(?P<club_name>.*)$', 'ASHMC.treasury.views.club_detail', {}, name='club_detail'),
+    url(r'^budgets/inline_item_row/(?P<number>\d+)?$', 'ASHMC.treasury.views.request_inline_item', name='ajax_item_inline_row'),
 )

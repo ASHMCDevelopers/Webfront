@@ -1,5 +1,22 @@
 {% extends 'treasury/base.html' %}
 
+{% block scriptin %}
+<script>
+$('#add-items').click(function(ev){
+    ev.preventDefault();
+    var count = $('#itemtable tbody').children().length;
+    ++count;
+
+    $.get("{% url 'ajax_item_inline_row' %}"+count,
+        function(data, textStatus, jqXHR) {
+            $('#itemtable tbody').append(data);
+            $('#id_budget_items-TOTAL_FORMS').attr('value', count);
+        }
+    );
+});
+</script>
+{% endblock scriptin %}
+
 {% block treasury_content %}
 <div class="centered"><h2>New budget request for {{club.name}}</h2></div>
 <form method="POST">
@@ -127,16 +144,18 @@
       </li>
     </ul>
   </fieldset>
-  <fieldset>
+  <fieldset id='itemized_budget'>
     <legend>Itemized Budget</legend>
     {{items.management_form}}
-    <table class="listing">
+    <table id="itemtable" class="listing">
+        <thead>
       <tr>
         <th></th>
         <th style="width: 2in">Item</th>
         <th style="text-align: center">Description</th>
         <th style="width: 1.5in">Amount (USD)</th>
       </tr>
+  </thead>
       {% for item_form in items %}
       {% if item_form.errors %}
       <tr>
@@ -154,7 +173,7 @@
       {% endfor %}
     </table>
     <div class="centered">
-        <input type="submit" class='button-submit' value="Add more" name="add-more"/>
+        <a href="#" id="add-items"><span class='button-submit'>Add another</span></a>
     </div>
   </fieldset>
   <fieldset>

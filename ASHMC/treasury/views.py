@@ -73,25 +73,20 @@ def budget_request(request, club_name):
     club = get_object_or_404(Club, name=club_name)
     if request.method == 'POST':
         form = forms.BudgetRequestForm(request.POST)
-        if 'add-more' in request.POST:
-            post_data = request.POST.copy()
-            post_data['budget_items-TOTAL_FORMS'] = int(post_data['budget_items-TOTAL_FORMS']) + 5,
-            items = forms.BudgetItemFormSet(post_data)
-        else:
-            items = forms.BudgetItemFormSet(request.POST)
-            if form.is_valid():
-                print 'form valid'
-                if items.is_valid():
-                    print 'items valid'
-                    request_instance = form.save(commit=False)
-                    items = forms.BudgetItemFormSet(request.POST, instance=request_instance)
+        items = forms.BudgetItemFormSet(request.POST)
+        if form.is_valid():
+            print 'form valid'
+            if items.is_valid():
+                print 'items valid'
+                request_instance = form.save(commit=False)
+                items = forms.BudgetItemFormSet(request.POST, instance=request_instance)
 
-                    request_instance.club = club
-                    request_instance.filer = request.user.student
-                    request_instance.save()
+                request_instance.club = club
+                request_instance.filer = request.user.student
+                request_instance.save()
 
-                    items.save()
-                    return redirect('club_admin', club_name=club_name)
+                items.save()
+                return redirect('club_admin', club_name=club_name)
     else:
         form = forms.BudgetRequestForm()
         items = forms.BudgetItemFormSet()
@@ -141,4 +136,11 @@ def ledger(request, fund_name):
     fund = get_object_or_404(Fund, name=fund_name)
     return render_to_response('ledger/ledger.html',
         context_instance=RequestContext(request, {'fund': fund})
+    )
+
+
+@login_required
+def request_inline_item(request, number):
+    return render_to_response('requests/inline_item_row_template.html',
+        context_instance=RequestContext(request, {'number': number})
     )
