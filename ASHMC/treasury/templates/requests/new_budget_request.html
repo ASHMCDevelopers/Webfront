@@ -164,12 +164,9 @@ $('#add-items').click(function(ev){
         </td>
       </tr>
       {% endif %}
-      <tr>
-        <td>{{ forloop.counter }})</td>
-        <td>{{item_form.item}}</td>
-        <td>{{item_form.description}}</td>
-        <td>{{item_form.amount}}</td>
-      </tr>
+      {% with forloop.counter as number  %}
+          {% include "requests/inline_item_row_template.html" %}
+      {% endwith %}
       {% endfor %}
     </table>
     <div class="centered">
