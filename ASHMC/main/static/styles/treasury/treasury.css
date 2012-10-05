@@ -598,9 +598,10 @@ footer {
   font-size: 40pt; }
 
 #postheader {
-  width: 11in;
+  max-width: 1050px;
   margin: 0 auto;
-  padding: 1em; }
+  padding: 1em;
+  background: white; }
   #postheader table {
     width: 10.6in; }
     #postheader table.info {
@@ -669,7 +670,6 @@ ul.actions li a {
   display: block;
   padding: 1em;
   border: 1px solid black;
-  text-decoration: none;
   color: black; }
 
 ul.actions li a:hover {

@@ -11,10 +11,10 @@
 }
 
 #postheader {
-    width: 11in;
+    max-width: 1050px;
     margin: 0 auto;
     padding: 1em;
-
+    background: $light_background;
 
     table {
         width: 10.6in;
@@ -122,7 +122,6 @@ ul.actions li a {
     display: block;
     padding: 1em;
     border: 1px solid black;
-    text-decoration: none;
     color: black;
 }
 
