@@ -107,12 +107,9 @@ class MeasureDetail(DetailView):
             forms.append(BallotForm(ballot, data=self.request.POST, prefix="{}".format(ballot.id)))
 
         # Make them vote again if they fucked up
-        # TODO: actually display error messages. Probably bring this
-        # into one view class.
         self.bad_forms = {}
         for f in forms:
             if not f.is_valid():
-                print dir(f)
                 self.bad_forms[f.ballot.id] = f.errors
 
         if self.bad_forms:
