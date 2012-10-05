@@ -1,74 +1,86 @@
 {% extends 'treasury/base.html' %}
 
 {% block treasury_content %}
-<h1>{{club.name}}</h1>
+<div class="centered"><h2>{{club.name}}</h2>
 
 <div class="actions">
   <a href="{% url 'new_check_request' club_name=club.name %}" class="action">Submit a check request</a>
   <a href="{% url 'new_budget_request' club_name=club.name %}" class="action">Request additional ASHMC funding</a>
 </div>
+</div>
+    <h3>General information</h3>
+    <table class="info">
+      <tr>
+        <td>Total balance</td>
+        <td>{{club.balance|floatformat:2}}</td>
+      </tr>
+    </table>
+<ul class="clubinfo">
+{% if club.check_requests.all %}
+<li>
+    <h3>Check requests</h3>
+    <table class="listing">
+      <tr>
+        <th style="width: 2in">Date</th>
+        <th style="width: 1.5in">Request No</th>
+        <th style="width: 2.5in">Payee</th>
+        <th style="width: 1in">Amount</th>
+        <th style="width: 2.5in">Status</th>
+      </tr>
+      {% for request in club.check_requests.all %}
+      <tr>
+        <td>{{request.date_filed|date:"m/d/Y"}}</td>
+        <td>{{request.pk|stringformat:"06d"}}</td>
+        <td>{{request.payee}}</td>
+        <td>{{request.amount|floatformat:2}}</td>
+        <td>{{request.status}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+</li>
+{% endif %}
+{% if club.current_budget_requests %}
+<li>
+    <h3>Budget requests</h3>
+    <table class="listing">
+      <tr>
+        <th style="width: 2in">Date</th>
+        <th style="width: 2in">Amount Requested</th>
+        <th style="width: 2in">Amount allocated</th>
+        <th style="width: 2.5in">Status</th>
+      </tr>
+      {% for request in club.current_budget_requests %}
+      <tr>
+        <td>{{request.date_filed|date:"m/d/Y"}}</td>
+        <td>{{request.ashmc_amount}}</td>
+        <td>{% if request.amount_allocated %}{{request.amount_allocated}}{% endif %}</td>
+        <td>{{request.status}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+</li>
+{% endif %}
 
-<h2>General information</h2>
-<table class="info">
-  <tr>
-    <td>Total balance</td>
-    <td>{{club.balance|floatformat:2}}</td>
-  </tr>
-</table>
-
-<h2>Check requests</h2>
-<table class="listing">
-  <tr>
-    <th style="width: 2in">Date</th>
-    <th style="width: 1.5in">Request No</th>
-    <th style="width: 2.5in">Payee</th>
-    <th style="width: 1in">Amount</th>
-    <th style="width: 2.5in">Status</th>
-  </tr>
-  {% for request in club.check_requests.all %}
-  <tr>
-    <td>{{request.date_filed}}</td>
-    <td>{{request.pk|stringformat:"06d"}}</td>
-    <td>{{request.payee}}</td>
-    <td>{{request.amount|floatformat:2}}</td>
-    <td>{{request.status}}</td>
-  </tr>
-  {% endfor %}
-</table>
-
-<h2>Budget requests</h2>
-<table class="listing">
-  <tr>
-    <th style="width: 2in">Date</th>
-    <th style="width: 2in">Amount Requested</th>
-    <th style="width: 2in">Amount allocated</th>
-    <th style="width: 2.5in">Status</th>
-  </tr>
-  {% for request in club.current_budget_requests %}
-  <tr>
-    <td>{{request.date_filed}}</td>
-    <td>{{request.ashmc_amount}}</td>
-    <td>{% if request.amount_allocated %}{{request.amount_allocated}}{% endif %}</td>
-    <td>{{request.status}}</td>
-  </tr>
-  {% endfor %}
-</table>
-
-<h2>Allocations</h2>
-<table class="listing">
-  <tr>
-    <th style="width: 2in">Date</th>
-    <th style="width: 2in">Allocation Number</th>
-    <th style="width: 1.5in">Amount</th>
-    <th style="width: 1.5in">Balance</th>
-  </tr>
-  {% for allocation in club.current_allocations %}
-  <tr>
-    <td>{{allocation.date_approved}}</td>
-    <td>{{allocation.allocation_number|stringformat:"06d"}}</td>
-    <td>{{allocation.amount|floatformat:2}}</td>
-    <td>{{allocation.amount_left|floatformat:2}}</td>
-  </tr>
-  {% endfor %}
-</table>
+{% if club.current_allocations %}
+<li>
+    <h3>Allocations</h3>
+    <table class="listing">
+      <tr>
+        <th style="width: 2in">Date</th>
+        <th style="width: 2in">Allocation Number</th>
+        <th style="width: 1.5in">Amount</th>
+        <th style="width: 1.5in">Balance</th>
+      </tr>
+      {% for allocation in club.current_allocations %}
+      <tr>
+        <td>{{allocation.date_approved|date:"m/d/Y"}}</td>
+        <td>{{allocation.allocation_number|stringformat:"06d"}}</td>
+        <td>{{allocation.amount|floatformat:2}}</td>
+        <td>{{allocation.amount_left|floatformat:2}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+</li>
+{% endif %}
+</ul>
 {% endblock %}

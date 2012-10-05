@@ -227,3 +227,19 @@ form fieldset
 {
     color: red;
 }
+
+// Club styling
+ul {
+    &.clubinfo {
+        padding: {
+            top: 1em;
+            bottom: 2em;
+        }
+        li {
+            padding: {
+                top: 1em;
+                bottom: 1em;
+            }
+        }
+    }
+}
