@@ -1,7 +1,7 @@
 {% extends 'treasury/base.html' %}
 
 {% block treasury_content %}
-<h1>New budget request for {{club.name}}</h1>
+<div class="centered"><h2>New budget request for {{club.name}}</h2></div>
 <form method="POST">
   {% csrf_token %}
   <fieldset>
@@ -153,7 +153,9 @@
       </tr>
       {% endfor %}
     </table>
-    <input type="submit" value="Add more" name="add-more"/>
+    <div class="centered">
+        <input type="submit" class='button-submit' value="Add more" name="add-more"/>
+    </div>
   </fieldset>
   <fieldset>
     <legend>Explanation</legend>
@@ -165,6 +167,8 @@
       </li>
     </ul>
   </fieldset>
-  <input type="submit" value="Submit"/>
+  <div class="centered">
+  <input type="submit" class='button-submit' value="Submit"/>
+  </div>
 </form>
 {% endblock %}

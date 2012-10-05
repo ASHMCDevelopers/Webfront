@@ -1,7 +1,7 @@
 {% extends 'treasury/base.html' %}
 
 {% block treasury_content %}
-<h1>New check request for {{club.name}}</h1>
+<div class="centered"><h2>New check request for {{club.name}}</h2></div>
 <form method="POST">
   {% csrf_token %}
   <ul>
