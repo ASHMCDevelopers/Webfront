@@ -311,6 +311,9 @@ a, .linklike {
     -o-transition: color 0.2s linear ;
     /* Opera */ }
 
+code {
+  font-family: monospace; }
+
 em, figcaption {
   font-weight: normal;
   font-style: italic; }
@@ -371,7 +374,7 @@ h3 {
   padding: 1.5em 0 0.5em 0;
   line-height: 1.3em; }
 
-h5 {
+h4 {
   font-size: 1em;
   padding: 1em 0 0.25em 0;
   line-height: 1.25em; }
@@ -392,8 +395,19 @@ p + p {
 
 .errors {
   background: #ff6a6a;
-  color: #fff;
-  text-align: center; }
+  color: #fff; }
+  .errors.heading {
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 1em; }
+
+.successes {
+  background: #77dd77;
+  color: #fff; }
+  .successes.heading {
+    text-align: center;
+    padding: 5px;
+    margin-bottom: 1em; }
 
 li {
   padding: .2em; }
@@ -402,9 +416,10 @@ li {
   display: block;
   font-size: 10px;
   font-style: italic; }
-  #copyright p {
+  #copyright div {
     line-height: 1em;
-    margin: 0; }
+    margin: 0;
+      margin-bottom: 0.25em; }
 
 footer {
   margin: 0 auto;
@@ -573,18 +588,16 @@ footer {
     color: white;
     font-size: 1em; }
     #ashmc h3 .AS {
-      font-family: "Walkway Expand Bold", sans-serif; }
+      font-family: "Walkway Expand Black", sans-serif; }
 
 #salutation, #login_form {
   margin-right: 0; }
 
-#logo {
-  padding-bottom: 15px;
-  min-width: 1215px; }
-
 #coursewrap {
   cursor: default;
-  font-family: serif; }
+  font-family: serif;
+  width: 55.75em;
+  margin: 0 auto; }
   #coursewrap ul {
     list-style-type: none;
     text-align: left;
@@ -613,6 +626,10 @@ footer {
         padding-left: 0;
         margin-left: -10px;
         padding-right: 10px; }
+
+#postheader {
+  padding-top: 1.5em;
+  padding-bottom: 1.5em; }
 
 #c {
   background-image: url(/static/images/small_stylized_rhino_1.png);

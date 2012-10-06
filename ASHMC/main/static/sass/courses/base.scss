@@ -5,14 +5,12 @@
     margin-right: 0;
 }
 
-#logo {
-    padding-bottom: 15px;
-    min-width: 1215px;
-}
-
 #coursewrap {
 	cursor: default;
 	font-family: serif;
+    width: 55.75em;
+    margin: 0 auto;
+
     ul {
         list-style-type: none;
         text-align: left;
@@ -58,6 +56,11 @@
             }
         }
     }
+}
+
+#postheader {
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
 }
 
 #c {
