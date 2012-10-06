@@ -10,6 +10,7 @@ from ...models import Campus, Course, Department, \
 
 from optparse import make_option
 
+
 class Command(BaseCommand):
     # add elements to this as more become supported.
     supported_majors = {
@@ -17,9 +18,9 @@ class Command(BaseCommand):
                               'computer science':{
                                                   'depts':['HCSI',],
                                                   'kernel':[
-                                                            ('CSCI005  ', 
+                                                            ('CSCI005  ',
                                                              'CSCI042  '),
-                                                            ('CSCI060  ', 
+                                                            ('CSCI060  ',
                                                              'CSCI042  '),
                                                             'MATH055  ',
                                                             'CSCI070  ',
@@ -68,7 +69,7 @@ class Command(BaseCommand):
                                                    'BIOL113  ',
                                                    'BIOL191  HM 2',
                                                    'BIOL192  HM 2',
-                                                   ('BIOL193  HM', 
+                                                   ('BIOL193  HM',
                                                     'BIOL195  HM'),
                                                    ('BIOL194  HM',
                                                     'BIOL196  HM'),
@@ -138,7 +139,7 @@ class Command(BaseCommand):
                                       },
                               }
                         }
-    
+
     option_list = BaseCommand.option_list + (
                   make_option('-c','--campus',
                         action='store',
@@ -148,48 +149,48 @@ class Command(BaseCommand):
                         help='The code of the campus which holds the major you\'re after; i.e., HM',
                   ),
                  )
-    
+
     args = '<"major title" "major title"...>'
-    
+
     help = 'creates a major for a specified campus. If no campus specified, assumes HM campus.'
-    
+
     def handle(self, *args, **options):
         print args, options
         # do all supported majors
         if len(args) > 0 and args[0].lower() == 'all':
             args = Command.supported_majors[options['campus_code']].keys()
-            
+
         print args
         for arg in args:
             arg = arg.lower()
             if not arg in Command.supported_majors[options['campus_code']].keys():
                 raise NotImplementedError()
-            
+
             campus = Campus.objects.get(code=options['campus_code'])
             print "campus", campus
             major = Command.supported_majors[options['campus_code']][arg]
             print "finding major", major ,"..."
-            
+
             m, new = Major.objects.get_or_create(title=arg.title(),
                                                  electives_required=major['elec_req'] if major.has_key('elec_req') else 3,
                                                  elective_credits=major['elec_creds'] if major.has_key('elec_creds') else 8,
                                                  primary_campus=campus)
             print "\tmajor: ", m
-           
-            # attach departments to major 
+
+            # attach departments to major
             for dept in major['depts']:
                 d = Department.objects.get(code=dept)
                 print "adding dept", d
                 m.departments.add(d)
-            
+
             # attach kernels to major
             for code in major['kernel']:
                 if type(code) is tuple:
                     alts = code[1:]
                     code = code[0]
                     alt_c = []
-                        
-                else: 
+
+                else:
                     alts = ()
                 #print code
                 alt_c = []
@@ -198,16 +199,16 @@ class Command(BaseCommand):
                     try:
                         c_code = alt[9:11]
                     except IndexError:
-                        # this kernel course is not campus specific 
+                        # this kernel course is not campus specific
                         c_code = ''
-                        
+
                     try:
                         n_code = alt[4:9]
                     except IndexError:
                         raise CommandError('Malformed code in {}:{} -- {}'.format(
                                                           campus, major, alt
                                                           ))
-                    
+
                     try:
                         a_code = alt[0:4]
                     except IndexError:
@@ -225,23 +226,23 @@ class Command(BaseCommand):
                 try:
                     c_code = code[9:11]
                 except IndexError:
-                    # this kernel course is not campus specific 
+                    # this kernel course is not campus specific
                     c_code = ''
-                    
+
                 try:
                     n_code = code[4:9]
                 except IndexError:
                     raise CommandError('Malformed code in {}:{} -- {}'.format(
                                                       campus, major, code
                                                       ))
-                
+
                 try:
                     a_code = code[0:4]
                 except IndexError:
                     raise CommandError('Malformed code in {}:{} -- {}'.format(
                                                       campus, major, code
                                                       ))
-                # if all specified, that should be enough to uniquely identify 
+                # if all specified, that should be enough to uniquely identify
                 # any course. But, not all are always specified.
                 #print c_code, n_code, a_code
                 courses = Course.objects.filter(codecampus__startswith=c_code,
@@ -262,22 +263,22 @@ class Command(BaseCommand):
                                                                         times_to_take=times
                                                                         )
                 mcr.alternates.add(*alt_c)
-            
+
             for code in major['electives']:
                 print "elective: ", code
                 try:
                     c_code = code[9:11]
                 except IndexError:
-                    # this kernel course is not campus specific 
+                    # this kernel course is not campus specific
                     c_code = ''
-                    
+
                 try:
                     n_code = code[4:9]
                 except IndexError:
                     raise CommandError('Malformed code in {}:{} -- {}'.format(
                                                       campus, major, code
                                                       ))
-                
+
                 try:
                     a_code = code[0:4]
                 except IndexError:
@@ -291,6 +292,6 @@ class Command(BaseCommand):
                 if len(courses) < 1:
                     raise CommandError("Must be a mistake: found no courses for requirement {}".format(code))
                 #print courses
-                
+
                 m.electives.add(*courses)
                 courses = None

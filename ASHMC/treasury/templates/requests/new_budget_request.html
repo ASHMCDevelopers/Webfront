@@ -1,0 +1,190 @@
+{% extends 'treasury/base.html' %}
+
+{% block scriptin %}
+<script>
+$('#add-items').click(function(ev){
+    ev.preventDefault();
+    var count = $('#itemtable tbody').children().length;
+    ++count;
+
+    $.get("{% url 'ajax_item_inline_row' %}"+count,
+        function(data, textStatus, jqXHR) {
+            $('#itemtable tbody').append(data);
+            $('#id_budget_items-TOTAL_FORMS').attr('value', count);
+        }
+    );
+});
+</script>
+{% endblock scriptin %}
+
+{% block treasury_content %}
+<div class="centered"><h2>New budget request for {{club.name}}</h2></div>
+<form method="POST">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Budget Request</legend>
+    <ul>
+      <li>
+        {{form.for_school_year.errors}}
+        {{form.for_school_year.label_tag}}
+        {{form.for_school_year}}
+      </li>
+      <li>
+        {{form.attended_budgeting_for.errors}}
+        {{form.attended_budgeting_for.label_tag}}
+        {{form.attended_budgeting_for}}
+      </li>
+      <li>
+        {{form.ashmc_amount.errors}}
+        {{form.ashmc_amount.label_tag}}
+        {{form.ashmc_amount}}
+      </li>
+      <li>
+        <label>Did you do internal fundraising?</label>
+        <div style="width: 2in" class="inline-field">
+          {{form.did_internal_fundraising.errors}}
+          {{form.did_internal_fundraising}}
+        </div>
+        <div style="width: 2in" class="inline-field">
+          {{form.internal_fundraising_amount.label_tag}}
+          {{form.internal_fundraising_amount.errors}}
+          {{form.internal_fundraising_amount}}
+        </div>
+      <li>
+        <label>How much money did you receive from outside sources?</label>
+        <div class="inline-set">
+          <div style="width: 2in" class="inline-field">
+            {{form.scripps_amount.errors}}
+            {{form.scripps_amount.label_tag}}
+            {{form.scripps_amount}}
+          </div>
+          <div style="width: 2in" class="inline-field">
+            {{form.cmc_amount.errors}}
+            {{form.cmc_amount.label_tag}}
+            {{form.cmc_amount}}
+          </div>
+          <div style="width: 2in" class="inline-field">
+            {{form.pomona_amount.errors}}
+            {{form.pomona_amount.label_tag}}
+            {{form.pomona_amount}}
+          </div>
+        </div>
+      </li>
+      <li class="inline-set">
+        <div style="width: 2in" class="inline-field">
+          {{form.pitzer_amount.errors}}
+          {{form.pitzer_amount.label_tag}}
+          {{form.pitzer_amount}}
+        </div>
+        <div style="width: 2in" class="inline-field">
+          {{form.other_amount.errors}}
+          {{form.other_amount.label_tag}}
+          {{form.other_amount}}
+        </div>
+      </li>
+      <li>
+        {{form.other_explanation.errors}}
+        {{form.other_explanation.label_tag}}
+        {{form.other_explanation}}
+      </li>
+    </ul>
+  </fieldset>
+  <fieldset>
+    <legend>Membership</legend>
+    <ul>
+      <li>
+        <div style="width: 4in" class="inline-field">
+          {{form.active_members.errors}}
+          {{form.active_members.label_tag}}
+          {{form.active_members}}
+        </div>
+        <div style="width: 4in" class="inline-field">
+          {{form.interest_level.errors}}
+          {{form.interest_level.label_tag}}
+          {{form.interest_level}}
+        </div>
+      </li>
+      <li>
+        <label>Please provide up-to-date membership information:</label>
+        <div class="inline-set">
+          <div style="width: 2in" class="inline-field">
+            {{form.hmc_members.errors}}
+            {{form.hmc_members.label_tag}}
+            {{form.hmc_members}}
+          </div>
+          <div style="width: 2in" class="inline-field">
+            {{form.scripps_members.errors}}
+            {{form.scripps_members.label_tag}}
+            {{form.scripps_members}}
+          </div>
+          <div style="width: 2in" class="inline-field">
+            {{form.cmc_members.errors}}
+            {{form.cmc_members.label_tag}}
+            {{form.cmc_members}}
+          </div>
+        </div>
+      </li>
+
+      <li class="inline-set">
+        <div style="width: 2in" class="inline-field">
+          {{form.pomona_members.errors}}
+          {{form.pomona_members.label_tag}}
+          {{form.pomona_members}}
+        </div>
+        <div style="width: 2in" class="inline-field">
+          {{form.pitzer_members.errors}}
+          {{form.pitzer_members.label_tag}}
+          {{form.pitzer_members}}
+        </div>
+        <div style="width: 2in" class="inline-field">
+          {{form.other_members.errors}}
+          {{form.other_members.label_tag}}
+          {{form.other_members}}
+        </div>
+      </li>
+    </ul>
+  </fieldset>
+  <fieldset id='itemized_budget'>
+    <legend>Itemized Budget</legend>
+    {{items.management_form}}
+    <table id="itemtable" class="listing">
+        <thead>
+      <tr>
+        <th></th>
+        <th style="width: 2in">Item</th>
+        <th style="text-align: center">Description</th>
+        <th style="width: 1.5in">Amount (USD)</th>
+      </tr>
+  </thead>
+      {% for item_form in items %}
+      {% if item_form.errors %}
+      <tr>
+        <td colspan="4">
+          {{item_form.errors}}
+        </td>
+      </tr>
+      {% endif %}
+      {% with forloop.counter as number  %}
+          {% include "requests/inline_item_row_template.html" %}
+      {% endwith %}
+      {% endfor %}
+    </table>
+    <div class="centered">
+        <a href="#" id="add-items"><span class='button-submit'>Add another</span></a>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Explanation</legend>
+    <ul>
+      <li>
+        {{form.budget_explanation.errors}}
+        {{form.budget_explanation.label_tag}}
+        {{form.budget_explanation}}
+      </li>
+    </ul>
+  </fieldset>
+  <div class="centered">
+  <input type="submit" class='button-submit' value="Submit"/>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'ledgers/ledger.tex' %}
+{% load ledger %}
+
+{% block formnumber %}04{% endblock %}
+{% block formdesc %}Club ledger{% endblock %}
+
+{% block description %}
+This is a list of all check requests and allocations for the given time period.
+{% endblock %}
+
+{% block header %}
+{{ club.name }}
+{% endblock %}
+
+{% block preamble %}
+  Current balance: {{club.balance|amount_format}}
+{% endblock %}
+
+{% block content %}
+  {% if club.line_items %}
+    \begin{longtable}{cccr}
+      \textbf{Date} & \textbf{Category} & \textbf{Description} & \textbf{Amount}  \\\hline
+      \hline
+      \endfirsthead
+      \multicolumn{4}{c}{\textsl{Continued from previous page}} \\
+      \textbf{Date} & \textbf{Category} & \textbf{Description} & \textbf{Amount} \\\hline
+      \endhead
+      \multicolumn{4}{c}{\textsl{Continued on next page}} \\
+      \endfoot
+      \endlastfoot
+
+      {% for line_item in club.line_items %}
+        {% cycle '\rowcolor{white}' '\rowcolor{gray}' %}
+        {{line_item.date_created}} &
+        {{line_item.category}} &
+        {{line_item.description}} &
+        {{line_item.amount|amount_format}}\\
+      {% endfor %}
+    \end{longtable}
+  {% endif %}
+{% endblock %}

@@ -39,13 +39,13 @@ class AttendanceForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(AttendanceForm, self).clean()
-        print "CLEAN ", cleaned_data
+        #print "CLEAN ", cleaned_data
         for number in range(1, self.event.guests_per_user + 1):
             age = cleaned_data.get("age_{}".format(number), None)
             name = cleaned_data.get("name_{}".format(number), '')
 
             # If neither name nor age was specified, that's cool with us.
-            if name == ''  and age == None:
+            if name == '' and age == None:
                 continue
 
             if not all([name, age]):

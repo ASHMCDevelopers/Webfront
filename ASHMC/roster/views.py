@@ -15,13 +15,13 @@ class TransientSuiteMembershipChange(View):
 
         if kwargs['action'] == "leave":
             sem = Semester.get_this_semester()
-            print sem
+            #print sem
             tsm = TransientSuiteMembership.objects.get(
                 user=self.request.user,
                 tsuite=tsuite,
             )
 
-            print tsm
+            #print tsm
 
             tsm.semesters.remove(sem)
 

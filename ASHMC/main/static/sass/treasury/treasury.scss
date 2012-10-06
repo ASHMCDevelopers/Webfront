@@ -1,0 +1,245 @@
+@import "base";
+@import "logo_style";
+
+.ASHMC {
+    font-size: 48pt;
+}
+
+.etreasury {
+    padding-left: 0.5em;
+    font-size: 40pt;
+}
+
+#postheader {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 1em;
+    background: $light_background;
+
+    table {
+        width: 10.6in;
+
+        &.info {
+            padding: 0.6em;
+            margin-bottom: 0.5em;
+            border: 1px solid gray;
+            margin-left: 0.3in;
+            width: 5in;
+
+            td:nth-child(2) {
+                text-align: right;
+            }
+        }
+    }
+}
+
+tr {
+
+    &:first-child {
+        td {
+            padding-top: 0.6em;
+        }
+    }
+
+    &:last-child {
+        td {
+            padding-bottom: 0.6em;
+        }
+    }
+
+    td {
+        padding: {
+            top: 0.25em;
+            bottom: 0.25em;
+        }
+    }
+
+    td:first-child {
+        padding-left: 0.6em;
+    }
+    td:last-child {
+        padding-right: 0.6em;
+    }
+}
+
+.actions
+{
+    margin-bottom: 19px;
+}
+
+.action
+{
+    padding: 8px;
+    background-color: #ccc;
+    color: black;
+}
+
+.action:hover
+{
+    background-color: #aaa;
+}
+
+h1 {
+    font-weight: normal;
+}
+
+table {
+    margin-left: 0.3in;
+    border-collapse: collapse;
+}
+
+table tr:first-child th{
+    border-bottom: 1px solid black;
+}
+
+table.listing tr:nth-child(2n) td {
+    background-color: #ddd;
+}
+
+table.listing tr td {
+    padding-bottom: 8px;
+    padding-top: 8px;
+}
+
+table input
+{
+    width: 100%;
+}
+
+/* Front page actions list */
+ul.actions {
+    width: 4in;
+    margin: 0 auto;
+    list-style: none;
+}
+
+ul.actions li {
+    padding: 0;
+    margin: 0.5em;
+}
+
+ul.actions li a {
+    display: block;
+    padding: 1em;
+    border: 1px solid black;
+    color: black;
+}
+
+ul.actions li a:hover {
+    background-color: #ccc;
+}
+
+/* Forms */
+form .errorlist
+{
+    margin: 0.1em;
+    border: 1px solid red;
+    padding: 0.1em;
+}
+
+form ul
+{
+    margin: 0 auto;
+    list-style: none;
+    padding: 0;
+}
+
+form li
+{
+    overflow: auto;
+}
+
+form li.inline-set
+{
+    margin-left: 2in;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+}
+
+form div.inline-set
+{
+    float: left;
+}
+
+form  ul li label
+{
+    display: block;
+    float: left;
+    width: 2in;
+}
+
+form ul li > .errorlist
+{
+    margin-left: 2in;
+}
+
+form ul ul
+{
+    margin-left: 2in;
+}
+
+form ul ul li label
+{
+    display: inline;
+    width: auto;
+}
+
+form ul ul li > .errorlist
+{
+    margin-left: 0.1em;
+}
+
+form .inline-field
+{
+    float: left;
+    overflow: auto;
+    margin: 0.4em;
+}
+
+form textarea
+{
+    width: 8.5in;
+}
+
+.helptext
+{
+    font-size: 10pt;
+    display: block;
+    margin-left: 2in;
+}
+
+/* Legends */
+
+form fieldset
+{
+    padding: 0.5em;
+    border: 1px solid black;
+    margin-bottom: 1em;
+}
+
+/* Ledger tables */
+.align-right
+{
+    text-align: right;
+}
+
+.inthered
+{
+    color: red;
+}
+
+// Club styling
+ul {
+    &.clubinfo {
+        padding: {
+            top: 1em;
+            bottom: 2em;
+        }
+        li {
+            padding: {
+                top: 1em;
+                bottom: 1em;
+            }
+        }
+    }
+}

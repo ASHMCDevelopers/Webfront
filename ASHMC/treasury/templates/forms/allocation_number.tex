@@ -1,0 +1,89 @@
+\documentclass{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{multirow}
+\usepackage{wasysym}
+
+\pagestyle{fancy}
+
+\newcommand{\treasurername}{Travis Athougies}
+\newcommand{\treasureremail}{Travis\_Athougies@hmc.edu}
+
+\newcommand{\field}[2]{\multicolumn{#1}{|l|}{~\hspace{#2}~}}
+\newcommand{\tfield}[3]{\multicolumn{#1}{|l|}{~\makebox[#2][l]{#3}~}}
+\newcommand{\tarea}[4]{\multicolumn{#1}{|l|}{~
+\vbox to #3 { \vfil
+\hbox to #2 { #4 }
+\vfil
+}
+~}}
+\newcommand{\fieldlabel}[2]{\multicolumn{#1}{|l|}{\scriptsize{#2}}}
+
+\fancyhead{}
+\fancyfoot{}
+
+\fancyhead[L]{\sffamily{\Large{ASHMC T-02} \\ \scriptsize{This form should be kept for the entire 2012 - 2013 school year}}}
+\fancyhead[R]{\sffamily{\Large{Notice of Allocation}} \\ \scriptsize{~}}
+
+\begin{document}
+\sffamily
+\begin{tabular}{lp{0.76\textwidth}}
+  \textbf{Instructions:} & This form is a notification of funds granted by ASHMC to your
+  organization in response to a budget request. It should be kept for your records, at least for the
+  current school year. You will need the allocation number listed on this form to withdraw funds. \\
+  \textbf{Course of Action:} & Once you have received this form, you will be given the chance to
+  authorize who can sign for check requests on this account on the worksheet below. The president
+  listed on the budget request should already be listed here. In order to be able to withdraw funds
+  for next semester, you \emph{must} return this form, signed by the current president, along with
+  names and signatures of all club officers who will be allowed to authorize check requests for this
+  allocation. The form should be returned to the mailbox of \treasurername, in the Platt Campus
+  Center. \\
+  \textbf{Questions?} & Please contact the current ASHMC treasurer, \emph{\treasurername}
+  (\treasureremail) with questions.
+\end{tabular}
+
+\vspace{1em}
+\rule{0.97\textwidth}{1pt}
+\vspace{1em}
+
+\begin{tabular}{p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}}
+  \hline
+  \fieldlabel{6}{Club/Organization/Individual Name} & \fieldlabel{4}{Date} \\
+  \tfield{6}{0.6\textwidth}{ {{allocation.for_club.name}} } & \tfield{4}{0.3\textwidth}{ {{allocation.date_approved}} } \\[0.9em]\hline
+
+  \fieldlabel{5}{Amount Requested} & \fieldlabel{5}{Amount Granted} \\
+  \tfield{5}{0.45\textwidth}{ {{allocation.amount_requested|floatformat:2}} } & \tfield{5}{0.45\textwidth}{ {{allocation.amount|floatformat:2}} } \\[0.9em]\hline
+  \fieldlabel{5}{\textbf{Allocation Number} -- You will need this number} & \fieldlabel{5}{Funding Source} \\
+  \tfield{5}{0.45\textwidth}{ {{allocation.allocation_number|stringformat:"06d"}} } & \tfield{5}{0.45\textwidth}{ {{allocation.source.name}} } \\[0.9em]\hline
+
+  \multicolumn{10}{|c|}{\textbf{Explanation} - \scriptsize{Additional stipulations for use of funds,
+      or general comments}} \\
+  \tarea{10}{0.9\textwidth}{10em}{ {{allocation.explanation}} } \\\hline
+\end{tabular}
+
+\vspace{1em}
+\newcommand{\halfdash}{-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --}
+\halfdash ~~ Detach here ~~ \halfdash\ --
+\vspace{1em}
+
+{\Large Authorized Signers for ASHMC Allocation}
+\vspace{1em}
+
+\begin{tabular}{|p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}p{0.1\textwidth}}
+  \hline
+  \fieldlabel{6}{Club/Organization/Individual Name} & \fieldlabel{4}{Date} \\
+  \tfield{6}{0.6\textwidth}{ {{allocation.for_club.name}} } & \tfield{4}{0.3\textwidth}{ {{allocation.date_approved}} } \\[0.9em]\hline
+
+  \fieldlabel{10}{Allocation Number} \\
+  \tfield{10}{0.9\textwidth}{ {{allocation.allocation_number|stringformat:"06d"}} } \\[0.9em]\hline
+
+  & \fieldlabel{3}{Title} & \fieldlabel{3}{Name} & \fieldlabel{3}{Signature} \\\hline
+  {% for officer in allocation.for_club.current_officers_for_allocation %}
+    \raisebox{-0.8em}{\Large Signer {{forloop.counter}} }& \tfield{3}{0.2\textwidth}{ \raisebox{-0.8em}{ {{officer.position}} } } &\tfield{3}{0.275\textwidth}{  \raisebox{-0.8em}{ {{officer.name}} } } & \field{3}{0.255\textwidth} \\[1.5em]\hline
+  {% endfor %}
+
+\end{tabular}
+
+\vspace{1em}
+Please return to the mailbox of \treasurername, located in the Platt mailroom
+\end{document}

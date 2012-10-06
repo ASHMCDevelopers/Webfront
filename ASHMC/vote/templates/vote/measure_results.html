@@ -19,8 +19,8 @@
                                 #{{ballot.display_position}} {{ballot.title}}:
                                 {% if ballot.get_winners|length > 1 %}
                                     <span class='errors'><h4 class='inline'>Tied</h4></span>
-                                    {% for winner in ballot.get_winners %}
-                                        {{winner}}{% if not forloop.last %};
+                                    {% for candidate in ballot.ordered_candidates %}
+                                        {{candidate}} ( {{candidate.votes}} ){% if not forloop.last %};
                                         {% endif %}
                                     {% endfor %}
                                 {% else %}

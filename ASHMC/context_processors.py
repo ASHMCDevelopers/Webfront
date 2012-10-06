@@ -5,6 +5,6 @@ def add_login_form(request):
     if request.user.is_authenticated():
         return {}
 
-    print "Adding login form."
+    #print "Adding login form."
 
     return {'login_form': LandingLoginForm()}

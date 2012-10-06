@@ -5,7 +5,7 @@ import local_settings
 
 from twitter import Twitter, OAuth
 
-VERSION = "20121002"
+VERSION = "20121005"
 
 django.template.add_to_builtins('django.templatetags.future')
 
@@ -196,6 +196,7 @@ INSTALLED_APPS = (
     'ASHMC.legal',
     'ASHMC.roster',
     'ASHMC.events',
+    'ASHMC.treasury'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -205,3 +206,5 @@ INSTALLED_APPS = (
 # more details on how to customize your logging configuration.
 SERVER_EMAIL = local_settings.SERVER_EMAIL
 LOGGING = local_settings.LOGGING
+
+ASHMC_FORMS_FOLDER = local_settings.ASHMC_FORMS_FOLDER
