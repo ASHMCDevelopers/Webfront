@@ -1,0 +1,23 @@
+{% extends 'treasury/base.html' %}
+
+{% block extrahead %}
+<style>
+  h1 {
+  text-align: center;
+  width: 3in;
+  margin: 0 auto;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2>I am here to</h2>
+<ul class="actions">
+  <li><a href="{% url 'club_select' %}">View information pertaining to my club</a></li>
+  <li><a href="{% url 'fund_overview' %}">See how my funds are being used</a></li>
+  <li><a href="#">File a check request</a></li>
+  <li><a href="#">Request ASHMC funds</a></li>
+  <li><a href="#">View treasury forms</a></li>
+  <li><a href="#">Contact the treasurer</a></li>
+</ul>
+{% endblock %}

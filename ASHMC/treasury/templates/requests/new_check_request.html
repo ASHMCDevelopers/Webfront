@@ -1,0 +1,12 @@
+{% extends 'treasury/base.html' %}
+
+{% block treasury_content %}
+<div class="centered"><h2>New check request for {{club.name}}</h2></div>
+<form method="POST">
+  {% csrf_token %}
+  <ul>
+    {{form.as_ul}}
+  </ul>
+  <input type="submit" class='button-submit' value="Submit"/>
+</form>
+{% endblock %}

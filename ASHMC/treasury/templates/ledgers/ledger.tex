@@ -1,0 +1,44 @@
+\documentclass[landscape]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{fancyhdr}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{colortbl}
+\usepackage{longtable}
+
+\pagestyle{fancy}
+
+\newcommand{\treasurername}{Travis Athougies}
+\newcommand{\treasureremail}{Travis\_Athougies@hmc.edu}
+
+\fancyhead{}
+\fancyfoot{}
+
+\fancyhead[L]{\sffamily\LARGE {ASHMC T-{% block formnumber%}{% endblock %}
+} }
+\fancyhead[R]{\sffamily\LARGE { {% block formdesc %}{% endblock %}}
+}
+
+\begin{document}
+\sffamily
+\begin{tabular}{lp{0.76\textwidth}}
+  \textbf{Descriptions:} & {% block description %}{% endblock %}\\
+  \textbf{Questions?} & Please contact the current ASHMC treasurer, \emph{\treasurername}(\treasureremail) with questions.
+\end{tabular}
+
+\vspace{1em}
+\rule{0.97\textwidth}{1pt}
+\vspace{1em}
+
+\LARGE{ {% block header %}{% endblock %}
+ }
+{% block preamble %}{% endblock %}
+
+\vspace{1em}
+\rule{0.97\textwidth}{1pt}
+\vspace{1em}
+
+{% block content %}
+{% endblock %}
+
+
+\end{document}
