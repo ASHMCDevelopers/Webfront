@@ -427,8 +427,8 @@ class BudgetRequest(models.Model):
     date_approved = models.DateTimeField(null=True, blank=True)
     amount_allocated = models.DecimalField(max_digits=11, decimal_places=2, null=True)
 
-    def __str__(self):
-        return "Budget Request for %s requesting %s on %s" % (self.club, self.ashmc_amount, self.date_filed)
+    def __unicode__(self):
+        return u"Budget Request for %s requesting %s on %s" % (self.club, self.ashmc_amount, self.date_filed)
 
     @property
     def denied(self):
