@@ -1,7 +1,5 @@
 # ASHMC Webfront
 
-###### Better living without MuddSD
-
 ## What is this?
 
 This is the ASHMC (currently) unofficial webfront, v1.x.
