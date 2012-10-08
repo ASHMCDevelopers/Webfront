@@ -304,6 +304,7 @@ class LineItem(models.Model):
         if self.pk is None:
             # If we're being created, a simple subtraction suffices
             self.balance = self.account.balance - self.amount
+            total = -1
         else:
             # Update all line items after this, if the balances don't add up
             balance = self.prev_balance
@@ -313,6 +314,20 @@ class LineItem(models.Model):
                 for line_item in self.account.line_items.filter(date_created__gt=self.date_created).order_by('date_created'):
                     prev_balance = line_item._update_balance(prev_balance)
                     line_item.save()
+
+            # Check that there is enough money left
+            total = self.allocation_line_items.all().aggregate(models.Sum('amount'))['amount__sum'] or 0
+
+        if total != self.amount and self.request is not None:
+            allocations = self.request.club.allocations.filter(source=self.account, school_year=TreasuryYear.objects.get_current())  # Only get allocations for this year and from the same account
+            total_amount_left = 0
+            for allocation in allocations:
+                total_amount_left += allocation.amount_left
+            if total_amount_left < self.amount:
+                # There's not enough allocation
+                from django.core.exceptions import ValidationError
+                raise ValidationError('Insufficient funds')
+
 
     def _update_balance(self, prev_balance):
         self.balance = prev_balance - self.amount
@@ -342,10 +357,10 @@ class LineItem(models.Model):
                     else:
                         amount_left -= allocation.amount_left
                         AllocationLineItem(line_item=self, allocation=allocation, amount=allocation.amount_left).save()
-                    if amount_left > 0:
-                        # There's not enough allocation
-                        from django.core.exceptions import ValidationError
-                        raise ValidationError('Insufficient funds')
+                if amount_left > 0:
+                    # There's not enough allocation
+                    from django.core.exceptions import ValidationError
+                    raise ValidationError('Insufficient funds')
 
     class Meta:
         ordering = ('-date_created', )
