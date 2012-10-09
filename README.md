@@ -2,7 +2,7 @@
 
 ## What is this?
 
-This is the ASHMC (currently) unofficial webfront, v1.x.
+This is the ASHMC (currently) unofficial webfront, and it is in continous development.
 
 The ASHMC webfront allows registered students to vote, learn about events, get updates from
 the ASHMC council, and know who the council actually is.
