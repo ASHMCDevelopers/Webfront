@@ -6,7 +6,6 @@ import feedparser
 from ..models import ASHMCRole, DormPresident, DormRole, DormAppointment, ASHMCAppointment, Semester
 from ASHMC.roster.models import UserRoom, TransientSuiteMembership
 
-import random
 import re
 import datetime
 
@@ -31,10 +30,12 @@ def current_roles(user, type=None):
 
     if type == 'ashmc':
         return sorted(
-        [x.role for x in ASHMCAppointment.objects.filter(
-            user=user,
-            semesters__id=sem.id
-        )])
+            [x.role for x in ASHMCAppointment.objects.filter(
+                user=user,
+                semesters__id=sem.id
+                )
+            ]
+        )
 
     elif type == 'dorm':
         return sorted(
@@ -54,14 +55,13 @@ def get_living_situation(user):
 
 @register.filter
 def current_suites(user, type="transient"):
-    sem = Semester.get_this_semester()
 
-    room = UserRoom.objects.get(
-        user=user,
-        semesters__id=sem.id,
-    )
+    room = UserRoom.get_current_room(user)
 
     if type == 'dorm':
+        # By definition, a room is in one *physical* suite, so
+        # return that - but in list format, so that it's consistent
+        # with the transient form
         if room.room.suite:
             suites = [room.room.suite]
         else:
@@ -69,6 +69,7 @@ def current_suites(user, type="transient"):
         return suites
 
     elif type == 'transient':
+        sem = Semester.get_this_semester()
         tsms = TransientSuiteMembership.objects.filter(
             user=user,
             semesters__id=sem.id,
@@ -85,13 +86,14 @@ def split(str, splitter):
 
 @register.filter
 def is_today(value):
-    assert isinstance(value, datetime.date)
+    if not isinstance(value, datetime.date):
+        return False
     now = datetime.datetime.now()
     return (
         value.day == now.day and
         value.month == now.month and
         value.year == now.year
-        )
+    )
 
 
 @register.filter
@@ -222,26 +224,3 @@ example usage:
     {% endfor %}
 {% endcache %}
 """
-
-
-class RandomGreetingNode(template.Node):
-    GREETING_CHOICES = (
-        "Welcome, ",
-        "Hi there, ",
-        "Hello, ",
-        "Greetings, ",
-        "Salutations, ",
-        "Salve, ",
-    )
-
-    def render(self, context):
-        return random.choice(self.GREETING_CHOICES)
-
-
-@register.tag(name='greeting')
-def greeting(parser, token):
-    tag_name = token.contents.split(None, 1)
-    if isinstance(tag_name, tuple):
-        raise template.TemplateSyntaxError, "%r tag takes no arguments" % token.contents.split()[0]
-
-    return RandomGreetingNode()
