@@ -19,7 +19,7 @@
     <td>Total allocated</td><td>{{total_allocated|floatformat:2}}</td>
   </tr>
   <tr>
-    <td>Total free</td><td>{{total_free|floatformat:2}}</td>
+    <td>Total available</td><td>{{total_free|amount_format}}</td>
   </tr>
 </table>
 <table id="funds" class="listing">
@@ -27,7 +27,7 @@
     <th style="width: 3in">Fund Name</th>
     <th style="width: 1in" class="align-right">Balance</th>
     <th style="width: 1in" class="align-right">Allocated</th>
-    <th style="width: 1in" class="align-right">Free</th>
+    <th style="width: 1in" class="align-right">Available</th>
   </tr>
   {% for account in accounts %}
   {% if account.name != 'Unresolved' %}
