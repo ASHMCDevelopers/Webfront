@@ -49,16 +49,7 @@ def current_roles(user, type=None):
 
 @register.filter
 def get_living_situation(user):
-    sem = Semester.get_this_semester()
-    try:
-        room = UserRoom.objects.get(
-            user=user,
-            semesters__id=sem.id,
-        )
-    except:
-        return ""
-
-    return room
+    return UserRoom.get_current_room(user)
 
 
 @register.filter
