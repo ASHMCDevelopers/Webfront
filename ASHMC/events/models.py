@@ -72,8 +72,8 @@ class Location(models.Model):
 
         if self.building:
             return u"{}: {}".format(
-                self.dorm,
-                self.building,
+                self.campus,
+                self.building.name,
             )
 
         return u"{}: {}".format(

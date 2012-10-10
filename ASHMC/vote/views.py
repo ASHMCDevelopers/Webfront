@@ -31,6 +31,7 @@ class MeasureListing(ListView):
             room = UserRoom.objects.filter(
                 user=self.request.user,
                 semesters__id=this_sem.id,
+                room__dorm__official_dorm=True,
             )[0].room
         except IndexError:
             # If they don't have a room, they're probably not eligible to vote.

@@ -22,7 +22,7 @@
 
             <div class="info">
                 <ul>
-                    {% with user.ashmcrole_set.all|maximum as ashmcrole %}
+                    {% with user.highest_ashmc_role as ashmcrole %}
                     <li>{{ashmcrole.cast}}</li>
                     {% endwith %}
                     {% with user|get_living_situation as room %}
