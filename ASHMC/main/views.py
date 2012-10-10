@@ -47,6 +47,9 @@ class LandingPage(TemplateView):
                 latest_entries = Entry.published.all()
             else:
                 user_dorm = UserRoom.get_current_room(self.request.user)
+                # if they're off campus, make sure the right official dorm is used:
+                if not user_dorm.offial_dorm:
+                    user_dorm = UserRoom.objects.get(room__dorm__code="OFF", number="Symobolic Room")
 
                 if user_dorm:
                     latest_entries = Entry.published.exclude(
