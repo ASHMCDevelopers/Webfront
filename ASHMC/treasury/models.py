@@ -41,7 +41,6 @@ class TreasuryYear(models.Model):
     def __unicode__(self):
         return u"{}".format(self.description)
 
-
 # Classes involving bank ledgers
 
 class Account(models.Model):
@@ -92,7 +91,8 @@ class Fund(models.Model):
     @property
     def currently_free(self):
         '''Get amount of money that has not been allocated'''
-        return self.balance - self.currently_allocated
+        expenses = self.line_items.filter(request__year=TreasuryYear.objects.get_current()).aggregate(models.Sum('amount'))['amount__sum'] or 0
+        return self.balance + expenses - self.currently_allocated
 
     @property
     def balance(self):
