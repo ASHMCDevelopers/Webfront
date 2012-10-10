@@ -136,7 +136,7 @@ class ASHMCAppointment(models.Model):
     @classmethod
     def get_current_highest(cls, user):
         sem = Semester.get_this_semester()
-        possibles = cls.objects.filter(semesters__id=sem.id)
+        possibles = cls.objects.filter(user=user, semesters__id=sem.id)
         if not possibles:
             return None
         return max([appt.role for appt in possibles])
