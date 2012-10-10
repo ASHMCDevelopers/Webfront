@@ -49,6 +49,21 @@ def current_roles(user, type=None):
 
 
 @register.filter
+def highest_role_at_time(user, timeobj):
+    sem = Semester.from_datetime(timeobj)
+    possibles = ASHMCAppointment.objects.filter(
+        user=user,
+        semesters__id=sem.id
+    )
+
+    if not possibles:
+        return None
+
+    print timeobj, sem, possibles
+    return max([appt.role for appt in possibles])
+
+
+@register.filter
 def get_living_situation(user):
     return UserRoom.get_current_room(user)
 
