@@ -166,7 +166,7 @@ class Club(models.Model):
     '''An ASHMC Club'''
 
     name = models.CharField(
-        max_length=512,
+        max_length=255,
         unique=True,
         null=False,
         blank=False,
