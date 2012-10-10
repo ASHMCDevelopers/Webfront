@@ -75,6 +75,14 @@ class UserRoom(models.Model):
         sem = Semester.get_this_semester()
         try:
             return cls.objects.get(user=user, semesters__id=sem.id)
+        except UserRoom.MultipleObjectsReturned:
+            # The only way multiple objects should be returned is if one room
+            # is the OFF Symbolic Room. So, they have an off-campus room:
+            return cls.objects.get(
+                user=user,
+                semesters__id=sem.id,
+                room__dorm__official_dorm=False,
+            )
         except models.ObjectDoesNotExist:
             return None
 
