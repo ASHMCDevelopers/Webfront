@@ -1,3 +1,4 @@
+{% load main_extras %}
 {% load blogger_filters %}
 <h2><a href="{{entry.get_absolute_url}}"><span class="catch_headline">{{entry.catch_title}}
     {% with entry|has_been_updated as u %}
@@ -14,12 +15,15 @@
     <li class="author">
         {% if entry.primary_author.get_full_name %}
         <a rel="author" href="{% url 'blogger_author_entry_list' entry.primary_author.id %}" title="">{{entry.primary_author.get_full_name}}</a>
-        {% if entry.primary_author.ashmcrole_set.count != 0 %}
-         &mdash;
-         {% with entry.primary_author.highest_ashmc_role as role %}
-         {{role.cast}}
+         {% with entry.primary_author|highest_role_at_time:entry.start_publication as role %}
+             {% if role %}
+             &mdash;
+             {% if role not in entry.primary_author|current_roles:"ashmc" %}
+             Former
+             {% endif %}
+             {{role.cast}}
+             {% endif %}
          {%endwith%}
-         {% endif %}
         {% else %}
             SYSTEM
         {% endif %}
