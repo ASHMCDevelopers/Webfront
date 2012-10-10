@@ -133,6 +133,14 @@ class ASHMCAppointment(models.Model):
 
     bio = models.TextField(null=True, blank=True)
 
+    @classmethod
+    def get_current_highest(cls, user):
+        sem = Semester.get_this_semester()
+        possibles = cls.objects.filter(semesters__id=sem.id)
+        if not possibles:
+            return None
+        return max([appt.role for appt in possibles])
+
     def __unicode__(self):
         return u"{} - {} ({})".format(self.user, self.role.cast(), self.semesters.all())
 
@@ -223,7 +231,7 @@ class ASHMCRole(Role):
     def short_repr(self):
         return u"{}".format(self.title)
 
-setattr(User, "highest_ashmc_role", property(lambda x: max(x.ashmcrole_set.all() or [None])))
+setattr(User, "highest_ashmc_role", property(lambda x: ASHMCAppointment.get_current_highest(x) or None))
 
 
 class DormPresident(ASHMCRole):
@@ -312,12 +320,23 @@ class Semester(models.Model):
                                      ('SM', "Summer"))
                             )
 
-    @staticmethod
-    def get_this_semester():
+    @classmethod
+    def get_this_semester(cls):
         half = Utility.current_semester()
         year = datetime.datetime.now().year
-        return Semester.objects.get(half=half,
+        return cls.objects.get(half=half,
                                year=year)
+
+    @classmethod
+    def from_datetime(cls, dtobj):
+        if 9 <= dtobj.month <= 12:
+            half = "FA"
+        elif 1 <= dtobj.month <= 5:
+            half = "SP"
+        else:
+            half = "SM"
+
+        return cls.objects.get(half=half, year=dtobj.year)
 
     def next_with_summer(self):
         if self.half == 'FA':
