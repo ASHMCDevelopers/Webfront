@@ -17,12 +17,6 @@ ADMINS = local_settings.ADMINS
 MANAGERS = ADMINS
 
 DATABASES = local_settings.DATABASES
-#DATABASE_ROUTERS = ['ASHMC.db_router.DatabaseAppsRouter', ]
-#DATABASE_APPS_MAPPING = {
-#                         'courses': 'course_info',
-#                         #'zinnia': 'default',
-#                         #'auth': 'default',
-#                         }
 
 TWITTER_USER = local_settings.TWITTER_USER
 TWITTER_CACHE_TIMEOUT = local_settings.TWITTER_CACHE_TIMEOUT
@@ -42,9 +36,6 @@ GDOC_SOURCE = local_settings.GDOC_SOURCE
 GDOC_URL = local_settings.GDOC_URL
 
 LOGIN_REDIRECT_URL = "/"
-
-# Allow other *.st.hmc.edu sites to use our session cookies
-#SESSION_COOKIE_DOMAIN = ".st.hmc.edu"
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
