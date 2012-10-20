@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.core.management.base import BaseCommand, CommandError
 from optparse import make_option
 
@@ -9,7 +9,11 @@ from ...models import DormRoom, UserRoom, Dorm
 
 import datetime
 import ldap
+import logging
 import xlrd
+
+
+logger = logging.getLogger(__name__)
 
 
 """
@@ -64,7 +68,7 @@ LDAP gives us a list of the following dicts:
 
 search using:
 l = ldap.initialize()
-l.bind_s()
+l.simple_bind_s()
 result = l.search_s("OU=Academic Students,DC=HMC,DC=EDU", ldap.SCOPE_SUBTREE, filterstr="(mail={})".format(
         student_email_from_roster
     )
@@ -96,7 +100,7 @@ class Command(BaseCommand):
             action='store',
             dest='year',
             default=datetime.date.today().year,
-            help='The year this roster is for.',
+            help='The year this roster is for',
         ),
         make_option('--semester-code',
             action='store',
@@ -108,7 +112,7 @@ class Command(BaseCommand):
             action='store_true',
             dest='old_data',
             default=False,
-            help="*don't* ignore students who have already graduated.",
+            help="*don't* ignore students who have already graduated",
         ),
     )
 
@@ -119,21 +123,19 @@ class Command(BaseCommand):
         try:
             workbook = xlrd.open_workbook(args[0])
         except IOError:
-            raise CommandError("Couldn't open workbook: {}".format(args[0]))
+            raise CommandError("Couldn't open roster: {}".format(args[0]))
 
         s = workbook.sheets()[0]
-
-        # On what row does the actual information start?
-        ROSTER_ROW_START = settings.ROSTER_ROW_START
 
         # TODO: make this more programmatic?
         FIELD_ORDERING = settings.ROSTER_FIELD_ORDERING
 
         senior = GradYear.senior_class(
             sem=Semester.objects.get(half=kwargs['semester'], year=kwargs['year'])
-        ).year
+        )
+        logger.info("Senior year: %s", senior)
         CLASS_TO_GRADYEAR = {
-            'FE': senior + 3,
+            'FE': senior + 3,  # Freshmen have three codes
             'FF': senior + 3,
             'FR': senior + 3,
             'SO': senior + 2,
@@ -141,53 +143,125 @@ class Command(BaseCommand):
             'SR': senior,
         }
 
+        # Initialize and bind to the LDAP connection
+        lconn = ldap.initialize(
+                uri=settings.AUTH_LDAP_SERVER_URI,
+        )
+        lconn.simple_bind_s(
+            who=settings.AUTH_LDAP_BIND_DN,
+            cred=settings.AUTH_LDAP_BIND_PASSWORD,
+        )
+
+        # get hmc for easy access later
         hmc = Campus.objects.get(code='HM')
-        for r in xrange(ROSTER_ROW_START, s.nrows):
+        this_sem, _ = Semester.objects.get_or_create(
+            year=kwargs['year'],
+            half=kwargs['semester'],
+        )
+        logger.info("Semester: %s", this_sem)
+
+        for r in xrange(settings.ROSTER_ROW_START, s.nrows):
             row = s.row(r)
 
-            year = CLASS_TO_GRADYEAR[row[FIELD_ORDERING.index('Class')].value]
-
-            if year < GradYear.senior_class().year and not kwargs['old_data']:
+            try:
+                gradyear = CLASS_TO_GRADYEAR[row[FIELD_ORDERING.index('Class')].value]
+            except KeyError:
+                logger.error("%d No such class: %s", r, row[FIELD_ORDERING.index('Class')].value)
                 continue
 
-            gradyear, _ = GradYear.objects.get_or_create(
-                year=year,
+            # Skip people who've already graduated - we don't care about them
+            if gradyear < CLASS_TO_GRADYEAR['SR'] and not kwargs['old_data']:
+                continue
+
+            email = row[FIELD_ORDERING.index('Email')].value
+            # Check LDAP for user
+            student_results = lconn.search_s(
+                "OU=Academic Students,DC=HMC,DC=EDU", ldap.SCOPE_SUBTREE, filterstr="(mail={})".format(
+                    email,
+                )
             )
-            print row
+
+            if len(student_results) < 1:
+                logger.error("%d Couldn't find user with email %s", r, email)
+                continue
+            elif len(student_results) > 1:
+                logger.error("%d Multiple students matching email %s", r, email)
+                continue
+
+            ldap_student = student_results[0][1]
 
             try:
-                new_user = User.objects.get(email=row[FIELD_ORDERING.index('Email Address')].value.lower().replace('hmc.edu', 'g.hmc.edu'))
+                new_user = User.objects.get(
+                    username=ldap_student['sAMAccountName'][0],
+                )
+                created = False
             except ObjectDoesNotExist:
                 new_user = User.objects.create_user(
-                    username=row[FIELD_ORDERING.index('Email Address')].value.lower().replace('hmc.edu', 'g.hmc.edu'),
-                    email=row[FIELD_ORDERING.index('Email Address')].value.lower().replace('hmc.edu', 'g.hmc.edu'),
+                    username=ldap_student['sAMAccountName'][0],
+                    email=email,
+                )
+                new_user.first_name = ldap_student['givenName'][0]
+                new_user.last_name = ldap_student['sn'][0]
+                new_user.save()
+                created = True
+
+            if created:
+                new_student, _ = Student.objects.get_or_create(
+                    user=new_user,
+                    class_of=gradyear,
+                    at=hmc,
+                    studentid=None,
                 )
 
-            new_student, _ = Student.objects.get_or_create(
-                user=new_user,
-                class_of=gradyear,
-                at=hmc,
-                studentid=None,
+            dormcode = row[FIELD_ORDERING.index('Dorm')].value.split(' ')
+
+            if dormcode[0] == '':
+                logger.error("%d Couldn't match dormcode %s", r, dormcode)
+
+            # Roster has CGUA, whereas DB has CGA.
+            if dormcode[0].startswith("CGU"):
+                dormcode = "CG{}".format(dormcode[0][-1])
+            else:
+                dormcode = dormcode[0]
+
+            try:
+                dorm = Dorm.all_objects.get(code__iexact=dormcode)
+            except ObjectDoesNotExist:
+                # If all else fails, see if there's a name match
+                logger.warn("No such code %s - trying name match", dormcode)
+                try:
+                    dorm = Dorm.all_objects.get(name__istartswith=dormcode)
+                except (ObjectDoesNotExist, MultipleObjectsReturned):
+                    logger.error(
+                        "{} ldap population failed for {} (on failed dorm lookup {})".format(r, new_user, dormcode),
+                    )
+                    continue
+
+            room, _ = DormRoom.objects.get_or_create(
+                dorm=dorm,
+                number=row[FIELD_ORDERING.index("Room")].value,
             )
 
-            dormname = row[FIELD_ORDERING.index('Dorm')].value.split(' ')
-
-            if dormname[0] != '':
-                if dormname[0] == "CGU":
-                    dormname = ' '.join(dormname)
-                else:
-                    dormname = dormname[0]
-
-                dorm = Dorm.objects.get(name__startswith=dormname)
-
-                room, _ = DormRoom.objects.get_or_create(
-                    dorm=dorm,
-                    number=row[FIELD_ORDERING.index("Room")].value,
+            if dorm.code in Dorm.all_objects.filter(official_dorm=False).values_list('code', flat=True)\
+              and dorm.code != "ABR":
+                # If they're off-campus, make sure they're 'symbollically'
+                # a part of the Offcampus dorm for voting purposes.
+                symoff, _ = DormRoom.objects.get_or_create(
+                    dorm__code="OFF",
+                    number="Symbolic Room",
                 )
 
-                ur, _ = UserRoom.objects.get_or_create(
+                # Symroom is going to be full of people.
+                symroomur, _ = UserRoom.objects.get_or_create(
                     user=new_user,
-                    room=room,
+                    room=symoff,
                 )
+                symroomur.semesters.add(this_sem)
 
-                ur.semesters.add(Semester.objects.get(half=kwargs['semester'], year=int(kwargs['year'])))
+                logger.info("Created symoblic room entry for %s", new_user)
+
+            ur, _ = UserRoom.objects.get_or_create(
+                user=new_user,
+                room=room,
+            )
+            ur.semesters.add(this_sem)
