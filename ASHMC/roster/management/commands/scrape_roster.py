@@ -193,6 +193,7 @@ class Command(BaseCommand):
 
             if dormcode[0] == '':
                 logger.error("%d Couldn't match dormcode %s", r, dormcode)
+                continue
 
             # Roster has CGUA, whereas DB has CGA.
             if dormcode[0].startswith("CGU"):
