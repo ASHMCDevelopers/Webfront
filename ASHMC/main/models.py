@@ -406,6 +406,10 @@ class GradYear(models.Model):
         )
         return gy
 
+    def __sub__(self, number):
+        assert isinstance(number, int)
+        return self + (-number)
+
     def __lt__(self, other_gy):
         assert isinstance(other_gy, self.__class__)
         return self.year < other_gy.year
