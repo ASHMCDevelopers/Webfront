@@ -398,6 +398,22 @@ class GradYear(models.Model):
         else:
             return GradYear.objects.get_or_create(year=sem.year + 1)[0]
 
+    def __add__(self, number):
+        assert isinstance(number, int)
+        y = self.year
+        gy, _ = self.__class__.objects.get_or_create(
+            year=y + number,
+        )
+        return gy
+
+    def __sub__(self, number):
+        assert isinstance(number, int)
+        return self + (-number)
+
+    def __lt__(self, other_gy):
+        assert isinstance(other_gy, self.__class__)
+        return self.year < other_gy.year
+
     def __unicode__(self):
         return u"{}".format(self.year)
 
