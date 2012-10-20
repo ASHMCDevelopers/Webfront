@@ -17,8 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 """
-
-LDAP gives us a list of the following dicts:
+LDAP gives us a list of the following things:
 
 [
 ('CN=Bryan J Visser,OU=HMC_2013,OU=Academic Students,DC=HMC,DC=Edu',
@@ -65,29 +64,6 @@ LDAP gives us a list of the following dicts:
    'whenChanged': ['20120916013915.0Z'],
    'whenCreated': ['20090825233010.0Z']}),
 ]
-
-search using:
-l = ldap.initialize()
-l.simple_bind_s()
-result = l.search_s("OU=Academic Students,DC=HMC,DC=EDU", ldap.SCOPE_SUBTREE, filterstr="(mail={})".format(
-        student_email_from_roster
-    )
-)[0]
-# first check if the user exists, then do this
-u = User.objects.create_user(result['sAMAccountName'])
-u.email = result['mail']
-u.first_name = result['givenName']
-u.last_name = result['sn']
-u.save()
-
-s = Student.objects.create(
-    user=u,
-    # etc.
-)
-
-# If the user existed already, just update the roster information -
-# don't mess with Student or User.
-
 """
 
 
