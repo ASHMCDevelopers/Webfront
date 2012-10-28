@@ -223,6 +223,10 @@ class ASHMCRole(Role):
 
         return my_index > their_index
 
+    def __eq__(self, other):
+        assert isinstance(other, ASHMCRole)
+        return self.title == other.title
+
     def __unicode__(self):
         if self.title.startswith('ASHMC'):
             return u"{}".format(self.title)
