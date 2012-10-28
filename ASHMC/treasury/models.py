@@ -41,6 +41,7 @@ class TreasuryYear(models.Model):
     def __unicode__(self):
         return u"{}".format(self.description)
 
+
 # Classes involving bank ledgers
 
 class Account(models.Model):
@@ -327,7 +328,6 @@ class LineItem(models.Model):
                 # There's not enough allocation
                 from django.core.exceptions import ValidationError
                 raise ValidationError('Insufficient funds')
-
 
     def _update_balance(self, prev_balance):
         self.balance = prev_balance - self.amount

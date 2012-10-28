@@ -150,28 +150,27 @@ class Command(BaseCommand):
                 continue
 
             email = row[FIELD_ORDERING.index('Email')].value
-            # Check LDAP for user
-            student_results = lconn.search_s(
-                "OU=Academic Students,DC=HMC,DC=EDU", ldap.SCOPE_SUBTREE, filterstr="(mail={})".format(
-                    email,
-                )
-            )
-
-            if len(student_results) < 1:
-                logger.error("%d Couldn't find user with email %s", r, email)
-                continue
-            elif len(student_results) > 1:
-                logger.error("%d Multiple students matching email %s", r, email)
-                continue
-
-            ldap_student = student_results[0][1]
-
             try:
                 new_user = User.objects.get(
-                    username=ldap_student['sAMAccountName'][0],
+                    email=email,
                 )
-                created = False
             except ObjectDoesNotExist:
+                # Check LDAP for user
+                student_results = lconn.search_s(
+                    "OU=Academic Students,DC=HMC,DC=EDU", ldap.SCOPE_SUBTREE, filterstr="(mail={})".format(
+                        email,
+                    )
+                )
+
+                if len(student_results) < 1:
+                    logger.error("%d Couldn't find user with email %s", r, email)
+                    continue
+                elif len(student_results) > 1:
+                    logger.error("%d Multiple students matching email %s", r, email)
+                    continue
+
+                ldap_student = student_results[0][1]
+
                 new_user = User.objects.create_user(
                     username=ldap_student['sAMAccountName'][0],
                     email=email,
@@ -179,9 +178,7 @@ class Command(BaseCommand):
                 new_user.first_name = ldap_student['givenName'][0]
                 new_user.last_name = ldap_student['sn'][0]
                 new_user.save()
-                created = True
 
-            if created:
                 new_student, _ = Student.objects.get_or_create(
                     user=new_user,
                     class_of=gradyear,
@@ -214,10 +211,17 @@ class Command(BaseCommand):
                     )
                     continue
 
-            room, _ = DormRoom.objects.get_or_create(
-                dorm=dorm,
-                number=row[FIELD_ORDERING.index("Room")].value,
-            )
+            if dorm.code == "OFF":
+                room = DormRoom.objects.get(
+                    dorm=dorm,
+                    number="Symbolic Room",
+                )
+
+            else:
+                room, _ = DormRoom.objects.get_or_create(
+                    dorm=dorm,
+                    number=row[FIELD_ORDERING.index("Room")].value,
+                )
 
             if dorm.code in Dorm.all_objects.filter(official_dorm=False).values_list('code', flat=True)\
               and dorm.code != "ABR":
