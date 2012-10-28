@@ -214,10 +214,17 @@ class Command(BaseCommand):
                     )
                     continue
 
-            room, _ = DormRoom.objects.get_or_create(
-                dorm=dorm,
-                number=row[FIELD_ORDERING.index("Room")].value,
-            )
+            if dorm.code == "OFF":
+                room = DormRoom.objects.get(
+                    dorm=dorm,
+                    number="Symbolic Room",
+                )
+
+            else:
+                room, _ = DormRoom.objects.get_or_create(
+                    dorm=dorm,
+                    number=row[FIELD_ORDERING.index("Room")].value,
+                )
 
             if dorm.code in Dorm.all_objects.filter(official_dorm=False).values_list('code', flat=True)\
               and dorm.code != "ABR":
