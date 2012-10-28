@@ -125,7 +125,7 @@ class Measure(models.Model):
 
     @property
     def actual_quorum(self):
-        return Vote.objects.filter(measure=self).count()  # (float(Vote.objects.filter(measure=self).count()) / self.eligible_voters.count()) * 100
+        return (float(Vote.objects.filter(measure=self).count()) / self.eligible_voters.count()) * 100
 
     @property
     def has_reached_quorum(self):
@@ -325,6 +325,5 @@ def set_end_on_quorum_reached(sender, **kwargs):
         # Measures have to be open for at least 48 hours.
         if midnight - measure.vote_start >= datetime.timedelta(days=2):
             measure.vote_end = midnight
-
-        measure.save()
-#post_save.connect(set_end_on_quorum_reached, sender=Vote)
+            measure.save()
+post_save.connect(set_end_on_quorum_reached, sender=Vote)
