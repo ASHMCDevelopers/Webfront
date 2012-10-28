@@ -100,7 +100,8 @@ class BallotForm(forms.Form):
         cleaned_data = super(BallotForm, self).clean()
 
         if self.ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY:
-            write_in = cleaned_data.get('write_in_value', None)
+            # Ensure that the write-in can't be just whitespace.
+            write_in = (cleaned_data.get('write_in_value', None) or '').strip()
             choice = cleaned_data.get('choice', None)
 
             # A none choice would have been caught unless there's a write-in field
@@ -123,7 +124,7 @@ class BallotForm(forms.Form):
             if len(cleaned_data['choice']) > self.ballot.number_to_select:
                 raise forms.ValidationError("You may only select up to {} candidate{}".format(
                         self.ballot.number_to_select,
-                        '' if self.ballot.candidate_set.count() == 1 else 's',
+                        '' if self.ballot.candidate_set.count() == 1 else 's',  # pluralize
                     )
                 )
 
