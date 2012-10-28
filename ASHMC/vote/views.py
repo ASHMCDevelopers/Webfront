@@ -128,9 +128,6 @@ class MeasureDetail(DetailView):
         )
 
         for form in forms:
-            if 'abstains' in form.cleaned_data and form.cleaned_data['abstains']:
-                continue
-
             if form.ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY:
                 if form.cleaned_data['choice'] is None:
                     # Valid form with None choice means write in or abstain
