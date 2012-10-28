@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
 
 
-from ASHMC.main.models import Semester
+from ASHMC.main.models import ASHMCRole, Semester
 from ASHMC.roster.models import UserRoom
 from .forms import BallotForm
 from .models import Ballot, Candidate, Measure, Vote, PopularityVote, PreferentialVote
@@ -196,16 +196,27 @@ class MeasureResultList(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        this_sem = Semester.get_this_semester()
+        if self.request.user.is_superuser:
+            return Measure.objects.all()
 
+        this_sem = Semester.get_this_semester()
         try:
             room = UserRoom.objects.filter(
                 user=self.request.user,
                 semesters__id=this_sem.id,
+                room__dorm__official_dorm=True,
             )[0].room
         except IndexError:
             # If they don't have a room, they're probably not eligible to vote.
             raise PermissionDenied()
+
+        if self.request.user.highest_ashmc_role >= ASHMCRole.objects.get(title="Vice-President"):
+            # VP's and higher can see all measures, except those that are dorm-specific
+            # because ASHMC has no business within a dorm.
+            return Measure.objects.filter(
+                Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
+                Q(vote_end__lte=datetime.datetime.now(pytz.utc)) | Q(is_open=False),
+            )
 
         return Measure.objects.filter(
             Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
