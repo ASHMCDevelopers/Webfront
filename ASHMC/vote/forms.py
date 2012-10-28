@@ -98,10 +98,10 @@ class BallotForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(BallotForm, self).clean()
+        # Ensure that the write-in can't be just whitespace.
+        write_in = (cleaned_data.get('write_in_value', None) or '').strip()
 
         if self.ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY:
-            # Ensure that the write-in can't be just whitespace.
-            write_in = (cleaned_data.get('write_in_value', None) or '').strip()
             choice = cleaned_data.get('choice', None)
 
             # A none choice would have been caught unless there's a write-in field
