@@ -99,7 +99,7 @@ class BallotForm(forms.Form):
     def clean(self):
         cleaned_data = super(BallotForm, self).clean()
         # Ensure that the write-in can't be just whitespace.
-        write_in = (cleaned_data.get('write_in_value', None) or '').strip()
+        write_in = cleaned_data.get('write_in_value', None)
 
         if self.ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY:
             choice = cleaned_data.get('choice', None)
@@ -115,6 +115,12 @@ class BallotForm(forms.Form):
                 raise forms.ValidationError(
                     "Can't choose a candidate and write one in for the same ballot."
                 )
+
+            if write_in:
+                if not write_in.strip():
+                    raise forms.ValidationError(
+                        "Can't write-in an empty candidate.",
+                    )
 
         elif self.ballot.vote_type == Ballot.VOTE_TYPES.SELECT_X:
             cleaned_data.setdefault('choice', [])

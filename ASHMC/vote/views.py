@@ -133,8 +133,10 @@ class MeasureDetail(DetailView):
 
             if form.ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY:
                 if form.cleaned_data['choice'] is None:
-                    # Valid form with None choice means write in
-                    # TODO: Document this assumption
+                    # Valid form with None choice means write in or abstain
+                    if not (form.cleaned_data['write_in_value'] or '').strip():
+                        continue
+
                     c, _ = Candidate.objects.get_or_create(
                         title=form.cleaned_data['write_in_value'],
                         ballot=form.ballot,
