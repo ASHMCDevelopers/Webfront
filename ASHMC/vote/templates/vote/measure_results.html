@@ -16,10 +16,10 @@
                         <ul>
                         {% for ballot in measure.ballot_set|order_by:"display_position" %}
                             <li>
-                                #{{ballot.display_position}} {{ballot.title}}:
+                                #{{forloop.counter}} {{ballot.title}}:
                                 {% if ballot.get_winners|length > 1 %}
                                     <span class='errors'><h4 class='inline'>Tied</h4></span>
-                                    {% for candidate in ballot.ordered_candidates %}
+                                    {% for candidate in ballot.get_winners %}
                                         {{candidate}}{% if not forloop.last %};
                                         {% endif %}
                                     {% endfor %}
@@ -27,7 +27,7 @@
                                     {{ballot.get_winners.0}}
                                 {% endif %}
                                 <h4>Breakdown</h4>
-                                <ul>
+                                <ul class='breakdown'>
                                     {% for candidate in ballot.ordered_candidates %}
                                     <li>
                                         {{candidate}} ( {% firstof candidate.votes "0"%} )
