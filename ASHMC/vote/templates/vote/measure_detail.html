@@ -59,11 +59,6 @@
             {{form_errors|prettify_error_listings:bid}}
             {% endwith %}
         <ul>
-            {% if form.ballot.can_abstain %}
-                <li class='candidate'>
-                    <label>{{form.abstains}} {{form.abstains.label}}</label>
-                </li>
-            {% endif %}
             {% if form.ballot.vote_type == VOTE_TYPES.PREFERENCE %}
                 {% for field in form %}
                    <li><label>{{field}} {{field.label}}</label></li>

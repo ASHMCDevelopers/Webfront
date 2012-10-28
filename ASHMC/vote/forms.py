@@ -98,9 +98,10 @@ class BallotForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(BallotForm, self).clean()
+        # Ensure that the write-in can't be just whitespace.
+        write_in = cleaned_data.get('write_in_value', None)
 
         if self.ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY:
-            write_in = cleaned_data.get('write_in_value', None)
             choice = cleaned_data.get('choice', None)
 
             # A none choice would have been caught unless there's a write-in field
@@ -115,6 +116,12 @@ class BallotForm(forms.Form):
                     "Can't choose a candidate and write one in for the same ballot."
                 )
 
+            if write_in:
+                if not write_in.strip():
+                    raise forms.ValidationError(
+                        "Can't write-in an empty candidate.",
+                    )
+
         elif self.ballot.vote_type == Ballot.VOTE_TYPES.SELECT_X:
             cleaned_data.setdefault('choice', [])
             if self.ballot.can_abstain:
@@ -123,7 +130,7 @@ class BallotForm(forms.Form):
             if len(cleaned_data['choice']) > self.ballot.number_to_select:
                 raise forms.ValidationError("You may only select up to {} candidate{}".format(
                         self.ballot.number_to_select,
-                        '' if self.ballot.candidate_set.count() == 1 else 's',
+                        '' if self.ballot.candidate_set.count() == 1 else 's',  # pluralize
                     )
                 )
 
