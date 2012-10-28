@@ -171,10 +171,16 @@ class Command(BaseCommand):
 
                 ldap_student = student_results[0][1]
 
-                new_user = User.objects.create_user(
-                    username=ldap_student['sAMAccountName'][0],
-                    email=email,
-                )
+                try:
+                    new_user = User.objects.create_user(
+                        username=ldap_student['sAMAccountName'][0],
+                        email=email,
+                    )
+                except Exception:
+                    new_user = User.objects.get(
+                        username=ldap_student['sAMAccountName'][0],
+                    )
+
                 new_user.first_name = ldap_student['givenName'][0]
                 new_user.last_name = ldap_student['sn'][0]
                 new_user.save()
@@ -207,9 +213,9 @@ class Command(BaseCommand):
                     dorm = Dorm.all_objects.get(name__istartswith=dormcode)
                 except (ObjectDoesNotExist, MultipleObjectsReturned):
                     logger.error(
-                        "{} ldap population failed for {} (on failed dorm lookup {})".format(r, new_user, dormcode),
+                        "{} ldap population failed for {} (on failed dorm lookup {}) - assuming OFF".format(r, new_user, dormcode),
                     )
-                    continue
+                    dorm = Dorm.objects.get(code="OFF")
 
             if dorm.code == "OFF":
                 room = DormRoom.objects.get(

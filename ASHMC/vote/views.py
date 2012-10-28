@@ -128,13 +128,15 @@ class MeasureDetail(DetailView):
         )
 
         for form in forms:
-            if 'abstains' in form.cleaned_data and form.cleaned_data['abstains']:
-                continue
-
             if form.ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY:
                 if form.cleaned_data['choice'] is None:
-                    # Valid form with None choice means write in
-                    # TODO: Document this assumption
+                    # Valid form with None choice means write in or abstain
+                    if not (form.cleaned_data['write_in_value'] or '').strip():
+                        # An "empty" (e.g., whitespace-only) write-in is caught
+                        # during form validation, so if we get here that means
+                        # they're really abstaining.
+                        continue
+
                     c, _ = Candidate.objects.get_or_create(
                         title=form.cleaned_data['write_in_value'],
                         ballot=form.ballot,
@@ -151,6 +153,7 @@ class MeasureDetail(DetailView):
                         vote=vote,
                         candidate=form.cleaned_data['choice'],
                     )
+
             elif form.ballot.vote_type == Ballot.VOTE_TYPES.SELECT_X:
                 for candidate in form.cleaned_data['choice']:
                     PopularityVote.objects.create(
@@ -158,6 +161,7 @@ class MeasureDetail(DetailView):
                         vote=vote,
                         candidate=candidate,
                     )
+
             elif form.ballot.vote_type == Ballot.VOTE_TYPES.PREFERENCE:
                 for candidate_field in form.cleaned_data:
                     candidate = Candidate.objects.get(

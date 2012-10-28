@@ -12,6 +12,7 @@
                     <div class='expiry_date'><h3>Voting Ended {{measure.vote_end|date:"n/j/y"}}</h3></div>
                     <div class='clearer'></div>
                     <div class="surrounder bright winners">
+                        <div class="centered"><h4>{{measure.eligible_voters.count}} eligible voters</h4></div>
                         <h3>Winners:</h3>
                         <ul>
                         {% for ballot in measure.ballot_set|order_by:"display_position" %}
