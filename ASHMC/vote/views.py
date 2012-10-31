@@ -197,7 +197,7 @@ class MeasureResultList(ListView):
 
     def get_queryset(self):
         if self.request.user.is_superuser:
-            return Measure.objects.all()
+            return Measure.objects.all().order_by('-vote_end')
 
         this_sem = Semester.get_this_semester()
         try:
@@ -216,7 +216,7 @@ class MeasureResultList(ListView):
             return Measure.objects.filter(
                 Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
                 Q(vote_end__lte=datetime.datetime.now(pytz.utc)) | Q(is_open=False),
-            )
+            ).order_by('-vote_end')
 
         return Measure.objects.filter(
             Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
