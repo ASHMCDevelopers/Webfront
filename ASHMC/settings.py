@@ -197,3 +197,5 @@ INSTALLED_APPS = (
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = local_settings.LOGGING
+
+AMAZON_ASSOCIATES_REDIRECT_URL = local_settings.AMAZON_ASSOCIATES_REDIRECT_URL
