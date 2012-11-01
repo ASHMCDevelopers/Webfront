@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
+from django.views.generic import RedirectView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -32,6 +33,7 @@ urlpatterns = patterns('',
     # DON'T user the soft_link if you can avoid it.
     url(r'^soft_link/(?P<url_name>.*)/', lambda x, url_name: redirect(url_name)),
     url(r'^roster/', include('ASHMC.roster.urls')),
+    url(r'^amazon/', RedirectView.as_view(url=settings.AMAZON_ASSOCIATES_REDIRECT_URL), {}, 'amazon_associates'),
     url(r'^', include('ASHMC.main.urls')),
 )
 
