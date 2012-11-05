@@ -1,6 +1,8 @@
 from django import template
 from django.utils.safestring import mark_safe
 
+from random import shuffle as rshuffle
+
 register = template.Library()
 
 
@@ -17,6 +19,16 @@ def get_candidate(ballot, choice):
 @register.filter
 def get_valid_candidates(ballot):
     return ballot.candidate_set.all().exclude(is_write_in=True)
+
+
+@register.filter
+def shuffle(queryset):
+    if isinstance(queryset, list):
+        new_list = queryset[:]
+        rshuffle(new_list)
+        return new_list
+
+    return queryset.order_by('?')
 
 
 @register.filter
