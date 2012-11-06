@@ -22,6 +22,24 @@ class IntegerRangeField(models.IntegerField):
         return super(IntegerRangeField, self).formfield(**defaults)
 
 
+class InstantRerunVotingRound(models.Model):
+    """ A single round of IRV voting.
+    See en.wikipedia.org/wiki/Instant-runoff_voting for more.
+    """
+    number = models.IntegerField(default=1)
+    ballot = models.ForeignKey("Ballot")
+
+    class Meta:
+        unique_together = (('ballot', 'number'),)
+
+
+class IRVCandidate(models.Model):
+    """A wrapper around a candidate in an IRV round."""
+    irv_round = models.ForeignKey(InstantRerunVotingRound)
+    candidate = models.ForeignKey("Candidate")
+    votes = models.IntegerField(default=0)
+
+
 class Ballot(models.Model):
     """For example, a ballot for ASHMC President would have
         candidates (actually PersonCandidates).
@@ -52,6 +70,9 @@ class Ballot(models.Model):
     can_write_in = models.BooleanField(default=False)
     can_abstain = models.BooleanField(default=True)
     is_secret = models.BooleanField(default=False)
+    is_irv = models.BooleanField(default=False,
+        help_text='Only applies to Preferential type; changes the way winners are calculated.',
+    )
 
     def get_winners(self):
         """does not break ties."""
@@ -59,9 +80,24 @@ class Ballot(models.Model):
             max_choices = max(self.candidate_set.annotate(pv_max=models.Count('popularityvote')).values_list('pv_max', flat=True))
             return self.candidate_set.annotate(models.Count('popularityvote')).filter(popularityvote__count=max_choices)
         elif self.vote_type == self.VOTE_TYPES.PREFERENCE:
-            # The lower the sum of the ranks of a candidate, the better they're doing overall.
-            min_choices = min(self.candidate_set.annotate(pf_sum=models.Sum('preferentialvote__amount')).values_list('pf_sum', flat=True))
-            return self.candidate_set.annotate(models.Sum('preferentialvote__amount')).filter(preferentialvote__amount=min_choices)
+            if not self.is_irv:
+                # The lower the sum of the ranks of a candidate, the better they're doing overall.
+                min_choices = min(self.candidate_set.annotate(pf_sum=models.Sum('preferentialvote__amount')).values_list('pf_sum', flat=True))
+                return self.candidate_set.annotate(models.Sum('preferentialvote__amount')).filter(preferentialvote__amount=min_choices)
+
+            # IRV voting is a little more intense.
+            # we do rounds - until one candidate has a majority, we eliminate the
+            # least popular candidate and apply the voters' other votes to their
+            # next favorite choice.
+            # http://en.wikipedia.org/wiki/Instant-runoff_voting
+
+            # Since each candidate gets a vote with a different ballot,
+            # we normalize the number of votes by the number of voters --
+            # each voter should have contributed the same number of votes per
+            # ballot (e.g., the number of candidates on the ballot)
+            total_votes = self.popularityvote_set.count() / self.candidate_set.count()
+            candidates = list(self.candidate_set.all())
+
         elif self.vote_type == self.VOTE_TYPES.SELECT_X:
             max_choices = self.candidate_set.annotate(pv_max=models.Count('popularityvote')).order_by('-pv_max').values_list('pv_max', flat=True)[0]
             return self.candidate_set.annotate(models.Count('popularityvote')).filter(popularityvote__count=max_choices)
