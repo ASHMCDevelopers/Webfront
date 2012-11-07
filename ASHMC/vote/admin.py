@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import *
+from .models import Candidate, CandidateUser, Ballot, Measure, PersonCandidate, Restrictions
+from .models import IRVCandidate, InstantRerunVotingRound, PreferentialVote, Vote
 
 
 class CandidateInline(admin.TabularInline):
@@ -73,6 +74,20 @@ class PreferentialVoteAdmin(admin.ModelAdmin):
 #admin.site.register(PreferentialVote, PreferentialVoteAdmin)
 
 
+def get_vote_count(obj):
+    obj.votes.count()
+
+
+class IRVCandidateAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__', 'candidate', get_vote_count, 'irv_round')
+#admin.site.register(IRVCandidate, IRVCandidateAdmin)
+
+
+class InstantRerunVotingRoundAdmin(admin.ModelAdmin):
+    list_display = ('__unicode__', 'ballot', 'number')
+#admin.site.register(InstantRerunVotingRound, InstantRerunVotingRoundAdmin)
+
+
 class CandidateAdmin(admin.ModelAdmin):
     def get_title(obj):
         return u'{}'.format(obj.cast())
@@ -84,5 +99,5 @@ admin.site.register(Candidate, CandidateAdmin)
 class PersonCandidateAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', 'ballot',)
     list_filter = ('ballot', 'ballot__measure',)
-    inlines = [CandidateUserInline,]
+    inlines = [CandidateUserInline, ]
 admin.site.register(PersonCandidate, PersonCandidateAdmin)

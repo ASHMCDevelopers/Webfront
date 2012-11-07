@@ -27,6 +27,9 @@ class MeasureListing(ListView):
 
         this_sem = Semester.get_this_semester()
 
+        if self.request.user.is_superuser:
+            return Measure.objects.exclude(vote_end__lte=datetime.datetime.now(pytz.utc)).order_by('vote_end')
+
         try:
             room = UserRoom.objects.filter(
                 user=self.request.user,
@@ -101,6 +104,8 @@ class MeasureDetail(DetailView):
         return context
 
     def post(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            return redirect('measure_list')
         measure = self.get_object()
 
         forms = []

@@ -177,3 +177,20 @@ input[type=text] {
     }
 }
 
+.irv_breakdown {
+    tr {
+        &:not(:last-child) {
+            border-bottom: 1px solid fade_out($dark_color, 0.85);
+        }
+    }
+    .column_max {
+        font:{
+            weight: bold;
+        }
+    }
+    th, td {
+        &:not(:first-child) {
+            text-align: right;
+        }
+    }
+}

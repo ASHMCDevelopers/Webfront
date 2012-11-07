@@ -32,6 +32,14 @@ def shuffle(queryset):
 
 
 @register.filter
+def irvqs_to_candidate(qs, candidate):
+    try:
+        return qs.filter(candidate=candidate)[0]
+    except IndexError:
+        return None
+
+
+@register.filter
 def dir_this(thing):
     return dir(thing)
 
