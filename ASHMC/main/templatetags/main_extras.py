@@ -69,7 +69,7 @@ def role_higher_than(user, title):
         return True
 
     try:
-        minimum = ASHMCRole.get(title=title)
+        minimum = ASHMCRole.objects.get(title=title)
     except Exception:
         return True
 
