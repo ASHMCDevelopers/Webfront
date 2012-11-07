@@ -32,12 +32,19 @@ class InstantRerunVotingRound(models.Model):
     class Meta:
         unique_together = (('ballot', 'number'),)
 
+    def __unicode__(self):
+        return "Round {} for {}".format(self.number, self.ballot)
+
 
 class IRVCandidate(models.Model):
     """A wrapper around a candidate in an IRV round."""
     irv_round = models.ForeignKey(InstantRerunVotingRound)
     candidate = models.ForeignKey("Candidate")
-    votes = models.IntegerField(default=0)
+    # Need to track votes between rounds and candidates.
+    votes = models.ManyToManyField("PreferentialVote")
+
+    def __unicode__(self):
+        return "{}".format(self.candidate)
 
 
 class Ballot(models.Model):
@@ -77,7 +84,9 @@ class Ballot(models.Model):
     def get_winners(self):
         """does not break ties."""
         if self.vote_type == self.VOTE_TYPES.POPULARITY or self.vote_type == self.VOTE_TYPES.INOROUT:
-            max_choices = max(self.candidate_set.annotate(pv_max=models.Count('popularityvote')).values_list('pv_max', flat=True))
+            max_choices = max(
+                self.candidate_set.annotate(pv_max=models.Count('popularityvote')).values_list('pv_max', flat=True)
+            )
             return self.candidate_set.annotate(models.Count('popularityvote')).filter(popularityvote__count=max_choices)
         elif self.vote_type == self.VOTE_TYPES.PREFERENCE:
             if not self.is_irv:
@@ -95,8 +104,83 @@ class Ballot(models.Model):
             # we normalize the number of votes by the number of voters --
             # each voter should have contributed the same number of votes per
             # ballot (e.g., the number of candidates on the ballot)
-            total_votes = self.popularityvote_set.count() / self.candidate_set.count()
+
+            if InstantRerunVotingRound.objects.filter(ballot=self).count() != 0:
+                irvr = InstantRerunVotingRound.objects.filter(ballot=self).order_by('-number')[0]
+                max_votes = max(IRVCandidate.objects.filter(
+                    irv_round=irvr,
+                ).annotate(models.Count('votes')).values_list(
+                    'votes__count',
+                    flat=True
+                ))
+                return irvr.irvcandidate_set.annotate(models.Count('votes')).filter(votes__count=max_votes)
+
+            total_votes = self.preferentialvote_set.count() / self.candidate_set.count()
             candidates = list(self.candidate_set.all())
+
+            the_round = InstantRerunVotingRound.objects.create(
+                number=1,
+                ballot=self,
+            )
+            for candidate in candidates:
+                irvc = IRVCandidate.objects.create(
+                    candidate=candidate,
+                    irv_round=the_round,
+                    # Get the FIRST-CHOICE votes for every candidate.
+                )
+                irvc.votes.add(*list(self.preferentialvote_set.filter(
+                    candidate=candidate,
+                    amount=1,
+                )))
+
+            # Do rounds until *someone* has a majority.
+            max_votes = max(IRVCandidate.objects.filter(
+                irv_round=the_round,
+            ).annotate(models.Count('votes')).values_list(
+                'votes__count',
+                flat=True
+            ))
+            while max_votes < total_votes / 2:
+                old_candidates = IRVCandidate.objects.filter(irv_round=the_round).annotate(pv_count=models.Count('votes')).order_by('pv_count')
+
+                the_round = InstantRerunVotingRound.objects.create(
+                    ballot=self,
+                    number=the_round.number + 1,
+                )
+
+                # TODO: break ties LOLOLOL
+                loser = old_candidates[0]
+
+                # Move all the surviving votes over, and delete the
+                # loser from the running.
+                for irvcandidate in old_candidates[1:]:
+                    irvc = IRVCandidate.objects.create(
+                        irv_round=the_round,
+                        candidate=irvcandidate.candidate,
+                    )
+                    irvc.votes.add(*list(irvcandidate.votes.all()))
+
+                # Attach losers votes to their next preference
+                for pvote in loser.votes.all():
+                    v = pvote.vote
+                    next_pvote = v.preferentialvote_set.get(
+                        amount=pvote.amount + 1,
+                    )
+                    next_irc = IRVCandidate.objects.get(
+                        irv_round=the_round,
+                        candidate=next_pvote.candidate,
+                    )
+                    next_irc.votes.add(next_pvote)
+
+                max_votes = max(IRVCandidate.objects.filter(
+                    irv_round=the_round,
+                ).annotate(models.Count('votes')).values_list(
+                    'votes__count',
+                    flat=True
+                ))
+            # The rounds are over! Time to find the max votes and return the list
+            # of winners.
+            return IRVCandidate.objects.annotate(models.Count('votes')).filter(votes__count=max_votes)
 
         elif self.vote_type == self.VOTE_TYPES.SELECT_X:
             max_choices = self.candidate_set.annotate(pv_max=models.Count('popularityvote')).order_by('-pv_max').values_list('pv_max', flat=True)[0]
