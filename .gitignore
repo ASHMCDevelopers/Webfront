@@ -1,0 +1,9 @@
+Webfront.sublime-workspace
+Webfront.sublime-project
+*.pyc
+*.xls
+*.xlsx
+ASHMC/local_settings.py
+.sass*
+webfront
+ASHMC/main/static/styles
