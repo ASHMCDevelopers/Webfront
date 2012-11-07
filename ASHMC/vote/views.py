@@ -104,6 +104,8 @@ class MeasureDetail(DetailView):
         return context
 
     def post(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            return redirect('measure_list')
         measure = self.get_object()
 
         forms = []
