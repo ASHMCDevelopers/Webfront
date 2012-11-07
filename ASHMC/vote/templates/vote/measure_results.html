@@ -1,5 +1,6 @@
 {% extends "vote/vote_base.html" %}
 {% load main_extras %}
+{% load vote_extras %}
 
 {% block post_header %}
         <ul class='measure_list'>
@@ -28,6 +29,38 @@
                                     {{ballot.get_winners.0}}
                                 {% endif %}
                                 <h4>Breakdown</h4>
+                                {% if ballot.vote_type == ballot.VOTE_TYPES.PREFERENCE and ballot.is_irv %}
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                {% for round in ballot.instantrerunvotinground_set.all %}
+                                                    <th>Round {{round.number}}</th>
+                                                {% endfor %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for candidate in ballot.candidate_set.all %}
+                                                <tr>
+                                                    <td>{{candidate}}</td>
+
+                                                    {% for round in ballot.instantrerunvotinground_set.all %}
+                                                        <td>
+                                                            {% with round.irvcandidate_set.all|irvqs_to_candidate:candidate as ircandidate%}
+                                                            {% if ircandidate %}
+                                                                {{ircandidate.votes.count}}
+                                                            {% else %}
+                                                                0
+                                                            {% endif %}
+                                                            {% endwith %}
+                                                        </td>
+                                                    {% endfor %}
+
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
                                 <ul class='breakdown'>
                                     {% for candidate in ballot.ordered_candidates %}
                                     <li>
@@ -35,6 +68,7 @@
                                     </li>
                                     {% endfor %}
                                 </ul>
+                                {% endif %}
                             </li>
                         {% endfor %}
                         </ul>
