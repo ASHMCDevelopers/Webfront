@@ -393,6 +393,9 @@ p + p {
   text-indent: 1.75em;
   margin-top: 0; }
 
+table th, table td {
+  padding: 0.25em; }
+
 .errors {
   background: #ff6a6a;
   color: #fff; }

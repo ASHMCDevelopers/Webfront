@@ -1,5 +1,35 @@
 {% extends "vote/vote_base.html" %}
 {% load main_extras %}
+{% load vote_extras %}
+
+{% block scriptin %}
+<script>
+$(
+$('.irv_breakdown tbody').each(function() {
+    var $trs = $(this).children('tr');
+    var maxes = []
+    $trs.each(function(){
+        $(this).children('td').not(":first-child").each(function(index, el){
+            if (index > maxes.length - 1) {
+                maxes.push(parseInt($(this).html()));
+            } else if (maxes[index] < parseInt($(this).html())) {
+                maxes[index] = parseInt($(this).html());
+            }
+        });
+    });
+    $trs.each(function(index, el){
+        $(this).children('td').not(":first-child").each(function(index, el){
+            if (parseInt($(this).html()) == maxes[index]){
+                $(this).addClass('column_max');
+            } else {
+                $(this).removeClass('column_max');
+            }
+        });
+    });
+})
+);
+</script>
+{% endblock scriptin %}
 
 {% block post_header %}
         <ul class='measure_list'>
@@ -28,6 +58,38 @@
                                     {{ballot.get_winners.0}}
                                 {% endif %}
                                 <h4>Breakdown</h4>
+                                {% if ballot.vote_type == ballot.VOTE_TYPES.PREFERENCE and ballot.is_irv %}
+                                    <table class="irv_breakdown">
+                                        <thead>
+                                            <tr>
+                                                <th>{# Blank because candidate names in this column #}</th>
+                                                {% for round in ballot.instantrerunvotinground_set.all %}
+                                                    <th>Round {{round.number}}</th>
+                                                {% endfor %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for candidate in ballot.candidate_set.all %}
+                                                <tr>
+                                                    <td>{{candidate}}</td>
+
+                                                    {% for round in ballot.instantrerunvotinground_set.all %}
+                                                        <td>
+                                                            {% with round.irvcandidate_set.all|irvqs_to_candidate:candidate as ircandidate%}
+                                                            {% if ircandidate %}
+                                                                {{ircandidate.votes.count}}
+                                                            {% else %}
+                                                                0
+                                                            {% endif %}
+                                                            {% endwith %}
+                                                        </td>
+                                                    {% endfor %}
+
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
                                 <ul class='breakdown'>
                                     {% for candidate in ballot.ordered_candidates %}
                                     <li>
@@ -35,6 +97,7 @@
                                     </li>
                                     {% endfor %}
                                 </ul>
+                                {% endif %}
                             </li>
                         {% endfor %}
                         </ul>

@@ -15,7 +15,8 @@ class EntryAdmin(admin.ModelAdmin):
     fieldsets = ((_('Content'), {'fields': ('title', 'catch_title', 'content',
                                             #'image',
                                             'status',
-                                            'primary_author')}),
+                                            #'primary_author'
+                                            )}),
                  (_('Options'), {'fields': ('featured', 'excerpt',  # 'template',
                                             'related', 'authors',
                                             'creation_date',
@@ -137,7 +138,7 @@ class EntryAdmin(admin.ModelAdmin):
 
     def save_model(self, request, entry, form, change):
         """Save the authors, update time, make an excerpt"""
-        if entry.status == PUBLISHED and not entry.pk:
+        if entry.status == PUBLISHED and entry.start_publication is None:
             entry.start_publication = timezone.now()
 
         if not form.cleaned_data.get('excerpt') and entry.status == PUBLISHED:
@@ -151,6 +152,10 @@ class EntryAdmin(admin.ModelAdmin):
             form.cleaned_data['authors'].append(request.user)
 
         entry.last_update = timezone.now()
+        try:
+            entry.primary_author
+        except Exception:
+            entry.primary_author = request.user
         entry.save()
 
     def get_form(self, request, obj=None, **kwargs):
@@ -165,7 +170,7 @@ class EntryAdmin(admin.ModelAdmin):
         queryset = super(EntryAdmin, self).queryset(request)
         if request.user.is_superuser:
             return queryset
-        return request.user.entries.all()
+        return queryset.filter(authors__id=request.user.id)
 
     def make_mine(self, request, queryset):
         """Set the entries to the user"""

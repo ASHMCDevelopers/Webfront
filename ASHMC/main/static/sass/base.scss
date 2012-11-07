@@ -182,6 +182,12 @@ p + p { // proper typogrpahic styling
     margin-top: 0;
 }
 
+table {
+    th,td {
+        padding: 0.25em;
+    }
+}
+
 .errors {
     background: $error_background;
     color: #fff;
