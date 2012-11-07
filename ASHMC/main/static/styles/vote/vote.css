@@ -393,6 +393,9 @@ p + p {
   text-indent: 1.75em;
   margin-top: 0; }
 
+table th, table td {
+  padding: 0.25em; }
+
 .errors {
   background: #ff6a6a;
   color: #fff; }
@@ -717,3 +720,10 @@ input[type=text] {
   input[type=text].preference {
     width: 50px;
     margin-right: 5px; }
+
+.irv_breakdown tr:not(:last-child) {
+  border-bottom: 1px solid rgba(28, 28, 28, 0.15); }
+.irv_breakdown .column_max {
+  font-weight: bold; }
+.irv_breakdown th:not(:first-child), .irv_breakdown td:not(:first-child) {
+  text-align: right; }
