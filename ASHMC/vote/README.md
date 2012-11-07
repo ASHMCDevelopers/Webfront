@@ -79,7 +79,7 @@ candidates). The appropriate worst number is automatically created by the system
 
 The winner is the candidate with the lowest total.
 
-#### Instant-runoff voting
+##### Instant-runoff voting
 Preference ballots can, optionally, be declared as IRV ballots. This means that
 they will perform automatic runoff elections until one candidate has a majority
 of the votes.

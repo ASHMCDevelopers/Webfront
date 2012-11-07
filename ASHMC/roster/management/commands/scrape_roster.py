@@ -136,6 +136,7 @@ class Command(BaseCommand):
         )
         logger.info("Semester: %s", this_sem)
 
+        active_users = []
         for r in xrange(settings.ROSTER_ROW_START, s.nrows):
             row = s.row(r)
 
@@ -180,10 +181,14 @@ class Command(BaseCommand):
                     new_user = User.objects.get(
                         username=ldap_student['sAMAccountName'][0],
                     )
+                    # In case they were previously inactivated...
+                    new_user.is_active = True
 
                 new_user.first_name = ldap_student['givenName'][0]
                 new_user.last_name = ldap_student['sn'][0]
                 new_user.save()
+                # keep track of which users we HAVE seen this time through
+                active_users += [new_user.id]
 
                 new_student, _ = Student.objects.get_or_create(
                     user=new_user,
@@ -252,3 +257,9 @@ class Command(BaseCommand):
                 room=room,
             )
             ur.semesters.add(this_sem)
+
+        # inactivate missing users - except the super.
+        for user in User.objects.exclude(is_superuser=True).exclude(id__in=active_users):
+            logger.info("Inactivating {}".format(user.username))
+            user.is_active = False
+            user.save()

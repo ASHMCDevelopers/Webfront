@@ -210,7 +210,9 @@ class ASHMCRole(Role):
     appointee = models.ManyToManyField(User, through="ASHMCAppointment")
 
     def __lt__(self, other):
-        assert isinstance(other, ASHMCRole)
+        if not isinstance(other, ASHMCRole):
+            raise TypeError("Cannot compare {} and {}".format(self.__class__, other.__class__))
+
         try:
             my_index = ASHMCRole.COUNCIL_ROLES.index(self.title)
         except ValueError:
@@ -224,7 +226,8 @@ class ASHMCRole(Role):
         return my_index > their_index
 
     def __eq__(self, other):
-        assert isinstance(other, ASHMCRole)
+        if not isinstance(other, ASHMCRole):
+            return False
         return self.title == other.title
 
     def __unicode__(self):
