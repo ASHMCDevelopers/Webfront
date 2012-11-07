@@ -219,7 +219,7 @@
     "model": "main.ASHMCRole",
     "pk": 25,
     "fields": {
-      "title": "Executive Assitant",
+      "title": "ASHMC Executive Assistant",
       "description": "",
       "real_type": ["main","ashmcrole"]
     }
@@ -237,7 +237,7 @@
     "model": "main.ASHMCRole",
     "pk": 27,
     "fields": {
-      "title": "Web Editor",
+      "title": "ASHMC Webmaster",
       "description": "",
       "real_type": ["main","ashmcrole"]
     }
