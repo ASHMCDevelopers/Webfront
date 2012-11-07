@@ -2,6 +2,35 @@
 {% load main_extras %}
 {% load vote_extras %}
 
+{% block scriptin %}
+<script>
+$(
+$('.irv_breakdown tbody').each(function() {
+    var $trs = $(this).children('tr');
+    var maxes = []
+    $trs.each(function(){
+        $(this).children('td').not(":first-child").each(function(index, el){
+            if (index > maxes.length - 1) {
+                maxes.push(parseInt($(this).html()));
+            } else if (maxes[index] < parseInt($(this).html())) {
+                maxes[index] = parseInt($(this).html());
+            }
+        });
+    });
+    $trs.each(function(index, el){
+        $(this).children('td').not(":first-child").each(function(index, el){
+            if (parseInt($(this).html()) == maxes[index]){
+                $(this).addClass('column_max');
+            } else {
+                $(this).removeClass('column_max');
+            }
+        });
+    });
+})
+);
+</script>
+{% endblock scriptin %}
+
 {% block post_header %}
         <ul class='measure_list'>
     {% for measure in object_list %}
@@ -30,10 +59,10 @@
                                 {% endif %}
                                 <h4>Breakdown</h4>
                                 {% if ballot.vote_type == ballot.VOTE_TYPES.PREFERENCE and ballot.is_irv %}
-                                    <table>
+                                    <table class="irv_breakdown">
                                         <thead>
                                             <tr>
-                                                <th></th>
+                                                <th>{# Blank because candidate names in this column #}</th>
                                                 {% for round in ballot.instantrerunvotinground_set.all %}
                                                     <th>Round {{round.number}}</th>
                                                 {% endfor %}
