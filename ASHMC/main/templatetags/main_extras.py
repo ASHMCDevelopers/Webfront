@@ -64,6 +64,23 @@ def highest_role_at_time(user, timeobj):
 
 
 @register.filter
+def role_higher_than(user, title):
+    if user.is_superuser:
+        return True
+
+    try:
+        minimum = ASHMCRole.get(title=title)
+    except Exception:
+        return True
+
+    attempter = user.highest_ashmc_role
+    if attempter:
+        return attempter >= minimum
+    else:
+        return False
+
+
+@register.filter
 def get_living_situation(user):
     return UserRoom.get_current_room(user)
 
