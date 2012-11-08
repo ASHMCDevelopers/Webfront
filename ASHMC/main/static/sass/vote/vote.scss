@@ -178,6 +178,8 @@ input[type=text] {
 }
 
 .irv_breakdown {
+    margin-left: 1em;
+
     tr {
         &:not(:last-child) {
             border-bottom: 1px solid fade_out($dark_color, 0.85);

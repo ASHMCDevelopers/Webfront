@@ -5,7 +5,7 @@ import local_settings
 
 from twitter import Twitter, OAuth
 
-VERSION = "20121107A"
+VERSION = "20121107B"
 
 django.template.add_to_builtins('django.templatetags.future')
 
