@@ -108,6 +108,13 @@ class Ballot(models.Model):
             # each voter should have contributed the same number of votes per
             # ballot (e.g., the number of candidates on the ballot)
 
+            # If no more votes can come in, then don't calculate again.
+
+            # Don't do anything while votes can still come in.
+            if not self.measure.voting_closed:
+                return Candidate.objects.none()
+
+            # Don't re-calculate if it's been calculated.
             if InstantRerunVotingRound.objects.filter(ballot=self).count() != 0:
                 irvr = InstantRerunVotingRound.objects.filter(ballot=self).order_by('-number')[0]
                 max_votes = max(IRVCandidate.objects.filter(
@@ -118,7 +125,7 @@ class Ballot(models.Model):
                 ))
                 return irvr.irvcandidate_set.annotate(models.Count('votes')).filter(votes__count=max_votes)
 
-            total_votes = self.preferentialvote_set.count() / self.candidate_set.count()
+            total_votes = float(self.preferentialvote_set.count()) / self.candidate_set.count()
             candidates = list(self.candidate_set.all())
 
             the_round = InstantRerunVotingRound.objects.create(
@@ -259,6 +266,10 @@ class Measure(models.Model):
         if self.restrictions is None:
             return User.objects.filter(inactive=False)
         return self.restrictions.get_grad_year_users() & self.restrictions.get_dorm_users()
+
+    @property
+    def voting_closed(self):
+        return (not self.is_open) or (self.vote_end < timezone.now())
 
     class Meta:
         verbose_name = _('Measure')
