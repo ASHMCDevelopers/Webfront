@@ -48,7 +48,9 @@ $('.irv_breakdown tbody').each(function() {
                         {% for ballot in measure.ballot_set|order_by:"display_position" %}
                             <li>
                                 #{{forloop.counter}} {{ballot.title}}:
-                                {% if ballot.get_winners|length > 1 %}
+                                {% if ballot.is_irv and not measure.voting_closed %}
+                                    IRV Winner cannot be determined while voting is open.
+                                {% elif ballot.get_winners|length > 1 %}
                                     <span class='errors'><h4 class='inline'>Tied</h4></span>
                                     {% for candidate in ballot.get_winners %}
                                         {{candidate}}{% if not forloop.last %};
