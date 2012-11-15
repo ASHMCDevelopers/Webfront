@@ -35,7 +35,7 @@ class BallotForm(forms.Form):
                 widget=forms.RadioSelect,
                 empty_label=None if not ballot.can_abstain else "I'm abstaining",
                 queryset=choices,
-                required=(not ballot.can_write_in),
+                required=(not ballot.can_write_in and not ballot.can_abstain),
             )
 
         elif ballot.vote_type == Ballot.VOTE_TYPES.INOROUT:
