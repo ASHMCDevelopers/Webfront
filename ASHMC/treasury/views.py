@@ -14,7 +14,7 @@ def club_permissions_required(f):
         club = get_object_or_404(Club, name=kwargs['club_name'])
         user = request.user
         # If the user is a superuser, they have access to every club.
-        if not user.is_superuser:
+        if not user.is_superuser and not user.has_perm('treasury.full_club_admin'):
             try:
                 officer_entry = club.current_officers.get(student=user.student)
             except Officer.DoesNotExist:
@@ -42,10 +42,17 @@ def club_admin(request, club_name):
     return render_to_response('clubs/admin.html',
         context_instance=RequestContext(request, {'club': club}))
 
+@login_required
+@club_permissions_required
+def check_request(request, club_name, request_id):
+    club = get_object_or_404(Club, name=club_name)
+    check_request = get_object_or_404(CheckRequest, pk=request_id, club=club)
+    return render_to_response('requests/check_request.html',
+                              context_instance=RequestContext(request, {'check_request': check_request}))
 
 @login_required
 @club_permissions_required
-def check_request(request, club_name):
+def new_check_request(request, club_name):
     '''Let's the user create a new check request'''
     club = get_object_or_404(Club, name=club_name)
     if request.method == 'POST':
@@ -58,7 +65,7 @@ def check_request(request, club_name):
             new_check_request.filer = request.user.student
 
             new_check_request.save()
-            return redirect('club_admin', club_name=club_name)
+            return redirect('check_request', club_name=club_name, request_id=new_check_request.pk)
     else:
         form = forms.CheckRequestForm()
 
@@ -68,7 +75,7 @@ def check_request(request, club_name):
 
 @login_required
 @club_permissions_required
-def budget_request(request, club_name):
+def new_budget_request(request, club_name):
     '''Let's the user create a new budget request'''
     club = get_object_or_404(Club, name=club_name)
     if request.method == 'POST':
@@ -102,7 +109,7 @@ def budget_request(request, club_name):
 
 @login_required
 def club_select(request):
-    if request.user.is_superuser:
+    if request.user.is_superuser or request.user.has_perm('treasury.full_club_admin'):
         clubs = Club.objects.all()
     else:
         officers = request.user.student.club_positions.filter(is_club_superuser=True)
