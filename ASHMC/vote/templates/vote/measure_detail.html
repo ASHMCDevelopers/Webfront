@@ -25,7 +25,7 @@
         <div class='ballot_blurb'>
             {{form.ballot.blurb|markdown:"safe"}}
         </div>
-        {% with form.ballot|get_valid_candidates|shuffle as candidates %}
+        {% with form.ballot|get_valid_candidates as candidates %}
             {% if form.ballot.vote_type != VOTE_TYPES.INOROUT %}
                 {% for candidate in candidates %}
                     {% if forloop.first %}
@@ -65,7 +65,7 @@
                        <li><label>{{field}} {{field.label}}</label></li>
                     {% endfor %}
                 {% else %}
-                    {% for candidate in candidates %}
+                    {% for candidate in form.choice %}
                         <li class='candidate'>
                             {{candidate}}
                         </li>
