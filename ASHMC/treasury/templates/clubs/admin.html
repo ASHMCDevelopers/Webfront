@@ -25,7 +25,8 @@
         <th style="width: 1.5in">Request No</th>
         <th style="width: 2.5in">Payee</th>
         <th style="width: 1in">Amount</th>
-        <th style="width: 2.5in">Status</th>
+        <th style="width: 1.5in">Status</th>
+        <th style="width: 1in"></th>
       </tr>
       {% for request in club.check_requests.all %}
       <tr>
@@ -34,6 +35,9 @@
         <td>{{request.payee}}</td>
         <td>{{request.amount|floatformat:2}}</td>
         <td>{{request.status}}</td>
+        <td> {% if request.pending %}
+          <a href="{% url 'check_request' club_name=club.name request_id=request.pk %}">Print ticket</a> {% endif %}
+            </td>
       </tr>
       {% endfor %}
     </table>
