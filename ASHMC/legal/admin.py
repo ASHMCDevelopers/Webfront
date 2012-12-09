@@ -56,15 +56,12 @@ admin.site.register(Modification, ModificationAdmin)
 
 
 class OfficialFormAdmin(admin.ModelAdmin):
+
     def get_file_path(obj):
         return obj.file_actual.path
+
     def get_file_url(obj):
         return obj.file_actual.url
     list_display = ('__unicode__', get_file_path, get_file_url)
     list_filter = ('last_updated',)
 admin.site.register(OfficialForm, OfficialFormAdmin)
-
-
-class GDocSheetAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(GDocSheet, GDocSheetAdmin)
