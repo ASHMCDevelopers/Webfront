@@ -2,8 +2,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import redirect
-from django.views.generic import CreateView, ListView, DetailView
-
+from django.views.generic import CreateView, ListView, DetailView, TemplateView
 
 from ASHMC.main.models import ASHMCRole, Semester
 from ASHMC.roster.models import UserRoom
@@ -18,8 +17,34 @@ import pytz
 logger = logging.getLogger(__name__)
 
 
+class GenBallotForm(TemplateView):
+    template_name = "vote/ballot_create_form_fields.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(GenBallotForm, self).get_context_data(**kwargs)
+        context['bid'] = kwargs['num']
+        return context
+
+
+class GenCandidateForm(TemplateView):
+    template_name = "vote/candidate_create_form_fields.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(GenCandidateForm, self).get_context_data(**kwargs)
+        context['bid'] = kwargs['bnum']
+        context['cid'] = kwargs['cnum']
+        return context
+
+
 class CreateMeasure(CreateView):
     model = Measure
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateMeasure, self).get_context_data(**kwargs)
+
+        context['ballot_types'] = Ballot.TYPES
+
+        return context
 
 
 class MeasureListing(ListView):
