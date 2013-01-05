@@ -2,7 +2,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import redirect
-from django.views.generic import ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView
 
 
 from ASHMC.main.models import ASHMCRole, Semester
@@ -16,6 +16,10 @@ import pytz
 
 
 logger = logging.getLogger(__name__)
+
+
+class CreateMeasure(CreateView):
+    model = Measure
 
 
 class MeasureListing(ListView):
