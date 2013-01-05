@@ -46,6 +46,7 @@ body {
 
 
 a {
+    cursor: pointer;
     color: $link_color;
     @include transition(color, .2s, $delay:.1s);
 
