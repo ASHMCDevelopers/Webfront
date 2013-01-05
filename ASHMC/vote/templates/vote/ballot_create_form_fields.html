@@ -1,9 +1,21 @@
 <div class='surrounder light'>
 <li class="ballot">
-    <h3 class="ballot_title">Ballot {{bid|add:1}} <input name="{{bid}}_title"type="text" /></h3>
-<div class='ballot_blurb'>
-    <textarea name="{{bid}}_description"></textarea>
+    <h3 class="ballot_title">Ballot {{bid|add:1}} <input placeholder="Title" name="{{bid}}_title"type="text" />  <select name="{{bid}}_type">
+        {% for val,name in ballot_types %}
+            <option value="{{val}}">{{name}}</option>
+        {% endfor %}
+    </select>
+</h3>
+
+    <ul class="ballot_options" style="float:right;">
+        <li><input type="checkbox" name='{{bid}}_irv'/> Use IRV</li>
+        <li><input type="checkbox" name="{{bid}}_writein" checked/> Allow write-ins</li>
+        <li><input type="checkbox" name="{{bid}}_abstain" checked/> Allow abstaining</li>
+    </ul>
+<div class='ballot_blurb' style="width: 70%;">
+    <textarea placeholder="Ballot description goes here." name="{{bid}}_description" style="width:100%; height: 85px;"></textarea>
 </div>
+<div class='clearer'></div>
 <ul>
     <li class="candidate_adder">
         <a id="{{bid}}">+</a> Add a candidate to this ballot

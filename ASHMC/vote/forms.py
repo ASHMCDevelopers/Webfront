@@ -1,7 +1,8 @@
 from django import forms
+from django.contrib.admin.widgets import AdminSplitDateTime
 from django.utils.safestring import mark_safe
 
-from .models import Ballot
+from .models import Ballot, Measure, Restrictions
 
 
 class CandidateChoiceField(forms.ModelChoiceField):
@@ -146,3 +147,25 @@ class BallotForm(forms.Form):
         return cleaned_data
 
 BallotFormSet = forms.formsets.formset_factory(BallotForm, extra=0)
+
+
+class CreateMeasureForm(forms.ModelForm):
+    class Meta:
+        model = Measure
+
+    def __init__(self, *args, **kwargs):
+        super(CreateMeasureForm, self).__init__(*args, **kwargs)
+        self.fields['vote_start'].widget = AdminSplitDateTime()
+        self.fields['vote_start'].widget.attrs['style'] = "padding:0.25em;text-align:center"
+        self.fields['vote_end'].widget = AdminSplitDateTime()
+        self.fields['vote_end'].widget.attrs['style'] = "padding:0.25em;text-align:center"
+
+        self.fields['quorum'].widget.attrs['style'] = "width:50px"
+        self.fields['summary'].widget.attrs['style'] = "width: 100%; height: 75px;"
+        self.fields['summary'].widget.attrs['placeholder'] = "Measury summary goes here."
+        self.fields['name'].widget.attrs['placeholder'] = "Measure Title"
+
+
+class CreateRestrictionsForm(forms.ModelForm):
+    class Meta:
+        model = Restrictions

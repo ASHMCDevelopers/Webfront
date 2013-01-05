@@ -163,7 +163,7 @@ h4 {
 }
 
 abbr {
-    letter-spacing: .1em;
+    letter-spacing: 0.1em;
 }
 
 p { // proper typographic styling
@@ -181,6 +181,10 @@ p { // proper typographic styling
 p + p { // proper typogrpahic styling
     text-indent: $line_height;
     margin-top: 0;
+}
+
+textarea {
+    padding: 0.1em;
 }
 
 table {

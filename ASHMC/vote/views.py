@@ -6,7 +6,7 @@ from django.views.generic import CreateView, ListView, DetailView, TemplateView
 
 from ASHMC.main.models import ASHMCRole, Semester
 from ASHMC.roster.models import UserRoom
-from .forms import BallotForm
+from .forms import BallotForm, CreateMeasureForm, CreateRestrictionsForm
 from .models import Ballot, Candidate, Measure, Vote, PopularityVote, PreferentialVote
 
 import datetime
@@ -23,6 +23,7 @@ class GenBallotForm(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(GenBallotForm, self).get_context_data(**kwargs)
         context['bid'] = kwargs['num']
+        context['ballot_types'] = Ballot.TYPES
         return context
 
 
@@ -38,12 +39,13 @@ class GenCandidateForm(TemplateView):
 
 class CreateMeasure(CreateView):
     model = Measure
+    form_class = CreateMeasureForm
 
     def get_context_data(self, **kwargs):
         context = super(CreateMeasure, self).get_context_data(**kwargs)
 
         context['ballot_types'] = Ballot.TYPES
-
+        context['restrictionsform'] = CreateRestrictionsForm()
         return context
 
 

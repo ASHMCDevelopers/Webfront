@@ -1,1 +1,114 @@
-{% extends "main_base_page.html" %}
+{% extends "vote/vote_base.html" %}
+{% load adminmedia %}
+
+{% block scriptin %}
+<script type="text/javascript">
+$(function(){
+    var ballot_count = 0;
+    var candidates_count = []
+    $(".ballot_adder a").click(function(){
+        var $this = $(this);
+        $.get("/vote/measure/create/ballot/" + ballot_count,
+            function(data, stat, jqXHR){
+                $this.parent().before(data);
+                candidates_count.push(0);
+                ballot_count++;
+            }
+        );
+    });
+
+    $("#ballot_holder").on('click', '.candidate_adder a', function(){
+        console.log("in candidate adder");
+        var $this = $(this);
+        var bnum = parseInt($this.attr('id'));
+        $.get("/vote/measure/create/candidate/" + bnum + "/" + candidates_count[bnum],
+            function(data, stat, jqXHR){
+                console.log(data);
+                $this.parent().before(data);
+                candidates_count[bnum]++;
+            }
+        );
+    })
+
+    $("#measure_create").submit(function(){
+        if (candidates_count.length < 1) {
+            $("#error_maker").html("You need at least one ballot.")
+            $("#error_maker").removeClass('hidden');
+            return false;
+        }
+
+        for (var i = 0; i < candidates_count.length; i++) {
+            if (candidates_count[i] == 0) {
+                $("#error_maker").html("All ballots need at least one candidate.")
+                $("#error_maker").removeClass('hidden');
+                return false;
+            }
+        }
+
+    });
+
+});
+
+</script>
+
+{# all this is necessary for the django admin datepickers to work #}
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+<script type="text/javascript" src="/static/admin/js/core.js"></script>
+<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+{% endblock scriptin %}
+
+{% block stylin %}
+   {{block.super}}
+
+{# Admin datepicker enablers #}
+<script type="text/javascript">
+    window.__admin_media_prefix__ = "{% filter escapejs %}{% admin_media_prefix %}{% endfilter %}";
+</script>
+<link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css"/>
+
+<link rel="stylesheet" type="text/css" href="/static/admin/css/widgets.css"/>
+{# end admin datepicker enablers #}
+{% endblock stylin %}
+
+{% block post_header %}
+
+<div class='measure_wrap_wrap'>
+    <div id="error_maker" class="hidden errors heading"></div>
+<div class='surrounder light'>
+<div class='measure_wrap'>
+
+<form id="measure_create" action="" method="POST">
+    {% csrf_token %}
+
+    <h2>
+        {{form.name}}
+    </h2>
+    <div class="quorum" style="margin-bottom: 1em;">
+        Quorum: {{form.quorum}}
+    </div>
+    <div class="measure_description">
+        {{form.summary}}
+    </div>
+
+    <div class="vote_start" style="margin: 0.5em 0;">
+    <table><!-- TODO: Don't use a table for this. -->
+        <tr><td>    Voting begins:</td><td>{{form.vote_start}}</td><td style="width:2em;"></td><td rowspan=2>Restrictions:<br/>{{restrictionsform.gradyears}}{{restrictionsform.dorms}}</td></tr>
+
+        <tr><td>Voting ends:</td><td>{{form.vote_end}}</td></tr>
+    </table>
+    </div>
+
+    <ol id="ballot_holder" style="padding-bottom: 15px;">
+        <li class="ballot_adder">
+            <a class="button" id="ballot_adder_sub">+</a> Add a ballot to this measure
+        </li>
+    </ol>
+
+    <input type="submit" class="button-submit centerer" value="Create this Measure">
+</form>
+</div>
+</div>
+</div>
+{% endblock post_header %}
