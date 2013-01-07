@@ -26,6 +26,18 @@ class _Utility(object):
                 return False
         return True
 
+    def all_or_none(self, lister, funct=lambda x: bool(x)):
+        """ funct must evaluate x => Boolean """
+        # Empty list is all or none by definition
+        if not lister:
+            return True
+        first_val = funct(lister[0])
+        for x in lister:
+            if funct(x) != first_val:
+                return False
+
+        return True
+
     def current_semester(self):
         """Determines whether today is in the spring, fall, or summer semesters"""
         today = datetime.datetime.now()
@@ -135,6 +147,9 @@ class ASHMCAppointment(models.Model):
 
     @classmethod
     def get_current_highest(cls, user):
+        if user.is_superuser:
+            # Superuser is always the highest ranked ashmcrole
+            return max(ASHMCRole.objects.all())
         sem = Semester.get_this_semester()
         possibles = cls.objects.filter(user=user, semesters__id=sem.id)
         if not possibles:
