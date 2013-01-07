@@ -69,7 +69,10 @@ class CreateMeasure(CreateView):
         return context
 
     def post(self, *args, **kwargs):
-        print self.request.POST
+        # block POSTs from most people.
+        if self.request.user.highest_ashmc_role <= ASHMCRole.objects.get(title=ASHMCRole.COUNCIL_ROLES[3]):
+            if "Class President" not in self.request.user.highest_ashmc_role.title:
+                raise PermissionDenied()
 
         form_class = self.get_form_class()
         # This setting to None is a hack to make the get_form call work.
@@ -80,7 +83,7 @@ class CreateMeasure(CreateView):
             return self.form_invalid(form)
         print form.cleaned_data
 
-        # The measure itself is valid; create it -- but DON'T SAVE IT.
+        # The measure itself is valid; create it.
         new_measure = Measure.objects.create(
             name=form.cleaned_data['name'],
             vote_start=form.cleaned_data['vote_start'],
@@ -89,25 +92,25 @@ class CreateMeasure(CreateView):
             quorum=form.cleaned_data['quorum'],
             is_open=form.cleaned_data['is_open'],
         )
-        # This view doesn't currently allow banned_accounts to be added. You need
+        logger.info("Created measure %d", new_measure.id)
+        # This doesn't currently allow banned_accounts to be added. You need
         # use the regular admin for that.
-        print "new Measure:", new_measure
 
         if isinstance(self.request.user.highest_ashmc_role.cast(), DormPresident):
             # Dorm presidents can only send measures to their dorm.
-            print "dorm president dorm restriction"
+            logger.debug("dorm president dorm restriction")
             real_role = self.request.user.highest_ashmc_role.cast()
             dorm_restrictions = [real_role.dorm]
         elif self.request.user.highest_ashmc_role > ASHMCRole.objects.get(title=ASHMCRole.COUNCIL_ROLES[3]):
-            print "unrestricted dorm restriction"
+            logger.debug("unrestricted dorm restriction")
             # VP and president can restrict dorm as they choose.
             dorm_restrictions = Dorm.objects.filter(pk__in=self.request.POST.getlist('dorms'))
         else:
-            print "no dorm restriction allowed"
+            logger.debug("no dorm restriction allowed")
             dorm_restrictions = []
 
         if self.request.user.highest_ashmc_role.title.endswith("Class President"):
-            print "Enacting class-president restriction"
+            logger.debug("Enacting class-president restriction")
             # Year-based class presidents can only send measure to their constituencies.
             if self.request.user.highest_ashmc_role.title.startswith("Senior"):
                 year_restrictions = [GradYear.senior_class()]
@@ -120,9 +123,7 @@ class CreateMeasure(CreateView):
         else:
             year_restrictions = GradYear.objects.filter(pk__in=self.request.POST.getlist('gradyears'))
 
-        print "DR:", dorm_restrictions
-        print "YR:", year_restrictions
-        # Create the Restrictions object for this new_measure.
+        # Update the Restrictions object for this new_measure.
         restrictions = new_measure.restrictions
         restrictions.gradyears.add(*[gy for gy in year_restrictions])
         restrictions.dorms.add(*[d for d in dorm_restrictions])
@@ -162,23 +163,18 @@ class CreateMeasure(CreateView):
                 # this is a ballot field.
                 ballots_dict[ballot_num][key_rest] = keyval
 
-        print ballots_dict
-
         for ballot_num in ballots_dict:
             ballot_dict = ballots_dict[ballot_num]
             candidate_info = ballot_dict.pop('candidates', {})
 
-            ballot = Ballot.objects.create(**ballot_dict)
-            ballot.measure = new_measure
-            ballot.save()
-            print ballot
-            print "candy keys:", candidate_info.keys()
+            ballot = Ballot.objects.create(measure=new_measure, **ballot_dict)
+            logger.info("M%d: created ballot %d", new_measure.id, ballot.id)
+
             for candidate_num in candidate_info.keys():
                 candidate_dict = candidate_info[candidate_num]
                 is_person = candidate_dict.pop('is_person', False)
 
                 if is_person:
-                    print candidate_num, "is a person"
                     usernames = candidate_dict['title'].split(' ')
                     try:
                         # Only support username
@@ -195,11 +191,11 @@ class CreateMeasure(CreateView):
                                 "Could not find all usernames: {} (found {})".format(usernames, students)
                             )
 
-                        logger.info("M%dB%d: creating person candidate for %s", new_measure.id, ballot.id, students)
                         candidate = PersonCandidate.objects.create(
                             ballot=ballot,
                             **candidate_dict
                         )
+                        logger.info("M%dB%d: created person candidate for %s", new_measure.id, ballot.id, students)
                         for student in students:
                             CandidateUser.objects.create(
                                 user=student.user,
@@ -219,8 +215,10 @@ class CreateMeasure(CreateView):
                         ballot=ballot,
                         **candidate_dict
                     )
+                    logger.info("M%dB%d: created candidate %d", new_measure.id, ballot.id, candidate.id)
 
-        return redirect('vote_measure_results')
+        # Finally, take them to the measure list.
+        return redirect('measure_list')
 
 
 class MeasureListing(ListView):
