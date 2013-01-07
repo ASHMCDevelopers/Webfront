@@ -157,8 +157,10 @@ class CreateMeasureForm(forms.ModelForm):
         super(CreateMeasureForm, self).__init__(*args, **kwargs)
         self.fields['vote_start'].widget = AdminSplitDateTime()
         self.fields['vote_start'].widget.attrs['style'] = "padding:0.25em;text-align:center"
+        self.fields['vote_start'].widget.attrs['size'] = 10
         self.fields['vote_end'].widget = AdminSplitDateTime()
         self.fields['vote_end'].widget.attrs['style'] = "padding:0.25em;text-align:center"
+        self.fields['vote_end'].widget.attrs['size'] = 10
 
         self.fields['quorum'].widget.attrs['style'] = "width:50px"
         self.fields['summary'].widget.attrs['style'] = "width: 100%; height: 75px;"
