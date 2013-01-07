@@ -2,6 +2,15 @@
 {% load adminmedia %}
 
 {% block scriptin %}
+<script type="text/javascript" src="http://dev.jquery.com/view/trunk/plugins/validate/jquery.validate.js"></script>
+
+{# all this is necessary for the django admin datepickers to work #}
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+<script type="text/javascript" src="/static/admin/js/core.js"></script>
+<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+
 <script type="text/javascript">
 $(function(){
     var ballot_count = 0;
@@ -48,15 +57,7 @@ $(function(){
     });
 
 });
-
 </script>
-
-{# all this is necessary for the django admin datepickers to work #}
-<script type="text/javascript" src="/admin/jsi18n/"></script>
-<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
-<script type="text/javascript" src="/static/admin/js/core.js"></script>
-<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
-<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
 {% endblock scriptin %}
 
 {% block stylin %}
@@ -66,11 +67,16 @@ $(function(){
 <script type="text/javascript">
     window.__admin_media_prefix__ = "{% filter escapejs %}{% admin_media_prefix %}{% endfilter %}";
 </script>
-<link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css"/>
 
+<link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css"/>
 <link rel="stylesheet" type="text/css" href="/static/admin/css/widgets.css"/>
 {# end admin datepicker enablers #}
 {% endblock stylin %}
+
+{% block pre_header %}
+   <div class="centered"><h1>Make sure there are no errors in the measure <em>before</em> you submit!</h1></div>
+{% endblock pre_header %}
+
 
 {% block post_header %}
 
@@ -86,7 +92,10 @@ $(function(){
         {{form.name}}
     </h2>
     <div class="quorum" style="margin-bottom: 1em;">
-        Quorum: {{form.quorum}}
+        {{form.quorum.label}}: {{form.quorum}}
+    </div>
+    <div class="is_open" style="">
+        {{form.is_open}} <label for="{{form.is_open.name}}">Open automatically?</label>
     </div>
     <div class="measure_description">
         {{form.summary}}
@@ -94,7 +103,7 @@ $(function(){
 
     <div class="vote_start" style="margin: 0.5em 0;">
     <table><!-- TODO: Don't use a table for this. -->
-        <tr><td>    Voting begins:</td><td>{{form.vote_start}}</td><td style="width:2em;"></td><td rowspan=2>Restrictions:<br/>{{restrictionsform.gradyears}}{{restrictionsform.dorms}}</td></tr>
+        <tr><td>Voting begins:</td><td>{{form.vote_start}}</td><td style="width:2em;"></td><td rowspan=2>Restrictions:<br/>{{restrictionsform.gradyears}}{{restrictionsform.dorms}}</td></tr>
 
         <tr><td>Voting ends:</td><td>{{form.vote_end}}</td></tr>
     </table>
