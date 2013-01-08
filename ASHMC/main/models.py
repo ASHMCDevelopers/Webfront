@@ -242,7 +242,9 @@ class ASHMCRole(Role):
         return my_index > their_index
 
     def __eq__(self, other):
-        if not isinstance(other, ASHMCRole):
+        if not other:
+            return False
+        elif not isinstance(other, ASHMCRole):
             raise TypeError("Cannot compare {} and {}".format(self.__class__, other.__class__))
         return self.title == other.title
 

@@ -142,7 +142,7 @@ TEMPLATE_DIRS = local_settings.TEMPLATE_DIRS
 TESTING = local_settings.TESTING
 
 AUTHENTICATION_BACKENDS = (
-    'django_auth_ldap.backend.LDAPBackend',
+    #'django_auth_ldap.backend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 

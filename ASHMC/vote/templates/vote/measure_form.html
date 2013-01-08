@@ -105,20 +105,20 @@ $(function(){
     <div class="vote_start" style="margin: 0.5em 0;">
     <table><!-- TODO: Don't use a table for this. -->
         <tr>
-            <td>Voting begins:</td><td>{{form.vote_start}}</td><td style="width:2em;"></td>
-            {% if request.user|role_higher_than:"Treasurer" %}
-            <td rowspan=2>Restrictions:<br/>{{restrictionsform.gradyears}}
+            <td>Voting begins:<br/>{{form.vote_start}}</td><td style="width:2em;"></td>
+            <td rowspan=2>{% if request.user|role_higher_than:"Treasurer" %}
+            Restrictions:<br/>{{restrictionsform.gradyears}}
                 {# Dorm Presidents can't send measures to other dorms, yo #}
                 {% if request.user|role_higher_than:"Dorm President" %}
                     {{restrictionsform.dorms}}
                 {% endif %}
-            </td>
             {% else %}
                 This measure will be restricted to your constituency.
             {% endif %}
+            </td>
         </tr>
 
-        <tr><td>Voting ends:</td><td>{{form.vote_end}}</td></tr>
+        <tr><td>Voting ends:<br/>{{form.vote_end}}</td></tr>
     </table>
     </div>
 
