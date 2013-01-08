@@ -4,7 +4,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.views.generic import CreateView, ListView, DetailView, TemplateView
 
-from ASHMC.main.models import ASHMCRole, DormPresident, GradYear, Semester, Student
+from ASHMC.main.models import ASHMCAppointment, ASHMCRole, DormPresident, GradYear, Semester, Student
 from ASHMC.roster.models import Dorm, UserRoom
 from .forms import BallotForm, CreateMeasureForm, CreateRestrictionsForm
 from .models import (
@@ -55,9 +55,11 @@ class CreateMeasure(CreateView):
         # Only the upper eschelons of the council can create measures.
         # President, VP, Dorm President, and Class Presidents only.
         # And super users, obviously.
-        if self.request.user.highest_ashmc_role <= ASHMCRole.objects.get(title=ASHMCRole.COUNCIL_ROLES[3]):
-            if "Class President" not in self.request.user.highest_ashmc_role.title:
-                raise Http404
+        userrole = ASHMCAppointment.get_current_highest(self.request.user)
+        minimum_role = ASHMCRole.objects.get(title=ASHMCRole.COUNCIL_ROLES[2])
+        if userrole < minimum_role:
+            if "Class President" not in userrole.title:
+                raise PermissionDenied()
 
         return super(CreateMeasure, self).get(*args, **kwargs)
 
@@ -70,8 +72,10 @@ class CreateMeasure(CreateView):
 
     def post(self, *args, **kwargs):
         # block POSTs from most people.
-        if self.request.user.highest_ashmc_role <= ASHMCRole.objects.get(title=ASHMCRole.COUNCIL_ROLES[3]):
-            if "Class President" not in self.request.user.highest_ashmc_role.title:
+        userrole = ASHMCAppointment.get_current_highest(self.request.user)
+        minimum_role = ASHMCRole.objects.get(title=ASHMCRole.COUNCIL_ROLES[2])
+        if userrole < minimum_role:
+            if "Class President" not in userrole.title:
                 raise PermissionDenied()
 
         form_class = self.get_form_class()

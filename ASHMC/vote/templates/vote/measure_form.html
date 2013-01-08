@@ -1,5 +1,6 @@
 {% extends "vote/vote_base.html" %}
 {% load adminmedia %}
+{% load main_extras %}
 
 {% block scriptin %}
 <script type="text/javascript" src="http://dev.jquery.com/view/trunk/plugins/validate/jquery.validate.js"></script>
@@ -17,7 +18,7 @@ $(function(){
     var candidates_count = []
     $(".ballot_adder a").click(function(){
         var $this = $(this);
-        $.get("/vote/measure/create/ballot/" + ballot_count,
+        $.get("/vote/create/ballot/" + ballot_count,
             function(data, stat, jqXHR){
                 $this.parent().before(data);
                 candidates_count.push(0);
@@ -30,7 +31,7 @@ $(function(){
         console.log("in candidate adder");
         var $this = $(this);
         var bnum = parseInt($this.attr('id'));
-        $.get("/vote/measure/create/candidate/" + bnum + "/" + candidates_count[bnum],
+        $.get("/vote/create/candidate/" + bnum + "/" + candidates_count[bnum],
             function(data, stat, jqXHR){
                 console.log(data);
                 $this.parent().before(data);
@@ -103,7 +104,19 @@ $(function(){
 
     <div class="vote_start" style="margin: 0.5em 0;">
     <table><!-- TODO: Don't use a table for this. -->
-        <tr><td>Voting begins:</td><td>{{form.vote_start}}</td><td style="width:2em;"></td><td rowspan=2>Restrictions:<br/>{{restrictionsform.gradyears}}{{restrictionsform.dorms}}</td></tr>
+        <tr>
+            <td>Voting begins:</td><td>{{form.vote_start}}</td><td style="width:2em;"></td>
+            {% if request.user|role_higher_than:"Treasurer" %}
+            <td rowspan=2>Restrictions:<br/>{{restrictionsform.gradyears}}
+                {# Dorm Presidents can't send measures to other dorms, yo #}
+                {% if request.user|role_higher_than:"Dorm President" %}
+                    {{restrictionsform.dorms}}
+                {% endif %}
+            </td>
+            {% else %}
+                This measure will be restricted to your constituency.
+            {% endif %}
+        </tr>
 
         <tr><td>Voting ends:</td><td>{{form.vote_end}}</td></tr>
     </table>
