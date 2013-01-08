@@ -150,10 +150,12 @@ class ASHMCAppointment(models.Model):
         if user.is_superuser:
             # Superuser is always the highest ranked ashmcrole
             return max(ASHMCRole.objects.all())
+
         sem = Semester.get_this_semester()
         possibles = cls.objects.filter(user=user, semesters__id=sem.id)
         if not possibles:
             return None
+
         return max([appt.role for appt in possibles])
 
     def __unicode__(self):
@@ -237,12 +239,11 @@ class ASHMCRole(Role):
             their_index = ASHMCRole.COUNCIL_ROLES.index(other.title)
         except ValueError:
             their_index = ASHMCRole.COUNCIL_ROLES.index("Dorm President")
-
         return my_index > their_index
 
     def __eq__(self, other):
         if not isinstance(other, ASHMCRole):
-            return False
+            raise TypeError("Cannot compare {} and {}".format(self.__class__, other.__class__))
         return self.title == other.title
 
     def __unicode__(self):
