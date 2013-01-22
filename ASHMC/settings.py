@@ -5,7 +5,7 @@ import local_settings
 
 from twitter import Twitter, OAuth
 
-VERSION = "20121118"
+VERSION = "20130121"
 
 django.template.add_to_builtins('django.templatetags.future')
 
@@ -68,7 +68,7 @@ MEDIA_ROOT = local_settings.MEDIA_ROOT
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
-
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -142,7 +142,7 @@ TEMPLATE_DIRS = local_settings.TEMPLATE_DIRS
 TESTING = local_settings.TESTING
 
 AUTHENTICATION_BACKENDS = (
-    'django_auth_ldap.backend.LDAPBackend',
+    #'django_auth_ldap.backend.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
