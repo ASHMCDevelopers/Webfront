@@ -5,7 +5,7 @@ import local_settings
 
 from twitter import Twitter, OAuth
 
-VERSION = "20130122"
+VERSION = "20130123"
 
 django.template.add_to_builtins('django.templatetags.future')
 
@@ -125,7 +125,7 @@ MIDDLEWARE_CLASSES = (
     #'middleware.LoginRequiredMiddleware.LoginRequiredMiddleware', # force login for all pages except urls in PUBLIC_URLS
     # Uncomment the next line for simple clickjacking protection:
     #'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 

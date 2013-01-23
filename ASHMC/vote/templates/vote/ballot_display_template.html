@@ -1,0 +1,29 @@
+<h3 class="ballot_title">{{ballot.title}}</h3>
+<div class='ballot_blurb'>
+    {{ballot.blurb|markdown:"safe"}}
+</div>
+{% with ballot|get_valid_candidates as candidates %}
+{% if ballot.vote_type != VOTE_TYPES.INOROUT %}
+    {% for candidate in candidates %}
+        {% if forloop.first %}
+        <div class='surrounder body'>
+        <div class='candidate_blurbs'>
+            <ul>
+        {% endif %}
+                <li class='surrounder light'>
+                    <h5 class="candidate_name">{{candidate.cast}}</h5>
+                    {% if candidate.description %}
+                        <div class="candidate_description">
+                            {{candidate.description|markdown:"safe"}}
+                        </div>
+                    {% else %}
+                        <p>No information provided.</p>
+                    {% endif %}
+                </li>
+        {% if forloop.last %}
+            </ul>
+        </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
