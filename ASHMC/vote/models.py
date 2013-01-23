@@ -22,6 +22,31 @@ class IntegerRangeField(models.IntegerField):
         return super(IntegerRangeField, self).formfield(**defaults)
 
 
+class InstantRerunVotingRound(models.Model):
+    """ A single round of IRV voting.
+    See en.wikipedia.org/wiki/Instant-runoff_voting for more.
+    """
+    number = models.IntegerField(default=1)
+    ballot = models.ForeignKey("Ballot")
+
+    class Meta:
+        unique_together = (('ballot', 'number'),)
+
+    def __unicode__(self):
+        return "Round {} for {}".format(self.number, self.ballot)
+
+
+class IRVCandidate(models.Model):
+    """A wrapper around a candidate in an IRV round."""
+    irv_round = models.ForeignKey(InstantRerunVotingRound)
+    candidate = models.ForeignKey("Candidate")
+    # Need to track votes between rounds and candidates.
+    votes = models.ManyToManyField("PreferentialVote")
+
+    def __unicode__(self):
+        return "{}".format(self.candidate)
+
+
 class Ballot(models.Model):
     """For example, a ballot for ASHMC President would have
         candidates (actually PersonCandidates).
@@ -52,16 +77,121 @@ class Ballot(models.Model):
     can_write_in = models.BooleanField(default=False)
     can_abstain = models.BooleanField(default=True)
     is_secret = models.BooleanField(default=False)
+    is_irv = models.BooleanField(default=False,
+        help_text='Only applies to Preferential type; changes the way winners are calculated.',
+    )
 
     def get_winners(self):
         """does not break ties."""
+        if self.candidate_set.count() == 0:
+            return []
+
         if self.vote_type == self.VOTE_TYPES.POPULARITY or self.vote_type == self.VOTE_TYPES.INOROUT:
-            max_choices = max(self.candidate_set.annotate(pv_max=models.Count('popularityvote')).values_list('pv_max', flat=True))
+            max_choices = max(
+                self.candidate_set.annotate(pv_max=models.Count('popularityvote')).values_list('pv_max', flat=True)
+            )
             return self.candidate_set.annotate(models.Count('popularityvote')).filter(popularityvote__count=max_choices)
         elif self.vote_type == self.VOTE_TYPES.PREFERENCE:
-            # The lower the sum of the ranks of a candidate, the better they're doing overall.
-            min_choices = min(self.candidate_set.annotate(pf_sum=models.Sum('preferentialvote__amount')).values_list('pf_sum', flat=True))
-            return self.candidate_set.annotate(models.Sum('preferentialvote__amount')).filter(preferentialvote__amount=min_choices)
+            if not self.is_irv:
+                # The lower the sum of the ranks of a candidate, the better they're doing overall.
+                min_choices = min(self.candidate_set.annotate(pf_sum=models.Sum('preferentialvote__amount')).values_list('pf_sum', flat=True))
+                return self.candidate_set.annotate(models.Sum('preferentialvote__amount')).filter(preferentialvote__amount=min_choices)
+
+            # IRV voting is a little more intense.
+            # we do rounds - until one candidate has a majority, we eliminate the
+            # least popular candidate and apply the voters' other votes to their
+            # next favorite choice.
+            # http://en.wikipedia.org/wiki/Instant-runoff_voting
+
+            # Since each candidate gets a vote with a different ballot,
+            # we normalize the number of votes by the number of voters --
+            # each voter should have contributed the same number of votes per
+            # ballot (e.g., the number of candidates on the ballot)
+
+            # If no more votes can come in, then don't calculate again.
+
+            # Don't do anything while votes can still come in.
+            if not self.measure.voting_closed:
+                return Candidate.objects.none()
+
+            # Don't re-calculate if it's been calculated.
+            if InstantRerunVotingRound.objects.filter(ballot=self).count() != 0:
+                irvr = InstantRerunVotingRound.objects.filter(ballot=self).order_by('-number')[0]
+                max_votes = max(IRVCandidate.objects.filter(
+                    irv_round=irvr,
+                ).annotate(models.Count('votes')).values_list(
+                    'votes__count',
+                    flat=True
+                ))
+                return irvr.irvcandidate_set.annotate(models.Count('votes')).filter(votes__count=max_votes)
+
+            total_votes = float(self.preferentialvote_set.count()) / self.candidate_set.count()
+            candidates = list(self.candidate_set.all())
+
+            the_round = InstantRerunVotingRound.objects.create(
+                number=1,
+                ballot=self,
+            )
+            for candidate in candidates:
+                irvc = IRVCandidate.objects.create(
+                    candidate=candidate,
+                    irv_round=the_round,
+                    # Get the FIRST-CHOICE votes for every candidate.
+                )
+                irvc.votes.add(*list(self.preferentialvote_set.filter(
+                    candidate=candidate,
+                    amount=1,
+                )))
+
+            # Do rounds until *someone* has a majority.
+            max_votes = max(IRVCandidate.objects.filter(
+                irv_round=the_round,
+            ).annotate(models.Count('votes')).values_list(
+                'votes__count',
+                flat=True
+            ))
+            while max_votes < total_votes / 2:
+                old_candidates = IRVCandidate.objects.filter(irv_round=the_round).annotate(pv_count=models.Count('votes')).order_by('pv_count')
+
+                the_round = InstantRerunVotingRound.objects.create(
+                    ballot=self,
+                    number=the_round.number + 1,
+                )
+
+                # TODO: break ties LOLOLOL
+                loser = old_candidates[0]
+
+                # Move all the surviving votes over, and delete the
+                # loser from the running.
+                for irvcandidate in old_candidates[1:]:
+                    irvc = IRVCandidate.objects.create(
+                        irv_round=the_round,
+                        candidate=irvcandidate.candidate,
+                    )
+                    irvc.votes.add(*list(irvcandidate.votes.all()))
+
+                # Attach losers votes to their next preference
+                for pvote in loser.votes.all():
+                    v = pvote.vote
+                    next_pvote = v.preferentialvote_set.get(
+                        amount=pvote.amount + 1,
+                    )
+                    next_irc = IRVCandidate.objects.get(
+                        irv_round=the_round,
+                        candidate=next_pvote.candidate,
+                    )
+                    next_irc.votes.add(next_pvote)
+
+                max_votes = max(IRVCandidate.objects.filter(
+                    irv_round=the_round,
+                ).annotate(models.Count('votes')).values_list(
+                    'votes__count',
+                    flat=True
+                ))
+            # The rounds are over! Time to find the max votes and return the list
+            # of winners.
+            return IRVCandidate.objects.annotate(models.Count('votes')).filter(votes__count=max_votes)
+
         elif self.vote_type == self.VOTE_TYPES.SELECT_X:
             max_choices = self.candidate_set.annotate(pv_max=models.Count('popularityvote')).order_by('-pv_max').values_list('pv_max', flat=True)[0]
             return self.candidate_set.annotate(models.Count('popularityvote')).filter(popularityvote__count=max_choices)
@@ -125,7 +255,7 @@ class Measure(models.Model):
 
     @property
     def actual_quorum(self):
-        return Vote.objects.filter(measure=self).count()  # (float(Vote.objects.filter(measure=self).count()) / self.eligible_voters.count()) * 100
+        return (float(Vote.objects.filter(measure=self).count()) / self.eligible_voters.count()) * 100
 
     @property
     def has_reached_quorum(self):
@@ -136,6 +266,10 @@ class Measure(models.Model):
         if self.restrictions is None:
             return User.objects.filter(inactive=False)
         return self.restrictions.get_grad_year_users() & self.restrictions.get_dorm_users()
+
+    @property
+    def voting_closed(self):
+        return (not self.is_open) or (self.vote_end < timezone.now())
 
     class Meta:
         verbose_name = _('Measure')
@@ -325,6 +459,5 @@ def set_end_on_quorum_reached(sender, **kwargs):
         # Measures have to be open for at least 48 hours.
         if midnight - measure.vote_start >= datetime.timedelta(days=2):
             measure.vote_end = midnight
-
-        measure.save()
-#post_save.connect(set_end_on_quorum_reached, sender=Vote)
+            measure.save()
+post_save.connect(set_end_on_quorum_reached, sender=Vote)

@@ -68,6 +68,7 @@ class StudentAdminForm(forms.ModelForm):
 
 class StudentAdmin(admin.ModelAdmin):
     form = StudentAdminForm
+    search_fields=('user__first_name', 'user__last_name', 'middle_name', 'studentid')
 
     def first_name(self):
         return self.user.first_name

@@ -10,7 +10,7 @@ Measures can contain an arbitrary number of ballots.
 
 A measure needn't be ready immediately; feel free to set its vote-start date
 to any time you like. If all else fails, you can toggle its vote-ability
-with the <code>is_open</code> flag.
+with the `is_open` flag.
 
 ### Measures require a description of some sort.
 
@@ -78,6 +78,14 @@ A Preference Ballot has users rank the candidates from best (1) to worst (# of
 candidates). The appropriate worst number is automatically created by the system.
 
 The winner is the candidate with the lowest total.
+
+##### Instant-runoff voting
+Preference ballots can, optionally, be declared as IRV ballots. This means that
+they will perform automatic runoff elections until one candidate has a majority
+of the votes.
+
+For more details about the process, hit up the
+[IRV Wikipedia page](http://en.wikipedia.org/wiki/Instant-runoff_voting).
 
 ### Support for Write-ins
 If the ballot is flagged as "can write-in", Users will be presented with a

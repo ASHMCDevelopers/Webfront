@@ -26,6 +26,18 @@ class _Utility(object):
                 return False
         return True
 
+    def all_or_none(self, lister, funct=lambda x: bool(x)):
+        """ funct must evaluate x => Boolean """
+        # Empty list is all or none by definition
+        if not lister:
+            return True
+        first_val = funct(lister[0])
+        for x in lister:
+            if funct(x) != first_val:
+                return False
+
+        return True
+
     def current_semester(self):
         """Determines whether today is in the spring, fall, or summer semesters"""
         today = datetime.datetime.now()
@@ -135,10 +147,15 @@ class ASHMCAppointment(models.Model):
 
     @classmethod
     def get_current_highest(cls, user):
+        if user.is_superuser:
+            # Superuser is always the highest ranked ashmcrole
+            return max(ASHMCRole.objects.all())
+
         sem = Semester.get_this_semester()
         possibles = cls.objects.filter(user=user, semesters__id=sem.id)
         if not possibles:
             return None
+
         return max([appt.role for appt in possibles])
 
     def __unicode__(self):
@@ -210,7 +227,9 @@ class ASHMCRole(Role):
     appointee = models.ManyToManyField(User, through="ASHMCAppointment")
 
     def __lt__(self, other):
-        assert isinstance(other, ASHMCRole)
+        if not isinstance(other, ASHMCRole):
+            raise TypeError("Cannot compare {} and {}".format(self.__class__, other.__class__))
+
         try:
             my_index = ASHMCRole.COUNCIL_ROLES.index(self.title)
         except ValueError:
@@ -220,8 +239,14 @@ class ASHMCRole(Role):
             their_index = ASHMCRole.COUNCIL_ROLES.index(other.title)
         except ValueError:
             their_index = ASHMCRole.COUNCIL_ROLES.index("Dorm President")
-
         return my_index > their_index
+
+    def __eq__(self, other):
+        if not other:
+            return False
+        elif not isinstance(other, ASHMCRole):
+            raise TypeError("Cannot compare {} and {}".format(self.__class__, other.__class__))
+        return self.title == other.title
 
     def __unicode__(self):
         if self.title.startswith('ASHMC'):
@@ -397,6 +422,22 @@ class GradYear(models.Model):
             return GradYear.objects.get_or_create(year=sem.year)[0]
         else:
             return GradYear.objects.get_or_create(year=sem.year + 1)[0]
+
+    def __add__(self, number):
+        assert isinstance(number, int)
+        y = self.year
+        gy, _ = self.__class__.objects.get_or_create(
+            year=y + number,
+        )
+        return gy
+
+    def __sub__(self, number):
+        assert isinstance(number, int)
+        return self + (-number)
+
+    def __lt__(self, other_gy):
+        assert isinstance(other_gy, self.__class__)
+        return self.year < other_gy.year
 
     def __unicode__(self):
         return u"{}".format(self.year)

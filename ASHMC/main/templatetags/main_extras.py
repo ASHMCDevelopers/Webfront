@@ -49,7 +49,13 @@ def current_roles(user, type=None):
 
 
 @register.filter
-def highest_role_at_time(user, timeobj):
+def highest_role_at_time(user, timeobj=None):
+    if not user.is_authenticated():
+        return None
+
+    if timeobj is None:
+        timeobj = datetime.datetime.now()
+
     sem = Semester.from_datetime(timeobj)
     possibles = ASHMCAppointment.objects.filter(
         user=user,
@@ -59,8 +65,36 @@ def highest_role_at_time(user, timeobj):
     if not possibles:
         return None
 
-    print timeobj, sem, possibles
     return max([appt.role for appt in possibles])
+
+
+@register.filter
+def role_higher_than(user, title):
+    if user.is_superuser:
+        return True
+
+    try:
+        minimum = ASHMCRole.objects.get(title=title)
+    except Exception:
+        return False
+
+    attempter = user.highest_ashmc_role
+    if attempter:
+        return attempter > minimum
+    else:
+        return False
+
+
+@register.filter
+def has_role(user, title):
+    if user.is_superuser:
+        return True
+
+    try:
+        if ASHMCAppointment.objects.get(user=user, role__title=title):
+            return True
+    except ASHMCAppointment.DoesNotExist:
+        return False
 
 
 @register.filter

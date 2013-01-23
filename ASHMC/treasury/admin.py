@@ -215,7 +215,7 @@ class CheckRequestAdmin(admin.ModelAdmin):
     raw_id_fields = ('filer',)
     list_display = ('club', 'year', 'date_filed', 'amount', 'date_approved', 'status')
     list_filter = ('approved',)
-    search_fields = ('club__name', 'filer__name', 'payee', 'line_items__check_number')
+    search_fields = ('club__name', 'filer__user__first_name', 'filer__user__last_name', 'filer__middle_name', 'payee', 'line_items__check_number')
     inlines=(LineItemInline,)
 
     fieldsets = (

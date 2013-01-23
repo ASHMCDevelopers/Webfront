@@ -27,7 +27,7 @@
         "pk": 4,
         "model": "roster.dorm",
         "fields": {
-            "code": "SU",
+            "code": "SG",
             "name": "Sontag"
         }
     },

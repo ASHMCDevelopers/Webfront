@@ -1,7 +1,8 @@
 from django import forms
+from django.contrib.admin.widgets import AdminSplitDateTime
 from django.utils.safestring import mark_safe
 
-from .models import Ballot
+from .models import Ballot, Measure, Restrictions
 
 
 class CandidateChoiceField(forms.ModelChoiceField):
@@ -35,7 +36,7 @@ class BallotForm(forms.Form):
                 widget=forms.RadioSelect,
                 empty_label=None if not ballot.can_abstain else "I'm abstaining",
                 queryset=choices,
-                required=(not ballot.can_write_in),
+                required=(not ballot.can_write_in and not ballot.can_abstain),
             )
 
         elif ballot.vote_type == Ballot.VOTE_TYPES.INOROUT:
@@ -98,9 +99,10 @@ class BallotForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(BallotForm, self).clean()
+        # Ensure that the write-in can't be just whitespace.
+        write_in = cleaned_data.get('write_in_value', None)
 
         if self.ballot.vote_type == Ballot.VOTE_TYPES.POPULARITY:
-            write_in = cleaned_data.get('write_in_value', None)
             choice = cleaned_data.get('choice', None)
 
             # A none choice would have been caught unless there's a write-in field
@@ -115,6 +117,12 @@ class BallotForm(forms.Form):
                     "Can't choose a candidate and write one in for the same ballot."
                 )
 
+            if write_in:
+                if not write_in.strip():
+                    raise forms.ValidationError(
+                        "Can't write-in an empty candidate.",
+                    )
+
         elif self.ballot.vote_type == Ballot.VOTE_TYPES.SELECT_X:
             cleaned_data.setdefault('choice', [])
             if self.ballot.can_abstain:
@@ -123,7 +131,7 @@ class BallotForm(forms.Form):
             if len(cleaned_data['choice']) > self.ballot.number_to_select:
                 raise forms.ValidationError("You may only select up to {} candidate{}".format(
                         self.ballot.number_to_select,
-                        '' if self.ballot.candidate_set.count() == 1 else 's',
+                        '' if self.ballot.candidate_set.count() == 1 else 's',  # pluralize
                     )
                 )
 
@@ -139,3 +147,27 @@ class BallotForm(forms.Form):
         return cleaned_data
 
 BallotFormSet = forms.formsets.formset_factory(BallotForm, extra=0)
+
+
+class CreateMeasureForm(forms.ModelForm):
+    class Meta:
+        model = Measure
+
+    def __init__(self, *args, **kwargs):
+        super(CreateMeasureForm, self).__init__(*args, **kwargs)
+        self.fields['vote_start'].widget = AdminSplitDateTime()
+        self.fields['vote_start'].widget.attrs['style'] = "padding:0.25em;text-align:center"
+        self.fields['vote_start'].widget.attrs['size'] = 10
+        self.fields['vote_end'].widget = AdminSplitDateTime()
+        self.fields['vote_end'].widget.attrs['style'] = "padding:0.25em;text-align:center"
+        self.fields['vote_end'].widget.attrs['size'] = 10
+
+        self.fields['quorum'].widget.attrs['style'] = "width:50px"
+        self.fields['summary'].widget.attrs['style'] = "width: 100%; height: 75px;"
+        self.fields['summary'].widget.attrs['placeholder'] = "Measury summary goes here."
+        self.fields['name'].widget.attrs['placeholder'] = "Measure Title"
+
+
+class CreateRestrictionsForm(forms.ModelForm):
+    class Meta:
+        model = Restrictions

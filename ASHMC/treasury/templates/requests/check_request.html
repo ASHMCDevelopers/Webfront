@@ -1,0 +1,74 @@
+{% comment %}
+Purposefully does not use a template or base, because this page is meant for printing
+{% endcomment %}
+<html>
+  <head>
+    <title>ASHMC Check Request #{{check_request.serial}}</title>
+    <style>
+      body {
+          width: 5in;
+          height: 5in;
+          margin: 2em auto;
+          border: 1px solid black;
+          padding: 2em;
+      }
+
+      h1, h2 {
+          text-align: center;
+      }
+
+      h2 {
+          font-family: Courier, serif;
+      }
+
+      table {
+          font-size: 14pt;
+      }
+
+      table tr td:first-child
+      {
+          font-weight: bold;
+          width: 2in;
+          vertical-align: top;
+      }
+
+      #instructions
+      {
+          margin-top: 3em;
+          font-size: 14pt;
+      }
+
+      #instructions h1
+      {
+          text-align: left;
+          padding: 0;
+          margin: 0;
+          font-size: 14pt;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ASHMC Check Request</h1>
+    <h2 class="serial">{{check_request.serial}}</h2>
+    <table>
+      <tr>
+        <td>Club</td><td>{{check_request.club.name}}</td>
+      </tr>
+      <tr>
+        <td>Date Filed</td><td>{{check_request.date_filed}}</td>
+      </tr>
+      <tr>
+        <td>Filer</td><td>{{check_request.filer.user.username}}</td>
+      </tr>
+      <tr>
+        <td>Payee</td><td>{{check_request.payee}}{% if check_request.deliver_to %}<br/>{{check_request.deliver_to}}{% endif %}</td>
+      </tr>
+      <tr>
+        <td>Amount</td><td>{{check_request.amount|floatformat:2}}</td>
+      </tr>
+    </table>
+    <div id="instructions">
+      <h1>Instructions</h1> Please print out this form, staple it to your receipts and put it in the Platt mailbox of the current treasurer. You should get a reimbursement check within seven days. If not, please contact the ASHMC treasurer at <a href="mailto:ashmc.treasurer@hmc.edu">ashmc.treasurer@hmc.edu.</a>
+    </div>
+  </body>
+</html>

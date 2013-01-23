@@ -25,65 +25,61 @@
         <div class='ballot_blurb'>
             {{form.ballot.blurb|markdown:"safe"}}
         </div>
-        {% if form.ballot.vote_type != VOTE_TYPES.INOROUT %}
-            {% for candidate in form.ballot|get_valid_candidates %}
-                {% if forloop.first %}
-                <div class='surrounder body'>
-                <div class='candidate_blurbs'>
-                    <ul>
+        {% with form.ballot|get_valid_candidates as candidates %}
+            {% if form.ballot.vote_type != VOTE_TYPES.INOROUT %}
+                {% for candidate in candidates %}
+                    {% if forloop.first %}
+                    <div class='surrounder body'>
+                    <div class='candidate_blurbs'>
+                        <ul>
+                    {% endif %}
+                            <li class='surrounder light'>
+                                <h5>{{candidate.cast}}</h5>
+                                {% if candidate.description %}
+                                {{candidate.description|markdown:"safe"}}
+                                {% else %}
+                                <p>No information provided.</p>
+                                {% endif %}
+                            </li>
+                    {% if forloop.last %}
+                        </ul>
+                    </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+                <div class='empty spacer'></div>
+                {% if form.ballot.vote_type == VOTE_TYPES.POPULARITY or form.ballot.vote_type == VOTE_TYPES.INOROUT %}
+                <h4>Choose an option</h4>
+                {% elif form.ballot.vote_type == VOTE_TYPES.SELECT_X %}
+                <h4>Select up to <span class='select_x'>{{form.ballot.number_to_select}}</span> option{{form.ballot.number_to_select|pluralize}}</h4>
+                {% elif form.ballot.vote_type == VOTE_TYPES.PREFERENCE %}
+                <h4>Rank the following options ({{form.ballot.candidate_set.all|length}} is worst, 1 is best)</h4>
                 {% endif %}
-                        <li class='surrounder light'>
-                            <h5>{{candidate.cast}}</h5>
-                            {% if candidate.description %}
-                            {{candidate.description|markdown:"safe"}}
-                            {% else %}
-                            <p>No information provided.</p>
-                            {% endif %}
+                {%with form.ballot.id as bid %}
+                {{form_errors|prettify_error_listings:bid}}
+                {% endwith %}
+                <ul>
+                {% if form.ballot.vote_type == VOTE_TYPES.PREFERENCE %}
+                    {% for field in form %}
+                       <li><label>{{field}} {{field.label}}</label></li>
+                    {% endfor %}
+                {% else %}
+                    {% for candidate in form.choice %}
+                        <li class='candidate'>
+                            {{candidate}}
                         </li>
-                {% if forloop.last %}
-                    </ul>
-                </div>
-                </div>
+                    {% endfor %}
                 {% endif %}
-            {% endfor %}
-        {% endif %}
-            <div class='empty spacer'></div>
-            {% if form.ballot.vote_type == VOTE_TYPES.POPULARITY or form.ballot.vote_type == VOTE_TYPES.INOROUT %}
-            <h4>Choose an option</h4>
-            {% elif form.ballot.vote_type == VOTE_TYPES.SELECT_X %}
-            <h4>Select up to <span class='select_x'>{{form.ballot.number_to_select}}</span> option{{form.ballot.number_to_select|pluralize}}</h4>
-            {% elif form.ballot.vote_type == VOTE_TYPES.PREFERENCE %}
-            <h4>Rank the following options ({{form.ballot.candidate_set.all|length}} is worst, 1 is best)</h4>
-            {% endif %}
-            {%with form.ballot.id as bid %}
-            {{form_errors|prettify_error_listings:bid}}
-            {% endwith %}
-        <ul>
-            {% if form.ballot.can_abstain %}
-                <li class='candidate'>
-                    <label>{{form.abstains}} {{form.abstains.label}}</label>
-                </li>
-            {% endif %}
-            {% if form.ballot.vote_type == VOTE_TYPES.PREFERENCE %}
-                {% for field in form %}
-                   <li><label>{{field}} {{field.label}}</label></li>
-                {% endfor %}
-            {% else %}
-                {% for candidate in form.choice %}
-                    <li class='candidate'>
-                        {{candidate}}
+                {% if form.ballot.can_write_in %}
+                    <li>
+                        {{form.write_in_value}}
                     </li>
-                {% endfor %}
-            {% endif %}
-            {% if form.ballot.can_write_in %}
-                <li>
-                    {{form.write_in_value}}
-                </li>
-            {% endif %}
-        </ul>
-    </li>
-    </div>
-
+                {% endif %}
+            </ul>
+        </li>
+        </div>
+        {% endwith %}
     {% endfor %}
     </ol>
     <div class='centered'>
