@@ -1,0 +1,14 @@
+{% extends "landing_page.html" %}
+{% load markup %}
+{% block title %}
+ {{flatpage.title}}
+{% endblock title %}
+
+{% block pre_header %}
+
+{% endblock pre_header %}
+
+
+{% block post_header %}
+   {{flatpage.content|urlize|markdown}}
+{% endblock post_header %}
