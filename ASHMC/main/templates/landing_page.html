@@ -116,6 +116,20 @@
         {% for entry in latest_entries %}
             {% include "front_post.html" %}
         {% endfor %}
+        <div class='blognav clearer'>
+            {% if latest_entries.has_previous %}
+            <div class='lefty'>
+                <a href="?page={{latest_entries.previous_page_number}}">Newer Entries</a>
+            </div>
+            {% endif %}
+
+            {% if latest_entries.has_next %}
+            <div class='righty'>
+                <a href='?page={{latest_entries.next_page_number}}'>Older Entries</a>
+            </div>
+            {% endif %}
+
+        </div>
     </section>
 {% endblock post_header %}
 

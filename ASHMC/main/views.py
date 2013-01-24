@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.cache import cache
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 
@@ -68,7 +69,18 @@ class LandingPage(TemplateView):
                 dorms_hidden_from=None,
             )
 
+        paginator = Paginator(latest_entries, 7)
+        page = self.request.GET.get('page', None)
+        try:
+            latest_entries = paginator.page(page)
+        except PageNotAnInteger:
+            latest_entries = paginator.page(1)
+        except EmptyPage:
+            # page out of range
+            latest_entries = paginator.page(paginator.num_pages)
+
         context['latest_entries'] = latest_entries
+        context['page'] = page
 
         context['top_stories'] = TopNewsItem.objects.filter(
             date_expired__gt=datetime.datetime.now(pytz.utc),
