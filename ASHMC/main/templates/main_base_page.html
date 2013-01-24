@@ -2,6 +2,7 @@
 {% load main_extras %}
 {% load cache %}
 {% load webdesign %}
+{% load flatpages %}
 
 {% block content %}
 <section id="preheader">
@@ -90,6 +91,14 @@
             <li><a href="{% url "legal_document_detail" 'ashmc-constitution' %}">Read the Constitution</a></li>
             <li><a href="{% url "legal_document_detail" 'ashmc-bylaws' %}">Read the Bylaws</a></li>
             <li><a href="{% url 'fund_overview' %}">eTreasury</a></li>
+
+        </ul>
+        <h5>ASHMC Policies</h5>
+        <ul class="footer-links">
+            {% get_flatpages '/policy/' for request.user as policy_pages %}
+            {% for page in policy_pages %}
+                <li><a href="{{ page.url }}">{{page.title}}</a></li>
+            {% endfor %}
         </ul>
     </div>
 

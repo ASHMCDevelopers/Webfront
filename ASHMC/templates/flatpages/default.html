@@ -16,6 +16,8 @@
 
 {% block post_header %}
     <div id="content">
+        <h2>{{flatpage.title}}</h2>
+
         {{flatpage.content|urlize|markdown}}
     </div>
 {% endblock post_header %}
