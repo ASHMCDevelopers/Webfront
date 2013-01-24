@@ -13,10 +13,6 @@ class DocumentDetail(DetailView):
         return Article.objects.filter(level=0)
 
 
-class WhatIsASHMC(TemplateView):
-    template_name = 'legal/what_is_ashmc.html'
-
-
 class OfficialFormList(ListView):
     model = OfficialForm
 
