@@ -99,6 +99,8 @@
             <li><a href="{% url 'fund_overview' %}">eTreasury</a></li>
 
         </ul>
+    </div>
+    <div class='righty'>
         <h5>ASHMC Policies</h5>
         <ul class="footer-links">
             {% get_flatpages '/policy/' for request.user as policy_pages %}
