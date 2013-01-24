@@ -2,6 +2,7 @@
 {% load main_extras %}
 {% load cache %}
 {% load webdesign %}
+{% load flatpages %}
 
 {% block content %}
 <section id="preheader">
@@ -77,7 +78,7 @@
         <li><a href="http://www.flickr.com/photos/micamultimedia/" title="Take a look at ASHMC on Flickr." class="social-media flickr">Take a look at ASHMC on Flickr.</a></li>
         <li><a href="" class="social-media youtube">Watch our YouTube channel.</a></li>
         {% endcomment %}
-        <li><a href=''><div class='facebook'>F<span class="hidden">acebook</span></div></a></li>
+        <li><a href='https://www.facebook.com/groups/groupsatharveymudd/'><div class='facebook'>F<span class="hidden">acebook</span></div></a></li>
         <li><a href='http://www.youtube.com/user/HarveyMuddCollege'><div class='youtube'>You<span class='hidden'>Tube</span></div></a></li>
         <li><a href='http://www.twitter.com/ashmc_council'><div class='twitter'>T<span class="hidden">witter</span></div></a></li>
     </ul>
@@ -86,10 +87,26 @@
     <div class='righty'>
         <h5>About ASHMC</h5>
         <ul class="footer-links">
-            <li><a href="{% url 'about_ashmc' %}">What is ASHMC?</a></li>
+            <li><a href="{% url 'council_list' %}">Meet the Council</a></li>
+            {% get_flatpages '/about/' for request.user as policy_pages %}
+            {% for page in policy_pages %}
+                {% if "deep" not in page.url %}
+                    <li><a href="{{page.url}}">{{page.title}}</a></li>
+                {% endif %}
+            {% endfor %}
             <li><a href="{% url "legal_document_detail" 'ashmc-constitution' %}">Read the Constitution</a></li>
             <li><a href="{% url "legal_document_detail" 'ashmc-bylaws' %}">Read the Bylaws</a></li>
             <li><a href="{% url 'fund_overview' %}">eTreasury</a></li>
+
+        </ul>
+        <h5>ASHMC Policies</h5>
+        <ul class="footer-links">
+            {% get_flatpages '/policy/' for request.user as policy_pages %}
+            {% for page in policy_pages %}
+                {% if "deep" not in page.url %}
+                    <li><a href="{{ page.url }}">{{page.title}}</a></li>
+                {% endif %}
+            {% endfor %}
         </ul>
     </div>
 
@@ -100,8 +117,6 @@
             <li><a href="https://sites.google.com/site/capactivities/">Committee for Activities Planning</a></li>
             <li><a href="http://www.hmc.edu/studentlife1/ashmc1/committees1/dac.html">Dormitory Affairs Committee</a></li>
         </ul>
-    </div>
-    <div class='righty'>
         <h5>Community &amp; Blogs</h5>
         <ul class="footer-links">
             <li><a href="http://newwww.hmc.edu/admission/connect/blog/">Admission and Financial Aid Blog</a></li>
