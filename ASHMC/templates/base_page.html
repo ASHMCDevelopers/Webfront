@@ -46,7 +46,7 @@
 
 
 {# scripts go at the end, when the page has mostly been loaded already. #}
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript" src="{% static 'scripts/jquery-1.9.0.js' %}"></script>
 
 
 
@@ -59,8 +59,8 @@
         return c/2*((t-=2)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
     }
 </script>
-<script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>
-<script src="https://raw.github.com/cowboy/jquery-resize/v1.1/jquery.ba-resize.min.js"></script>
+<script src="{% static 'scripts/jquery.tools.min.js' %}"></script>
+<script src="{% static 'scripts/jquery.ba-resize.min.js' %}"></script>
 {% block scriptin %}
 {% endblock %}
 </body>
