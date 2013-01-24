@@ -1,0 +1,13 @@
+@import "base.scss";
+@import "logo_style";
+
+#content {
+    padding: 2em 1em;
+    width: 750px;
+    margin-left: 2em;
+    background-color: $light_background;
+
+    p {
+        max-width: 700px;
+    }
+}
