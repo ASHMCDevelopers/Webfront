@@ -1,0 +1,23 @@
+{% extends "main_base_page.html" %}
+{% load staticfiles %}
+{% load markup %}
+{% block title %}
+ {{flatpage.title}}
+{% endblock title %}
+
+{% block stylin %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/flatpages/policy.css' %}">
+{% endblock stylin %}
+
+{% block pre_header %}
+
+{% endblock pre_header %}
+
+
+{% block post_header %}
+    <div id="content">
+        <h2>{{flatpage.title}}</h2>
+
+        {{flatpage.content|urlize|markdown}}
+    </div>
+{% endblock post_header %}
