@@ -155,6 +155,7 @@ class Command(BaseCommand):
                 new_user = User.objects.get(
                     email=email,
                 )
+                active_users += [new_user.id]
             except ObjectDoesNotExist:
                 # Check LDAP for user
                 student_results = lconn.search_s(
