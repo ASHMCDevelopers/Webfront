@@ -13,6 +13,7 @@ class ArticleAdmin(MPTTModelAdmin):
     def save_model(self, request, article, form, change):
         """Keep track of who modified this object."""
 
+        article.save()
         mod = Modification.objects.create(
             user=request.user,
             article=article,
@@ -32,7 +33,6 @@ class ArticleAdmin(MPTTModelAdmin):
 
         mod.save()
 
-        article.save()
         article.modification_set.add(mod)
 
 admin.site.register(Article, ArticleAdmin)
