@@ -126,17 +126,17 @@ class OfficialForm(models.Model):
 class MinutesDocument(models.Model):
 
     def update_filename(instance, filename):
-        path = "legal/minutes/{}".format(datetime.datetime.date.today().year)
+        path = "legal/minutes/{}".format(datetime.date.today().year)
         format = "{}.{}".format(
             instance.date.strftime("%m-%d-%Y"),
-            instance.file_extension
+            instance.file_actual.name.split('.')[-1]
         )
         return os.path.join(path, format)
 
     uploaded = models.DateField(default=datetime.datetime.now)
     date = models.DateField(unique=True)
 
-    file_actual = models.FileField(upload_to="legal/minutes/%Y/")
+    file_actual = models.FileField(upload_to=update_filename)
 
     @property
     def dl_url(self):
