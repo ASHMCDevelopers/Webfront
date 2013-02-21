@@ -124,6 +124,10 @@ class OfficialForm(models.Model):
 
 
 class MinutesDocument(models.Model):
+    GROUPS = {
+        1: "ASHMC",
+        2: "DAC",
+    }
 
     def update_filename(instance, filename):
         path = "legal/minutes/{}".format(datetime.date.today().year)
@@ -135,6 +139,7 @@ class MinutesDocument(models.Model):
 
     uploaded = models.DateField(default=datetime.datetime.now)
     date = models.DateField(unique=True)
+    group = models.IntegerField(choices=GROUPS.items())
 
     file_actual = models.FileField(upload_to=update_filename)
 
