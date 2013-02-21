@@ -1,8 +1,8 @@
-from django.views.generic import View, DetailView, TemplateView, ListView
-from django.http import Http404
+from django.views.generic import View, DetailView, ListView
+from django.http import Http404, HttpResponseBadRequest
 from django.shortcuts import redirect
 
-from .models import Article, OfficialForm
+from .models import Article, OfficialForm, MinutesDocument
 
 
 class DocumentDetail(DetailView):
@@ -27,7 +27,6 @@ class OfficialFormList(ListView):
 
 
 class GetFormByName(View):
-
     def get(self, *args, **kwargs):
         name = kwargs.get('name', None)
         if name is None:
@@ -43,3 +42,20 @@ class GetFormByName(View):
         form = possible_forms[0]
         # redirect them to download the actual file.
         return redirect(form.file_actual.url)
+
+
+class MinutesList(ListView):
+    model = MinutesDocument
+
+    def get_queryset(self):
+        try:
+            group = int(self.kwargs.get('group'))
+            year = int(self.kwargs.get('year'))
+        except ValueError:
+            return HttpResponseBadRequest
+
+        results = self.model.objects.filter(date__year=year, group=group)
+        if not results:
+            raise Http404
+
+        return results
