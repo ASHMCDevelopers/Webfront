@@ -5,6 +5,7 @@ from django.utils.translation import ugettext as _
 from mptt.models import MPTTModel, TreeForeignKey
 
 import datetime
+import os
 import pytz
 # Create your models here.
 
@@ -120,3 +121,34 @@ class OfficialForm(models.Model):
 
     def __unicode__(self):
         return u"{}".format(self.name)
+
+
+class MinutesDocument(models.Model):
+    GROUPS = {
+        1: "ASHMC",
+        2: "DAC",
+    }
+
+    def update_filename(instance, filename):
+        path = "legal/minutes/{}".format(datetime.date.today().year)
+        format = "{}.{}".format(
+            instance.date.strftime("%m-%d-%Y"),
+            instance.file_actual.name.split('.')[-1]
+        )
+        return os.path.join(path, format)
+
+    uploaded = models.DateField(default=datetime.datetime.now)
+    date = models.DateField(unique=True)
+    group = models.IntegerField(choices=GROUPS.items())
+
+    file_actual = models.FileField(upload_to=update_filename)
+
+    @property
+    def dl_url(self):
+        try:
+            return self.file_actual.url
+        except ValueError:
+            return ''
+
+    def __unicode__(self):
+        return u"Minutes for {}".format(self.date.strftime("%d/%m/%Y"))

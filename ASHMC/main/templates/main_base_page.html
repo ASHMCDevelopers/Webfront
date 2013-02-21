@@ -96,8 +96,8 @@
             {% endfor %}
             <li><a href="{% url "legal_document_detail" 'ashmc-constitution' %}">Read the Constitution</a></li>
             <li><a href="{% url "legal_document_detail" 'ashmc-bylaws' %}">Read the Bylaws</a></li>
+            <li><a href="{% url "legal_minutes_list" group=1 year=2013 %}">Minutes</a></li>
             <li><a href="{% url 'fund_overview' %}">eTreasury</a></li>
-
         </ul>
     </div>
     <div class='righty'>
@@ -109,6 +109,9 @@
                     <li><a href="{{ page.url }}">{{page.title}}</a></li>
                 {% endif %}
             {% endfor %}
+            {% if request.user.is_authenticated %}
+                <li><a href="{% url 'legal_form_list' %}">Offical Forms</a></li>
+            {% endif %}
         </ul>
     </div>
 
