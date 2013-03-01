@@ -8,6 +8,9 @@ class RoomInterest(models.Model):
     room = models.ForeignKey(DormRoom)
     interested_users = models.ManyToManyField(User)
 
+    def __unicode__(self):
+        return u"{}: {}".format(self.room, self.interested_users.all())
+
 class DrawNumber(models.Model):
     number = models.IntegerField()
     user = models.OneToOneField(User)
@@ -22,7 +25,8 @@ class DrawNumber(models.Model):
         return self.number > other.number
 
     def __unicode__(self):
-        return u"{} {}".format(
+        return u"{} {}: {}".format(
             self.user.student.class_of.to_classname(),
             self.number,
+            self.user,
         )
