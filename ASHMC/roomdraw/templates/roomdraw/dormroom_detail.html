@@ -8,7 +8,7 @@
 {% endblock stylin %}
 
 {% block post_header %}
-    <h1>{{object}}</h1>
+    <h2>{{object}}</h2>
 
     <div class="groups">
     <table>
@@ -54,7 +54,7 @@
         {% get_comment_form for object as cf%}
         <form action="{% comment_form_target %}" method="POST">
             {% csrf_token %}
-            <h2>Leave a note:</h2>
+            <h3>Leave a note:</h3>
             {% for hf in cf.hidden_fields %}
                 {{hf}}
             {% endfor %}
