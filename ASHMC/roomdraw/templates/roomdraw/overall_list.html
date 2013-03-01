@@ -1,5 +1,7 @@
 {% extends "main_base_page.html" %}
 {% load static %}
+{% load main_extras %}
+{% load roomdraw_extras %}
 
 {% block stylin %}
     <link rel="stylesheet" type="text/css" href="{% static "styles/roomdraw/roomdraw_base.css" %}">
@@ -7,9 +9,30 @@
 
 {% block post_header %}
 {% for dorm in dorms %}
+<div class="roomtable">
 <h1>{{dorm.0.dorm}}</h1>
+<table>
+    <thead>
+        <th>Room #</th><th># Groups</th><th>Best Number</th>
+    </thead>
+    <tbody>
     {% for room in dorm %}
-        {{room}}<br/>
+    <tr>
+        <td><a href="{% url "roomdraw_room_detail" dorm=room.dorm.code number=room.number %}">{{room}}</a></td>
+        <td>{{room.roominterest_set.count}}</td>
+        <td>{{room|get_highest_number}}</td>
+    </tr>
     {% endfor %}
+    </tbody>
+</table>
+</div>
+<div class="floorplan">
+    {% with dorm.0.dorm.name  as dormname  %}
+        {% for floor in  floors|get:dormname %}
+            <img src="{% static "images/roomdraw/"%}{{dormname}}{{floor}}.jpg">
+        {% endfor %}
+    {% endwith %}
+</div>
+<div class="clearer"></div>
 {% endfor %}
 {% endblock post_header %}

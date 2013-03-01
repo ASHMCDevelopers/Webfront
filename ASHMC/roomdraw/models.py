@@ -6,4 +6,23 @@ from ASHMC.roster.models import DormRoom
 
 class RoomInterest(models.Model):
     room = models.ForeignKey(DormRoom)
-    users = models.ManyToManyField(User)
+    interested_users = models.ManyToManyField(User)
+
+class DrawNumber(models.Model):
+    number = models.IntegerField()
+    user = models.OneToOneField(User)
+
+    def __lt__(self, other):
+        if not isinstance(other, DrawNumber):
+            return NotImplemented
+        # senior numbers are better than junior, etc.
+        if self.user.student.class_of > other.user.student.class_of:
+            return True
+        # smaller numbers are better than bigger ones
+        return self.number > other.number
+
+    def __unicode__(self):
+        return u"{} {}".format(
+            self.user.student.class_of.to_classname(),
+            self.number,
+        )
