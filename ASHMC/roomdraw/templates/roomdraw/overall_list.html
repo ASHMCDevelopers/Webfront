@@ -1,0 +1,15 @@
+{% extends "main_base_page.html" %}
+{% load static %}
+
+{% block stylin %}
+    <link rel="stylesheet" type="text/css" href="{% static "styles/roomdraw/roomdraw_base.css" %}">
+{% endblock stylin %}
+
+{% block post_header %}
+{% for dorm in dorms %}
+<h1>{{dorm.0.dorm}}</h1>
+    {% for room in dorm %}
+        {{room}}<br/>
+    {% endfor %}
+{% endfor %}
+{% endblock post_header %}

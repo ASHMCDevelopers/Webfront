@@ -34,6 +34,7 @@ urlpatterns = patterns('',
     url(r'^soft_link/(?P<url_name>.*)/', lambda x, url_name: redirect(url_name)),
     url(r'^roster/', include('ASHMC.roster.urls')),
     url(r'^amazon/', RedirectView.as_view(url=settings.AMAZON_ASSOCIATES_REDIRECT_URL), {}, 'amazon_associates'),
+    url(r'^roomdraw/', include('ASHMC.roomdraw.urls')),
     url(r'^', include('ASHMC.main.urls')),
 )
 
