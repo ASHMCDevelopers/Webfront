@@ -140,9 +140,12 @@ class BallotForm(forms.Form):
             print "CLEANED: ", cleaned_data
 
             if len(rankings) != len(cleaned_data):
-                raise forms.ValidationError(
-                    "You must rank each option uniquely."
-                )
+                if not self.ballot.is_irv:
+                    # IRV ballots do *not* require complete rankings;
+                    # standard preferential ballots do.
+                    raise forms.ValidationError(
+                        "You must rank each option uniquely."
+                    )
 
         return cleaned_data
 
