@@ -62,7 +62,7 @@ $('.irv_breakdown tbody').each(function() {
                                 {% if not request.user|role_higher_than:"Vice-President" %}
                                 {% else %}
                                     <h4>Breakdown</h4>
-                                    {% if ballot.vote_type == ballot.VOTE_TYPES.PREFERENCE and ballot.is_irv %}
+                                    {% if ballot.vote_type == ballot.VOTE_TYPES.PREFERENCE and ballot.is_irv and measure.voting_closed %}
                                         <table class="irv_breakdown">
                                             <thead>
                                                 <tr>

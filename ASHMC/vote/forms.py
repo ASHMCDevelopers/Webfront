@@ -76,7 +76,7 @@ class BallotForm(forms.Form):
                     # because otherwise the fields don't validate properly. Bugger
                     # if I know why, though.
                     max_value=ballot.candidate_set.count(),
-
+                    required=not ballot.is_irv,
                     label="{}".format(candidate.cast()),
                     widget=forms.TextInput(
                         attrs={
@@ -86,7 +86,8 @@ class BallotForm(forms.Form):
                 )
                 self.fields[str(candidate.cast())].candidate = candidate
 
-        if ballot.can_write_in:
+        # write-ins don't make sense in a preference context.
+        if ballot.can_write_in and ballot.vote_type != Ballot.VOTE_TYPES.PREFERENCE:
             self.fields['write_in_value'] = forms.CharField(
                 max_length=50,
                 required=False,

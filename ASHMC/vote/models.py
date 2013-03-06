@@ -9,6 +9,9 @@ from django.utils.translation import ugettext as _
 from ASHMC.main.models import GradYear, Utility
 from ASHMC.roster.models import Dorm, DormRoom, UserRoom
 import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class IntegerRangeField(models.IntegerField):
@@ -116,23 +119,31 @@ class Ballot(models.Model):
 
             # Don't re-calculate if it's been calculated.
             if InstantRerunVotingRound.objects.filter(ballot=self).count() != 0:
+
                 irvr = InstantRerunVotingRound.objects.filter(ballot=self).order_by('-number')[0]
-                max_votes = max(IRVCandidate.objects.filter(
-                    irv_round=irvr,
-                ).annotate(models.Count('votes')).values_list(
-                    'votes__count',
-                    flat=True
-                ))
-                return irvr.irvcandidate_set.annotate(models.Count('votes')).filter(votes__count=max_votes)
+                try:
+                    max_votes = max(IRVCandidate.objects.filter(
+                        irv_round=irvr,
+                    ).annotate(models.Count('votes')).values_list(
+                        'votes__count',
+                        flat=True,
+                    ))
+                    return irvr.irvcandidate_set.annotate(models.Count('votes')).filter(votes__count=max_votes)
 
-            total_votes = float(self.preferentialvote_set.count()) / self.candidate_set.count()
+                except ValueError:
+                    return IRVCandidate.objects.none()
+
+            logger.debug("Calcluating IRV for BALLOT %s", self)
+
+            total_votes = self.measure.vote_set.count()
             candidates = list(self.candidate_set.all())
-
+            logger.debug("total votes: %s", total_votes)
             the_round = InstantRerunVotingRound.objects.create(
                 number=1,
                 ballot=self,
             )
             for candidate in candidates:
+                logger.debug("Creating initial IRVCandidate for %s", candidate)
                 irvc = IRVCandidate.objects.create(
                     candidate=candidate,
                     irv_round=the_round,
@@ -144,22 +155,31 @@ class Ballot(models.Model):
                 )))
 
             # Do rounds until *someone* has a majority.
+            logger.debug("calculating starting max votes")
             max_votes = max(IRVCandidate.objects.filter(
                 irv_round=the_round,
             ).annotate(models.Count('votes')).values_list(
                 'votes__count',
-                flat=True
+                flat=True,
             ))
-            while max_votes < total_votes / 2:
+            logger.debug("max_votes: %s", max_votes)
+
+            while max_votes <= total_votes / 2:
+
+                logger.debug("%s out of %s", max_votes, total_votes)
+
                 old_candidates = IRVCandidate.objects.filter(irv_round=the_round).annotate(pv_count=models.Count('votes')).order_by('pv_count')
+                logger.debug("old candidates: %s", old_candidates)
 
                 the_round = InstantRerunVotingRound.objects.create(
                     ballot=self,
                     number=the_round.number + 1,
                 )
+                logger.debug("creating new round: %s", the_round.number)
 
                 # TODO: break ties LOLOLOL
                 loser = old_candidates[0]
+                logger.debug("found loser: %s", loser)
 
                 # Move all the surviving votes over, and delete the
                 # loser from the running.
@@ -172,10 +192,20 @@ class Ballot(models.Model):
 
                 # Attach losers votes to their next preference
                 for pvote in loser.votes.all():
+                    logger.debug("attaching loser's votes to other candidates")
                     v = pvote.vote
-                    next_pvote = v.preferentialvote_set.get(
-                        amount=pvote.amount + 1,
-                    )
+                    try:
+                        next_pvote = v.preferentialvote_set.get(
+                            amount=pvote.amount + 1,
+                        )
+                    except PreferentialVote.ObjectDoesNotExist:
+                        logger.debug("losing a preference due to lack of ranking")
+                        # If there are no more preferences, that's fine.
+                        # their vote no longer contributes to the total,
+                        # and they don't get a candidate assigned to them.
+                        total_votes -= 1
+                        continue
+
                     next_irc = IRVCandidate.objects.get(
                         irv_round=the_round,
                         candidate=next_pvote.candidate,
@@ -190,7 +220,7 @@ class Ballot(models.Model):
                 ))
             # The rounds are over! Time to find the max votes and return the list
             # of winners.
-            return IRVCandidate.objects.annotate(models.Count('votes')).filter(votes__count=max_votes)
+            return IRVCandidate.objects.annotate(models.Count('votes')).filter(votes__count=max_votes, irv_round=the_round)
 
         elif self.vote_type == self.VOTE_TYPES.SELECT_X:
             max_choices = self.candidate_set.annotate(pv_max=models.Count('popularityvote')).order_by('-pv_max').values_list('pv_max', flat=True)[0]
@@ -269,7 +299,7 @@ class Measure(models.Model):
 
     @property
     def voting_closed(self):
-        return (not self.is_open) or (self.vote_end < timezone.now())
+        return (not self.is_open) or (self.vote_end is not None and self.vote_end < timezone.now())
 
     class Meta:
         verbose_name = _('Measure')
