@@ -62,7 +62,9 @@
                 <ul>
                 {% if form.ballot.vote_type == VOTE_TYPES.PREFERENCE %}
                     {% for field in form %}
-                       <li><label>{{field}} {{field.label}}</label></li>
+                        {% if not field.label == form.write_in_value.label %}
+                           <li><label>{{field}} {{field.label}}</label></li>
+                        {% endif %}
                     {% endfor %}
                 {% else %}
                     {% for candidate in form.choice %}
