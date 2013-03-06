@@ -199,7 +199,7 @@ class Ballot(models.Model):
                             amount=pvote.amount + 1,
                         )
                     except PreferentialVote.ObjectDoesNotExist:
-                        logger.debug("losing a preference due to lack of ranking")
+                        logger.info("losing a preference due to lack of ranking")
                         # If there are no more preferences, that's fine.
                         # their vote no longer contributes to the total,
                         # and they don't get a candidate assigned to them.
