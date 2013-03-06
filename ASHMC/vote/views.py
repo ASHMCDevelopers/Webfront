@@ -169,6 +169,11 @@ class CreateMeasure(CreateView):
 
         for ballot_num in ballots_dict:
             ballot_dict = ballots_dict[ballot_num]
+            # sanitize ballot info
+            for key, val in ballot_dict.iteritems():
+                if val == "":
+                    ballot_dict[key] = None
+
             candidate_info = ballot_dict.pop('candidates', {})
 
             ballot = Ballot.objects.create(measure=new_measure, **ballot_dict)
@@ -379,16 +384,17 @@ class MeasureDetail(DetailView):
 
             elif form.ballot.vote_type == Ballot.VOTE_TYPES.PREFERENCE:
                 for candidate_field in form.cleaned_data:
-                    candidate = Candidate.objects.get(
-                        title=candidate_field,
-                        ballot=form.ballot,
-                    )
-                    PreferentialVote.objects.create(
-                        ballot=form.ballot,
-                        vote=vote,
-                        candidate=candidate,
-                        amount=form.cleaned_data[candidate_field],
-                    )
+                    if form.cleaned_data[candidate_field]:
+                        candidate = Candidate.objects.get(
+                            title=candidate_field,
+                            ballot=form.ballot,
+                        )
+                        PreferentialVote.objects.create(
+                            ballot=form.ballot,
+                            vote=vote,
+                            candidate=candidate,
+                            amount=form.cleaned_data[candidate_field],
+                        )
 
             elif form.ballot.vote_type == Ballot.VOTE_TYPES.INOROUT:
                 # Don't create a popularityvote if their choice is 'abstain'
