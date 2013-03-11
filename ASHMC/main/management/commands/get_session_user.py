@@ -23,4 +23,4 @@ class Command(BaseCommand):
         uid = session.get_decoded().get('_auth_user_id')
         user = User.objects.get(pk=uid)
 
-        print user.username, user.get_full_name(), user.email
+        print user.id, user.username, user.get_full_name(), user.email
