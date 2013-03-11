@@ -170,9 +170,14 @@ class CreateMeasure(CreateView):
         for ballot_num in ballots_dict:
             ballot_dict = ballots_dict[ballot_num]
             # sanitize ballot info
-            for key, val in ballot_dict.iteritems():
+            for key, val in ballot_dict.items():
                 if val == "":
-                    ballot_dict[key] = None
+                    del ballot_dict[key]
+
+            if "can_abstain" not in ballot_dict:
+                ballot_dict["can_abstain"] = False
+            if "is_open" not in ballot_dict:
+                ballot_dict["is_open"] = False
 
             candidate_info = ballot_dict.pop('candidates', {})
 
