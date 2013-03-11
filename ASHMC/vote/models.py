@@ -306,6 +306,8 @@ class Measure(models.Model):
         verbose_name_plural = _('Measures')
 
     def save(self, *args, **kwargs):
+        if self.vote_start is None:
+            raise IntegrityError("vote_measure.vote_start may not be NULL")
         if self.vote_end is not None:
             # Ensure that the measure is open for at least 2 days.
             if self.vote_end - self.vote_start < datetime.timedelta(days=2):
