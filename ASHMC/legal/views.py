@@ -54,7 +54,7 @@ class MinutesList(ListView):
         except ValueError:
             return HttpResponseBadRequest
 
-        results = self.model.objects.filter(date__year=year, group=group)
+        results = self.model.objects.filter(date__year=year, group=group).order_by('-date')
         if not results:
             raise Http404
 
