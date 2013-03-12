@@ -175,6 +175,13 @@ $(function() {
     $(this).children('.text').children('a').css('color', color);
   });
 
+  // fix firefox display issue
+  if (navigator.userAgent.indexOf("Firefox")!=-1) {
+    var loginform = $("#login_form_hold");
+    loginform.css('width', '315px');
+    loginform.css('margin-right', '110px');
+  }
+
 });
 </script>
 {% endblock scriptin %}
