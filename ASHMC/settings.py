@@ -5,7 +5,7 @@ import local_settings
 
 from twitter import Twitter, OAuth
 
-VERSION = "20130310"
+VERSION = "20130312"
 
 django.template.add_to_builtins('django.templatetags.future')
 
@@ -127,6 +127,7 @@ MIDDLEWARE_CLASSES = (
     #'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'ASHMC.middleware.ImpersonateMiddleware.ImpersonateMiddleware',
 )
 
 INTERNAL_IPS = local_settings.INTERNAL_IPS
