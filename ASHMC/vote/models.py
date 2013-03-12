@@ -156,13 +156,16 @@ class Ballot(models.Model):
 
             # Do rounds until *someone* has a majority.
             logger.debug("calculating starting max votes")
-            max_votes = max(IRVCandidate.objects.filter(
-                irv_round=the_round,
-            ).annotate(models.Count('votes')).values_list(
-                'votes__count',
-                flat=True,
-            ))
-            logger.debug("max_votes: %s", max_votes)
+            try:
+                max_votes = max(IRVCandidate.objects.filter(
+                    irv_round=the_round,
+                ).annotate(models.Count('votes')).values_list(
+                    'votes__count',
+                    flat=True,
+                ))
+                logger.debug("max_votes: %s", max_votes)
+            except ValueError:
+                Candidate.objects.none()
 
             while max_votes <= total_votes / 2:
 
