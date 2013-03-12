@@ -73,7 +73,7 @@
                         </li>
                     {% endfor %}
                 {% endif %}
-                {% if form.ballot.can_write_in %}
+                {% if form.ballot.can_write_in and not form.ballot.is_irv %}
                     <li>
                         {{form.write_in_value}}
                     </li>
