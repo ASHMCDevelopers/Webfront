@@ -27,7 +27,7 @@ class LandingPage(TemplateView):
         context = super(LandingPage, self).get_context_data(**kwargs)
 
         tweets = cache.get('latest_tweets')
-
+        semester = Semester.get_this_semester()
         if tweets:
             context['latest_tweets'] = tweets
 
@@ -48,12 +48,29 @@ class LandingPage(TemplateView):
                 latest_entries = Entry.published.all()
             else:
                 user_dorm = UserRoom.get_current_room(self.request.user)
-                # if they're off campus, make sure the right official dorm is used:
                 try:
+                    # if they're off campus, make sure the right official dorm is used:
                     if not user_dorm.room.dorm.official_dorm:
-                        user_dorm = UserRoom.objects.get(room__dorm__code="OFF", room__number="Symbolic Room", user=self.request.user)
+                        user_dorm = UserRoom.objects.get(
+                            user=self.request.user,
+                            semesters__id=semester.id,
+                            room__dorm__code="OFF",
+                            room__number="Symbolic Room",
+                        )
                 except AttributeError:
                     user_dorm = None
+
+                except UserRoom.DoesNotExist:
+                    # No offcampus room, then they're probably abroad.
+                    try:
+                        user_dorm = UserRoom.objects.get(
+                            user=self.request.user,
+                            room__dorm__code="ABR",
+                            semesters__id=semester.id,
+                        )
+
+                    except UserRoom.DoesNotExist:
+                        user_dorm = None
 
                 if user_dorm:
                     latest_entries = Entry.published.exclude(
