@@ -267,7 +267,6 @@ class MeasureListing(ListView):
             #raise PermissionDenied()
             logger.debug("%s %s", e, e.message)
             logger.info("blocked access to {}".format(self.request.user))
-            # Until we have roster data importing, this is bad
             raise PermissionDenied
 
         return Measure.objects.exclude(
