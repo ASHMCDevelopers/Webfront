@@ -67,6 +67,9 @@
                         {% endif %}
                     {% endfor %}
                 {% else %}
+                    {% if form.ballot.vote_type == VOTE_TYPES.SELECT_X and form.ballot.can_abstain %}
+                        <li class='candidate'>{{form.abstains}} I'm abstaining</li>
+                    {% endif %}
                     {% for candidate in form.choice %}
                         <li class='candidate'>
                             {{candidate}}
