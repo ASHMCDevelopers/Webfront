@@ -127,3 +127,6 @@ emails and about what:
 ```bash
 python manage.py send_reminder_emails 25 18 32 104
 ```
+
+If you use the `--dry-run` flag, no emails will be sent. This allows you to
+double check the intended recipients beforehand, if you like.
