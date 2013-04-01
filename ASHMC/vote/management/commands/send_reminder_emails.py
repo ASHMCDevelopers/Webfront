@@ -1,17 +1,19 @@
-from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
 from django.core.management.base import BaseCommand
+from django.db.models import Q
 from django.template import Context
 from django.template.loader import get_template
 
-from vote.models import Measure, Vote
+from ASHMC.main.models import Semester
+from ASHMC.roster.models import UserRoom
+from ASHMC.vote.models import Measure, Vote, User
 
 from datetime import datetime, timedelta
 
 
 class Command(BaseCommand):
-    args = '<sessionid>'
-    help = 'Identifies the user associated with a certain sessionid'
+    args = '(<measure_id>)*'
+    help = 'sends a reminder email to users to vote'
 
     def handle(self, *args, **kwargs):
         if len(args) > 0:
@@ -31,29 +33,55 @@ class Command(BaseCommand):
                 vote_start__lte=datetime.today() - timedelta(days=5),
             )
 
-        for measure in measures:
-            for user in measure.eligible_voters:
+        for user in User.objects.filter(is_active=True, is_superuser=False):
+            this_sem = Semester.get_this_semester()
+            try:
+                room = UserRoom.objects.get(
+                    user=user,
+                    semesters__id=this_sem.id,
+                    room__dorm__official_dorm=True,
+                ).room
+
+            except UserRoom.DoesNotExist:
+                # So they don't have an official dorm room
+                # that means they should be abroad.
+
                 try:
-                    # only send emails to people who haven't voted in
-                    # this measure
-                    Vote.objects.get(account=user, measure=measure)
+                    room = UserRoom.objects.get(
+                        user=user,
+                        semesters__id=this_sem.id,
+                        room__dorm__code="ABR",
+                    ).room
+                except UserRoom.DoesNotExist:
                     continue
-                except Vote.DoesNotExist:
-                    pass
 
-                htmly = get_template("vote/reminder_email.html")
-                plaintext = get_template("vote/reminder_email.txt")
-                d = Context({'user': user, 'measure': measure})
-                subject = "A friendly ASHMC reminder"
-                from_email = "automatic@ashmc.hmc.edu"
-                to_email = user.email
-                msg = EmailMultiAlternatives(
-                    subject,
-                    plaintext.render(d),
-                    from_email,
-                    [to_email],
-                )
-                msg.attach_alternative(htmly.render(d), "text/html")
-                msg.send()
+            # only send emails to people who haven't voted in
+            # this measure
+            delinquent_measures = measures.exclude(
+                Q(id__in=Vote.objects.filter(account=user).values_list('measure__id', flat=True)),
+            ).filter(
+                Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
+                Q(restrictions__gradyears=user.student.class_of) | Q(restrictions__gradyears=None),
+            ).exclude(
+                banned_accounts__id__exact=user.id,
+            )
 
-                print "sent reminder email to", user.id, "about", measure.id
+            if not delinquent_measures.exists():
+                continue
+
+            htmly = get_template("vote/reminder_email.html")
+            plaintext = get_template("vote/reminder_email.txt")
+            d = Context({'user': user, 'measures': delinquent_measures})
+            subject = "A friendly ASHMC reminder"
+            from_email = "automatic@ashmc.hmc.edu"
+            to_email = user.email
+            msg = EmailMultiAlternatives(
+                subject,
+                plaintext.render(d),
+                from_email,
+                [to_email],
+            )
+            msg.attach_alternative(htmly.render(d), "text/html")
+            msg.send()
+
+            print "sent reminder email to", user.id, "about", [m.id for m in delinquent_measures]

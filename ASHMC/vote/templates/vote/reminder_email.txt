@@ -1,8 +1,11 @@
 Hello, {{user.first_name}}!
 
-You haven't voted yet on {{measure.title}} -- Please vote at
-ashmc.hmc.edu/vote/measure/{{measure.id}} so the election can reach quorum.
+You haven't voted yet on the following measures:{% for measure in measures %}
+    {{measure.name}}
+{% endfor %}
+Please vote at https://ashmc.hmc.edu/vote/ so the election can reach quorum.
 
 Thanks for your time!
+
 
 This email was sent automatically; please do not respond to it.
