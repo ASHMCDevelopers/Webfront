@@ -125,5 +125,5 @@ You may optionally give it a list of Measure ID's, which will restrict who gets
 emails and about what:
 
 ```bash
-python manag.epy send_reminder_emails 25 18 32 104
+python manage.py send_reminder_emails 25 18 32 104
 ```
