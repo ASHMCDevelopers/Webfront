@@ -3,7 +3,7 @@ Hello, {{user.first_name}}!
 You haven't voted yet on the following measures:{% for measure in measures %}
     {% autoescape off %}{{measure.name}}{% endautoescape %}
 {% endfor %}
-Please vote at https://ashmc.hmc.edu/vote/ so the election can reach quorum.
+Please vote at https://ashmc.hmc.edu{% url 'vote_main' %} so the election can reach quorum.
 
 Thanks for your time!
 

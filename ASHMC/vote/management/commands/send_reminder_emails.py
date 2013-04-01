@@ -23,7 +23,7 @@ class Command(BaseCommand):
             dest='dry_run',
             default=False,
             help='Don\'t actually send any emails.',
-        )
+        ),
     )
 
     def handle(self, *args, **options):

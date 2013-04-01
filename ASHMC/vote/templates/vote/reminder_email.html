@@ -4,7 +4,7 @@ You haven't voted yet on the following measures:
 <ul>{% for measure in measures %}
     <li>{{measure.name}}</li>
 {% endfor %}</ul>
-Please vote at <a href="https://ashmc.hmc.edu/vote">https://ashmc.hmc.edu/vote</a> so the election can reach quorum.
+Please vote at <a href="https://ashmc.hmc.edu{% url 'vote_main' %}">https://ashmc.hmc.edu{% url 'vote_main' %}</a> so the election can reach quorum.
 
 Thanks for your time!
 
