@@ -5,7 +5,7 @@ import local_settings
 
 from twitter import Twitter, OAuth
 
-VERSION = "20130322"
+VERSION = "20130401"
 
 django.template.add_to_builtins('django.templatetags.future')
 
@@ -201,3 +201,5 @@ LOGGING = local_settings.LOGGING
 
 ASHMC_FORMS_FOLDER = local_settings.ASHMC_FORMS_FOLDER
 AMAZON_ASSOCIATES_REDIRECT_URL = local_settings.AMAZON_ASSOCIATES_REDIRECT_URL
+
+EMAIL_BACKEND = local_settings.EMAIL_BACKEND

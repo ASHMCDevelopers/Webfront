@@ -1,0 +1,11 @@
+Hello, <strong>{{user.first_name}}</strong>!
+
+You haven't voted yet on the following measures:
+<ul>{% for measure in measures %}
+    <li>{{measure.name}}</li>
+{% endfor %}</ul>
+Please vote at <a href="https://ashmc.hmc.edu/vote">https://ashmc.hmc.edu/vote</a> so the election can reach quorum.
+
+Thanks for your time!
+
+<em>This email was sent automatically; please do not respond to it.</em>
