@@ -9,13 +9,24 @@ from ASHMC.roster.models import UserRoom
 from ASHMC.vote.models import Measure, Vote, User
 
 from datetime import datetime, timedelta
+from optparse import make_option
 
 
 class Command(BaseCommand):
     args = '(<measure_id>)*'
     help = 'sends a reminder email to users to vote'
 
-    def handle(self, *args, **kwargs):
+    option_list = BaseCommand.option_list + (
+        make_option(
+            '--dry-run',
+            action='store_true',
+            dest='dry_run',
+            default=False,
+            help='Don\'t actually send any emails.',
+        )
+    )
+
+    def handle(self, *args, **options):
         if len(args) > 0:
             measure_ids = args
         else:
@@ -82,6 +93,7 @@ class Command(BaseCommand):
                 [to_email],
             )
             msg.attach_alternative(htmly.render(d), "text/html")
-            msg.send()
+            if not options.get('dry_run'):
+                msg.send()
 
             print "sent reminder email to", user.id, "about", [m.id for m in delinquent_measures]
