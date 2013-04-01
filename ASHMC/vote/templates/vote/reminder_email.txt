@@ -1,7 +1,7 @@
 Hello, {{user.first_name}}!
 
 You haven't voted yet on the following measures:{% for measure in measures %}
-    {{measure.name}}
+    {% autoescape off %}{{measure.name}}{% endautoescape %}
 {% endfor %}
 Please vote at https://ashmc.hmc.edu/vote/ so the election can reach quorum.
 
