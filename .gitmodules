@@ -1,0 +1,3 @@
+[submodule "ASHMC/courses"]
+	path = ASHMC/courses
+	url = git://github.com/ASHMCDevelopers/courses.git
