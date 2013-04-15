@@ -20,7 +20,10 @@ class MeasureCreationTest(T.TestCase):
         """Tests that sensible defaults are held to."""
         measure = MeasureFactory.create()
 
-        self.assertAlmostEqual(measure.vote_start, datetime.datetime.now(), delta=datetime.timedelta(seconds=5))
+        self.assertAlmostEqual(
+            measure.vote_start, datetime.datetime.now(),
+            delta=datetime.timedelta(seconds=5),
+        )
         self.assertTrue(measure.is_open)
 
     def test_cannot_create_measure_without_required_fields(self):
@@ -50,21 +53,5 @@ class BallotCreationTest(T.TestCase):
         )
 
         self.assertEqual(ballot.measure, self.measure)
-        self.assertEqual(ballot.is_secret, True)
+        self.assertEqual(ballot.is_secret, False)
         self.assertEqual(ballot.can_write_in, False)
-
-    def test_display_position_uniqueness(self):
-        """Test uniqueness constraint on display_position,measure key"""
-        ballot1 = BallotFactory(measure=self.measure)
-
-        self.assertEqual(ballot1.display_position, 1)
-
-        ballot2 = BallotFactory.build(measure=self.measure)
-
-        with self.assertRaises(IntegrityError) as cm:
-            ballot2.save()
-        exc = cm.exception
-        self.assertEqual(exc.message, "columns measure_id, display_position are not unique")
-
-        ballot3 = BallotFactory()
-        self.assertEqual(ballot3.display_position, 1)

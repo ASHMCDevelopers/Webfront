@@ -169,6 +169,14 @@ class CreateMeasure(CreateView):
 
         for ballot_num in ballots_dict:
             ballot_dict = ballots_dict[ballot_num]
+            # sanitize ballot info
+            for key, val in ballot_dict.items():
+                if val == "":
+                    del ballot_dict[key]
+
+            if "can_abstain" not in ballot_dict:
+                ballot_dict["can_abstain"] = False
+
             candidate_info = ballot_dict.pop('candidates', {})
 
             ballot = Ballot.objects.create(measure=new_measure, **ballot_dict)
@@ -238,17 +246,28 @@ class MeasureListing(ListView):
             return Measure.objects.exclude(vote_end__lte=datetime.datetime.now(pytz.utc)).order_by('vote_end')
 
         try:
-            room = UserRoom.objects.filter(
+            room = UserRoom.objects.get(
                 user=self.request.user,
                 semesters__id=this_sem.id,
                 room__dorm__official_dorm=True,
-            )[0].room
-        except IndexError:
+            ).room
+
+        except UserRoom.DoesNotExist:
+            # So they don't have an official dorm room
+            # that means they should be abroad.
+
+            room = UserRoom.objects.get(
+                user=self.request.user,
+                semesters__id=this_sem.id,
+                room__dorm__code="ABR",
+            ).room
+
+        except Exception, e:
             # If they don't have a room, they're probably not eligible to vote.
             #raise PermissionDenied()
+            logger.debug("%s %s", e, e.message)
             logger.info("blocked access to {}".format(self.request.user))
-            # Until we have roster data importing, this is bad
-            pass
+            raise PermissionDenied
 
         return Measure.objects.exclude(
             # Immediately filter out expired measures. Otherwise shit gets weird.
@@ -379,16 +398,17 @@ class MeasureDetail(DetailView):
 
             elif form.ballot.vote_type == Ballot.VOTE_TYPES.PREFERENCE:
                 for candidate_field in form.cleaned_data:
-                    candidate = Candidate.objects.get(
-                        title=candidate_field,
-                        ballot=form.ballot,
-                    )
-                    PreferentialVote.objects.create(
-                        ballot=form.ballot,
-                        vote=vote,
-                        candidate=candidate,
-                        amount=form.cleaned_data[candidate_field],
-                    )
+                    if form.cleaned_data[candidate_field]:
+                        candidate = Candidate.objects.get(
+                            title=candidate_field,
+                            ballot=form.ballot,
+                        )
+                        PreferentialVote.objects.create(
+                            ballot=form.ballot,
+                            vote=vote,
+                            candidate=candidate,
+                            amount=form.cleaned_data[candidate_field],
+                        )
 
             elif form.ballot.vote_type == Ballot.VOTE_TYPES.INOROUT:
                 # Don't create a popularityvote if their choice is 'abstain'

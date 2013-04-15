@@ -61,8 +61,8 @@
                         {% endwith %}
                     </li>
                     <li><a href="{% url 'fund_overview'%}"><h3>Treasury</h3></a></li>
-                    <li><a href="{% url "event_list" %}"><h3>Check Events</h3></a></li>
                     <li><a href="{% url "courses_landing_page" %}"><h3>Search Courses</h3></a></li>
+                    <li><a href="https://www.google.com/calendar/embed?src=f9ns7tq7be2iuvbo7k4cbckjd0%40group.calendar.google.com&ctz=America/Los_Angeles"><h3>Check Events</h3></a></li>
                     <li><a href="{% url "legal_document_detail" 'ashmc-constitution' %}"><h3>Read the ASHMC&nbsp;Constitution</h3></a></li>
                     <li><a href="{% url "legal_document_detail" 'ashmc-bylaws' %}"><h3>Read the ASHMC&nbsp;Bylaws</h3></a></li>
                 </ul>
@@ -175,6 +175,13 @@ $(function() {
     var color = $($(this).children('.spacer').children('.author').children('a')[0]).css('color');
     $(this).children('.text').children('a').css('color', color);
   });
+
+  // fix firefox display issue
+  if (navigator.userAgent.indexOf("Firefox")!=-1) {
+    var loginform = $("#login_form_hold");
+    loginform.css('width', '315px');
+    loginform.css('margin-right', '110px');
+  }
 
 });
 </script>

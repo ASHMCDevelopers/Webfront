@@ -1,0 +1,11 @@
+Hello, {{user.first_name}}!
+
+You haven't voted yet on the following measures:{% for measure in measures %}
+    {% autoescape off %}{{measure.name}}{% endautoescape %}
+{% endfor %}
+Please vote at https://ashmc.hmc.edu{% url 'vote_main' %} so the election can reach quorum.
+
+Thanks for your time!
+
+
+This email was sent automatically; please do not respond to it.

@@ -155,6 +155,7 @@ class Command(BaseCommand):
                 new_user = User.objects.get(
                     email=email,
                 )
+                active_users += [new_user.id]
             except ObjectDoesNotExist:
                 # Check LDAP for user
                 student_results = lconn.search_s(
@@ -229,9 +230,15 @@ class Command(BaseCommand):
                 )
 
             else:
+                number = row[FIELD_ORDERING.index("Room")].value,
+                try:
+                    number = int(number)
+                except ValueError:
+                    number = str(number)
+
                 room, _ = DormRoom.objects.get_or_create(
                     dorm=dorm,
-                    number=row[FIELD_ORDERING.index("Room")].value,
+                    number=number,
                 )
 
             if dorm.code in Dorm.all_objects.filter(official_dorm=False).values_list('code', flat=True)\

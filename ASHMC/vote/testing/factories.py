@@ -1,7 +1,7 @@
 import datetime
 import factory
 
-from ..models import (Ballot, DormBallot, Measure,
+from ..models import (Ballot, Measure,
     Vote, PopularityVote, Candidate, PersonCandidate, User)
 
 

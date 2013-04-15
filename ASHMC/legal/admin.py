@@ -13,6 +13,7 @@ class ArticleAdmin(MPTTModelAdmin):
     def save_model(self, request, article, form, change):
         """Keep track of who modified this object."""
 
+        article.save()
         mod = Modification.objects.create(
             user=request.user,
             article=article,
@@ -32,7 +33,6 @@ class ArticleAdmin(MPTTModelAdmin):
 
         mod.save()
 
-        article.save()
         article.modification_set.add(mod)
 
 admin.site.register(Article, ArticleAdmin)
@@ -65,3 +65,5 @@ class OfficialFormAdmin(admin.ModelAdmin):
     list_display = ('__unicode__', get_file_path, get_file_url)
     list_filter = ('last_updated',)
 admin.site.register(OfficialForm, OfficialFormAdmin)
+
+admin.site.register(MinutesDocument)
