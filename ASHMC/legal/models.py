@@ -4,6 +4,7 @@ from django.utils.translation import ugettext as _
 
 from mptt.models import MPTTModel, TreeForeignKey
 
+from collections import defaultdict
 import datetime
 import os
 import pytz
@@ -33,12 +34,13 @@ class Modification(models.Model):
 
 
 class Article(MPTTModel):
-    LEVEL_TO_HEADER_MAP = {
-        0: "",
-        1: "Article",
-        2: "Section",
-        3: "",
-    }
+    LEVEL_TO_HEADER_MAP = defaultdict(
+        str,
+        {
+            1: "Article",
+            2: "Section",
+        }
+    )
 
     parent = TreeForeignKey("self", null=True, blank=True, related_name='children')
 
