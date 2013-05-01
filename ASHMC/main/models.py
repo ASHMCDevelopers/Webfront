@@ -42,9 +42,9 @@ class _Utility(object):
         """Determines whether today is in the spring, fall, or summer semesters"""
         today = datetime.datetime.now()
 
-        if today.month < 5:
+        if today.month < 7:
             return "SP"
-        elif today.month < 8:
+        elif today.month < 9:
             return "SM"
         else:
             return "FA"
