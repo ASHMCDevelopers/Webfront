@@ -57,7 +57,7 @@ class GuestAttendance(models.Model):
 
 
 class Location(models.Model):
-    campus = models.ForeignKey(Campus, default=Campus.objects.get(code='HM'))
+    campus = models.ForeignKey(Campus, default=Campus.objects.get_hm)
     dorm = models.ForeignKey(Dorm, null=True, blank=True)
     suite = models.ForeignKey(Suite, null=True, blank=True)
     building = models.ForeignKey(Building, null=True, blank=True)
