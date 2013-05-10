@@ -1,7 +1,5 @@
 from django.db import models, transaction
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
 import datetime
 
 class TreasuryYearManager(models.Manager):
@@ -44,7 +42,7 @@ class TreasuryYear(models.Model):
 
 # Classes involving bank ledgers
 
-class Account(models.Model):
+class Account(models.Model): 
     name = models.CharField(
         help_text='The name of the ASHMC account',
         max_length=200,
@@ -320,7 +318,7 @@ class LineItem(models.Model):
             total = self.allocation_line_items.all().aggregate(models.Sum('amount'))['amount__sum'] or 0
 
         if total != self.amount and self.request is not None:
-            allocations = self.request.club.allocations.filter(source=self.account, school_year=TreasuryYear.objects.get_current())  # Only get allocations for this year and from the same account
+            allocations = self.request.club.allocations.filter(source=self.account, school_year=self.request.year)  # Only get allocations for the school year of our associated check request
             total_amount_left = 0
             for allocation in allocations:
                 total_amount_left += allocation.amount_left
@@ -346,7 +344,7 @@ class LineItem(models.Model):
             AllocationLineItem.objects.filter(line_item=self).delete()
             with transaction.commit_on_success():  # We want this to be atomic
                 # Find allocations based on account source
-                allocations = self.request.club.allocations.filter(source=self.account, school_year=TreasuryYear.objects.get_current())  # Only get allocations for this year and from the same account
+                allocations = self.request.club.allocations.filter(source=self.account, school_year=self.request.year)  # Only get allocations for the school year of our associated check request
 
                 amount_left = self.amount  # The amount remaining after withdrawing money from allocations
                 for allocation in allocations:
@@ -527,9 +525,3 @@ class CheckRequest(models.Model):
             return 'Denied'
         else:
             return 'Pending'
-
-# Set up club admin permission
-club_content_type = ContentType.objects.get_for_model(Club)
-if len(Permission.objects.filter(codename='full_club_admin')) == 0:
-    club_admin_permission = Permission(name='Full Club Admin Access', codename='full_club_admin', content_type=club_content_type)
-    club_admin_permission.save()
