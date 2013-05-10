@@ -1,7 +1,5 @@
 from django.db import models, transaction
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
 import datetime
 
 class TreasuryYearManager(models.Manager):
@@ -527,9 +525,3 @@ class CheckRequest(models.Model):
             return 'Denied'
         else:
             return 'Pending'
-
-# Set up club admin permission
-club_content_type = ContentType.objects.get_for_model(Club)
-if len(Permission.objects.filter(codename='full_club_admin')) == 0:
-    club_admin_permission = Permission(name='Full Club Admin Access', codename='full_club_admin', content_type=club_content_type)
-    club_admin_permission.save()

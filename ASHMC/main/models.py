@@ -469,6 +469,10 @@ class Student(models.Model):
         return u"{}".format(self.user.get_full_name())
 
 
+class CampusManager(models.Manager):
+    def get_hm(self):
+        return self.get(code='HM')
+
 class Campus(models.Model):
     CAMPUSES = (
                     ('SC', 'Scripps'),
@@ -485,6 +489,8 @@ class Campus(models.Model):
     ABSTRACTIONS = ['NA', 'UN']
     title = models.CharField(max_length=100, choices=((x[1], x[1]) for x in CAMPUSES))
     code = models.CharField(max_length=2, unique=True, choices=CAMPUSES)
+
+    objects = CampusManager()
 
     class Meta:
         verbose_name_plural = "campuses"
