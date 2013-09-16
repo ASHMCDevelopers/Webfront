@@ -283,6 +283,8 @@ class DormAppointment(models.Model):
     def dorm(self):
         return self.dorm_role.dorm
 
+    def __unicode__(self):
+        return u"{} - {} ({})".format(self.user, self.role.cast(), self.semesters.all())
 
 class DormRole(Role):
 
