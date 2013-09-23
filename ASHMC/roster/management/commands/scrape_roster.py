@@ -260,7 +260,7 @@ class Command(BaseCommand):
                     number = str(number[0]).encode('ascii')
 
                 if not dryrun: 
-                    room, _ = DormRoom.objects.get(
+                    room = DormRoom.objects.get(
                         dorm=dorm,
                         number=number,
                     )
