@@ -90,6 +90,12 @@ class Command(BaseCommand):
             default=False,
             help="*don't* ignore students who have already graduated",
         ),
+        make_option('--dryrun',
+            action='store_true',
+            dest='dryrun',
+            default=False,
+            help="Don't save changes",
+        ),
     )
 
     def handle(self, *args, **kwargs):
@@ -130,10 +136,18 @@ class Command(BaseCommand):
 
         # get hmc for easy access later
         hmc = Campus.objects.get(code='HM')
-        this_sem, _ = Semester.objects.get_or_create(
-            year=kwargs['year'],
-            half=kwargs['semester'],
-        )
+        if not dryrun: 
+            this_sem, _ = Semester.objects.get_or_create(
+                year=kwargs['year'],
+                half=kwargs['semester'],
+            )
+
+        else:
+            this_sem, _ = Semester.objects.get(
+                year=kwargs['year'],
+                half=kwargs['semester'],
+            )
+
         logger.info("Semester: %s", this_sem)
 
         active_users = []
@@ -187,16 +201,24 @@ class Command(BaseCommand):
 
                 new_user.first_name = ldap_student['givenName'][0]
                 new_user.last_name = ldap_student['sn'][0]
-                new_user.save()
+                if not dryrun: new_user.save()
                 # keep track of which users we HAVE seen this time through
                 active_users += [new_user.id]
-
-                new_student, _ = Student.objects.get_or_create(
-                    user=new_user,
-                    class_of=gradyear,
-                    at=hmc,
-                    studentid=None,
-                )
+                
+                if not dryrun: 
+                    new_student, _ = Student.objects.get_or_create(
+                        user=new_user,
+                        class_of=gradyear,
+                        at=hmc,
+                        studentid=None,
+                    )
+                else: 
+                    new_student, _ = Student.objects.get(
+                        user=new_user,
+                        class_of=gradyear,
+                        at=hmc,
+                        studentid=None,
+                    )
 
             dormcode = row[FIELD_ORDERING.index('Dorm')].value.split(' ')
 
@@ -236,37 +258,55 @@ class Command(BaseCommand):
                 except ValueError:
                     number = str(number)
 
-                room, _ = DormRoom.objects.get_or_create(
-                    dorm=dorm,
-                    number=number,
-                )
+                if not dryrun: 
+                    room, _ = DormRoom.objects.get_or_create(
+                        dorm=dorm,
+                        number=number,
+                    )
+                else: room, _ = DormRoom.objects.get(dorm=dorm, number=number,)
 
             if dorm.code in Dorm.all_objects.filter(official_dorm=False).values_list('code', flat=True)\
               and dorm.code != "ABR":
                 # If they're off-campus, make sure they're 'symbollically'
                 # a part of the Offcampus dorm for voting purposes.
-                symoff, _ = DormRoom.objects.get_or_create(
-                    dorm__code="OFF",
-                    number="Symbolic Room",
-                )
-
+                if not dryrun:
+                    symoff, _ = DormRoom.objects.get_or_create(
+                        dorm__code="OFF",
+                        number="Symbolic Room",
+                    )
+                else: 
+                    symoff, _ = DormRoom.objects.get(
+                        dorm__code="OFF",
+                        number="Symbolic Room",
+                    )
                 # Symroom is going to be full of people.
-                symroomur, _ = UserRoom.objects.get_or_create(
-                    user=new_user,
-                    room=symoff,
-                )
-                symroomur.semesters.add(this_sem)
+                if not dryrun: 
+                    symroomur, _ = UserRoom.objects.get_or_create(
+                        user=new_user,
+                        room=symoff,
+                        )
+                else: 
+                    symroomur, _ = UserRoom.objects.get_or_create(
+                        user=new_user,
+                        room=symoff,
+                        )
+                if not dryrun: symroomur.semesters.add(this_sem)
 
                 logger.info("Created symoblic room entry for %s", new_user)
 
-            ur, _ = UserRoom.objects.get_or_create(
+            if not dryrun: 
+                ur, _ = UserRoom.objects.get_or_create(
                 user=new_user,
                 room=room,
-            )
-            ur.semesters.add(this_sem)
+                )
+            else: ur, _ = UserRoom.objects.get(
+                user=new_user, room=room, 
+                )
+
+            if not dryrun: ur.semesters.add(this_sem)
 
         # inactivate missing users - except the super.
         for user in User.objects.exclude(is_superuser=True).exclude(id__in=active_users):
             logger.info("Inactivating {}".format(user.username))
             user.is_active = False
-            user.save()
+            if not dryrun: user.save()
