@@ -134,16 +134,17 @@ class Command(BaseCommand):
             cred=settings.AUTH_LDAP_BIND_PASSWORD,
         )
 
+        dryrun=kwargs['dryrun']
         # get hmc for easy access later
         hmc = Campus.objects.get(code='HM')
+
         if not dryrun: 
             this_sem, _ = Semester.objects.get_or_create(
                 year=kwargs['year'],
                 half=kwargs['semester'],
             )
-
         else:
-            this_sem, _ = Semester.objects.get(
+            this_sem = Semester.objects.get(
                 year=kwargs['year'],
                 half=kwargs['semester'],
             )
@@ -213,7 +214,7 @@ class Command(BaseCommand):
                         studentid=None,
                     )
                 else: 
-                    new_student, _ = Student.objects.get(
+                    new_student = Student.objects.get(
                         user=new_user,
                         class_of=gradyear,
                         at=hmc,
@@ -254,16 +255,16 @@ class Command(BaseCommand):
             else:
                 number = row[FIELD_ORDERING.index("Room")].value,
                 try:
-                    number = int(number)
+                    number = int(number[0])
                 except ValueError:
-                    number = str(number)
+                    number = str(number[0]).encode('ascii')
 
                 if not dryrun: 
                     room, _ = DormRoom.objects.get_or_create(
                         dorm=dorm,
                         number=number,
                     )
-                else: room, _ = DormRoom.objects.get(dorm=dorm, number=number,)
+                else: room = DormRoom.objects.get(dorm=dorm, number=number,)
 
             if dorm.code in Dorm.all_objects.filter(official_dorm=False).values_list('code', flat=True)\
               and dorm.code != "ABR":
@@ -275,7 +276,7 @@ class Command(BaseCommand):
                         number="Symbolic Room",
                     )
                 else: 
-                    symoff, _ = DormRoom.objects.get(
+                    symoff = DormRoom.objects.get(
                         dorm__code="OFF",
                         number="Symbolic Room",
                     )
@@ -286,7 +287,7 @@ class Command(BaseCommand):
                         room=symoff,
                         )
                 else: 
-                    symroomur, _ = UserRoom.objects.get_or_create(
+                    symroomur  = UserRoom.objects.get_or_create(
                         user=new_user,
                         room=symoff,
                         )
@@ -299,7 +300,7 @@ class Command(BaseCommand):
                 user=new_user,
                 room=room,
                 )
-            else: ur, _ = UserRoom.objects.get(
+            else: ur = UserRoom.objects.get(
                 user=new_user, room=room, 
                 )
 
