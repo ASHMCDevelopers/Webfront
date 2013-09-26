@@ -138,6 +138,7 @@ class Command(BaseCommand):
         # get hmc for easy access later
         hmc = Campus.objects.get(code='HM')
 
+
         if not dryrun: 
             this_sem, _ = Semester.objects.get_or_create(
                 year=kwargs['year'],
@@ -214,6 +215,7 @@ class Command(BaseCommand):
                         studentid=None,
                     )
                 else: 
+
                     new_student = Student.objects.get(
                         user=new_user,
                         class_of=gradyear,
@@ -276,6 +278,7 @@ class Command(BaseCommand):
                         number="Symbolic Room",
                     )
                 else: 
+
                     symoff = DormRoom.objects.get(
                         dorm__code="OFF",
                         number="Symbolic Room",
@@ -300,6 +303,7 @@ class Command(BaseCommand):
                 user=new_user,
                 room=room,
                 )
+
             else: ur = UserRoom.objects.get(
                 user=new_user, room=room, 
                 )
