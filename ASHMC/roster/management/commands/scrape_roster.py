@@ -290,7 +290,7 @@ class Command(BaseCommand):
                         room=symoff,
                         )
                 else: 
-                    symroomur  = UserRoom.objects.get_or_create(
+                    symroomur  = UserRoom.objects.get(
                         user=new_user,
                         room=symoff,
                         )
