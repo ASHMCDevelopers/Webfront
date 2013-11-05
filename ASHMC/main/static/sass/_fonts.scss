@@ -1,13 +1,4 @@
 @font-face {
-	font-family: "Adobe Caslon Pro";
-	src: url("/static/fonts/Adobe Caslon Pro.ttf") format("truetype");
-}
-@font-face {
-	font-family: "Adobe Caslon Pro";
-	font-weight: 600;
-	src: url("/static/fonts/Adobe Caslon Pro Semibold.ttf") format("truetype");
-}
-@font-face {
 	font-family: "Walkway Bold";
 	src: url("/static/fonts/Walkway Bold.ttf") format("truetype");
 }
@@ -62,12 +53,24 @@
 	src: url(/static/fonts/pico.ttf) format("truetype");
 }
 
+
 @font-face {
-    font-family: "Proxima Nova";
-    src: url("/static/fonts/ProximaNova-Regular.otf") format("opentype");
+    font-family: "Montserrat";
+    src: url("/static/fonts/Montserrat-Regular.ttf") format("truetype");
 }
+
 @font-face {
-    font-family: "Proxima Nova";
-    font-style: italic;
-    src: url("/static/fonts/ProximaNova-RegItalic.otf") format("opentype");
+    font-family: "Montserrat";
+    src: url("/static/fonts/Montserrat-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Lusitana";
+    src: url("/static/fonts/Lusitana-Regular.ttf") format("truetype");
+}
+
+
+@font-face {
+    font-family: "Lusitana";
+    src: url("/static/fonts/Lusitana-Bold.ttf") format("truetype");
 }
