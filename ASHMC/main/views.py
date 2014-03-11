@@ -34,7 +34,7 @@ class LandingPage(TemplateView):
         else:
             try:
                 tweets = settings.TWITTER_AGENT.statuses.user_timeline()[:6]
-            except URLError:
+            except:
                 tweets = []
             for tweet in tweets:
                 tweet['date'] = pytz.utc.localize(datetime.datetime.strptime(tweet['created_at'], "%a %b %d %H:%M:%S +0000 %Y"))
