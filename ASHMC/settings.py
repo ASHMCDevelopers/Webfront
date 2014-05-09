@@ -203,3 +203,7 @@ ASHMC_FORMS_FOLDER = local_settings.ASHMC_FORMS_FOLDER
 AMAZON_ASSOCIATES_REDIRECT_URL = local_settings.AMAZON_ASSOCIATES_REDIRECT_URL
 
 EMAIL_BACKEND = local_settings.EMAIL_BACKEND
+
+# For some reason the fix in local_settings doesn't work. See 
+# https://docs.djangoproject.com/en/1.6/ref/settings/#std%3asetting-ALLOWED_HOSTS
+ALLOWED_HOSTS = ['*',]
