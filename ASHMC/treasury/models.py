@@ -2,13 +2,16 @@ from django.db import models, transaction
 from django.core.exceptions import ObjectDoesNotExist
 import datetime
 
+#TODO put this somewhere global
+rolloverMonth = 6
+
 class TreasuryYearManager(models.Manager):
     def get_current(self):
         '''Gets the current TreasuryYear'''
         now = datetime.datetime.now()
 
         # The ASHMC Treasury Year starts in May
-        if now.month < 5:
+        if now.month < rolloverMonth:
             year = now.year - 1
         else:
             year = now.year
@@ -20,7 +23,7 @@ class TreasuryYearManager(models.Manager):
         except ObjectDoesNotExist:
             return TreasuryYear.objects.create(
                 description=description,
-                date=datetime.date(year, 5, 1),
+                date=datetime.date(year, rolloverMonth, 1),
             )
 
 
