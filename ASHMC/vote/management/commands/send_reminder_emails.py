@@ -80,6 +80,7 @@ class Command(BaseCommand):
             except:
                 print user.username + " caused an exception:", sys.exc_info()[0]
                 print "(S)He probably doesn't have a student object somehow"
+                continue
 
             if not delinquent_measures.exists():
                 continue
