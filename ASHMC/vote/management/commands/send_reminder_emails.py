@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from django.db.models import Q
 from django.template import Context
 from django.template.loader import get_template
-
+import sys
 from ASHMC.main.models import Semester
 from ASHMC.roster.models import UserRoom
 from ASHMC.vote.models import Measure, Vote, User
@@ -68,14 +68,18 @@ class Command(BaseCommand):
 
             # only send emails to people who haven't voted in
             # this measure
-            delinquent_measures = measures.exclude(
-                Q(id__in=Vote.objects.filter(account=user).values_list('measure__id', flat=True)),
-            ).filter(
-                Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
-                Q(restrictions__gradyears=user.student.class_of) | Q(restrictions__gradyears=None),
-            ).exclude(
-                banned_accounts__id__exact=user.id,
-            )
+            try:
+                delinquent_measures = measures.exclude(
+                    Q(id__in=Vote.objects.filter(account=user).values_list('measure__id', flat=True)),
+                    ).filter(
+                    Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
+                    Q(restrictions__gradyears=user.student.class_of) | Q(restrictions__gradyears=None),
+                    ).exclude(
+                        banned_accounts__id__exact=user.id,
+                        )
+            except:
+                print user.username + " caused an exception:", sys.exc_info()[0]
+                print "(S)He probably doesn't have a student object somehow"
 
             if not delinquent_measures.exists():
                 continue
