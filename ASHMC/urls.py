@@ -30,7 +30,7 @@ urlpatterns = patterns('',
     url(r'^accounts/change_password/$', 'django.contrib.auth.views.password_change', name='change_password',
         kwargs={'post_change_redirect': reverse_lazy('main_home')},
     ),
-    # DON'T user the soft_link if you can avoid it.
+    # DON'T use the soft_link if you can avoid it.
     url(r'^soft_link/(?P<url_name>.*)/', lambda x, url_name: redirect(url_name)),
     url(r'^roster/', include('ASHMC.roster.urls')),
     url(r'^amazon/', RedirectView.as_view(url=settings.AMAZON_ASSOCIATES_REDIRECT_URL), {}, 'amazon_associates'),
