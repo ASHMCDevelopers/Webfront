@@ -1,5 +1,5 @@
-Webfront.sublime-workspace
-Webfront.sublime-project
+.gitignore
+virtualenv
 *.pyc
 *.xls
 *.xlsx
