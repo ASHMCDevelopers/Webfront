@@ -166,7 +166,6 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'django.contrib.markup',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.webdesign',
@@ -180,6 +179,7 @@ INSTALLED_APPS = (
     'taggit',
     'mptt',
     'debug_toolbar',
+    'markdown_deux',
 
     'ASHMC.main',  # landing page handler
     'ASHMC.courses',
