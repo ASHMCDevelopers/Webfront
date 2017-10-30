@@ -1,7 +1,6 @@
 from django.contrib import comments
 from django.contrib.auth.models import User
 from django.contrib.comments.models import CommentFlag
-from django.contrib.markup.templatetags.markup import markdown
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
@@ -11,6 +10,7 @@ from django.utils.translation import ugettext as _
 from mptt.models import MPTTModel
 from mptt.models import TreeForeignKey
 from taggit.managers import TaggableManager
+from markdown import markdown
 
 from .util import entries_published, DRAFT, HIDDEN, PUBLISHED, UPLOAD_TO, EntryPublishedManager
 from ASHMC.roster.models import Dorm

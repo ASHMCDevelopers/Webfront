@@ -448,14 +448,18 @@ class MeasureResultList(ListView):
         if self.request.user.highest_ashmc_role >= ASHMCRole.objects.get(title="Vice-President"):
             # VP's and higher can see all measures, except those that are dorm-specific
             # because ASHMC has no business within a dorm.
-            return Measure.objects.filter(
-                Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
-                Q(vote_end__lte=datetime.datetime.now(pytz.utc)) | Q(is_open=False),
-            ).order_by('-vote_end')
+            query = Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None)
+        else:
+            # Everybody else can see only their own dorm/dorm-unrestricted and their own
+            # year/year-unrestricted ballots
+            query = (
+                (Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None))
+                &
+                (Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None))
+            )
 
         return Measure.objects.filter(
-            Q(restrictions__dorms=room.dorm) | Q(restrictions__dorms=None),
-            Q(restrictions__gradyears=self.request.user.student.class_of) | Q(restrictions__gradyears=None),
+            query,
             # Only show measures which have already closed for voting
             vote_end__lte=datetime.datetime.now(pytz.utc),
         ).exclude(
