@@ -7,3 +7,4 @@ ASHMC/local_settings.py
 .sass*
 webfront
 ASHMC/main/static/styles
+*.css

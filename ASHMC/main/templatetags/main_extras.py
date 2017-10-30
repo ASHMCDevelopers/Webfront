@@ -134,6 +134,13 @@ def split(str, splitter):
 
 
 @register.filter
+def get(dictable, key):
+    try:
+        return dictable[key]
+    except KeyError:
+        return ""
+
+@register.filter
 def is_today(value):
     if not isinstance(value, datetime.date):
         return False

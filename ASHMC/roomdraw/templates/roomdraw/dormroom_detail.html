@@ -1,0 +1,67 @@
+{% extends "main_base_page.html" %}
+{% load comments %}
+{% load static %}
+{% load roomdraw_extras %}
+
+{% block stylin %}
+   <link rel="stylesheet" type="text/css" href="{% static "styles/roomdraw/roomdraw_detail.css" %}">
+{% endblock stylin %}
+
+{% block post_header %}
+    <h2>{{object}}</h2>
+
+    <div class="groups">
+    <table>
+        <thead>
+            <th>Best Number</th><th>People</th><th></th>
+        </thead>
+    {% for group in object.roominterest_set.all %}
+        <tr>
+            <td>{{group|get_highest_number}}</td><td>{{group.interested_users.all|prettify|join:", "}}</td>
+            <td>
+                {% if request.user in group.interested_users.all %}
+                    <input type="submit" class="button-submit" value="leave this group" />
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    </div>
+    <hr/>
+    <div class="comment_holder">
+        {% get_comment_list for object as comment_list %}
+         {% for comment in comment_list %}
+            <article class="comment">
+                <ul class="metadata clearfix">
+                    <li class='author'><h3>{{comment.user.get_full_name}}</h3></li>
+
+                    <li class='date'>{{comment.submit_date|date:"F jS, Y g:i a"}}</li>
+                    </li>
+                </ul>
+
+                <div class='comment_body'>
+                    {{comment.comment}}
+                </div>
+            </article>
+         {% empty %}
+            <article clas='comment'>
+                <h3 class='centered'>Nobody's left any notes.</h3>
+            </article>
+         {% endfor %}
+    </div>
+    <div class="comment_form">
+
+        {% get_comment_form for object as cf%}
+        <form action="{% comment_form_target %}" method="POST">
+            {% csrf_token %}
+            <h3>Leave a note:</h3>
+            {% for hf in cf.hidden_fields %}
+                {{hf}}
+            {% endfor %}
+            <input type="hidden" name="next" value="{% if next %}{{ next }}{% else %}{% endif %}" />
+        <div class='comment_comment'>{{cf.comment}}</div>
+        <div class='comment_submit'><input type="submit" class='button-submit' value="note it!"/></div>
+        </form>
+    </div>
+
+{% endblock post_header %}

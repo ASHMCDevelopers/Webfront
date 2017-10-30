@@ -187,6 +187,7 @@ INSTALLED_APPS = (
     'ASHMC.vote',
     'ASHMC.legal',
     'ASHMC.roster',
+    'ASHMC.roomdraw',
     'ASHMC.events',
     'ASHMC.treasury'
 )

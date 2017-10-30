@@ -1,0 +1,31 @@
+@import "base";
+@import "logo_style";
+
+.floorplan {
+    img {
+        width: 800px;
+    }
+}
+
+.roomtable {
+    float: right;
+}
+
+#postheader {
+    width: 1200px;
+    margin: 0 auto;
+    background-color: $light_background;
+    padding: 1em;
+}
+
+.groups {
+    table {
+        width: 75%;
+        margin: 0 auto;
+    }
+    tbody {
+        tr:nth-child(odd) {
+            background: $body_background;
+        }
+    }
+}

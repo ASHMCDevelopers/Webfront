@@ -444,6 +444,10 @@ class GradYear(models.Model):
     def __unicode__(self):
         return u"{}".format(self.year)
 
+    def to_classname(self):
+        offset = self.year - GradYear.senior_class().year
+        return ["Senior", "Junior", "Sophomore", "Freshman"][offset]
+
 
 class Student(models.Model):
     user = models.OneToOneField(User)
